@@ -1,0 +1,21 @@
+{
+  "$comment": "Mẫu .claude/settings.json (Mức 2). Hook chạy shell tuỳ ý: review như code, đặt dưới CODEOWNERS. Thay <...> bằng lệnh thật; kiểm cú pháp theo docs Claude Code bản hiện hành.",
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Edit(<thư-mục-migration-đã-phát-hành>/**)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "<lệnh lint nhanh cho file vừa sửa>" }
+        ]
+      }
+    ]
+  }
+}

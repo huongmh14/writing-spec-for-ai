@@ -1,0 +1,70 @@
+# WrittingSpecForAI
+
+Bộ skill `writing-spec-for-ai`: AI khảo sát dự án → trình **đề xuất thiết kế docs** → làm rõ → viết docs → tự kiểm → thử docs bằng task mẫu → chỉ sau 3 cổng duyệt của bạn mới code.
+
+Skill chính là **bộ điều phối**; mỗi bước triển khai chi tiết thành một sub-skill riêng (viết riêng cho từng loại việc: khảo sát, đề xuất, viết spec, viết design, thay đổi spec, review, thử docs).
+
+## Cấu trúc
+
+```
+SKILL.md                         # bộ điều phối: 8 bước, 3 cổng duyệt, bàn giao sub-skill
+skills/                          # sub-skill chi tiết theo từng bước
+  survey-project/SKILL.md        #   1–2. khảo sát, bằng chứng, mức 0/1/2
+  propose-doc-design/SKILL.md    #   3–4. đề xuất thiết kế + chia bộ spec theo khu vực (Cổng 1)
+  write-spec/SKILL.md            #   5b. viết 1 spec: EARS, NFR, biên, AC Cho/Khi/Thì
+  write-design-doc/SKILL.md      #   5c. thiết kế khi spec > 2 PR / chạm schema, API, bảo mật
+  change-spec/SKILL.md           #        spec con vs CHG-xx; vòng đời P-xx → D-xx
+  review-docs/SKILL.md           #   6.   chấm checklist, báo cáo (Cổng 2)
+  test-docs/SKILL.md             #   7.   thử docs bằng task mẫu, phiên mới (Cổng 3)
+references/
+  principles.md                  # mô hình, bộ kỹ năng mức 0/1/2, quy tắc spec, phong cách,
+                                 # ma trận công cụ, skill dự án vs global, bài học, nguồn
+  examples.md                    # ví dụ chuẩn từ dự án thật (REQ EARS, AC, NFR, decisions, plan)
+  review-checklist.md            # chấm AGENTS.md, từng spec, trạng thái, vị trí, thử docs
+  base-kit.md                    # (đề xuất) phần kế thừa 100% cho mọi dự án: Core / Tham số /
+                                 # Pack / Profile S-M-L, luật ghi đè, lộ trình phát triển base
+templates/
+  doc-design-proposal.md         # Cổng 1
+  AGENTS.md
+  docs/
+    glossary.md
+    decisions.md                 # + định danh hiện hành, P-xx
+    adr/_template.md
+    specs/README.md, _template.md, _design-template.md
+    changes/_proposal-template.md   # thay đổi spec dạng delta
+    plans/_plan-template.md, HANDOFF.md
+    progress.md
+    upgrade/_template.md
+  adapters/
+    CLAUDE.md, copilot-instructions.md, pull_request_template.md
+    scoped-rules.md              # luật theo thư mục cho 4 công cụ
+    claude-settings.json         # deny-rules + hook
+    subagent.md
+  project-skill/SKILL.md
+```
+
+## Cài đặt
+
+Cài **nguyên bộ** (giữ nguyên cấu trúc — sub-skill trỏ nhau bằng đường dẫn tương đối). Sao chép thư mục thành `writing-spec-for-ai`:
+
+| Agent | Global | Theo dự án |
+|---|---|---|
+| Antigravity | `~/.gemini/config/skills/writing-spec-for-ai/` | `<repo>/.agents/skills/writing-spec-for-ai/` |
+| Claude Code | `~/.claude/skills/writing-spec-for-ai/` | `<repo>/.claude/skills/writing-spec-for-ai/` |
+| Codex / OpenCode / Cursor | thư mục skill của công cụ | `<repo>/.agents/skills/` |
+
+```powershell
+Copy-Item -Recurse D:\WrittingSpecForAI "$HOME\.gemini\config\skills\writing-spec-for-ai"
+```
+
+## Cách dùng
+
+> Dùng skill writing-spec-for-ai thiết kế docs cho dự án này.
+
+Có thể gọi trực tiếp sub-skill khi chỉ cần một việc:
+
+> Dùng skill write-spec viết spec cho khu vực <X>.
+> Dùng skill survey-project khảo sát repo này.
+> Dùng skill change-spec xử lý yêu cầu đổi <…> vào SPEC-<…>.
+
+AI dừng ở 3 chỗ: sau đề xuất thiết kế (Cổng 1), sau khi viết docs (Cổng 2), sau khi thử docs (Cổng 3) — bạn duyệt từng cổng mới sang bước sau; code chỉ bắt đầu sau Cổng 3.

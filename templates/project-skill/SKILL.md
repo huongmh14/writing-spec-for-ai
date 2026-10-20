@@ -1,0 +1,30 @@
+---
+name: <kebab-case, ≤ 64 ký tự, ví dụ adding-module>
+description: <Làm gì> trong repo <tên>. Kích hoạt khi <từ khoá người dùng hay nói, tín hiệu cụ thể>. <Ngôi thứ ba, ≤ 1024 ký tự.>
+---
+
+<!-- Đặt tại .agents/skills/<name>/SKILL.md (Antigravity, Codex…) hoặc .claude/skills/<name>/SKILL.md.
+Chỉ tạo khi quy trình đã lặp ≥ 2 lần. Body < 500 dòng; reference sâu 1 cấp.
+Workflow có tác dụng phụ (deploy, xoá): Claude Code thêm `disable-model-invocation: true`. -->
+
+# <Tên>
+
+Spec/luật: SPEC-…, AGENTS.md mục …
+
+## Các bước
+
+<!-- Độ tự do: thao tác dễ vỡ (migration, xoá, phát hành) → lệnh chính xác/script, không để agent tự chế.
+Việc cần phán đoán (review, thiết kế) → nguyên tắc + ví dụ. -->
+
+1. <lệnh/thao tác cụ thể, đường dẫn thật>
+2.
+
+## Kiểm tra trước khi xong
+
+- [ ] <lệnh phải xanh>
+
+## Gotchas
+
+- <triệu chứng → nguyên nhân → cách tránh>
+
+<!-- Kỹ năng chung (TDD, debug, review): gọi tên skill global, không chép lại. -->

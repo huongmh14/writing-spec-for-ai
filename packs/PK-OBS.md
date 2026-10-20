@@ -58,5 +58,5 @@
 | Triệu chứng | Nguyên nhân | Cách tránh | Kiểm lần cuối |
 |---|---|---|---|
 | Máy chủ Prometheus/Metrics hết RAM hoặc treo sau khi lên production | Gắn `userId`, `requestId`, hoặc `req.url` chưa chuẩn hoá vào `labelNames` của metric | Chỉ gắn route template (`/users/:id`) và `status_class` (`2xx`, `4xx`, `5xx`); đẩy ID chi tiết sang log/trace | 2026-10-20 |
-| Log ghi nhận job thất bại nhưng không biết do cron chạy tự động hay do ai chạy tay qua CLI | Chỉ truyền `runId` mà không truyền `entryPoint` tại nơi khởi phát | Khởi tạo child logger kèm `{ entryPoint, requestId }` ngay ở hàm входа của từng kênh | 2026-10-20 |
+| Log ghi nhận job thất bại nhưng không biết do cron chạy tự động hay do ai chạy tay qua CLI | Chỉ truyền `runId` mà không truyền `entryPoint` tại nơi khởi phát | Khởi tạo child logger kèm `{ entryPoint, requestId }` ngay ở hàm điểm vào (`entryPoint`) của từng kênh | 2026-10-20 |
 | Log in ra `"err": "[object Object]"` hoặc `{}` rỗng khi bắt ngoại lệ | Truyền đối tượng `Error` vào trường không được serializer hỗ trợ hoặc `JSON.stringify(err)` trực tiếp | Dùng chuẩn trường `err` của Pino hoặc trích rõ `{ errName: err.name, errMessage: err.message, errCode: err.code }` | 2026-10-20 |

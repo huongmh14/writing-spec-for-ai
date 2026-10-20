@@ -2,6 +2,18 @@
 
 Mỗi phiên bản liệt kê ID luật đổi (Core `C-xx`, Pack `PK-…-Rnn`; sổ đăng ký: [references/base-kit.md](references/base-kit.md)). Dự án đang dùng base grep các ID này trong docs của mình để biết chỗ phải xem lại.
 
+## v1.2.1 — 2026-10-20
+
+### Nâng cấp (SDO, Chống ngụy biện, Benchmark & Kiểm định tự động)
+
+- **Chuẩn hoá SDO (Skill Discovery Optimization) cho 10 `SKILL.md` và 3 `agents/*.md`:**
+  - Đặt điều kiện kích hoạt (*"Kích hoạt khi..."* / *"Dùng ở Bước..."* / *"Use when..."*) lên đầu mọi trường `description` (tuân thủ luật `C24` và chuẩn `agentskills.io`).
+  - Loại bỏ tóm tắt quy trình làm việc (workflow spoilers) khỏi `description` để ngăn lỗi AI agent đọc lướt `description` rồi tự làm tắt mà không mở đọc file `SKILL.md`.
+  - Giảm **31,5%** chi phí token metadata thường trực trong system prompt (từ 4.426 ký tự xuống 3.035 ký tự cho cả 10 skills).
+- **Bảng Chống ngụy biện (`Red Flags`) trong `SKILL.md`:** khoá chặt 3 Cổng duyệt trước tổ hợp áp lực Thời gian + Uy quyền + Chi phí chìm (*"dự án nhỏ viết luôn khỏi qua Cổng 1"*, *"tự đoán chỗ thiếu"*, *"bỏ qua `spec-challenger`/`doc-tester`"*).
+- **Bộ kịch bản đánh giá chuẩn `evals/evals.json`:** 5 kịch bản benchmark (Greenfield Profile `S`, Brownfield Backend `As-built`, Multi-Agent Orchestrator, Pressure Resistance, Fresh-Context Adversarial Review) + ma trận kiểm thử điều hướng SDO 9 sub-skills.
+- **Cổng kiểm định tự động `scripts/validate.ps1` & GitHub Actions `.github/workflows/validate.yml`:** kiểm tra tự động YAML frontmatter, chuẩn SDO Trigger-First (`≤ 450` ký tự), trần số dòng (Ratchets), 0 liên kết nội bộ gãy, 0 ký tự lạ sai bảng mã, và JSON schema hợp lệ.
+
 ## v1.2.0 — 2026-10-20
 
 ### Thêm

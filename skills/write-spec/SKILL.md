@@ -1,6 +1,6 @@
 ---
 name: write-spec
-description: Viết một spec xây dựng cụ thể cho một khu vực của dự án — mục tiêu, phạm vi, REQ theo mẫu EARS có mức và giai đoạn, NFR đủ dòng có số liệu, trường hợp biên, AC dạng Cho/Khi/Thì kèm tầng test, cách kiểm end-to-end, câu hỏi mở. Dùng khi viết spec mới (Draft), đặc tả hiện trạng code (As-built), hoặc khi người dùng nói "viết spec", "đặc tả", "SPEC-XXX", "yêu cầu nghiệm thu".
+description: Dùng ở Bước 5b khi viết spec mới (Draft) hoặc đặc tả hiện trạng code (As-built) sau khi qua Cổng 1, hoặc khi người dùng nói "viết spec", "đặc tả", "SPEC-XXX", "yêu cầu nghiệm thu". Tạo file đặc tả REQ (mẫu EARS), NFR định lượng, trường hợp biên và AC (Cho/Khi/Thì kèm tầng test).
 ---
 
 # Write spec — viết một spec xây dựng cụ thể (Bước 5, phần spec)

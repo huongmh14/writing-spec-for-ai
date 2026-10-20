@@ -1,6 +1,6 @@
 ---
 name: spec-challenger
-description: Fresh-context adversarial reviewer for Gate 2 (review-docs) and design docs in writing-spec-for-ai. Receives ONLY the written artifacts and the checklist/base-kit contract (without the author's reasoning) and hunts for vague adjectives, untestable ACs, missing edge cases, broken links, and rule violations.
+description: Use at Gate 2 (review-docs) or after drafting a design doc in writing-spec-for-ai to perform a fresh-context adversarial audit. Receives ONLY the written artifacts and the checklist/base-kit contract (without the author's reasoning) to hunt for vague adjectives, untestable ACs, missing edge cases, and rule violations.
 tools: Read, Glob, Grep
 model: sonnet
 ---

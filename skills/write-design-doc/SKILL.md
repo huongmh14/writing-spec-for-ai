@@ -1,6 +1,6 @@
 ---
 name: write-design-doc
-description: Viết tài liệu thiết kế đi kèm một spec (docs/specs/<nn>-<khu-vực>-design.md) khi spec cần hơn 2 PR hoặc chạm schema, API công khai, bảo mật — thiết kế Module Sâu (Deep Modules) và Điểm ghép nối (Seams), so sánh ≥ 2 phương án (Design It Twice), trích dẫn docs chính thức theo version (C25), gắn trần đơn giản hoá (ceiling: C27), mô hình đe doạ STRIDE và kế hoạch rollback. Dùng khi đề xuất được duyệt có yêu cầu mức 1 "tài liệu thiết kế", hoặc khi người dùng nói "viết design", "thiết kế cho SPEC-XXX".
+description: Dùng ở Bước 5c khi một spec cần > 2 PR, chạm schema dữ liệu, API công khai hoặc bảo mật/thanh toán, hoặc khi người dùng nói "viết design doc", "thiết kế cho SPEC-XXX". Tạo tài liệu thiết kế kiến trúc (Deep Modules, Seams, Design It Twice, mô hình đe doạ STRIDE và kế hoạch rollback).
 ---
 
 # Write design doc — tài liệu thiết kế của một spec (Bước 5c)

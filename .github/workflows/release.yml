@@ -22,6 +22,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Run Deterministic Skill Suite Validation
+        shell: pwsh
+        run: ./scripts/validate.ps1
+
       - name: Package Full Suite & Standalone Skills
         shell: bash
         run: |

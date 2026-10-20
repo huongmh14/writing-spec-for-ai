@@ -1,4 +1,4 @@
-# Writing Spec for AI (Tiếng Việt — v1.2.0)
+# Writing Spec for AI (Tiếng Việt — v1.2.1)
 
 <p align="center">
   <a href="./README.md">English</a> · <strong>Tiếng Việt</strong>
@@ -6,7 +6,7 @@
 
 Bộ skill & plugin `writing-spec-for-ai`: AI khảo sát dự án (`spec-surveyor`) → trình **đề xuất thiết kế docs + Capability Map** → làm rõ theo **Frontier + HYPOTHESIS/GUESS** → viết docs (`AGENTS.md`, `CONSTRAINTS.md`, `SPEC-xx`, `DESIGN-xx`) → phản biện đối kháng trong context sạch (`spec-challenger`) → thử docs bằng task mẫu trong phòng sạch (`doc-tester`) → chẻ đồ thị Tracer-Bullet tasks (`plan-tasks`) & sinh skill tự kiểm (`generate-verify-harness`) → chỉ sau 3 cổng duyệt của bạn mới code.
 
-## Cấu trúc (`v1.2.0`)
+## Cấu trúc (`v1.2.1`)
 
 ```text
 SKILL.md                                 # Bộ điều phối: 8 bước, 3 cổng duyệt, bàn giao 9 sub-skill & 3 subagent

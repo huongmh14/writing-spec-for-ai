@@ -1,6 +1,6 @@
 ---
 name: spec-surveyor
-description: Read-only repository surveyor for Step 1–2 (survey-project) of writing-spec-for-ai. Scans stack manifests, commands, existing AI docs, CI alignment, secret hygiene, operational scripts, and baseline quality metrics, returning a compact evidence table with exact path:line citations while keeping the main context window clean.
+description: Use when surveying a repository in Step 1–2 (survey-project) of writing-spec-for-ai, especially for repositories with > 50 files. Performs a strictly read-only audit of stack, commands, AI docs, CI alignment, secret hygiene, and quality ratchets, returning a compact path:line evidence table to keep the main context clean.
 tools: Read, Glob, Grep, Bash
 model: sonnet
 ---

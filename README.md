@@ -276,6 +276,8 @@ writing-spec-for-ai/
 │   ├── adapters/                        #   CLAUDE.md, copilot-instructions.md, scoped-rules.md,
 │   │                                    #   claude-settings.json, pull_request_template.md, subagent.md
 │   └── project-skill/SKILL.md           #   Template for generating repo-specific skills
+├── evals/evals.json                     # Standardized A/B benchmark, pressure & SDO routing test suite
+├── scripts/validate.ps1                 # Deterministic quality gate (SDO, ratchets, links, encoding)
 └── .claude-plugin/                      # Native plugin manifests (.claude, .cursor, .copilot, .zcode)
 ```
 

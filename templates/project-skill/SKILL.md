@@ -1,6 +1,6 @@
 ---
 name: <kebab-case, ≤ 64 ký tự, ví dụ adding-module>
-description: <Làm gì> trong repo <tên>. Kích hoạt khi <từ khoá người dùng hay nói, tín hiệu cụ thể>. <Ngôi thứ ba, ≤ 1024 ký tự.>
+description: Kích hoạt khi <từ khoá người dùng hay nói, tín hiệu cụ thể> trong repo <tên>. <Kết quả đầu ra, ngôi thứ ba, ≤ 450 ký tự; không tóm tắt các bước làm việc bên trong để tránh agent bỏ qua đọc thân file.>
 ---
 
 <!-- Đặt tại .agents/skills/<name>/SKILL.md (Antigravity, Codex…) hoặc .claude/skills/<name>/SKILL.md.

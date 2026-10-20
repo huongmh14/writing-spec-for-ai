@@ -1,6 +1,6 @@
 ---
 name: test-docs
-description: Thử bộ tài liệu AI bằng cách giao subagent doc-tester hoàn toàn sạch context làm 2–3 task mẫu đại diện (chỉ đọc AGENTS.md và docs/), ghi lại đường dẫn điều hướng, luật bị bỏ qua, câu hỏi thừa, việc làm thừa; sửa docs theo kết quả rồi xin người dùng duyệt trước khi code (Cổng 3). Dùng khi người dùng nói "thử docs", "test tài liệu", "Cổng 3", hoặc trước khi bắt đầu code theo bộ spec mới.
+description: Dùng ở Bước 7 (Cổng 3) sau khi qua Cổng 2 và trước khi bắt đầu code theo bộ spec mới, hoặc khi người dùng nói "thử docs", "test tài liệu", "Cổng 3". Kiểm chứng khả năng dẫn đường của AGENTS.md và docs/ bằng subagent doc-tester trong context sạch với 3 task mẫu đại diện.
 ---
 
 # Test docs — thử tài liệu bằng task mẫu trong phiên sạch (Bước 7, Cổng 3)

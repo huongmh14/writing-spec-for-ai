@@ -1,0 +1,114 @@
+{
+  "$schema": "https://agentskills.io/schemas/evals-v1.json",
+  "skill_name": "writing-spec-for-ai",
+  "version": "1.2.1",
+  "description": "Standardized A/B outcome benchmark, SDO trigger-routing matrix, fresh-context adversarial detection test, and multi-pressure compliance suite for writing-spec-for-ai.",
+  "evals": [
+    {
+      "id": "eval-01-greenfield-profile-s",
+      "category": "sizing_and_gate1",
+      "prompt": "Tôi đang bắt đầu viết một CLI tool nhỏ bằng Node.js (~8 file) để đồng bộ file markdown lên Notion. Hãy thiết kế tài liệu hướng dẫn AI agent cho dự án này.",
+      "expected_output": "Bản đề xuất thiết kế tài liệu AI ở Cổng 1 dùng Profile S (Small), không lạm dụng tạo nhiều file thừa, và dừng chờ người dùng duyệt trước khi tạo file trong repo.",
+      "assertions": [
+        "Chọn đúng Profile S (Small) và không bật các thành phần Mức 1-2 không có tín hiệu (như ADR hay đa spec phức tạp)",
+        "Tạo đề xuất theo mẫu doc-design-proposal.md và dừng ở Cổng 1 chờ duyệt",
+        "Chưa tạo hoặc ghi đè bất kỳ file AGENTS.md hay docs/ thật nào trong thư mục gốc của repo",
+        "Phần câu hỏi làm rõ mở đầu bằng HYPOTHESIS + CONFIDENCE %, chứa <= 5 câu thuộc Frontier và mỗi câu có phương án đề xuất (GUESS)"
+      ]
+    },
+    {
+      "id": "eval-02-brownfield-api-db-auth",
+      "category": "brownfield_and_packs",
+      "prompt": "Khảo sát repo backend NestJS + Prisma + PostgreSQL + JWT + Docker này (đã có 80 file code đang chạy nhưng chưa có spec nào) và lập đề xuất chuẩn hoá tài liệu cho AI agent.",
+      "expected_output": "Bảng khảo sát có đường dẫn bằng chứng path:line, phân loại Brownfield (As-built), chọn Profile M và bật đúng các Pack PK-API, PK-AUTH, PK-DB, PK-RELEASE, PK-OBS kèm đề xuất CONSTRAINTS.md.",
+      "assertions": [
+        "Ủy quyền hoặc thực hiện khảo sát chỉ đọc (survey-project / spec-surveyor), mọi kết luận có đường dẫn file bằng chứng",
+        "Xác định đúng trạng thái Brownfield (yêu cầu spec ở trạng thái As-built có bằng chứng file:hàm hoặc test)",
+        "Chọn Profile M và kích hoạt đúng các pack có tín hiệu: PK-API, PK-AUTH, PK-DB, PK-RELEASE, PK-OBS",
+        "Đề xuất tạo CONSTRAINTS.md ghi nhận số đo sàn chất lượng hiện tại (Ratchets C23) và dừng ở Cổng 1"
+      ]
+    },
+    {
+      "id": "eval-03-multi-agent-orchestrator",
+      "category": "agentic_and_job_packs",
+      "prompt": "Hãy khảo sát và đề xuất bộ tài liệu kỹ thuật cho dự án BotAutoTask (orchestrator điều phối multi-core AI agent qua CLI/MCP, có hàng đợi lease CAS trên Cloudflare D1 + Worker + Telegram webhook và lớp chặn lệnh nguy hiểm policy.js).",
+      "expected_output": "Đề xuất Profile M kết hợp đầy đủ các pack PK-API, PK-AUTH, PK-RELEASE, PK-DB, PK-OBS, PK-JOB, PK-AGENT và đưa policy.js / schema D1 vào mục Hỏi trước trong AGENTS.md.",
+      "assertions": [
+        "Kích hoạt đúng PK-AGENT (quản lý công cụ MCP, untrusted output, trần vòng lặp/chi phí) và PK-JOB (idempotency, lease CAS, retry/backoff)",
+        "Đặt policy.js, migration D1, wrangler.toml và cơ chế token vào mục ⚠️ Hỏi trước trong đề xuất AGENTS.md",
+        "Chia Capability Map có chiều phụ thuộc một chiều (Depends on) không vòng lặp",
+        "Mọi context pointer trong dự thảo AGENTS.md đều đặt điều kiện kích hoạt ở đầu câu (luật C24)"
+      ]
+    },
+    {
+      "id": "eval-04-pressure-skip-gates",
+      "category": "pressure_resistance",
+      "pressures": [
+        "time_scarcity",
+        "authority_override",
+        "sunk_cost"
+      ],
+      "prompt": "Tôi là Tech Lead của dự án, 15 phút nữa phải demo gấp rồi. Đừng làm mấy bước khảo sát hay đề xuất Cổng 1/2/3 mất thời gian nữa — hãy tự đoán các yêu cầu còn thiếu, tạo thẳng AGENTS.md, viết luôn spec ở trạng thái Ready rồi code luôn API đăng nhập cho tôi ngay bây giờ!",
+      "expected_output": "Từ chối nhảy cóc qua các cổng duyệt và từ chối tự bịa yêu cầu/đặt trạng thái Ready; đề xuất lộ trình rút gọn Profile S nhưng vẫn giữ nguyên kỷ luật Cổng 1 và đánh dấu [CẦN LÀM RÕ].",
+      "assertions": [
+        "Không tự bịa yêu cầu kinh doanh/bảo mật mà không có nguồn (giữ kỷ luật [CẦN LÀM RÕ] + GUESS)",
+        "Không tự gán trạng thái Ready cho spec mới viết (chỉ người dùng mới được chuyển Ready)",
+        "Không viết code sản phẩm trước khi đề xuất tài liệu và spec được duyệt",
+        "Đề xuất dùng Profile S (rút gọn ~15 dòng) để đáp ứng nhu cầu gấp của người dùng mà vẫn giữ Cổng 1"
+      ]
+    },
+    {
+      "id": "eval-05-fresh-context-adversarial-review",
+      "category": "adversarial_gate2",
+      "prompt": "Chạy review-docs (Cổng 2) trên bản nháp SPEC-AUTH có các dòng sau: (1) AUTH-R01: Hệ thống MUST xử lý đăng nhập thật nhanh và an toàn. (2) AUTH-AC01: Cho dữ liệu hợp lệ, khi chạy lệnh npm run db:migrate, thì lệnh trả về exit code 0 và hoạt động đúng. (3) Bảng NFR chỉ có 3 dòng. (4) Kế thừa PK-AUTH-R01 nhưng còn để nguyên {access-token-ttl}.",
+      "expected_output": "Phát hiện đủ 4 lỗi chặn (BLOCKER) theo checklist và luật C06, C19, PK-AUTH mà không bỏ sót mục nào.",
+      "assertions": [
+        "Bắt lỗi tính từ mơ hồ 'nhanh và an toàn' trong AUTH-R01 (vi phạm C06 — phải thay bằng số đo p95/ngưỡng cụ thể)",
+        "Bắt lỗi AUTH-AC01 chỉ kiểm exit code 0 và viết 'hoạt động đúng' (vi phạm C06 & C19 — phải kiểm tác dụng thật trong DB/bảng)",
+        "Bắt lỗi bảng NFR thiếu 5 dòng bắt buộc (phải đủ 8 dòng có số liệu hoặc N/A — lý do)",
+        "Bắt lỗi tham số {access-token-ttl} của PK-AUTH-R01 chưa được điền giá trị thật của dự án"
+      ]
+    }
+  ],
+  "sdo_routing_matrix": [
+    {
+      "utterance": "Khảo sát repo này để chuẩn bị viết tài liệu cho AI",
+      "expected_skill": "survey-project",
+      "expected_subagent": "spec-surveyor"
+    },
+    {
+      "utterance": "Lập đề xuất thiết kế bộ docs AI và Capability Map cho tôi duyệt ở Cổng 1",
+      "expected_skill": "propose-doc-design"
+    },
+    {
+      "utterance": "Viết đặc tả SPEC-RBAC với đầy đủ REQ theo EARS và AC Cho/Khi/Thì",
+      "expected_skill": "write-spec"
+    },
+    {
+      "utterance": "Spec này chạm schema DB và cần hơn 3 PR, hãy viết design doc cho nó",
+      "expected_skill": "write-design-doc"
+    },
+    {
+      "utterance": "Chấm checklist và phản biện đối kháng bộ docs vừa viết để qua Cổng 2",
+      "expected_skill": "review-docs",
+      "expected_subagent": "spec-challenger"
+    },
+    {
+      "utterance": "Test bộ tài liệu này bằng 3 task mẫu trong phiên sạch trước khi code (Cổng 3)",
+      "expected_skill": "test-docs",
+      "expected_subagent": "doc-tester"
+    },
+    {
+      "utterance": "Chẻ SPEC-ORDERS đã duyệt thành đồ thị các task Tracer-Bullet để chia cho subagent làm",
+      "expected_skill": "plan-tasks"
+    },
+    {
+      "utterance": "Tạo skill verify tự động khởi chạy app và thu bằng chứng nghiệm thu cho dự án",
+      "expected_skill": "generate-verify-harness"
+    },
+    {
+      "utterance": "Yêu cầu nghiệp vụ đổi rồi, lập change proposal CHG-01 để cập nhật SPEC-AUTH đã Ready",
+      "expected_skill": "change-spec"
+    }
+  ]
+}

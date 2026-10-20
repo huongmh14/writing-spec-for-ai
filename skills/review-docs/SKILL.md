@@ -1,6 +1,6 @@
 ---
 name: review-docs
-description: Tự kiểm và phản biện đối kháng bộ tài liệu AI theo checklist trước khi trình người dùng duyệt (Cổng 2) — dùng subagent spec-challenger trong context sạch (chỉ truyền ARTIFACT + CONTRACT, không truyền lời biện hộ CLAIM) để rà AGENTS.md, CONSTRAINTS.md, từng spec, decisions/glossary, vị trí adapter và Pack kế thừa; phân loại phát hiện theo 4 mức và lập báo cáo Cổng 2. Dùng sau khi viết hoặc sửa docs, hoặc khi người dùng nói "review docs", "kiểm tra spec", "chấm checklist", "Cổng 2".
+description: Dùng ở Bước 6 (Cổng 2) ngay sau khi viết hoặc sửa bộ tài liệu/spec, hoặc khi người dùng nói "review docs", "kiểm tra spec", "chấm checklist", "Cổng 2". Thực hiện phản biện đối kháng trong context sạch (qua subagent spec-challenger) và chấm checklist trước khi trình người dùng duyệt.
 ---
 
 # Review docs — phản biện đối kháng & tự kiểm trước khi trình duyệt (Cổng 2)

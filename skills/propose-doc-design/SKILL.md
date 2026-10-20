@@ -1,6 +1,6 @@
 ---
 name: propose-doc-design
-description: Lập đề xuất thiết kế bộ tài liệu cho AI agent của một dự án — AGENTS.md, CONSTRAINTS.md, glossary, decisions, Capability Map & danh sách spec theo khu vực, plans, adapters, hook — kèm Profile S/M/L, Pack PK-*, câu hỏi làm rõ theo Frontier + HYPOTHESIS/GUESS và kế hoạch thử tài liệu; dừng chờ người dùng duyệt (Cổng 1), chưa tạo file nào trong repo. Dùng sau khi khảo sát, hoặc khi người dùng nói "đề xuất docs", "thiết kế tài liệu cho AI", "Cổng 1".
+description: Dùng ở Bước 3–4 (Cổng 1) ngay sau khi khảo sát dự án, hoặc khi người dùng nói "đề xuất docs", "thiết kế tài liệu cho AI", "Cổng 1". Lập bản đề xuất kiến trúc tài liệu AI (Capability Map, Profile S/M/L, Pack PK-*, câu hỏi làm rõ theo Frontier + HYPOTHESIS/GUESS) và dừng chờ người dùng duyệt trước khi tạo file trong repo.
 ---
 
 # Propose doc design — đề xuất thiết kế docs (Bước 3–4 của writing-spec-for-ai)

@@ -1,6 +1,6 @@
 ---
 name: doc-tester
-description: Clean-room dry-run agent for Gate 3 (test-docs) of writing-spec-for-ai. Simulates a brand-new developer/agent joining the repository with zero prior conversation context, reading ONLY the repository's AGENTS.md and docs/ to produce an execution plan for sample tasks and expose documentation blind spots.
+description: Use at Gate 3 (test-docs) of writing-spec-for-ai before writing any production code. Simulates a brand-new developer/agent with zero prior conversation context, reading ONLY AGENTS.md and docs/ to produce an execution plan for 3 sample tasks and expose documentation navigation blind spots.
 tools: Read, Glob, Grep
 model: sonnet
 ---

@@ -1,6 +1,6 @@
 ---
 name: <vai-tro, ví dụ test-writer>
-description: <Làm gì> cho repo <tên>. Dùng khi <tín hiệu>. Ngôi thứ ba, cụ thể.
+description: Dùng khi <tín hiệu / ngữ cảnh kích hoạt cụ thể> trong repo <tên>. <Đầu ra trả về, ngôi thứ ba, ≤ 450 ký tự, không tóm tắt quy trình bên trong.>
 tools: <danh sách tool tối thiểu, ví dụ Read, Grep, Glob, Bash>
 ---
 

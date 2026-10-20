@@ -1,6 +1,6 @@
 ---
 name: survey-project
-description: Khảo sát một dự án để chuẩn bị viết bộ spec và tài liệu cho AI agent — thu thập stack, lệnh, tài liệu sẵn có, vùng rủi ro, điều kiện hạ tầng, số đo sàn chất lượng (Ratchets), tận dụng Knowledge Graph nếu có; chấm greenfield/brownfield, đề xuất Profile S/M/L, mức 0/1/2 và các Domain Pack (PK-*) kèm tín hiệu. Dùng khi bắt đầu dự án mới, khi repo chưa có hoặc có tài liệu AI rời rạc, hoặc khi người dùng nói "khảo sát dự án", "audit docs", "chuẩn bị viết spec".
+description: Dùng ở Bước 1–2 khi bắt đầu dự án mới, khi repo chưa có hoặc có tài liệu AI rời rạc, hoặc khi người dùng nói "khảo sát dự án", "audit docs", "chuẩn bị viết spec". Thu thập bằng chứng hiện trạng repo (stack, lệnh, CI, vùng rủi ro, số đo sàn chất lượng) và đề xuất Profile S/M/L cùng các Domain Pack (PK-*).
 ---
 
 # Survey project — khảo sát dự án (Bước 1–2 của writing-spec-for-ai)

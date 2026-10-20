@@ -1,6 +1,6 @@
 ---
 name: generate-verify-harness
-description: Sinh skill kiểm chứng tự động cấp dự án (.agents/skills/verify-<app>/SKILL.md) giúp AI agent tự khởi chạy ứng dụng thật, kiểm tra sức khoẻ instance (Doctor), điều khiển qua giao diện người dùng/HTTP/CLI (Drive), thu thập bằng chứng nghiệm thu (Evidence) và dọn dẹp an toàn (Cleanup). Dùng khi dự án bước sang giai đoạn code/nghiệm thu hoặc khi người dùng nói "tạo skill verify", "tạo bộ kiểm chứng tự động cho app".
+description: Dùng ở Bước 7.5–8 khi dự án bước sang giai đoạn code/nghiệm thu hoặc khi người dùng nói "tạo skill verify", "tạo bộ kiểm chứng tự động cho app". Sinh skill kiểm chứng thực tế cấp dự án (.agents/skills/verify-<app>/SKILL.md) để AI agent tự khởi chạy, kiểm tra sức khoẻ, điều khiển ứng dụng và thu bằng chứng nghiệm thu.
 ---
 
 # Generate verify harness — sinh Skill Kiểm chứng Thực tế cho Dự án
@@ -17,7 +17,7 @@ description: Sinh skill kiểm chứng tự động cấp dự án (.agents/skil
 Trước khi viết skill, tự đọc repo để xác định 5 yếu tố:
 - **Bề mặt tương tác (Surface):** Web UI, HTTP API, CLI/TUI, Worker/Daemon, hay Desktop/Electron?
 - **Cách khởi chạy (Launch):** Lệnh khởi động từ trạng thái sạch (gồm cả migration + seed nếu có), cổng mạng, biến môi trường, và **dấu hiệu thật sự sẵn sàng** (log line cụ thể hoặc health endpoint trả `200`, không chỉ là tiến trình vừa bật).
-- **Công cụ điều khiển (Drive):** Ưu tiên harness có sẵn trong repo (Playwright, টেস্ট runner, script CLI, `curl`); nếu chưa có mới chọn công cụ chuẩn (Playwright/CDP cho Web, PTY/subshell cô lập cho CLI, HTTP client cho API).
+- **Công cụ điều khiển (Drive):** Ưu tiên harness có sẵn trong repo (Playwright, test runner, script CLI, `curl`); nếu chưa có mới chọn công cụ chuẩn (Playwright/CDP cho Web, PTY/subshell cô lập cho CLI, HTTP client cho API).
 - **Bằng chứng thu thập (Evidence):** Ảnh chụp màn hình, bản ghi terminal, HTTP response body + status, dòng log có `requestId`, và trạng thái dữ liệu trong DB/file sau thao tác.
 - **Cô lập (Isolation):** Hai phiên kiểm chứng có chạy song song được không (port riêng, DB/thư mục tạm riêng)? Nếu không, phải ghi rõ quy tắc kiểm tra khoá để tránh đè lên phiên của lập trình viên.
 

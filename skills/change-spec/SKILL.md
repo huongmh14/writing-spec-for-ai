@@ -1,6 +1,6 @@
 ---
 name: change-spec
-description: Thay đổi spec đã Ready hoặc Done đúng quy trình — chọn giữa spec con, change proposal CHG-xx (ADDED/MODIFIED/REMOVED) và cập nhật decisions P-xx/D-xx; áp dụng delta vào spec sau khi được duyệt. Dùng khi yêu cầu đổi sau khi spec đã duyệt, khi phát hiện spec sai trong khi code, hoặc khi người dùng nói "sửa spec", "change proposal", "cập nhật đặc tả".
+description: Dùng ở Bước 8 khi yêu cầu thay đổi sau khi spec đã duyệt (Ready/Done), khi phát hiện spec sai trong lúc code, hoặc khi người dùng nói "sửa spec", "change proposal", "cập nhật đặc tả". Phân luồng giữa tách spec con và lập Change Proposal CHG-xx (ADDED/MODIFIED/REMOVED) kèm đồng bộ decisions/AC.
 ---
 
 # Change spec — thay đổi spec đã duyệt

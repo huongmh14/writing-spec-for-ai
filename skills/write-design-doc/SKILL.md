@@ -1,11 +1,13 @@
 ---
 name: write-design-doc
-description: Viết tài liệu thiết kế đi kèm một spec (docs/specs/<nn>-<khu-vực>-design.md) khi spec cần hơn 2 PR hoặc chạm schema, API công khai, bảo mật — gồm thành phần, luồng, mô hình dữ liệu, contract máy đọc, mô hình đe doạ, phương án đã loại, rủi ro và rollback. Dùng khi đề xuất được duyệt có yêu cầu mức 1 "tài liệu thiết kế", hoặc khi người dùng nói "viết design", "thiết kế cho SPEC-XXX".
+description: Viết tài liệu thiết kế đi kèm một spec (docs/specs/<nn>-<khu-vực>-design.md) khi spec cần hơn 2 PR hoặc chạm schema, API công khai, bảo mật — thiết kế Module Sâu (Deep Modules) và Điểm ghép nối (Seams), so sánh ≥ 2 phương án (Design It Twice), trích dẫn docs chính thức theo version (C25), gắn trần đơn giản hoá (ceiling: C27), mô hình đe doạ STRIDE và kế hoạch rollback. Dùng khi đề xuất được duyệt có yêu cầu mức 1 "tài liệu thiết kế", hoặc khi người dùng nói "viết design", "thiết kế cho SPEC-XXX".
 ---
 
-# Write design doc — tài liệu thiết kế của một spec
+# Write design doc — tài liệu thiết kế của một spec (Bước 5c)
 
-Nguyên tắc phân vai: **spec nói cái gì, design nói ghép thế nào**. Nếu nội dung định viết trả lời được "yêu cầu nào?" thì thuộc spec; trả lời "chọn kiến trúc/giao diện nào và tại sao?" thì thuộc design.
+Nguyên tắc phân vai: **spec nói cái gì, design nói ghép thế nào**. Nếu nội dung định viết trả lời được "yêu cầu nào?" thì thuộc spec; trả lời "chọn kiến trúc/giao diện nào, đặt điểm ghép nối (seam) ở đâu và tại sao?" thì thuộc design.
+
+> Nguồn kế thừa: `codebase-design` (Deep Modules & Seams), `pstack/architect` (Design It Twice), `source-driven-development` (`C25`), `ponytail` (`C27`), `archify`.
 
 Khi nào viết (tín hiệu, phải có thật trước khi mở file):
 - Plan dự kiến của spec > 2 PR;
@@ -15,26 +17,32 @@ Khi nào viết (tín hiệu, phải có thật trước khi mở file):
 ## Các bước
 
 1. Tạo `docs/specs/<nn>-<khu-vực>-design.md` từ `templates/docs/specs/_design-template.md`; bảng Thuộc tính link về spec.
-2. **Bối cảnh và ràng buộc**: chỉ liệt kê ràng buộc *ảnh hưởng chọn phương án* (từ `decisions.md` D-xx, AGENTS.md, hạ tầng). Không tả lại spec.
-3. **Thiết kế**: sơ đồ luồng (mermaid) cho luồng chính + luồng lỗi; bảng `Thành phần | Trách nhiệm | REQ` — mỗi thành phần phải maps về ≥ 1 REQ, mỗi REQ "ghép thế nào" phải có thành phần nhận trách nhiệm.
-4. **Mô hình dữ liệu**: bảng thực thể + trường chính + ràng buộc + vòng đời. Thay đổi schema có sẵn → ghi rõ migration đường đi.
+2. **Bối cảnh và ràng buộc**: chỉ liệt kê ràng buộc *ảnh hưởng chọn phương án* (từ `decisions.md` D-xx, `CONSTRAINTS.md`, AGENTS.md, hạ tầng). Không tả lại spec.
+3. **Thiết kế Module Sâu & Điểm ghép nối (`Deep Modules & Seams`):**
+   - Sơ đồ luồng (Mermaid) cho luồng chính + luồng lỗi (nếu người dùng cần bản HTML tương tác để duyệt thiết kế phức tạp, dùng thêm skill `archify`).
+   - Bảng `Thành phần (Module) | Giao diện & Điểm ghép nối (Interface & Seam) | Trách nhiệm ẩn bên trong | REQ` — ưu tiên **Deep Module** (giao diện nhỏ, ít hàm/tham số nhưng ẩn được nhiều logic phức tạp bên trong) thay vì Shallow Module (giao diện phình to chỉ làm nhiệm vụ truyền tay).
+   - Chỉ rõ **Seam (điểm ghép nối)** nơi đặt bài test nghiệm thu để test toàn bộ hành vi từ bên ngoài mà không phải mock sâu vào ruột cài đặt.
+   - **Trích dẫn nguồn chính thống (`C25`):** mọi mẫu thiết kế gắn với framework/thư viện phải kiểm đúng major version trong manifest và đính link tài liệu chính thức (hoặc gắn `[UNVERIFIED]` nếu chưa xác minh được).
+   - **Đánh dấu trần đơn giản hoá (`C27`):** nếu cố ý chọn thiết kế đơn giản có giới hạn đã biết (in-memory queue, lock đơn tiến trình, polling), ghi rõ `ceiling: <ngưỡng chịu tải tối đa> → <đường nâng cấp khi vượt ngưỡng>`.
+4. **Mô hình dữ liệu**: bảng thực thể + trường chính + ràng buộc + vòng đời. Thay đổi schema có sẵn → ghi rõ đường migration tương thích ngược (**Expand → Migrate → Verify → Contract** theo `PK-DB-R01`).
 5. **Hợp đồng**: link file máy đọc (`openapi.yaml#/paths/...`, JSON Schema, test vectors). **Không chép nội dung contract vào design** — một sự thật một chỗ.
-6. **Mô hình đe doạ** (vùng rủi ro auth/phân quyền/dữ liệu cá nhân/thanh toán): bảng `Tài sản | Mối đe doạ (STRIDE) | Biện pháp | REQ/AC` — mọi biện pháp phải truy về REQ/AC, biện pháp nào không có REQ thì bổ sung REQ vào spec (cùng PR).
-7. **Phương án đã loại**: ≥ 1 dòng cho mỗi phương án từng cân nhắc, ghi vì sao loại. Thiếu mục này = design chưa xong (đây là chỗ người review nhìn vào đầu tiên).
+6. **Mô hình đe doạ** (vùng rủi ro auth/phân quyền/dữ liệu cá nhân/thanh toán/agent): bảng `Tài sản | Mối đe doạ (STRIDE) | Biện pháp | REQ/AC` — mọi biện pháp phải truy về REQ/AC, biện pháp nào không có REQ thì bổ sung REQ vào spec (cùng PR).
+7. **Phương án đã loại (`Design It Twice`)**: với vùng thiết kế cốt lõi, bắt buộc phác thảo tối thiểu **2 phương án có hình thái giao diện khác nhau**, so sánh độ sâu giao diện (Interface Depth), độ cô lập thay đổi (Locality) và chi phí vận hành, rồi ghi rõ vì sao loại phương án kia. Thiếu mục này = design chưa xong.
 8. **Rủi ro, migration, rollback**: chuyện gì hỏng khi triển khai, quay lại thế nào, có mất dữ liệu không.
-9. **Đối chiếu nguyên tắc**: bảng rà từng nguyên tắc AGENTS.md / D-xx liên quan — Đạt / Vi phạm + lý do (vi phạm có thể chấp nhận, nhưng phải nêu).
+9. **Đối chiếu nguyên tắc**: bảng rà từng nguyên tắc AGENTS.md / D-xx / `CONSTRAINTS.md` liên quan — Đạt / Vi phạm + lý do.
 
 ## Gotchas
 
 - Design phình thành bản mô tả lại spec (copy REQ) → xoá phần không trả lời "ghép thế nào".
-- Sơ đồ vẽ miên man nhưng bảng REQ → thành phần thiếu → không truy vết được nghiệm thu.
-- Phương án đã loại chỉ ghi một từ "không phù hợp" → phải có lý do cụ thể đủ để người sau không đề xuất lại.
+- Đặt quá nhiều seam/adapter giả định khi thực tế chỉ có 1 cách cài đặt (*"One adapter means a hypothetical seam; two adapters means a real one"*).
+- Phương án đã loại chỉ dựng "bù nhìn" (strawman) hoặc ghi một từ "không phù hợp" → phải là phương án khả thi thực sự và nêu lý do kỹ thuật đủ để người sau không đề xuất lại.
 
 ## Kiểm tra trước khi trình
 
 - [ ] Có tín hiệu đủ điều kiện viết design (liệt kê ở đầu skill).
-- [ ] Mỗi thành phần maps về REQ; mỗi REQ khó có thành phần nhận trách nhiệm.
+- [ ] Mỗi thành phần maps về REQ; chỉ rõ **Interface Depth** và **Seam** đặt test.
+- [ ] Các quyết định phụ thuộc framework/API có link tài liệu chính thức đúng version (`C25`); các chỗ đơn giản hoá có chủ đích có ghi chú `ceiling:` (`C27`).
 - [ ] Contract là file máy đọc, design chỉ link.
-- [ ] Có ≥ 1 phương án đã loại kèm lý do.
+- [ ] Có ≥ 1 phương án đối trọng thực sự đã loại kèm lý do (**Design It Twice**).
 - [ ] Vùng rủi ro: có bảng STRIDE, biện pháp truy về REQ/AC.
-- [ ] Có rollback; đổi schema có đường migration.
+- [ ] Có rollback; đổi schema có đường migration Expand–Contract.

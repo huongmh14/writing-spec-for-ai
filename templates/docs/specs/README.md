@@ -16,7 +16,7 @@ Nguồn sự thật về yêu cầu. Quyết định ở `../decisions.md`, thu�
 | Trạng thái | AI được làm | AI không được làm |
 |---|---|---|
 | `Draft` | Đọc, chỉ chỗ thiếu/mâu thuẫn/mơ hồ, đề xuất phương án kèm đánh đổi, viết AC | **Viết code triển khai**; tự chọn phương án thay người dùng |
-| `Ready` | Lập plan, chia PR, chuẩn bị migration, viết test theo AC | Đổi nội dung spec trong lúc làm |
+| `Ready` | Lập plan (`plan-tasks`), chia PR, chuẩn bị migration, viết test theo AC | Đổi nội dung spec trong lúc làm |
 | `In progress` | Viết code + test, đánh `[x]` AC khi CI xanh, báo blocker | Lệch khỏi spec mà không nói; thêm chức năng "nhân tiện" |
 | `Done` | Sửa lỗi đã xác nhận, đúng hành vi spec mô tả | Đổi hành vi khi chưa có `../changes/CHG-xx` được duyệt |
 | `As-built` | Ghi bằng chứng, nêu hành vi đáng ngờ vào câu hỏi mở | Coi code hiện có là chuẩn; "sửa cho hợp lý" |
@@ -38,14 +38,18 @@ Sửa trong **cùng PR** với code.
 | Biến môi trường / cấu hình | `../reference/config.md` + `.env.example` |
 | Breaking change | `../changelog/<ver>.md` |
 | Quyết định kỹ thuật | `../decisions.md` (+ REQ bị ảnh hưởng) |
-| Khuôn mẫu code / quy trình | `AGENTS.md` |
+| Khuôn mẫu code / quy trình | `AGENTS.md` (hoặc `CONSTRAINTS.md` nếu là ngưỡng chất lượng) |
 | **Đổi stack / công cụ build** | Lệnh trong `AGENTS.md` + CI + quy ước code + skill dự án — một change, không tách PR |
 
-## Danh mục
+## Danh mục & Bản đồ Năng lực (Capability Map)
 
-| ID | File | Nội dung | Giai đoạn | Trạng thái |
-|---|---|---|---|---|
-| SPEC-ARCH | [00-architecture.md](00-architecture.md) | Kiến trúc, nguyên tắc | 1 | Draft |
+Chiều phụ thuộc chỉ đi một chiều (không có vòng lặp). Nếu 2 spec phụ thuộc chéo nhau, gộp thành 1 hoặc tách phần chung ra spec nền.
+
+| ID | File | Nội dung | Phụ thuộc vào (`Depends on`) | Giai đoạn | Trạng thái |
+|---|---|---|---|---|---|
+| SPEC-ARCH | [00-architecture.md](00-architecture.md) | Kiến trúc, nguyên tắc | — | 1 | Draft |
+
+**Thứ tự xây dựng (Build Order):** `SPEC-ARCH → ...`
 
 ## Đối chiếu tài liệu nguồn <!-- khi spec dựng từ PRD/docx -->
 
@@ -53,7 +57,3 @@ Sửa trong **cùng PR** với code.
 |---|---|
 
 **Phần lệch so với nguồn:** <nội dung chốt sau tài liệu nguồn, chỉ có ở spec + decisions>
-
-## Thứ tự triển khai đề xuất
-
-1.

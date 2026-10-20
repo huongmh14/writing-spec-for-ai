@@ -12,18 +12,18 @@ SKILL_NAME="writing-spec-for-ai"
 TEMP_DIR=""
 
 echo "===================================================="
-echo "  Installing Writing Spec for AI (Multi-Agent Kit)  "
+echo "  Installing Writing Spec for AI v1.2.0             "
 echo "===================================================="
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" 2>/dev/null && pwd || pwd)"
 
 if [ -f "$SCRIPT_DIR/SKILL.md" ]; then
     SOURCE_DIR="$SCRIPT_DIR"
-    echo "[1/2] Using local repository at $SOURCE_DIR ..."
+    echo "[1/3] Using local repository at $SOURCE_DIR ..."
 else
     TEMP_DIR="$(mktemp -d)"
     trap 'rm -rf "$TEMP_DIR"' EXIT
-    echo "[1/2] Downloading latest release from $REPO_URL ..."
+    echo "[1/3] Downloading latest release from $REPO_URL ..."
     git clone --depth 1 "$REPO_URL" "$TEMP_DIR" >/dev/null 2>&1
     SOURCE_DIR="$TEMP_DIR"
 fi
@@ -38,7 +38,7 @@ TARGETS=(
     "$HOME/.zcode/skills/$SKILL_NAME"
 )
 
-echo "[2/2] Installing skill suite to AI coding agents..."
+echo "[2/3] Installing skill suite to AI coding agents..."
 
 for DEST in "${TARGETS[@]}"; do
     rm -rf "$DEST"
@@ -48,8 +48,24 @@ for DEST in "${TARGETS[@]}"; do
         --exclude='.github' \
         --exclude='dist' \
         -cf - . | tar -C "$DEST" -xf -
-    echo "  [+] Installed -> $DEST"
+    echo "  [+] Installed skill suite -> $DEST"
 done
+
+echo "[3/3] Installing specialized subagents (spec-surveyor, spec-challenger, doc-tester)..."
+
+AGENT_DIRS=(
+    "$HOME/.claude/agents"
+    "$HOME/.agents/agents"
+    "$HOME/.cursor/agents"
+)
+
+if [ -d "$SOURCE_DIR/agents" ]; then
+    for ADIR in "${AGENT_DIRS[@]}"; do
+        mkdir -p "$ADIR"
+        cp -f "$SOURCE_DIR/agents/"*.md "$ADIR/"
+        echo "  [+] Installed subagents -> $ADIR"
+    done
+fi
 
 echo ""
 echo "Done! Try asking your agent:"

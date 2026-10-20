@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Release tag (e.g. v1.1.0)"
+        description: "Release tag (e.g. v1.2.0)"
         required: true
-        default: "v1.1.0"
+        default: "v1.2.0"
 
 permissions:
   contents: write
@@ -47,17 +47,20 @@ jobs:
             "change-spec"
             "review-docs"
             "test-docs"
+            "plan-tasks"
+            "generate-verify-harness"
           )
 
           for SUB in "${SUBSKILLS[@]}"; do
             STAGE="dist/subskills/${SUB}"
             mkdir -p "$STAGE"
             cp "skills/${SUB}/SKILL.md" "$STAGE/SKILL.md"
-            cp -r references packs templates profiles.md LICENSE "$STAGE/"
+            cp -r references packs agents templates profiles.md LICENSE "$STAGE/"
             # Normalize relative paths from ../../ to ./ for standalone installation
             sed -i 's|\.\./\.\./references/|./references/|g' "$STAGE/SKILL.md"
             sed -i 's|\.\./\.\./templates/|./templates/|g' "$STAGE/SKILL.md"
             sed -i 's|\.\./\.\./packs/|./packs/|g' "$STAGE/SKILL.md"
+            sed -i 's|\.\./\.\./agents/|./agents/|g' "$STAGE/SKILL.md"
             sed -i 's|\.\./\.\./profiles\.md|./profiles.md|g' "$STAGE/SKILL.md"
             (cd dist/subskills && zip -r "../skill-${SUB}.zip" "${SUB}")
           done

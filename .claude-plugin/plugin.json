@@ -1,7 +1,7 @@
 {
   "name": "writing-spec-for-ai",
-  "description": "Spec-driven documentation framework & 3-gate orchestrator skill for AI coding agents — AGENTS.md, EARS specs, reusable technical packs (PK-API, PK-AUTH, PK-RELEASE), and S/M/L project profiles.",
-  "version": "1.1.0",
+  "description": "Spec-driven documentation framework & 3-gate orchestrator skill for AI coding agents — AGENTS.md, CONSTRAINTS.md, EARS specs, 8 reusable domain packs (PK-API, PK-AUTH, PK-RELEASE, PK-DB, PK-OBS, PK-FE, PK-JOB, PK-AGENT), S/M/L project profiles, and 3 specialized subagents.",
+  "version": "1.2.0",
   "author": {
     "name": "huongmh14"
   },
@@ -11,11 +11,30 @@
   "keywords": [
     "ai-agents",
     "agents-md",
+    "constraints-md",
     "spec-driven-development",
     "ears-syntax",
     "claude-code",
     "cursor",
     "codex",
-    "antigravity"
+    "antigravity",
+    "zcode"
+  ],
+  "skills": [
+    "./",
+    "./skills/survey-project",
+    "./skills/propose-doc-design",
+    "./skills/write-spec",
+    "./skills/write-design-doc",
+    "./skills/change-spec",
+    "./skills/review-docs",
+    "./skills/test-docs",
+    "./skills/plan-tasks",
+    "./skills/generate-verify-harness"
+  ],
+  "agents": [
+    "./agents/spec-surveyor.md",
+    "./agents/spec-challenger.md",
+    "./agents/doc-tester.md"
   ]
 }

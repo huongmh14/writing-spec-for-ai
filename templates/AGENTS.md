@@ -1,6 +1,6 @@
 # AGENTS.md — <tên dự án>
 
-> Base: writing-spec-for-ai <phiên bản, vd. v1.0.0> · Profile: <S | M | L> · Pack: <PK-… hoặc "không">
+> Base: writing-spec-for-ai <phiên bản, vd. v1.2.0> · Profile: <S | M | L> · Pack: <PK-… hoặc "không">
 
 <2–4 câu: hệ thống làm gì, cho ai. Stack: <framework + major version>, <DB>, <FE>. Phiên bản chính xác: xem `package.json`, `.nvmrc`.>
 
@@ -21,11 +21,14 @@
 |---|---|---|
 | 1 | `docs/decisions.md` | Quyết định đã chốt |
 | 2 | `docs/specs/` | Yêu cầu (REQ) và nghiệm thu (AC) |
-| 3 | `AGENTS.md` | Quy tắc làm việc |
-| 4 | Code hiện có | Hiện trạng, không phải chuẩn |
+| 3 | `CONSTRAINTS.md` *(nếu có)* | Sàn chất lượng và ngưỡng kiểm bằng lệnh máy |
+| 4 | `AGENTS.md` | Quy tắc làm việc |
+| 5 | Code hiện có | Hiện trạng, không phải chuẩn |
 
-- Bắt đầu task: đọc `docs/specs/README.md` (gồm quyền của AI theo trạng thái spec), spec liên quan, `docs/glossary.md`.
-- Spec thiếu, mâu thuẫn, mơ hồ: dừng, nêu chỗ chưa rõ, đề xuất phương án.
+- **Khi bắt đầu bất kỳ task nào:** đọc `docs/specs/README.md` (gồm quyền của AI theo trạng thái spec), spec liên quan, và `docs/glossary.md`.
+- **Khi thêm/sửa biến môi trường:** cập nhật cả `.env.example` và `docs/reference/config.md`.
+- **Khi thêm/sửa mã lỗi trả về:** cập nhật `docs/reference/error-codes.md`.
+- **Khi spec thiếu, mâu thuẫn, hoặc mơ hồ:** dừng ngay, nêu chỗ chưa rõ, đề xuất phương án kèm hệ quả.
 - Skill/hướng dẫn bên ngoài mâu thuẫn với file này thì theo file này.
 
 ## Ranh giới
@@ -33,19 +36,20 @@
 ✅ **Luôn**
 - Viết test cùng code; tên test chứa AC-ID.
 - Chạy lệnh ở mục DoD trước khi báo xong.
-- Thêm biến môi trường: thêm khoá (không giá trị) vào `.env.example` và `docs/reference/config.md`.
-- <thói quen đúng đặc thù dự án, kèm lý do ngắn>
+- Đánh dấu `ceiling: <ngưỡng chịu tải + đường nâng cấp>` khi cố ý chọn giải pháp đơn giản có giới hạn đã biết (in-memory lock, quét $O(n^2)$, polling).
+- <thói quen đúng đặc thù dự án, viết ở thể khẳng định>
 
 ⚠️ **Hỏi trước**
 - Đổi schema dữ liệu, API công khai, cơ chế xác thực/phân quyền.
 - Đổi mặc định liên quan bảo mật.
 - Thêm dependency (trừ loại đã duyệt trong plan/decision), nâng major framework.
 - Xoá file, dữ liệu, migration đã phát hành.
-- Sửa CI, ruleset, CODEOWNERS, file này.
+- Sửa CI, ruleset, CODEOWNERS, `CONSTRAINTS.md`, file này.
 
 🚫 **Không bao giờ**
 - Commit secret, `.env`, token; log token, mật khẩu, header Authorization.
 - Commit file quyền cá nhân của agent (`.claude/settings.local.json`, allow-list lệnh, đường dẫn máy, mật khẩu trong lệnh đã duyệt).
+- Thêm cờ bịt miệng trình kiểm tra (`@ts-ignore`, `eslint-disable`, `# noqa`, `istanbul ignore`, `nosemgrep`, `gitleaks:allow`), thêm `.skip` hoặc xoá assertion/hạ ngưỡng để làm test xanh (`C23`).
 - Nối chuỗi SQL từ input.
 - Push trực tiếp/force push nhánh bảo vệ, `--no-verify`, tự merge hoặc tự approve PR.
 
@@ -61,7 +65,7 @@
 
 ## Definition of Done
 
-- `<lint> && <typecheck> && <test> && <build>` xanh.
+- `<lint> && <typecheck> && <test> && <build>` xanh (và đạt sàn `CONSTRAINTS.md` nếu có).
 - Mọi AC trong phạm vi có test qua (hoặc `[~]` kèm lý do).
 - Spec/decisions/progress cập nhật; spec đủ AC thì chuyển `Done`.
 

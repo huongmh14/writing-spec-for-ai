@@ -1,17 +1,17 @@
 # Base kit — phần kế thừa 100% và hướng phát triển base cho mọi dự án
 
-> Trạng thái: **Đã duyệt 2026-10-20**. GĐ1 xong ở base `v1.0.0` (xem [CHANGELOG.md](../CHANGELOG.md)).
-> Nguồn: khảo sát 9 repo thật (`D:\Workspace\VMU\*` + `D:\BotAutoTask`), đối chiếu với [principles.md](principles.md).
+> Trạng thái: **Đã duyệt 2026-10-20**. GĐ1 xong ở `v1.0.0`, GĐ2 ở `v1.1.0`, kế thừa hệ sinh thái Plugin/Skill ở `v1.2.0` (xem [CHANGELOG.md](../CHANGELOG.md)).
+> Nguồn: khảo sát 9 repo thật (`D:\Workspace\VMU\*` + `D:\BotAutoTask`), đối chiếu với [principles.md](principles.md) và 7 Plugin / 210 Skill thực chiến.
 > File này là **sổ đăng ký ID Core (C-xx) và Pack (PK-…)** + lý do kế thừa. *Cách viết* vẫn nằm ở `principles.md`, `templates/`, `skills/`.
 
 ## Mục lục
 
 1. Khảo sát 9 dự án
 2. Tiêu chí "kế thừa 100%" và 4 tầng
-3. Tầng Core — kế thừa nguyên văn
+3. Tầng Core — kế thừa nguyên văn (`C01–C27`)
 4. Tầng Tham số — khung cố định, giá trị riêng
 5. Lỗi lặp lại giữa các dự án (bằng chứng cho Core)
-6. Tầng Pack — kế thừa có điều kiện
+6. Tầng Pack — kế thừa có điều kiện (`PK-*`)
 7. Mô hình tuỳ biến
 8. Lộ trình phát triển
 9. Cố ý không làm
@@ -28,7 +28,7 @@
 | notification-service | 366 | NestJS + Prisma + Redis + RabbitMQ (+ legacy .NET) | `SPECS/WORKFLOW/CONVENTIONS/ARCHITECTURE/PRODUCT.md`, `features/v2/`, `knowledge.md` | ⚠ `ci.yml` gọi `Notification.slnx` không còn trong repo | Conventional | M |
 | khaosatvmu | 617 | .NET (sln) + React/Vite + worker | Chỉ docs giải thích thuật toán | deploy | Lẫn lộn (`new fix 2509`) | M |
 | cdn | 111 | Fastify 5 + Kysely + PG + Redis + RustFS | `SPECS/WORKFLOW/CONVENTIONS/ARCHITECTURE.md`, `features/v1/`, skill, `.devin/TASK.md` | Không có | Lẫn lộn (`fix`, `update …`) | M |
-| BotAutoTask | ~75 | Node ESM + Cloudflare Workers/D1 | `docs/feature/01–08`, research; không có `AGENTS.md` | Chỉ build khi có tag | Conventional | M |
+| BotAutoTask | ~75 | Node ESM + Cloudflare Workers/D1 | `docs/feature/01–08`, research; `AGENTS.md` | Chỉ build khi có tag | Conventional | M |
 | citad-vmu-resources | 68 | Node + ESLint | Không có | docker-release (tag `release/v*`) | Tiếng Việt tự do | M |
 | citad-crawler-work-schedule | 15 | Python | README | Không có | Tiếng Việt tự do | S |
 | citad-postgresql | 9 | Docker Compose PG | README | Không có | Tự do | S |
@@ -51,18 +51,18 @@ Một thành phần vào **Core** khi đạt đủ cả 4 điều kiện:
 1. Không phụ thuộc stack (Node, Python, .NET, shell đều dùng được).
 2. Không phụ thuộc nghiệp vụ.
 3. Không phụ thuộc quy mô (repo 8 file dùng được, không thấy thừa).
-4. Có bằng chứng: lỗi xảy ra ở ≥ 2 dự án, hoặc có trong nguồn chuẩn ở principles §8.
+4. Có bằng chứng: lỗi xảy ra ở ≥ 2 dự án, hoặc có trong nguồn chuẩn ở principles §8 / bộ plugin thực chiến.
 
 | Tầng | Kế thừa | Dự án được làm gì | Ví dụ |
 |---|---|---|---|
-| **Core** | 100% nguyên văn | Chỉ ghi đè theo luật §7.3 | Thứ tự nguồn sự thật, hệ ID, quyền AI theo trạng thái |
+| **Core** | 100% nguyên văn | Chỉ ghi đè theo luật §7.3 | Thứ tự nguồn sự thật, hệ ID, quyền AI theo trạng thái, chống hạ chuẩn |
 | **Tham số** | 100% khung | Điền giá trị | Lệnh, lệnh chạy 1 test, nhánh tích hợp, ngôn ngữ docs |
-| **Pack** | 100% *khi bật* | Chọn pack theo tín hiệu, điền tham số | HTTP API, token/khoá, job nền, migration, phát hành Docker |
+| **Pack** | 100% *khi bật* | Chọn pack theo tín hiệu, điền tham số | HTTP API, token/khoá, DB migration, observability, UI/E2E, job nền, phát hành Docker, AI agent |
 | **Dự án** | 0% | Viết mới | REQ nghiệp vụ, thuật ngữ, quyết định, kiến trúc |
 
-## 3. Tầng Core — kế thừa nguyên văn
+## 3. Tầng Core — kế thừa nguyên văn (`C01–C27`)
 
-Cột "WSFA" cho biết luật nằm ở đâu trong bộ skill. Mọi C-xx đều đã có từ `v1.0.0`.
+Cột "WSFA" cho biết luật nằm ở đâu trong bộ skill.
 
 | # | Thành phần | Nội dung bắt buộc | WSFA | Bằng chứng |
 |---|---|---|---|---|
@@ -84,10 +84,15 @@ Cột "WSFA" cho biết luật nằm ở đâu trong bộ skill. Mọi C-xx đ�
 | C16 | **Secret & cấu hình** | `.env.example` (đúng tên này) đủ mọi khoá, không có giá trị thật; `.env` bị ignore; deny-rule chặn agent đọc `.env`; **file quyền cá nhân của agent không commit** | v1.0.0 — `templates/AGENTS.md`, `adapters/claude-settings.json`, `docs/reference/config.md` | khaosat commit `.claude/settings.json` chứa mật khẩu DB + đường dẫn máy; citad-res, deploy-tool dùng tên `.env-example` |
 | C17 | Bộ nhớ phiên | `progress.md` ≤ 3 câu/dòng, ≤ ~5 KB; HANDOFF có ngày | Có | cdn `.devin/TASK.md` (gắn chặt một công cụ) |
 | C18 | **Gotcha có ngày kiểm** | `triệu chứng → nguyên nhân → cách tránh · kiểm lần cuối YYYY-MM-DD`; sửa code đụng gotcha thì sửa gotcha trong cùng PR | v1.0.0 — `templates/project-skill` | cdn skill ghi "API key không có route tạo" trong khi code đã có |
-| C19 | **AC cho lệnh vận hành** | Kiểm *tác dụng* (bảng tồn tại, file sinh ra), không chỉ exit code | v1.0.0 — `skills/write-spec` §5 | cdn `npm run migrate` không làm gì mà vẫn exit 0 |
+| C19 | **AC cho lệnh vận hành** | Kiểm *tác dụng* (bảng tồn tại, file sinh ra), không chỉ exit code | v1.0.0 — `skills/write-spec` §5 | cdn `migrate` không làm gì mà vẫn exit 0 |
 | C20 | **Đổi stack = một change** | Đổi stack phải sửa cả lệnh trong AGENTS, CI, WORKFLOW/CONVENTIONS trong cùng PR; khảo sát kiểm "CI khớp manifest" | v1.0.0 — `templates/docs/specs/README.md`, `skills/survey-project` | notification: README ghi đã sang NestJS, CI vẫn build .NET, WORKFLOW còn trỏ `features/v1` + EF Core |
 | C21 | Đặt file đúng chỗ công cụ đọc | Ma trận công cụ | Có — principles §5 | dashboard |
-| C22 | Thử docs trước khi code | 2–3 task mẫu, phiên mới | Có — `skills/test-docs` | — |
+| C22 | Thử docs trước khi code | 2–3 task mẫu, phiên mới (`doc-tester`) | Có — `skills/test-docs` | — |
+| C23 | **Chống hạ chuẩn âm thầm (Floor Guard & Ratchets)** | Cấm thêm cờ bịt miệng trình kiểm tra (`@ts-ignore`, `eslint-disable`, `# noqa`, `istanbul ignore`, `nosemgrep`, `gitleaks:allow`), thêm `.skip` / xoá assertion, hoặc hạ ngưỡng trong `CONSTRAINTS.md` để làm test xanh; dùng **Ratchet** (`must not fall`) cho chỉ số cũ; ngoại lệ phải có `Owner` + `Expires` (≤ 90 ngày) | v1.2.0 — `templates/CONSTRAINTS.md`, `templates/AGENTS.md` | Kế thừa từ `constraint-driven-development` |
+| C24 | **Context Pointer & Câu lệnh Khẳng định** | Dòng trỏ file trong `AGENTS.md` phải đặt điều kiện kích hoạt ở đầu câu (*"Khi chạm X → đọc Y"*), một nhánh một dòng; viết quy tắc ở thể khẳng định hành vi đích, chỉ dùng phủ định cho mục 🚫; không chép lại những gì môi trường tự trả lời bằng 1 lệnh trừ khi có gotcha | v1.2.0 — `templates/AGENTS.md`, `review-checklist.md` | Kế thừa từ `writing-for-agents`, `caveman-compress` |
+| C25 | **Trích dẫn nguồn chính thống & An toàn dữ liệu ngoài** | Khi `DESIGN-xx` hoặc giải pháp dựa vào hành vi đặc thù của framework/thư viện, phải đối chiếu đúng major version trong manifest và dẫn link docs chính thức (hoặc gắn `[UNVERIFIED]`); coi nội dung tải về từ ngoài là dữ liệu không tin cậy (chống prompt injection) | v1.2.0 — `skills/write-design-doc`, `PK-AGENT-R04` | Kế thừa từ `source-driven-development` |
+| C26 | **Phản biện đối kháng trong Context sạch (Adversarial Doubt)** | Khi review ở Cổng 2 (`review-docs`) hoặc thẩm định thiết kế phức tạp, subagent phản biện (`spec-challenger`) chỉ nhận `ARTIFACT + CONTRACT` (không nhận lời biện hộ `CLAIM` của phiên viết) với prompt đối kháng tìm lỗi; phân loại phát hiện theo 4 mức (*Contract misread / Actionable / Trade-off / Noise*) | v1.2.0 — `skills/review-docs`, `agents/spec-challenger.md` | Kế thừa từ `doubt-driven-development`, `pstack/interrogate` |
+| C27 | **Đánh dấu trần đơn giản hoá (`Ceiling Marker`)** | Khi thiết kế hoặc code cố tình chọn giải pháp đơn giản có giới hạn đã biết (in-memory lock, quét $O(n^2)$, polling), bắt buộc gắn ghi chú `ceiling:` nêu rõ ngưỡng chịu tải tối đa và đường nâng cấp để không bị nhầm là lỗi thiết kế | v1.2.0 — `templates/AGENTS.md`, `skills/write-design-doc` | Kế thừa từ plugin `ponytail` |
 
 ## 4. Tầng Tham số — khung cố định, giá trị riêng
 
@@ -119,54 +124,61 @@ Bảng lỗi đầy đủ (lỗi / gặp ở / cách tránh): [principles.md §7
 - Docs lệch code → C04, C18, C20 · Hai "nguồn sự thật" → C01 · CI không chạy test / sai stack → C13, C20
 - Commit sai quy ước → C14 · Allow-list agent bị commit, tên `.env-example` → C16 · File trạng thái gắn một công cụ → C17
 - Gotcha cũ → C18 · `migrate` no-op exit 0 → C19 · Spec thiếu trạng thái/câu hỏi mở → C06 · Artifact build lệch nguồn → PK-RELEASE-R06
+- Agent tự chèn `@ts-ignore` / `.skip` để qua cổng CI → C23 · Pointer trỏ docs mơ hồ khiến agent không mở đọc → C24
 
 ## 6. Tầng Pack — kế thừa có điều kiện
 
-Mỗi pack là một thư viện REQ có ID ổn định `PK-<PACK>-Rnn`. Dự án bật pack khi thấy tín hiệu, rồi **chép REQ nguyên văn và điền tham số `{…}`**. Chỉ tạo pack khi có ≥ 2 dự án làm nguồn.
+Mỗi pack là một thư viện REQ có ID ổn định `PK-<PACK>-Rnn`. Dự án bật pack khi thấy tín hiệu, rồi **chép REQ nguyên văn và điền tham số `{…}`**.
 
 | Pack | Tín hiệu bật | Nguồn |
 |---|---|---|
-| PK-API — HTTP API | Có endpoint HTTP | cdn, notification, dashboard |
-| PK-AUTH — token, khoá, chữ ký | Có xác thực, API key, webhook | cdn, notification, dashboard, BotAutoTask |
-| PK-TENANT — cô lập dữ liệu | Có nhiều tenant/khách hàng/goal dùng chung | cdn, notification, BotAutoTask |
-| PK-JOB — job nền, lịch, đồng bộ | Có worker, cron, queue, daemon | cdn, notification, crawler, BotAutoTask, deploy-tool |
-| PK-DB — schema, migration | Có DB tự quản lý | cdn, notification, dashboard, khaosat, BotAutoTask |
-| PK-RELEASE — Docker, registry, phát hành | Có image/binary phát hành | cdn, crawler, citad-res, dashboard, BotAutoTask |
-| PK-AGENT — app điều khiển AI agent | App chạy lệnh do AI sinh ra | BotAutoTask — **ứng viên**, chờ dự án thứ 2 |
+| [PK-API](../packs/PK-API.md) — HTTP API | Có endpoint HTTP | cdn, notification, dashboard |
+| [PK-AUTH](../packs/PK-AUTH.md) — token, khoá, chữ ký | Có xác thực, API key, webhook | cdn, notification, dashboard, BotAutoTask |
+| [PK-RELEASE](../packs/PK-RELEASE.md) — Docker, registry, phát hành | Có image/binary phát hành | cdn, crawler, citad-res, dashboard, BotAutoTask |
+| [PK-DB](../packs/PK-DB.md) — schema, migration, query | Có DB tự quản lý, ORM, thư mục `migrations/` | cdn, notification, dashboard, khaosat, BotAutoTask + `migration` |
+| [PK-OBS](../packs/PK-OBS.md) — logging, metrics, runbook | Dịch vụ chạy dài hạn cần structured log, RED metrics, cảnh báo | cdn, notification, dashboard, BotAutoTask + `observability-and-instrumentation` |
+| [PK-FE](../packs/PK-FE.md) — UI, design tokens, a11y, E2E | Có giao diện người dùng (Web/Desktop/Dashboard) | dashboard, khaosat + `ui-ux-pro-max`, `playwright`, `impeccable` |
+| [PK-JOB](../packs/PK-JOB.md) — job nền, cron, queue, daemon | Có worker, cron, queue, daemon đồng bộ | cdn, notification, crawler, BotAutoTask, deploy-tool + `pstack` |
+| [PK-AGENT](../packs/PK-AGENT.md) — điều phối AI agent, sandbox | Hệ thống gọi LLM/CLI agent, MCP server, chạy lệnh do AI sinh ra | BotAutoTask + `pstack`, `superpowers`, `botautotask`, `doubt-driven-development` |
+| PK-TENANT — cô lập dữ liệu | Có nhiều tenant/khách hàng dùng chung | cdn, notification, BotAutoTask (dự kiến bản sau) |
 
-### File pack (GĐ2 — đã xong)
+### File pack (`packs/PK-*.md` — đã có 8 pack)
 
-REQ chi tiết và AC mẫu nằm trong file riêng: [packs/PK-API.md](../packs/PK-API.md), [packs/PK-AUTH.md](../packs/PK-AUTH.md), [packs/PK-RELEASE.md](../packs/PK-RELEASE.md).
+REQ chi tiết và AC mẫu nằm trong file riêng tại [`packs/`](../packs/):
+- [`packs/PK-API.md`](../packs/PK-API.md)
+- [`packs/PK-AUTH.md`](../packs/PK-AUTH.md)
+- [`packs/PK-RELEASE.md`](../packs/PK-RELEASE.md)
+- [`packs/PK-DB.md`](../packs/PK-DB.md)
+- [`packs/PK-OBS.md`](../packs/PK-OBS.md)
+- [`packs/PK-FE.md`](../packs/PK-FE.md)
+- [`packs/PK-JOB.md`](../packs/PK-JOB.md)
+- [`packs/PK-AGENT.md`](../packs/PK-AGENT.md)
 
 Định dạng file pack:
 ```
 packs/<pack>.md
-  Tín hiệu bật · Nguồn (dự án) · Tham số {…} kèm mặc định
+  Tín hiệu bật · Nguồn (dự án + skill) · Tham số {…} kèm mặc định
   REQ (EARS) · AC mẫu Cho/Khi/Thì có tham số
   Dòng thêm vào AGENTS.md (Luôn / Hỏi trước / Không bao giờ)
   Mục khảo sát bổ sung cho survey-project · Gotchas có ngày kiểm
 ```
-
-Pack đang có:
-- PK-API, PK-AUTH, PK-RELEASE — đã viết, có ≥ 2 nguồn.
-- PK-TENANT, PK-JOB, PK-DB — chờ tín hiệu (chưa đủ dự án thứ hai).
-- PK-AGENT — chờ dự án thứ hai (hiện chỉ BotAutoTask).
 
 ## 7. Mô hình tuỳ biến
 
 ### 7.1 Cấu trúc trong WrittingSpecForAI
 
 ```
-templates/      # = tầng Core + khung Tham số (giữ chỗ cũ, không đổi tên)
-packs/          # MỚI — tầng Pack, mỗi pack một file
-profiles.md     # MỚI — preset S / M / L
-CHANGELOG.md    # MỚI — phiên bản base; ghi file Core / REQ pack nào đổi
+templates/      # = tầng Core + khung Tham số (gồm cả templates/CONSTRAINTS.md)
+packs/          # = tầng Pack (8 pack: PK-API, PK-AUTH, PK-RELEASE, PK-DB, PK-OBS, PK-FE, PK-JOB, PK-AGENT)
+agents/         # = 3 subagents chuyên biệt (spec-surveyor, spec-challenger, doc-tester)
+profiles.md     # = preset S / M / L
+CHANGELOG.md    # = phiên bản base; ghi file Core / REQ pack nào đổi
 ```
 
 ### 7.2 Dự án khai báo dùng base (đầu AGENTS.md)
 
 ```md
-> Base: writing-spec-for-ai v1.0 · Profile: M · Pack: PK-API, PK-AUTH, PK-RELEASE
+> Base: writing-spec-for-ai v1.2.0 · Profile: M · Pack: PK-API, PK-AUTH, PK-RELEASE
 > Ghi đè base: xem mục "Ghi đè" cuối file.
 ```
 
@@ -192,51 +204,41 @@ Thứ tự ưu tiên: `decisions dự án > spec dự án > AGENTS.md dự án (
 | Profile | Dấu hiệu | File tối thiểu | Ví dụ |
 |---|---|---|---|
 | **S** — script, hạ tầng | < ~30 file, không có API công khai | `AGENTS.md` (≤ 60 dòng) + README + `.env.example`; một file `docs/spec.md` nếu có hành vi cần nghiệm thu | vmu-deploy-tool, citad-postgresql, crawler |
-| **M** — dịch vụ | Có API/worker/DB | Toàn bộ mức 0 + pack theo tín hiệu + CI chạy DoD | cdn, notification, khaosat, citad-res, BotAutoTask |
-| **L** — nền tảng, monorepo | Nhiều package, có dự án phía dưới | M + mức 1–2: luật theo phạm vi, upgrade/compatibility, cưỡng chế bằng máy | dashboard |
+| **M** — dịch vụ | Có API/worker/DB | Toàn bộ mức 0 + pack theo tín hiệu + `CONSTRAINTS.md` (tuỳ chọn) + CI chạy DoD | cdn, notification, khaosat, citad-res, BotAutoTask |
+| **L** — nền tảng, monorepo | Nhiều package, có dự án phía dưới | M + mức 1–2: `CONSTRAINTS.md` bắt buộc, luật theo phạm vi, upgrade/compatibility, cưỡng chế bằng máy | dashboard |
 
-Profile chỉ là điểm xuất phát. Tín hiệu mức 1–2 (principles §2) vẫn quyết định thêm gì.
-
-> Chi tiết về profile S/M/L (dấu hiệu, file tối thiểu, ví dụ, khi nào nâng cấp) nằm trong file riêng: [profiles.md](../profiles.md).
+> Chi tiết về profile S/M/L nằm trong file riêng: [profiles.md](../profiles.md).
 
 ### 7.5 Nâng cấp base
 
-Tăng phiên bản base thì `CHANGELOG.md` liệt kê ID đổi (C-xx, PK-…-Rnn). Dự án grep ID trong docs của mình để biết chỗ phải xem lại. Chưa cần script (§9).
+Tăng phiên bản base thì `CHANGELOG.md` liệt kê ID đổi (C-xx, PK-…-Rnn). Dự án grep ID trong docs của mình để biết chỗ phải xem lại.
 
 ## 8. Lộ trình phát triển
 
 | GĐ | Việc | Đầu ra | Trạng thái |
 |---|---|---|---|
 | 0 | Khảo sát + đề xuất | File này | ✅ Duyệt 2026-10-20 |
-| 1 | Bổ sung Core còn thiếu | `git init` + tag `v1.0.0`, `CHANGELOG.md`; C03, C10, C11, C20 → `templates/docs/specs/README.md`; C15, C16 → `templates/AGENTS.md` + `adapters/claude-settings.json`; C18 → `templates/project-skill`; C19 → `skills/write-spec`; khảo sát C16/C19/C20 → `skills/survey-project`; mục kiểm → `review-checklist.md`; lỗi lặp → principles §7.1; template `docs/reference/config.md`, `error-codes.md`, `docs/changelog/` | ✅ `v1.0.0` |
-| 2 | Pack + profile | `packs/PK-API.md`, `PK-AUTH.md`, `PK-RELEASE.md`; `profiles.md`; `propose-doc-design` hỏi profile + pack; `review-checklist.md` thêm mục kiểm REQ kế thừa; `base-kit.md` §6 trỏ sang file pack | ✅ `v1.1.0` |
-| 3 | Thử trên BotAutoTask (M, brownfield) | Docs BotAutoTask theo base qua đủ 3 cổng | Chưa làm — xong khi `test-docs` không còn câu hỏi đã có đáp án trong docs |
+| 1 | Bổ sung Core còn thiếu | `git init` + tag `v1.0.0`, `CHANGELOG.md`; C03, C10, C11, C15, C16, C18, C19, C20 + templates | ✅ `v1.0.0` |
+| 2 | Pack + profile | `packs/PK-API.md`, `PK-AUTH.md`, `PK-RELEASE.md`; `profiles.md`; đóng gói OSS đa nền tảng | ✅ `v1.1.0` |
+| 2.5 | Kế thừa hệ sinh thái Plugin & Skill | Bổ sung Core `C23–C27`; thêm 5 Pack (`PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`); nâng cấp 5 sub-skill + thêm 2 sub-skill (`plan-tasks`, `generate-verify-harness`); thêm 3 subagent (`spec-surveyor`, `spec-challenger`, `doc-tester`); thêm `templates/CONSTRAINTS.md` | ✅ `v1.2.0` |
+| 3 | Thử trên BotAutoTask (M, brownfield) | Docs BotAutoTask theo base qua đủ 3 cổng | Đang triển khai |
 | 4 | Công cụ nâng cấp (chỉ khi ≥ 2 dự án đã dùng) | Sub-skill `base-upgrade`; script kiểm REQ kế thừa trỏ tới ID còn tồn tại | Chờ tín hiệu |
-| 5 | Pack theo nhu cầu | PK-TENANT, PK-JOB, PK-DB; PK-AGENT khi có dự án thứ 2 | Chờ tín hiệu |
-
-> [!WARNING]
-> Chỉ thử trên một repo M nên chưa kiểm được base có quá nặng với repo S hay không. Repo S đầu tiên dùng base phải ghi nhận lại số file docs và câu hỏi thừa.
 
 ## 9. Cố ý không làm
 
-- **Không đóng gói npm/submodule:** team dùng nhiều stack (Node, Python, .NET, shell). Copy kèm phiên bản là đủ.
+- **Không đóng gói npm/submodule bắt buộc runtime:** copy/install kèm phiên bản là đủ cho mọi stack.
 - **Không viết script đồng bộ trước GĐ4:** chưa có dự án thứ hai dùng base (YAGNI).
-- **Không tạo pack nghiệp vụ** (thông báo, khảo sát, media): mỗi thứ chỉ có một dự án.
+- **Không tạo pack nghiệp vụ hẹp** (thông báo, khảo sát, media): mỗi thứ chỉ có một dự án.
 - **Không đổi tên hay chuyển `templates/`:** tránh gãy link trong skill và dự án đã chép.
-- **Không bắt repo S tạo `specs/`, `decisions.md`, `glossary.md`:** chỉ thêm khi có tín hiệu.
+- **Không bắt repo S tạo `specs/`, `decisions.md`, `glossary.md`, `CONSTRAINTS.md`:** chỉ thêm khi có tín hiệu.
 
 ## 10. Làm rõ
 
 ### Phiên 2026-10-20
-
 - H: Mô hình trạng thái spec? → Đ: giữ `Draft → Ready → In progress → Done (+ As-built)`, thêm bảng quyền AI theo trạng thái (C03).
 - H: Đặt pack ở đâu? → Đ: `packs/` trong WrittingSpecForAI, chung một phiên bản.
-- H: Ngôn ngữ Core/Pack? → Đ: tiếng Việt; ID, lệnh, tên file, mã lỗi tiếng Anh; chỉ dịch khi có dự án English-only áp dụng.
-- H: Quản lý phiên bản? → Đ: git + tag semver + `CHANGELOG.md` ghi ID luật đổi.
-- H: GĐ1 gồm gì? → Đ: C03, C10, C11, C15, C16, C18, C19, C20 + template config / error-codes / changelog.
-- H: Profile S/M/L và luật ghi đè (§7.3, §7.4)? → Đ: đồng ý như đề xuất.
-- H: Pack viết trước? → Đ: PK-API, PK-AUTH, PK-RELEASE.
-- H: Dự án thử? → Đ: BotAutoTask.
+- H: Ngôn ngữ Core/Pack? → Đ: tiếng Việt; ID, lệnh, tên file, mã lỗi tiếng Anh.
+- H: Kế thừa từ kho 7 Plugin & 210 Skill đã cài? → Đ: Duyệt toàn bộ (Core `C23–C27`, 5 Pack mới `PK-DB/OBS/FE/JOB/AGENT`, 2 sub-skill mới `plan-tasks` & `generate-verify-harness`, 3 subagent `spec-surveyor`/`spec-challenger`/`doc-tester`, và `templates/CONSTRAINTS.md`).
 
 ## 11. Câu hỏi mở
 

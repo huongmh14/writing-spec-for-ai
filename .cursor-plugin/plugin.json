@@ -1,0 +1,14 @@
+{
+  "name": "writing-spec-for-ai",
+  "displayName": "Writing Spec For AI",
+  "description": "Spec-driven documentation framework & 3-gate orchestrator skill for AI coding agents — AGENTS.md, EARS specs, reusable technical packs, and S/M/L project profiles.",
+  "version": "1.1.0",
+  "author": {
+    "name": "huongmh14"
+  },
+  "homepage": "https://github.com/huongmh14/writing-spec-for-ai",
+  "repository": "https://github.com/huongmh14/writing-spec-for-ai",
+  "license": "MIT",
+  "keywords": ["ai-agents", "agents-md", "spec-driven-development", "ears", "documentation"],
+  "skills": "./skills/"
+}

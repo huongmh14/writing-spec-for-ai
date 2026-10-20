@@ -16,7 +16,8 @@ Mỗi phiên bản liệt kê ID luật đổi (Core `C-xx`, Pack `PK-…-Rnn`; 
 - `references/base-kit.md` §6: trỏ REQ chi tiết sang file pack thay vì chứa nháp REQ (một sự thật một chỗ).
 - `references/base-kit.md` §7.4: trỏ chi tiết profile sang `profiles.md`.
 - `references/base-kit.md` §8: đánh dấu GĐ2 xong, trạng thái `v1.1.0`.
-- `README.md`: thêm `packs/` và `profiles.md` vào cấu trúc.
+- `README.md` (English open-source edition) + `README.vi.md` (bản tiếng Việt): thêm cấu trúc `packs/`, `profiles.md`, hướng dẫn cài đặt đa nền tảng.
+- Đóng gói Open-Source & Plugin Manifests: `LICENSE` (MIT), `install.ps1`, `install.sh`, `.claude-plugin/`, `.cursor-plugin/`, `.copilot-plugin/`, `.zcode-plugin/`, `.github/workflows/release.yml` (tự động đóng gói full-suite `.zip` và 7 standalone sub-skill `.zip` khi push tag `v*`).
 
 ### Sửa
 

@@ -1,0 +1,74 @@
+name: Package Skills & Publish Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (e.g. v1.1.0)"
+        required: true
+        default: "v1.1.0"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build Skill Packages & Create GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Package Full Suite & Standalone Skills
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME:-${{ github.event.inputs.tag }}}"
+          mkdir -p dist/bundle/writing-spec-for-ai
+
+          # 1. Full Suite archive (writing-spec-for-ai-full-suite.zip)
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='dist' \
+            ./ dist/bundle/writing-spec-for-ai/
+          (cd dist/bundle && zip -r "../writing-spec-for-ai-${TAG}-full-suite.zip" writing-spec-for-ai)
+          cp "dist/writing-spec-for-ai-${TAG}-full-suite.zip" "dist/writing-spec-for-ai.zip"
+
+          # 2. Individual self-contained sub-skill archives
+          SUBSKILLS=(
+            "survey-project"
+            "propose-doc-design"
+            "write-spec"
+            "write-design-doc"
+            "change-spec"
+            "review-docs"
+            "test-docs"
+          )
+
+          for SUB in "${SUBSKILLS[@]}"; do
+            STAGE="dist/subskills/${SUB}"
+            mkdir -p "$STAGE"
+            cp "skills/${SUB}/SKILL.md" "$STAGE/SKILL.md"
+            cp -r references packs templates profiles.md LICENSE "$STAGE/"
+            # Normalize relative paths from ../../ to ./ for standalone installation
+            sed -i 's|\.\./\.\./references/|./references/|g' "$STAGE/SKILL.md"
+            sed -i 's|\.\./\.\./templates/|./templates/|g' "$STAGE/SKILL.md"
+            sed -i 's|\.\./\.\./packs/|./packs/|g' "$STAGE/SKILL.md"
+            sed -i 's|\.\./\.\./profiles\.md|./profiles.md|g' "$STAGE/SKILL.md"
+            (cd dist/subskills && zip -r "../skill-${SUB}.zip" "${SUB}")
+          done
+
+          ls -lh dist/*.zip
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name || github.event.inputs.tag }}
+          name: "Writing Spec for AI ${{ github.ref_name || github.event.inputs.tag }}"
+          generate_release_notes: true
+          files: |
+            dist/*.zip

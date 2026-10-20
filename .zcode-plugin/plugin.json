@@ -1,0 +1,10 @@
+{
+  "name": "writing-spec-for-ai",
+  "version": "1.1.0",
+  "description": "Spec-driven documentation framework & 3-gate orchestrator skill for AI coding agents.",
+  "author": {
+    "name": "huongmh14"
+  },
+  "license": "MIT",
+  "skills": "skills"
+}

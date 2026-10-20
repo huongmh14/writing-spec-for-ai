@@ -25,6 +25,8 @@ Việc cần phán đoán (review, thiết kế) → nguyên tắc + ví dụ. -
 
 ## Gotchas
 
-- <triệu chứng → nguyên nhân → cách tránh>
+<!-- Sửa code đụng tới một gotcha thì sửa/xoá gotcha đó trong cùng PR. Gotcha sai còn hại hơn không có. -->
+
+- <triệu chứng> → <nguyên nhân> → <cách tránh> · kiểm lần cuối YYYY-MM-DD
 
 <!-- Kỹ năng chung (TDD, debug, review): gọi tên skill global, không chép lại. -->

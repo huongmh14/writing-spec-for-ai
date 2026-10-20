@@ -74,6 +74,7 @@ Công thức: **Cho** <trạng thái ban đầu với dữ liệu cụ thể>, *
 - Mỗi REQ ≥ 1 AC; phải có ≥ 1 AC cho nhánh lỗi của khu vực.
 - Ghi tầng test sau mỗi AC: *(unit)*, *(integration)*, *(contract)*, *(e2e)*, *(thủ công — lý do + cách đóng)*.
 - AC phụ thuộc hạ tầng thật (registry, email) → gắn `[~]` ngay từ đầu + lý do + cách đóng.
+- AC cho lệnh vận hành (migrate, sync, seed, deploy) phải kiểm **tác dụng** (bảng tồn tại, số bản ghi, file sinh ra), không chỉ exit code 0. Kèm AC nhánh lỗi: không làm được thì exit ≠ 0.
 - Cách đặt tên/test: tên test chứa AC-ID (đối chiếu examples.md §2).
 
 ## 6. Đóng gói

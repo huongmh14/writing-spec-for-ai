@@ -8,6 +8,7 @@ Skill chính là **bộ điều phối**; mỗi bước triển khai chi tiết 
 
 ```
 SKILL.md                         # bộ điều phối: 8 bước, 3 cổng duyệt, bàn giao sub-skill
+CHANGELOG.md                     # phiên bản base (git tag), ID luật đổi mỗi bản
 skills/                          # sub-skill chi tiết theo từng bước
   survey-project/SKILL.md        #   1–2. khảo sát, bằng chứng, mức 0/1/2
   propose-doc-design/SKILL.md    #   3–4. đề xuất thiết kế + chia bộ spec theo khu vực (Cổng 1)
@@ -21,8 +22,8 @@ references/
                                  # ma trận công cụ, skill dự án vs global, bài học, nguồn
   examples.md                    # ví dụ chuẩn từ dự án thật (REQ EARS, AC, NFR, decisions, plan)
   review-checklist.md            # chấm AGENTS.md, từng spec, trạng thái, vị trí, thử docs
-  base-kit.md                    # (đề xuất) phần kế thừa 100% cho mọi dự án: Core / Tham số /
-                                 # Pack / Profile S-M-L, luật ghi đè, lộ trình phát triển base
+  base-kit.md                    # sổ đăng ký luật Core (C-xx) / Pack (PK-…), Profile S-M-L,
+                                 # luật ghi đè, lộ trình phát triển base
 templates/
   doc-design-proposal.md         # Cổng 1
   AGENTS.md
@@ -30,11 +31,13 @@ templates/
     glossary.md
     decisions.md                 # + định danh hiện hành, P-xx
     adr/_template.md
-    specs/README.md, _template.md, _design-template.md
+    specs/README.md, _template.md, _design-template.md   # README: quyền AI theo trạng thái, hotfix, loại thay đổi → file
     changes/_proposal-template.md   # thay đổi spec dạng delta
     plans/_plan-template.md, HANDOFF.md
     progress.md
     upgrade/_template.md
+    reference/config.md, error-codes.md   # biến môi trường, mã lỗi — mỗi thứ một chỗ
+    changelog/_template.md
   adapters/
     CLAUDE.md, copilot-instructions.md, pull_request_template.md
     scoped-rules.md              # luật theo thư mục cho 4 công cụ

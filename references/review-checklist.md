@@ -13,6 +13,9 @@
 - [ ] Quy ước code có ≥ 1 ví dụ thật hoặc file mẫu để bắt chước.
 - [ ] Phủ đủ 6 mảng: lệnh, test, cấu trúc, style, git, ranh giới.
 - [ ] ≤ ~150 dòng; không câu hiển nhiên; không số dòng/phiên bản patch; nhấn mạnh (IMPORTANT/viết hoa) chỉ ở vài dòng.
+- [ ] Có 3 luật xử lý lỗi (không nuốt im lặng; message nội bộ không ra ngoài; best-effort phải log).
+- [ ] 🚫 có "không commit file quyền cá nhân của agent"; ✅ có "thêm biến môi trường thì sửa `.env.example` + `docs/reference/config.md`".
+- [ ] Đầu file khai báo base: phiên bản, profile, pack; mục "Ghi đè" (nếu có) mỗi dòng nới/bỏ đều có `D-xx`.
 
 ## 2. Spec (từng spec)
 
@@ -29,6 +32,7 @@
 - [ ] Có cách kiểm end-to-end.
 - [ ] Thuật ngữ khớp glossary.
 - [ ] Spec `As-built`: mỗi REQ có bằng chứng; `[x]` chỉ khi test hiện có chứng minh.
+- [ ] AC của lệnh vận hành (migrate, sync, seed, deploy) kiểm tác dụng, không chỉ exit code.
 
 ## 3. Quyết định, thuật ngữ, trạng thái
 
@@ -37,6 +41,16 @@
 - [ ] `glossary.md` có các thuật ngữ miền chính, cột "không gọi là".
 - [ ] File trạng thái (progress, HANDOFF, plan) có ngày cập nhật; HANDOFF mới bằng dòng cuối progress.
 - [ ] progress tách khỏi danh mục spec; ≤ ~5 KB; ≤ 3 câu/dòng.
+- [ ] `docs/specs/README.md` có bảng quyền AI theo trạng thái, luật hotfix, bảng "loại thay đổi → file phải sửa" (có dòng đổi stack).
+- [ ] Nợ spec của hotfix (nếu có) nằm trong progress và chưa quá 1 ngày làm việc.
+- [ ] Biến môi trường chỉ mô tả ở `docs/reference/config.md`; khớp `.env.example`. Mã lỗi/trạng thái chỉ ở `docs/reference/error-codes.md`.
+
+## 3b. CI, cấu hình, gotcha
+
+- [ ] CI chạy đúng lệnh DoD trên stack hiện tại; mọi đường dẫn CI tham chiếu đều tồn tại.
+- [ ] Chỉ một file nhận là nguồn sự thật cho mỗi chủ đề.
+- [ ] File env mẫu tên `.env.example`; `.env` bị ignore; không có file quyền cá nhân của agent trong git.
+- [ ] Mỗi gotcha có ngày kiểm lần cuối; gotcha mâu thuẫn với code hiện tại đã được sửa/xoá.
 
 ## 4. Vị trí & adapter
 

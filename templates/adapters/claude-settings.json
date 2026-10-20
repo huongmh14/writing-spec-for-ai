@@ -1,9 +1,11 @@
 {
-  "$comment": "Mẫu .claude/settings.json (Mức 2). Hook chạy shell tuỳ ý: review như code, đặt dưới CODEOWNERS. Thay <...> bằng lệnh thật; kiểm cú pháp theo docs Claude Code bản hiện hành.",
+  "$comment": "Mẫu .claude/settings.json (Mức 2), file commit chung cho team: chỉ chứa deny + hook. Allow-list lệnh cá nhân để ở .claude/settings.local.json và thêm file đó vào .gitignore. Không dùng Read(./.env.*): deny thắng allow nên sẽ chặn luôn .env.example mà agent phải cập nhật. Hook chạy shell tuỳ ý: review như code, đặt dưới CODEOWNERS. Thay <...> bằng lệnh thật; kiểm cú pháp theo docs Claude Code bản hiện hành.",
   "permissions": {
     "deny": [
       "Read(./.env)",
-      "Read(./.env.*)",
+      "Read(./.env.local)",
+      "Read(./.env.*.local)",
+      "Read(./.env.production)",
       "Read(./secrets/**)",
       "Edit(<thư-mục-migration-đã-phát-hành>/**)"
     ]

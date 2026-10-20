@@ -20,7 +20,8 @@
 
 ## 2. Mức đề xuất
 
-- Mức 0: toàn bộ (0.1–0.14).
+- Base: writing-spec-for-ai <phiên bản> · Profile: <S | M | L> — dấu hiệu: <…> · Pack: <PK-… — tín hiệu: …>
+- Mức 0: toàn bộ (0.1–0.16).
 - Mức 1: <thành phần> — tín hiệu: <…>
 - Mức 2: <thành phần> — tín hiệu: <…>
 

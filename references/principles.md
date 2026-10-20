@@ -41,6 +41,7 @@ flowchart TD
 | Thiết kế | Ghép thế nào, phương án nào bị loại | `docs/specs/<nn>-<khu-vực>-design.md` |
 | Thay đổi | Spec đã chạy đổi gì | `docs/changes/` |
 | Kế hoạch | Thứ tự nào, song song gì | `docs/plans/` |
+| Tra cứu | Biến nào, mã nào nghĩa gì, bản nào đổi gì | `docs/reference/config.md`, `docs/reference/error-codes.md`, `docs/changelog/` |
 | Bộ nhớ | Đang ở đâu | `docs/progress.md`, `docs/plans/HANDOFF.md` |
 | Cưỡng chế | Máy chặn | lint, hook, CI, settings deny |
 
@@ -70,6 +71,8 @@ flowchart TD
 | 0.12 | **Đặt file đúng chỗ công cụ đọc** | Theo ma trận §5; kiểm bằng `/context`, `/memory show` | File đặt sai chỗ = không tồn tại |
 | 0.13 | **Thử tài liệu** | Phiên mới, giao agent 2–3 task mẫu; ghi luật bị bỏ qua, câu hỏi đã có trong docs | Docs chưa thử là docs chưa xong |
 | 0.14 | **Tiêu chí cắt** | Mỗi dòng: "bỏ đi agent có làm sai không?" Không thì xoá. AGENTS.md ≤ ~150 dòng | Dài thì luật quan trọng bị chìm |
+| 0.15 | **Quyền AI theo trạng thái spec** | Bảng trạng thái × được làm / không được làm trong `docs/specs/README.md`; không code spec `Draft`; hotfix sửa spec trong ≤ 1 ngày làm việc | Trạng thái chỉ có nghĩa khi gắn với việc agent được phép làm |
+| 0.16 | **Loại thay đổi → file phải sửa** | Bảng trong `docs/specs/README.md`, gồm dòng "đổi stack" | Docs lệch code vì không ai biết phải sửa file nào |
 
 ### Mức 1 — Thêm khi có tín hiệu
 
@@ -211,6 +214,20 @@ Bối cảnh + stack → **Lệnh** → Nguồn sự thật → Ranh giới 3 t�
 | Nhật ký 23 KB trong file phải đọc mỗi phiên | progress tách riêng, ≤ 3 câu/dòng, lưu trữ định kỳ |
 | AC chặn vì gói GitHub Free, hết hạn mức CI, team chưa tồn tại | Khảo sát "điều kiện hạ tầng bên ngoài"; AC phụ thuộc hạ tầng gắn `[~]` từ đầu |
 | AGENTS.md 170 dòng nạp luật RBAC khi sửa CSS | Luật theo phạm vi |
+
+### 7.1 Lỗi lặp lại giữa các dự án (khảo sát 9 repo, 2026-10-20)
+
+| Lỗi | Gặp ở | Quy tắc phòng tránh |
+|---|---|---|
+| Docs mô tả khác code (format key, thuật toán hash, cây thư mục, file không tồn tại) | cdn ×3, BotAutoTask, notification-service | `As-built` kèm test chứng minh; gotcha có ngày kiểm; bảng "loại thay đổi → file phải sửa" |
+| Hai file cùng nhận là "nguồn sự thật" | notification (`SPECS.md` + `knowledge.md`), cdn (`SPECS.md` + `ARCHITECTURE.md`) | Một sự thật một chỗ; khảo sát grep "Single Source of Truth" |
+| CI không chạy test, hoặc chạy sai stack sau khi đổi stack | cdn, BotAutoTask, citad-*, notification (`Notification.slnx` đã xoá) | CI chạy DoD; đổi stack là một change sửa AGENTS + CI + quy ước cùng PR |
+| Commit không theo quy ước | cdn, khaosatvmu, citad-* | Vi phạm ≥ 2 lần → commitlint |
+| Allow-list cá nhân của agent (mật khẩu DB, đường dẫn máy) bị commit | khaosatvmu `.claude/settings.json` | `settings.json` chung chỉ chứa deny + hook; allow-list để ở `settings.local.json` (ignore) |
+| Tên file env mẫu không thống nhất (`.env-example`) | citad-vmu-resources, vmu-deploy-tool | Luôn dùng `.env.example` |
+| File trạng thái gắn chặt một công cụ | cdn `.devin/TASK.md` | `docs/progress.md` không phụ thuộc công cụ |
+| Lệnh `migrate` không làm gì mà vẫn exit 0 | cdn | AC của lệnh vận hành kiểm tác dụng |
+| File build được commit nhưng lệch với nguồn | BotAutoTask `dist/` | CI kiểm artifact khớp nguồn (PK-RELEASE) |
 
 ---
 

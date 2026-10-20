@@ -20,6 +20,10 @@ Chỉ đọc, không sửa file nào của dự án. Repo lớn (không đọc h
 | File mồ côi / bị bỏ quên | `git check-ignore <file>` với mọi file docs; grep xem file có được file nào link tới không; so ngày sửa với `git log -5` | Danh sách file bị ignore hoặc không được trỏ tới |
 | Tài liệu nguồn bên ngoài | Hỏi người dùng / tìm `*.docx`, `docs/prd`, ticket | Đường dẫn, phiên bản, ngày |
 | Cưỡng chế sẵn có | Đọc CI, `eslint` config, hooks (husky/pre-commit), branch protection, CODEOWNERS | Cái gì đã có máy chặn, cái gì chỉ nằm trong văn xuôi |
+| **CI khớp stack** | So lệnh/đường dẫn trong CI với manifest và file có thật (`git ls-files`) | CI build file không tồn tại, chạy stack cũ, hoặc không chạy test (chỉ build) |
+| **Nhiều "nguồn sự thật"** | grep `Single Source of Truth`, `nguồn sự thật`, `SSOT` trong docs; so cùng một sự thật (format key, env, cây thư mục) giữa các file | Các cặp file tranh nhau hoặc mô tả khác nhau |
+| **Secret & cấu hình** | Tên file env mẫu (`.env.example`?); `.env` có bị ignore không; `git ls-files .claude .cursor .vscode` | File quyền cá nhân của agent bị commit (allow-list, đường dẫn máy, mật khẩu) |
+| **Lệnh vận hành** | Chạy thử an toàn (`migrate`, `sync`, `seed`) trên môi trường local hoặc đọc code của lệnh | Lệnh không làm gì mà vẫn exit 0 |
 | Quy ước git thực tế | `git log --oneline -30` | Dạng commit thật, tên nhánh thật (khớp hay lệch quy định viết) |
 | Vùng rủi ro | grep: auth/login/token, permission/role, schema/migration, payment/billing, personal data/email/phone | Danh sách thư mục/file rủi ro → sau này quyết định luật "Hỏi trước" |
 | Hạ tầng bên ngoài | CI config (runner, hạn mức), registry, secrets dùng trong workflow, team/org GitHub | Điều kiện có thể chặn AC: gói Free, hết hạn mức, team chưa tồn tại |
@@ -27,7 +31,7 @@ Chỉ đọc, không sửa file nào của dự án. Repo lớn (không đọc h
 
 ## 2. Chấm mức đề xuất (theo principles §2)
 
-- Mức 0 (0.1–0.14): luôn đủ toàn bộ sau khảo sát.
+- Mức 0 (0.1–0.16): luôn đủ toàn bộ sau khảo sát.
 - Mức 1: liệt kê từng thành phần kèm **tín hiệu thấy được trong repo** — ví dụ "> 3 spec" phải đếm được, "chạm schema" phải chỉ được file migration.
 - Mức 2: chỉ khi đã thấy luật bị vi phạm ≥ 2 lần hoặc quy trình lặp ≥ 2 lần trong lịch sử git/issue. Repo mới → ghi "chưa có tín hiệu, bổ sung sau".
 
@@ -37,6 +41,7 @@ Chỉ đọc, không sửa file nào của dự án. Repo lớn (không đọc h
 - Quên hạ tầng bên ngoài → AC treo lơ lửng lúc triển khai (bài học dashboard: gói GitHub Free chặn AC phát hành).
 - Kết luận "thiếu docs" trong khi file docs bị `.gitignore` — docs tồn tại nhưng không ai thấy.
 - Không phân biệt "chưa có spec" (greenfield) với "có code chưa có spec" (brownfield → As-built, mỗi REQ cần bằng chứng).
+- Dự án vừa đổi stack: README đã mới nhưng CI, WORKFLOW, CONVENTIONS còn stack cũ (bài học notification-service) — kiểm từng file, không tin README.
 
 ## Kiểm tra trước khi xong
 

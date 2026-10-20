@@ -7,7 +7,7 @@ description: Thiết kế bộ tài liệu hướng dẫn AI agent cho một d�
 
 Mục tiêu: bộ tài liệu giúp mọi AI agent **làm đúng luật, tự chứng minh việc đã xong, biết dừng khi mơ hồ** — và ngắn nhất có thể.
 
-Skill này là **bộ điều phối**. Mỗi bước có một sub-skill chi tiết trong [skills/](skills/) — mở đúng sub-skill khi làm bước đó. Nền tảng nguyên tắc: [references/principles.md](references/principles.md) (§2 bộ kỹ năng mức 0/1/2, §3 quy tắc spec, §4 phong cách, §5 ma trận công cụ). Ví dụ chuẩn từ dự án thật: [references/examples.md](references/examples.md). Mẫu file: [templates/](templates/).
+Skill này là **bộ điều phối**. Mỗi bước có một sub-skill chi tiết trong [skills/](skills/) — mở đúng sub-skill khi làm bước đó. Nền tảng nguyên tắc: [references/principles.md](references/principles.md) (§2 bộ kỹ năng mức 0/1/2, §3 quy tắc spec, §4 phong cách, §5 ma trận công cụ). Ví dụ chuẩn từ dự án thật: [references/examples.md](references/examples.md). Mẫu file: [templates/](templates/). Luật kế thừa cho mọi dự án (Core C-xx, Pack, Profile S/M/L, luật ghi đè): [references/base-kit.md](references/base-kit.md) — dự án ghi phiên bản base đang dùng ở đầu `AGENTS.md`.
 
 ## Luật cứng
 

@@ -1,6 +1,6 @@
 # AGENTS.md — <tên dự án>
 
-> Base: writing-spec-for-ai <phiên bản, vd. v1.2.0> · Profile: <S | M | L> · Pack: <PK-… hoặc "không">
+> Base: writing-spec-for-ai <phiên bản, vd. v1.2.2> · Profile: <S | M | L> · Pack: <PK-… hoặc "không">
 
 <2–4 câu: hệ thống làm gì, cho ai. Stack: <framework + major version>, <DB>, <FE>. Phiên bản chính xác: xem `package.json`, `.nvmrc`.>
 

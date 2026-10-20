@@ -2,31 +2,36 @@
 
 Cập nhật: YYYY-MM-DD. Spec: SPEC-… (Ready). Thiết kế: <link>. Quyết định: D-…
 
-## Trạng thái
+## 1. Đồ thị Task & Lát cắt dọc (`Tracer Bullets` / `Expand–Contract`)
 
-| PR | Nhánh | Nội dung | AC | Phụ thuộc | Song song | Trạng thái |
+<!-- Mỗi task thông thường là một lát cắt dọc (Tracer Bullet) đi xuyên schema → logic/API → UI/CLI → test AC-ID, sửa ≤ ~5 file. Thay đổi diện rộng dùng chuỗi Expand → Migrate → Contract. -->
+
+| Mã Task | Tên hành vi đầu-cuối (hoặc bước Expand/Migrate/Contract) | REQ / AC nghiệm thu | `Blocked by` | Song song (`Frontier`) | Nhánh / PR | Trạng thái |
 |---|---|---|---|---|---|---|
-| 1 | `feat/SPEC-XXX-<phần>` | | XXX-AC01..AC03 | — | | Chưa làm |
-| 2 | `feat/SPEC-XXX-<phần>` | | XXX-AC04 | 1 | [P] với 3 | Chưa làm |
+| `T-01` | | XXX-R01, XXX-AC01..AC02 | `None` | [P] với `T-02` | `feat/SPEC-XXX-<phần>` | `[ ]` |
+| `T-02` | | XXX-R02, XXX-AC03 | `None` | [P] với `T-01` | `feat/SPEC-XXX-<phần>` | `[ ]` |
+| `T-03` | | XXX-R03, XXX-AC04 | `T-01, T-02` | — | `feat/SPEC-XXX-<phần>` | `[ ]` |
 
-## Thứ tự và lý do
+## 2. Thứ tự và lý do
 
-1. <PR> trước vì <phụ thuộc/rủi ro>.
+1. `<T-01>` trước vì `<phụ thuộc/prefactoring/rủi ro>`.
 
-## Dependency đã duyệt cho đợt này
+## 3. Dependency đã duyệt cho đợt này
 
-| Package | Dùng ở PR | Theo |
+| Package | Dùng ở Task/PR | Theo quyết định |
 |---|---|---|
 
-## Checklist theo loại thay đổi
+## 4. Checklist kích hoạt theo loại thay đổi
 
-- **Đổi schema:** migration; <đồng bộ schema phụ>; mục trong `docs/upgrade/<ver>.md`.
-- **Đổi API công khai:** contract; changeset; mục nâng cấp.
+- **Đổi schema:** migration (`Expand–Contract`); <đồng bộ schema phụ>; mục trong `docs/upgrade/<ver>.md`.
+- **Đổi API công khai:** contract máy đọc; changeset; mục nâng cấp.
 - **Chạm bảo mật:** trình kế hoạch trước khi code; nêu rõ trong PR.
 
-## Ghi chú từng PR
+## 5. Chi tiết từng Task (`Context Pointers` cho Subagent)
 
-1. **`feat/SPEC-XXX-<phần>`**
-   - Ngữ cảnh tối thiểu: SPEC-XXX §4 (R01–R03), design §2; file `<…>`.
-   - Test trước code: XXX-AC01..AC03 *(tầng)*.
-   - Rủi ro:
+### `T-01`: <Tên hành vi đầu-cuối>
+- **Ngữ cảnh tối thiểu:** `SPEC-XXX` §4 (`XXX-R01`), `design` §2; file `<đường dẫn ≤ 5 file>`.
+- **Blocked by:** `None`
+- **Test viết trước code:** `XXX-AC01..AC02` *(tầng test)*.
+- **Lệnh kiểm chứng (`Verify`):** `<lệnh chạy đúng 1 test chứa AC-ID>`
+- **Rủi ro / Rollback:**

@@ -178,7 +178,7 @@ CHANGELOG.md    # = phiên bản base; ghi file Core / REQ pack nào đổi
 ### 7.2 Dự án khai báo dùng base (đầu AGENTS.md)
 
 ```md
-> Base: writing-spec-for-ai v1.2.0 · Profile: M · Pack: PK-API, PK-AUTH, PK-RELEASE
+> Base: writing-spec-for-ai v1.2.2 · Profile: M · Pack: PK-API, PK-AUTH, PK-RELEASE
 > Ghi đè base: xem mục "Ghi đè" cuối file.
 ```
 

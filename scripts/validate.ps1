@@ -3,12 +3,13 @@
     Deterministic quality gate & SDO validator for the writing-spec-for-ai skill/plugin suite.
 .DESCRIPTION
     Enforces:
-    1. Valid YAML frontmatter (name, description) on SKILL.md, skills/*/SKILL.md, and agents/*.md
-    2. SDO Trigger-First compliance: descriptions must start with trigger conditions and stay <= 450 chars
-    3. Line-count ratchets (Progressive Disclosure budget)
-    4. Zero broken relative Markdown links
-    5. Zero stray non-Latin/non-Vietnamese script characters
-    6. Valid JSON syntax on all plugin manifests and evals/evals.json
+    1. Valid JSON syntax and version consistency across all plugin manifests, marketplace.json, claude-settings.json, and evals/evals.json
+    2. Complete skill & agent arrays in all 4 plugin manifests (.claude, .cursor, .copilot, .zcode)
+    3. Valid YAML frontmatter (name, description) on SKILL.md, skills/*/SKILL.md, and agents/*.md
+    4. SDO Trigger-First compliance: descriptions must start with trigger conditions and stay <= 450 chars
+    5. Line-count ratchets (Progressive Disclosure budget)
+    6. Template structural markers (Capability Map, HYPOTHESIS/CONFIDENCE, Pack Inheritance, Deep Modules & Seams, Tracer Bullets)
+    7. Zero broken relative Markdown links & zero stray non-Latin/non-Vietnamese script characters
 #>
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
@@ -16,14 +17,24 @@ $failures = @()
 
 Write-Host "=== Validating writing-spec-for-ai at $root ===" -ForegroundColor Cyan
 
-# 1. Validate JSON manifests & evals
+# 1. Validate JSON manifests, evals & version sync
 $jsonFiles = @(
     ".claude-plugin/plugin.json",
+    ".claude-plugin/marketplace.json",
     ".cursor-plugin/plugin.json",
     ".copilot-plugin/plugin.json",
     ".zcode-plugin/plugin.json",
+    "templates/adapters/claude-settings.json",
     "evals/evals.json"
 )
+$versions = @{}
+$pluginManifests = @(
+    ".claude-plugin/plugin.json",
+    ".cursor-plugin/plugin.json",
+    ".copilot-plugin/plugin.json",
+    ".zcode-plugin/plugin.json"
+)
+
 foreach ($rel in $jsonFiles) {
     $full = Join-Path $root $rel
     if (-not (Test-Path $full)) {
@@ -31,10 +42,26 @@ foreach ($rel in $jsonFiles) {
         continue
     }
     try {
-        $null = Get-Content $full -Raw -Encoding UTF8 | ConvertFrom-Json
+        $parsed = Get-Content $full -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($parsed.PSObject.Properties.Name -contains "version") {
+            $versions[$rel] = $parsed.version
+        }
+        if ($rel -in $pluginManifests) {
+            if (-not ($parsed.skills -is [System.Array]) -or ($parsed.skills -notcontains "./") -or ($parsed.skills.Count -ne 10)) {
+                $failures += "[MANIFEST] $rel must declare all 10 skills as an array including './'"
+            }
+            if (-not ($parsed.agents -is [System.Array]) -or ($parsed.agents.Count -ne 3)) {
+                $failures += "[MANIFEST] $rel must declare all 3 subagents in 'agents' array"
+            }
+        }
     } catch {
         $failures += "[JSON] Invalid JSON in ${rel}: $($_.Exception.Message)"
     }
+}
+
+$uniqueVersions = $versions.Values | Select-Object -Unique
+if ($uniqueVersions.Count -gt 1) {
+    $failures += "[VERSION] Version mismatch across JSON files: $(($versions.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join ', ')"
 }
 
 # 2. Validate SKILL.md and agents/*.md frontmatter, SDO rules & line budgets
@@ -93,7 +120,24 @@ Get-ChildItem -Path (Join-Path $root "packs") -File -Filter "PK-*.md" | ForEach-
     }
 }
 
-# 4. Validate Markdown relative links and character hygiene across all .md files
+# 4. Validate structural alignment between Templates and Sub-skills
+$templateChecks = @(
+    @{ File = "templates/doc-design-proposal.md"; Pattern = "Depends on"; Label = "Capability Map 'Depends on' column" },
+    @{ File = "templates/doc-design-proposal.md"; Pattern = "HYPOTHESIS"; Label = "Frontier Q&A 'HYPOTHESIS' block" },
+    @{ File = "templates/docs/specs/_template.md"; Pattern = "PK-"; Label = "Domain Pack inheritance table" },
+    @{ File = "templates/docs/specs/_design-template.md"; Pattern = "Interface & Seam"; Label = "Deep Modules & Seams column" },
+    @{ File = "templates/docs/specs/_design-template.md"; Pattern = "Design It Twice"; Label = "Design It Twice section" },
+    @{ File = "templates/docs/plans/_plan-template.md"; Pattern = "Blocked by"; Label = "Tracer-Bullet Task Graph 'Blocked by' column" }
+)
+foreach ($tc in $templateChecks) {
+    $tPath = Join-Path $root $tc.File
+    $tRaw = Get-Content $tPath -Raw -Encoding UTF8
+    if ($tRaw -notmatch [regex]::Escape($tc.Pattern)) {
+        $failures += "[TEMPLATE] $($tc.File) is missing required marker: $($tc.Label)"
+    }
+}
+
+# 5. Validate Markdown relative links and character hygiene across all .md files
 $allMd = Get-ChildItem -Path $root -Recurse -File -Filter "*.md" | Where-Object { $_.FullName -notmatch "\\(\.git|dist)\\" }
 foreach ($f in $allMd) {
     $rel = $f.FullName.Substring($root.Length + 1).Replace('\','/')
@@ -121,7 +165,7 @@ foreach ($f in $allMd) {
     }
 }
 
-Write-Host ("Checked {0} Markdown files, {1} Skills, {2} Subagents." -f $allMd.Count, $skillFiles.Count, $agentFiles.Count) -ForegroundColor Gray
+Write-Host ("Checked {0} Markdown files, {1} Skills, {2} Subagents, {3} JSON manifests." -f $allMd.Count, $skillFiles.Count, $agentFiles.Count, $jsonFiles.Count) -ForegroundColor Gray
 Write-Host ("Total always-loaded description budget (10 skills): {0} chars (~{1} tokens)" -f $totalSkillDescChars, [math]::Round($totalSkillDescChars / 3.8)) -ForegroundColor Gray
 
 if ($failures.Count -gt 0) {

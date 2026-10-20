@@ -103,11 +103,11 @@ Profile là điểm xuất phát để repo nhỏ không gánh chi phí docs c�
 
 **Ghi trong đề xuất docs (doc-design-proposal.md):**
 ```
-- Base: writing-spec-for-ai v1.2.0 · Profile: M · Pack: PK-API, PK-AUTH, PK-DB, PK-RELEASE
+- Base: writing-spec-for-ai v1.2.2 · Profile: M · Pack: PK-API, PK-AUTH, PK-DB, PK-RELEASE
 ```
 
 **Ghi trong AGENTS.md (đầu file):**
 ```md
-> Base: writing-spec-for-ai v1.2.0 · Profile: M · Pack: PK-API, PK-AUTH, PK-DB, PK-RELEASE
+> Base: writing-spec-for-ai v1.2.2 · Profile: M · Pack: PK-API, PK-AUTH, PK-DB, PK-RELEASE
 > Ghi đè base: xem mục "Ghi đè" cuối file.
 ```

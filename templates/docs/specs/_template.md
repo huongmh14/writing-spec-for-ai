@@ -30,6 +30,12 @@
 
 <!-- Mẫu EARS: Luôn / Khi <sự kiện> / Trong khi <trạng thái> / Nếu <lỗi> thì / Khi bật <tính năng>. Chỗ chưa rõ: [CẦN LÀM RÕ: …] -->
 
+### Kế thừa từ Domain Pack (`PK-*`) <!-- xoá tiểu mục này nếu spec không kế thừa pack -->
+
+| REQ dự án | Kế thừa từ Pack | Tham số `{…}` điền giá trị / Ghi đè |
+|---|---|---|
+| XXX-R03 | `PK-API-R01` | `{error-code-doc}` = `docs/reference/error-codes.md` |
+
 ## 5. Yêu cầu phi chức năng
 
 | Khía cạnh | Yêu cầu (số liệu) hoặc `N/A — lý do` |

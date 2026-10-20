@@ -1,7 +1,7 @@
 {
   "$schema": "https://agentskills.io/schemas/evals-v1.json",
   "skill_name": "writing-spec-for-ai",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Standardized A/B outcome benchmark, SDO trigger-routing matrix, fresh-context adversarial detection test, and multi-pressure compliance suite for writing-spec-for-ai.",
   "evals": [
     {

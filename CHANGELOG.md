@@ -2,6 +2,22 @@
 
 Mỗi phiên bản liệt kê ID luật đổi (Core `C-xx`, Pack `PK-…-Rnn`; sổ đăng ký: [references/base-kit.md](references/base-kit.md)). Dự án đang dùng base grep các ID này trong docs của mình để biết chỗ phải xem lại.
 
+## v1.2.2 — 2026-10-20
+
+### Sửa lỗi & Đồng bộ kiến trúc
+
+- **Cài đặt phẳng 9 Sub-Skills ở cấp 1 (`install.ps1` & `install.sh`):**
+  - Ngoài skill điều phối `writing-spec-for-ai`, trình cài đặt nay giải phẳng cả 9 sub-skills (`survey-project`, `propose-doc-design`, `write-spec`, `write-design-doc`, `change-spec`, `review-docs`, `test-docs`, `plan-tasks`, `generate-verify-harness`) ra thư mục gốc `<agent-skills-dir>/<sub-skill>/` kèm chuẩn hoá đường dẫn tương đối (`../../` → `./`) để mọi AI IDE/CLI phát hiện và gọi trực tiếp được từng sub-skill.
+  - Sửa lỗi `install.ps1` khi chạy one-liner `irm ... | iex` trong thư mục dự án vô tình có sẵn file `SKILL.md`.
+- **Đồng bộ cấu trúc giữa Templates và Sub-Skills:**
+  - `templates/doc-design-proposal.md`: bổ sung cột `Depends on` + `Build Order` (Capability Map), bảng kế thừa Pack `PK-*`, và khung phỏng vấn `HYPOTHESIS + CONFIDENCE % + Frontier + ➡️ GUESS`.
+  - `templates/docs/specs/_template.md`: bổ sung bảng kế thừa REQ từ Domain Pack (`PK-*-Rnn` + tham số `{…}`).
+  - `templates/docs/specs/_design-template.md`: bổ sung bảng **Deep Modules & Seams** (`Interface & Seam`, `Depth`, nguồn `C25` / `ceiling:` `C27`), migration `Expand–Contract` (`PK-DB-R01`), và bảng so sánh **Design It Twice** (`Interface Depth`, `Locality`).
+  - `templates/docs/plans/_plan-template.md`: nâng cấp thành đồ thị **Tracer-Bullet Task Graph** (`T-01`, `Blocked by`, `Frontier`, lệnh `Verify` và context pointers cho subagent).
+- **Đồng bộ Plugin Manifests & Validator (`scripts/validate.ps1`):**
+  - `.cursor-plugin/plugin.json`, `.copilot-plugin/plugin.json`, `.zcode-plugin/plugin.json`: khai báo đầy đủ mảng 10 skills (gồm cả `./`) và 3 subagents.
+  - `scripts/validate.ps1`: kiểm tra thêm `marketplace.json`, `claude-settings.json`, đồng bộ `version` trên toàn bộ manifest, và kiểm tra các marker cấu trúc bắt buộc trong `templates/`.
+
 ## v1.2.1 — 2026-10-20
 
 ### Nâng cấp (SDO, Chống ngụy biện, Benchmark & Kiểm định tự động)

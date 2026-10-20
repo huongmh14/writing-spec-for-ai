@@ -7,39 +7,48 @@
 $ErrorActionPreference = "Stop"
 $RepoUrl = "https://github.com/huongmh14/writing-spec-for-ai.git"
 $SkillName = "writing-spec-for-ai"
+$Version = "1.2.2"
 
 Write-Host "====================================================" -ForegroundColor Cyan
-Write-Host "  Installing Writing Spec for AI v1.2.0             " -ForegroundColor Cyan
+Write-Host "  Installing Writing Spec for AI v$Version             " -ForegroundColor Cyan
 Write-Host "====================================================" -ForegroundColor Cyan
 
 $TempDir = $null
 $SourceDir = $PSScriptRoot
 
-if ([string]::IsNullOrWhiteSpace($SourceDir) -or -not (Test-Path (Join-Path $SourceDir "SKILL.md"))) {
+# Guard against irm ... | iex where $PSScriptRoot is empty and CWD happens to contain an unrelated SKILL.md
+$IsLocalRepo = (-not [string]::IsNullOrWhiteSpace($SourceDir)) -and
+               (Test-Path (Join-Path $SourceDir "SKILL.md")) -and
+               (Test-Path (Join-Path $SourceDir "references\base-kit.md")) -and
+               (Test-Path (Join-Path $SourceDir "skills\survey-project\SKILL.md"))
+
+if (-not $IsLocalRepo) {
     $TempDir = Join-Path ([System.IO.Path]::GetTempPath()) ("writing-spec-for-ai-" + [System.Guid]::NewGuid().ToString("N"))
-    Write-Host "[1/3] Downloading latest release from $RepoUrl ..." -ForegroundColor Yellow
+    Write-Host "[1/4] Downloading latest release from $RepoUrl ..." -ForegroundColor Yellow
     git clone --depth 1 $RepoUrl $TempDir | Out-Null
     $SourceDir = $TempDir
 } else {
-    Write-Host "[1/3] Using local repository at $SourceDir ..." -ForegroundColor Yellow
+    Write-Host "[1/4] Using local repository at $SourceDir ..." -ForegroundColor Yellow
 }
 
 $Targets = @(
-    @{ Name = "Universal (.agents)"; Path = "$HOME\.agents\skills\$SkillName" },
-    @{ Name = "Antigravity";         Path = "$HOME\.gemini\config\skills\$SkillName" },
-    @{ Name = "Claude Code";         Path = "$HOME\.claude\skills\$SkillName" },
-    @{ Name = "Codex";               Path = "$HOME\.codex\skills\$SkillName" },
-    @{ Name = "OpenCode";            Path = "$HOME\.config\opencode\skills\$SkillName" },
-    @{ Name = "Cursor";              Path = "$HOME\.cursor\skills\$SkillName" },
-    @{ Name = "ZCode";               Path = "$HOME\.zcode\skills\$SkillName" }
+    @{ Name = "Universal (.agents)"; Root = "$HOME\.agents\skills" },
+    @{ Name = "Antigravity";         Root = "$HOME\.gemini\config\skills" },
+    @{ Name = "Claude Code";         Root = "$HOME\.claude\skills" },
+    @{ Name = "Codex";               Root = "$HOME\.codex\skills" },
+    @{ Name = "OpenCode";            Root = "$HOME\.config\opencode\skills" },
+    @{ Name = "Cursor";              Root = "$HOME\.cursor\skills" },
+    @{ Name = "ZCode";               Root = "$HOME\.zcode\skills" }
 )
 
 $ExcludeItems = @(".git", ".github", "dist")
+$SubSkills = Get-ChildItem -Path (Join-Path $SourceDir "skills") -Directory
 
-Write-Host "[2/3] Installing skill suite to AI coding agents..." -ForegroundColor Yellow
+Write-Host "[2/4] Installing main orchestrator skill ($SkillName)..." -ForegroundColor Yellow
 
 foreach ($Target in $Targets) {
-    $Dest = $Target.Path
+    $RootDir = $Target.Root
+    $Dest = Join-Path $RootDir $SkillName
     if (Test-Path $Dest) {
         Remove-Item -Recurse -Force $Dest
     }
@@ -48,10 +57,43 @@ foreach ($Target in $Targets) {
     Get-ChildItem -Path $SourceDir -Force | Where-Object { $ExcludeItems -notcontains $_.Name } | ForEach-Object {
         Copy-Item -Path $_.FullName -Destination $Dest -Recurse -Force
     }
-    Write-Host ("  [+] Installed skill suite -> {0,-20} ({1})" -f $Target.Name, $Dest) -ForegroundColor Green
+    Write-Host ("  [+] Installed orchestrator -> {0,-20} ({1})" -f $Target.Name, $Dest) -ForegroundColor Green
 }
 
-Write-Host "[3/3] Installing specialized subagents (spec-surveyor, spec-challenger, doc-tester)..." -ForegroundColor Yellow
+Write-Host "[3/4] Installing 9 standalone sub-skills at top level for direct discovery..." -ForegroundColor Yellow
+
+foreach ($Target in $Targets) {
+    $RootDir = $Target.Root
+    foreach ($Sub in $SubSkills) {
+        $SubDest = Join-Path $RootDir $Sub.Name
+        if (Test-Path $SubDest) {
+            Remove-Item -Recurse -Force $SubDest
+        }
+        New-Item -ItemType Directory -Force -Path $SubDest | Out-Null
+
+        # Copy shared references, packs, agents, templates, and profiles so standalone invocation resolves all links
+        foreach ($Shared in @("references", "packs", "agents", "templates", "profiles.md", "LICENSE")) {
+            $SharedPath = Join-Path $SourceDir $Shared
+            if (Test-Path $SharedPath) {
+                Copy-Item -Path $SharedPath -Destination $SubDest -Recurse -Force
+            }
+        }
+
+        # Copy sub-skill SKILL.md and normalize ../../ relative links to ./
+        $RawSkill = Get-Content (Join-Path $Sub.FullName "SKILL.md") -Raw -Encoding UTF8
+        $NormalizedSkill = $RawSkill `
+            -replace '\.\./\.\./references/', './references/' `
+            -replace '\.\./\.\./templates/', './templates/' `
+            -replace '\.\./\.\./packs/', './packs/' `
+            -replace '\.\./\.\./agents/', './agents/' `
+            -replace '\.\./\.\./profiles\.md', './profiles.md' `
+            -replace '\.\./([a-z0-9-]+)/SKILL\.md', '../$1/SKILL.md'
+        [System.IO.File]::WriteAllText((Join-Path $SubDest "SKILL.md"), $NormalizedSkill, (New-Object System.Text.UTF8Encoding($false)))
+    }
+    Write-Host ("  [+] Installed 9 sub-skills -> {0,-20} ({1})" -f $Target.Name, $RootDir) -ForegroundColor Green
+}
+
+Write-Host "[4/4] Installing specialized subagents (spec-surveyor, spec-challenger, doc-tester)..." -ForegroundColor Yellow
 
 $AgentDirs = @(
     "$HOME\.claude\agents",
@@ -74,5 +116,5 @@ if ($TempDir -and (Test-Path $TempDir)) {
 }
 
 Write-Host ""
-Write-Host "Done! Try asking your agent:" -ForegroundColor Cyan
+Write-Host "Done! Installed 10 skills + 3 subagents. Try asking your agent:" -ForegroundColor Cyan
 Write-Host '  "Use skill writing-spec-for-ai to survey this repo and propose a doc design."' -ForegroundColor White

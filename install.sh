@@ -9,38 +9,55 @@ set -euo pipefail
 
 REPO_URL="https://github.com/huongmh14/writing-spec-for-ai.git"
 SKILL_NAME="writing-spec-for-ai"
+VERSION="1.2.2"
 TEMP_DIR=""
 
 echo "===================================================="
-echo "  Installing Writing Spec for AI v1.2.0             "
+echo "  Installing Writing Spec for AI v${VERSION}             "
 echo "===================================================="
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" 2>/dev/null && pwd || pwd)"
+SCRIPT_DIR=""
+if [ -n "${BASH_SOURCE[0]:-}" ]; then
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd || true)"
+fi
 
-if [ -f "$SCRIPT_DIR/SKILL.md" ]; then
+if [ -n "$SCRIPT_DIR" ] && [ -f "$SCRIPT_DIR/SKILL.md" ] && [ -f "$SCRIPT_DIR/references/base-kit.md" ] && [ -f "$SCRIPT_DIR/skills/survey-project/SKILL.md" ]; then
     SOURCE_DIR="$SCRIPT_DIR"
-    echo "[1/3] Using local repository at $SOURCE_DIR ..."
+    echo "[1/4] Using local repository at $SOURCE_DIR ..."
 else
     TEMP_DIR="$(mktemp -d)"
     trap 'rm -rf "$TEMP_DIR"' EXIT
-    echo "[1/3] Downloading latest release from $REPO_URL ..."
+    echo "[1/4] Downloading latest release from $REPO_URL ..."
     git clone --depth 1 "$REPO_URL" "$TEMP_DIR" >/dev/null 2>&1
     SOURCE_DIR="$TEMP_DIR"
 fi
 
-TARGETS=(
-    "$HOME/.agents/skills/$SKILL_NAME"
-    "$HOME/.gemini/config/skills/$SKILL_NAME"
-    "$HOME/.claude/skills/$SKILL_NAME"
-    "$HOME/.codex/skills/$SKILL_NAME"
-    "$HOME/.config/opencode/skills/$SKILL_NAME"
-    "$HOME/.cursor/skills/$SKILL_NAME"
-    "$HOME/.zcode/skills/$SKILL_NAME"
+TARGET_ROOTS=(
+    "$HOME/.agents/skills"
+    "$HOME/.gemini/config/skills"
+    "$HOME/.claude/skills"
+    "$HOME/.codex/skills"
+    "$HOME/.config/opencode/skills"
+    "$HOME/.cursor/skills"
+    "$HOME/.zcode/skills"
 )
 
-echo "[2/3] Installing skill suite to AI coding agents..."
+SUBSKILLS=(
+    "survey-project"
+    "propose-doc-design"
+    "write-spec"
+    "write-design-doc"
+    "change-spec"
+    "review-docs"
+    "test-docs"
+    "plan-tasks"
+    "generate-verify-harness"
+)
 
-for DEST in "${TARGETS[@]}"; do
+echo "[2/4] Installing main orchestrator skill ($SKILL_NAME)..."
+
+for ROOT in "${TARGET_ROOTS[@]}"; do
+    DEST="$ROOT/$SKILL_NAME"
     rm -rf "$DEST"
     mkdir -p "$DEST"
     tar -C "$SOURCE_DIR" \
@@ -48,10 +65,29 @@ for DEST in "${TARGETS[@]}"; do
         --exclude='.github' \
         --exclude='dist' \
         -cf - . | tar -C "$DEST" -xf -
-    echo "  [+] Installed skill suite -> $DEST"
+    echo "  [+] Installed orchestrator -> $DEST"
 done
 
-echo "[3/3] Installing specialized subagents (spec-surveyor, spec-challenger, doc-tester)..."
+echo "[3/4] Installing 9 standalone sub-skills at top level for direct discovery..."
+
+for ROOT in "${TARGET_ROOTS[@]}"; do
+    for SUB in "${SUBSKILLS[@]}"; do
+        SUB_DEST="$ROOT/$SUB"
+        rm -rf "$SUB_DEST"
+        mkdir -p "$SUB_DEST"
+        cp -r "$SOURCE_DIR/references" "$SOURCE_DIR/packs" "$SOURCE_DIR/agents" "$SOURCE_DIR/templates" "$SOURCE_DIR/profiles.md" "$SOURCE_DIR/LICENSE" "$SUB_DEST/"
+        sed \
+            -e 's|\.\./\.\./references/|./references/|g' \
+            -e 's|\.\./\.\./templates/|./templates/|g' \
+            -e 's|\.\./\.\./packs/|./packs/|g' \
+            -e 's|\.\./\.\./agents/|./agents/|g' \
+            -e 's|\.\./\.\./profiles\.md|./profiles.md|g' \
+            "$SOURCE_DIR/skills/$SUB/SKILL.md" > "$SUB_DEST/SKILL.md"
+    done
+    echo "  [+] Installed 9 sub-skills -> $ROOT"
+done
+
+echo "[4/4] Installing specialized subagents (spec-surveyor, spec-challenger, doc-tester)..."
 
 AGENT_DIRS=(
     "$HOME/.claude/agents"
@@ -68,5 +104,5 @@ if [ -d "$SOURCE_DIR/agents" ]; then
 fi
 
 echo ""
-echo "Done! Try asking your agent:"
+echo "Done! Installed 10 skills + 3 subagents. Try asking your agent:"
 echo '  "Use skill writing-spec-for-ai to survey this repo and propose a doc design."'

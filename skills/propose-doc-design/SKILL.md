@@ -13,9 +13,9 @@ description: Lập đề xuất thiết kế bộ tài liệu cho AI agent của
 ## 1. Điền đề xuất từ kết quả khảo sát
 
 - Mục 1 (hiện trạng): chép bảng khảo sát, giữ nguyên cột bằng chứng.
-- Mục 2 (mức): chỉ giữ thành phần mức 1–2 có tín hiệu.
+- Mục 2 (mức): chọn **profile** (S/M/L) dựa trên dấu hiệu từ khảo sát (xem `profiles.md`), chỉ giữ thành phần mức 1–2 có tín hiệu, chọn **pack** theo tín hiệu (PK-API, PK-AUTH, PK-RELEASE, v.v.).
 - Mục 3 (cây file): mỗi file ghi rõ Tạo / Sửa / Di chuyển / Xoá — repo có sẵn docs thì ưu tiên sửa/di chuyển, không tạo bản sao thứ hai.
-- Mục 4 (nội dung AGENTS.md): viêt sẵn các giá trị chính — lệnh, 3 tầng ranh giới, DoD, file mẫu để bắt chước.
+- Mục 4 (nội dung AGENTS.md): viêt sẵn các giá trị chính — lệnh, 3 tầng ranh giới, DoD, file mẫu để bắt chước, dòng khai báo base/profile/pack.
 - Mục 7 (cưỡng chế/hook/skill): chỉ đề xuất khi có tín hiệu; ghi luật nào rút thành check được.
 
 ## 2. Chia bộ spec theo khu vực (mục 5 của đề xuất) — phần quan trọng nhất
@@ -27,6 +27,7 @@ Cách chia, theo thứ tự:
 3. Tách riêng các spec **phương tiện** mọi phần cùng phải theo: `ARCH`, `REPO`, `API`, `NFR` — chỉ khi dự án đủ lớn (nhiều module/team).
 4. Mỗi khu vực → 1 dòng bảng: `SPEC-<TÊN> | khu vực | trạng thái dự kiến (Draft/As-built) | nguồn yêu cầu (đường dẫn PRD/issue/code)`.
 5. Kiểm khối lượng: 1 spec ≈ 10–25 REQ. Khu vực lớn hơn → tách (vd. `AUTH` tách `MFA`); nhỏ hơn 5 REQ → gộp.
+6. **REQ từ pack:** nếu dự án bật pack (PK-API, PK-AUTH, PK-RELEASE…), ghi REQ kế thừa bằng bảng thay vì chép lại lý do (xem base-kit §7.2). Ví dụ: `MEDIA-R07 kế thừa PK-AUTH-R01, tham số salt = API_KEY_SALT`.
 
 Tham chiếu chuẩn: 19 spec của dashboard (examples.md §5). 
 

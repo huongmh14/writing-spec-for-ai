@@ -134,55 +134,11 @@ Mỗi pack là một thư viện REQ có ID ổn định `PK-<PACK>-Rnn`. Dự �
 | PK-RELEASE — Docker, registry, phát hành | Có image/binary phát hành | cdn, crawler, citad-res, dashboard, BotAutoTask |
 | PK-AGENT — app điều khiển AI agent | App chạy lệnh do AI sinh ra | BotAutoTask — **ứng viên**, chờ dự án thứ 2 |
 
-### REQ lõi đề xuất (rút gọn; chuyển sang file pack ở GĐ2)
+### File pack (GĐ2 — đã xong)
 
-**PK-API**
-- R01 — Mọi lỗi MUST trả cùng một định dạng `{error, code, statusCode, details?}`; `code` nằm trong danh mục mã lỗi.
-- R02 — Nếu lỗi là 5xx, hệ thống MUST NOT trả message/stack cho client, trừ khi bật `{cờ debug}` ngoài production.
-- R03 — Input sai MUST trả 400, `details` liệt kê theo từng trường.
-- R04 — `GET /health` MUST trả 200, không cần auth, không lộ thông tin nội bộ.
-- R05 — Danh sách MUST phân trang `{items, total, page, limit}`; `limit` ≤ `{trần}`.
-- R06 — Trong production, CORS MUST dùng danh sách origin cụ thể, không dùng `*`.
-- R07 — Khi có contract máy đọc (OpenAPI), file đó là nguồn thật; spec chỉ link tới.
+REQ chi tiết và AC mẫu nằm trong file riêng: [packs/PK-API.md](../packs/PK-API.md), [packs/PK-AUTH.md](../packs/PK-AUTH.md), [packs/PK-RELEASE.md](../packs/PK-RELEASE.md).
 
-**PK-AUTH**
-- R01 — Secret/khoá MUST lưu dạng hash có salt; giá trị gốc chỉ trả về đúng một lần khi tạo.
-- R02 — So sánh secret MUST dùng phép so sánh constant-time.
-- R03 — Mỗi loại token MUST mang claim loại (`typ`); endpoint MUST từ chối token sai loại (cdn `aca4c78`).
-- R04 — Refresh token MUST duy nhất cho mỗi lần cấp, quay vòng sau mỗi lần dùng, thu hồi được (cdn `706d120`).
-- R05 — URL/webhook có ký MUST dùng HMAC kèm `exp`; quá hạn thì bị từ chối.
-- R06 — Nếu thiếu hoặc hỏng cấu hình auth, hệ thống MUST từ chối (fail-closed) (BotAutoTask Worker).
-- R07 — Hệ thống MUST NOT log token, mật khẩu, header `Authorization`.
-
-**PK-TENANT**
-- R01 — Mọi truy vấn dữ liệu của tenant MUST lọc theo `tenant_id` lấy từ danh tính đã xác thực, không lấy từ input.
-- R02 — Thao tác hàng loạt (pause, xoá, đồng bộ) MUST chỉ tác động trong phạm vi được chỉ định (bug `/pause` của BotAutoTask).
-- R03 — Bộ test MUST có ca cô lập dùng 2 tenant (cdn skill).
-
-**PK-JOB**
-- R01 — Job MUST idempotent: chạy lại cùng input không sinh bản ghi trùng (cdn sync EC-02, BotAutoTask nonce).
-- R02 — Mốc tiến độ (`last_sync_at`, checkpoint) MUST chỉ ghi sau khi đơn vị việc thành công.
-- R03 — Một đơn vị lỗi MUST NOT chặn đơn vị khác; kết thúc có lỗi thì exit code ≠ 0.
-- R04 — Khi nhận tín hiệu dừng, job MUST làm xong việc đang dở hoặc trả việc lại hàng đợi.
-- R05 — Logic chạy định kỳ MUST có lệnh chạy thủ công tương đương.
-- R06 — Lịch chạy MUST ghi rõ múi giờ (commit crawler "chỉnh TZ về VN").
-
-**PK-DB**
-- R01 — Mọi thay đổi schema MUST có migration đánh số, có đường lui.
-- R02 — Migration đã phát hành MUST NOT bị sửa; muốn sửa thì tạo migration mới.
-- R03 — Lệnh migrate MUST thất bại khi không áp được migration (C19).
-- R04 — Snapshot schema (`schema.sql`, `schema.prisma`) MUST khớp tổng các migration; CI kiểm.
-
-**PK-RELEASE**
-- R01 — `.env.example` MUST đủ mọi biến; ứng dụng MUST validate env lúc khởi động và báo gộp mọi lỗi (cdn `config`).
-- R02 — Image/binary MUST build từ tag `{release/v<semver>}`; tag image = phiên bản.
-- R03 — Container MUST chạy bằng user non-root, build multi-stage.
-- R04 — Mỗi phiên bản MUST có changelog; breaking change MUST có hướng dẫn nâng cấp (`templates/docs/upgrade`).
-- R05 — PR vào nhánh môi trường MUST ghi kế hoạch rollback (= triển khai lại tag trước).
-- R06 — Nếu artifact build được commit vào repo, CI MUST kiểm artifact khớp nguồn.
-
-### Định dạng một file pack (GĐ2)
-
+Định dạng file pack:
 ```
 packs/<pack>.md
   Tín hiệu bật · Nguồn (dự án) · Tham số {…} kèm mặc định
@@ -190,6 +146,11 @@ packs/<pack>.md
   Dòng thêm vào AGENTS.md (Luôn / Hỏi trước / Không bao giờ)
   Mục khảo sát bổ sung cho survey-project · Gotchas có ngày kiểm
 ```
+
+Pack đang có:
+- PK-API, PK-AUTH, PK-RELEASE — đã viết, có ≥ 2 nguồn.
+- PK-TENANT, PK-JOB, PK-DB — chờ tín hiệu (chưa đủ dự án thứ hai).
+- PK-AGENT — chờ dự án thứ hai (hiện chỉ BotAutoTask).
 
 ## 7. Mô hình tuỳ biến
 
@@ -236,6 +197,8 @@ Thứ tự ưu tiên: `decisions dự án > spec dự án > AGENTS.md dự án (
 
 Profile chỉ là điểm xuất phát. Tín hiệu mức 1–2 (principles §2) vẫn quyết định thêm gì.
 
+> Chi tiết về profile S/M/L (dấu hiệu, file tối thiểu, ví dụ, khi nào nâng cấp) nằm trong file riêng: [profiles.md](../profiles.md).
+
 ### 7.5 Nâng cấp base
 
 Tăng phiên bản base thì `CHANGELOG.md` liệt kê ID đổi (C-xx, PK-…-Rnn). Dự án grep ID trong docs của mình để biết chỗ phải xem lại. Chưa cần script (§9).
@@ -246,7 +209,7 @@ Tăng phiên bản base thì `CHANGELOG.md` liệt kê ID đổi (C-xx, PK-…-R
 |---|---|---|---|
 | 0 | Khảo sát + đề xuất | File này | ✅ Duyệt 2026-10-20 |
 | 1 | Bổ sung Core còn thiếu | `git init` + tag `v1.0.0`, `CHANGELOG.md`; C03, C10, C11, C20 → `templates/docs/specs/README.md`; C15, C16 → `templates/AGENTS.md` + `adapters/claude-settings.json`; C18 → `templates/project-skill`; C19 → `skills/write-spec`; khảo sát C16/C19/C20 → `skills/survey-project`; mục kiểm → `review-checklist.md`; lỗi lặp → principles §7.1; template `docs/reference/config.md`, `error-codes.md`, `docs/changelog/` | ✅ `v1.0.0` |
-| 2 | Pack + profile | `packs/PK-API.md`, `PK-AUTH.md`, `PK-RELEASE.md`; `profiles.md`; `propose-doc-design` hỏi profile + pack | Chưa làm — xong khi mỗi pack có ≥ 2 nguồn và AC mẫu |
+| 2 | Pack + profile | `packs/PK-API.md`, `PK-AUTH.md`, `PK-RELEASE.md`; `profiles.md`; `propose-doc-design` hỏi profile + pack; `review-checklist.md` thêm mục kiểm REQ kế thừa; `base-kit.md` §6 trỏ sang file pack | ✅ `v1.1.0` |
 | 3 | Thử trên BotAutoTask (M, brownfield) | Docs BotAutoTask theo base qua đủ 3 cổng | Chưa làm — xong khi `test-docs` không còn câu hỏi đã có đáp án trong docs |
 | 4 | Công cụ nâng cấp (chỉ khi ≥ 2 dự án đã dùng) | Sub-skill `base-upgrade`; script kiểm REQ kế thừa trỏ tới ID còn tồn tại | Chờ tín hiệu |
 | 5 | Pack theo nhu cầu | PK-TENANT, PK-JOB, PK-DB; PK-AGENT khi có dự án thứ 2 | Chờ tín hiệu |

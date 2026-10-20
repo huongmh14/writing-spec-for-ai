@@ -33,6 +33,7 @@
 - [ ] Thuật ngữ khớp glossary.
 - [ ] Spec `As-built`: mỗi REQ có bằng chứng; `[x]` chỉ khi test hiện có chứng minh.
 - [ ] AC của lệnh vận hành (migrate, sync, seed, deploy) kiểm tác dụng, không chỉ exit code.
+- [ ] **REQ kế thừa từ pack (nếu có):** tham chiếu đúng ID pack (vd. `PK-AUTH-R01`), tham số `{…}` đã được điền giá trị cụ thể, không để trống.
 
 ## 3. Quyết định, thuật ngữ, trạng thái
 
@@ -77,6 +78,7 @@
 - [ ] Hook/settings đã review; deny-rules cho file nhạy cảm.
 - [ ] Luật đã có check tự động chỉ còn một dòng văn xuôi trỏ tới check.
 - [ ] Docs điều khiển agent (AGENTS.md, skill, rule, hook) nằm dưới CODEOWNERS.
+- [ ] **Pack được khai báo trong AGENTS.md (dòng đầu):** chỉ pack có tín hiệu bật, không thừa; mỗi pack có ≥ 2 dự án làm nguồn (xem `packs/PK-….md`).
 
 ## 7. Thử tài liệu (Bước 7)
 

@@ -24,6 +24,11 @@ references/
   review-checklist.md            # chấm AGENTS.md, từng spec, trạng thái, vị trí, thử docs
   base-kit.md                    # sổ đăng ký luật Core (C-xx) / Pack (PK-…), Profile S-M-L,
                                  # luật ghi đè, lộ trình phát triển base
+packs/                           # MỚI — tầng Pack, mỗi pack một file (PK-API, PK-AUTH, PK-RELEASE…)
+  PK-API.md                      # HTTP API
+  PK-AUTH.md                     # Token, khoá, chữ ký
+  PK-RELEASE.md                  # Docker, registry, phát hành
+profiles.md                      # MỚI — preset Profile S/M/L
 templates/
   doc-design-proposal.md         # Cổng 1
   AGENTS.md

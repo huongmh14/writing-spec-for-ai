@@ -2,6 +2,26 @@
 
 Mỗi phiên bản liệt kê ID luật đổi (Core `C-xx`, Pack `PK-…-Rnn`; sổ đăng ký: [references/base-kit.md](references/base-kit.md)). Dự án đang dùng base grep các ID này trong docs của mình để biết chỗ phải xem lại.
 
+## v1.1.0 — 2026-10-20
+
+### Thêm
+
+- `packs/PK-API.md` — Pack HTTP API với REQ PK-API-R01–R07, AC mẫu, dòng AGENTS.md, mục khảo sát, gotchas.
+- `packs/PK-AUTH.md` — Pack token/khoá/chữ ký với REQ PK-AUTH-R01–R07, AC mẫu, dòng AGENTS.md, mục khảo sát, gotchas.
+- `packs/PK-RELEASE.md` — Pack Docker/registry/phát hành với REQ PK-RELEASE-R01–R06, AC mẫu, dòng AGENTS.md, mục khảo sát, gotchas.
+- `profiles.md` — Profile S/M/L với dấu hiệu, file tối thiểu, ví dụ, khi nào nâng cấp.
+- `skills/propose-doc-design/SKILL.md`: cập nhật để hỏi profile và pack khi đề xuất docs.
+- `templates/doc-design-proposal.md`: cập nhật mục 2 để khai báo base/profile/pack.
+- `references/review-checklist.md`: thêm mục kiểm REQ kế thừa (tham chiếu đúng ID pack, tham số đã điền) và mục kiểm pack khai báo trong AGENTS.md.
+- `references/base-kit.md` §6: trỏ REQ chi tiết sang file pack thay vì chứa nháp REQ (một sự thật một chỗ).
+- `references/base-kit.md` §7.4: trỏ chi tiết profile sang `profiles.md`.
+- `references/base-kit.md` §8: đánh dấu GĐ2 xong, trạng thái `v1.1.0`.
+- `README.md`: thêm `packs/` và `profiles.md` vào cấu trúc.
+
+### Sửa
+
+- Không có thay đổi luật Core (C-xx), chỉ thêm tầng Pack và Profile.
+
 ## v1.0.0 — 2026-10-20
 
 Phiên bản đầu tiên được ghim. Có từ trước (C01, C02, C04–C09, C12–C14, C17, C21, C22): bộ điều phối + 7 sub-skill + templates.

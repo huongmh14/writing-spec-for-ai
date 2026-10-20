@@ -20,9 +20,9 @@
 
 ## 2. Mức đề xuất
 
-- Base: writing-spec-for-ai v1.2.2 · Profile: <S | M | L> — xem `profiles.md` về dấu hiệu và file tối thiểu.
+- Base: writing-spec-for-ai v1.3.0 · Profile: <S | M | L> — xem `profiles.md` về dấu hiệu và file tối thiểu.
 - Pack: <PK-… — tín hiệu: …> — xem `packs/PK-….md` về tín hiệu bật và REQ.
-- Mức 0: toàn bộ (0.1–0.16 / `C01–C27`).
+- Mức 0: toàn bộ (0.1–0.18 / `C01–C29`).
 - Mức 1: <thành phần> — tín hiệu: <…>
 - Mức 2: <thành phần> — tín hiệu: <…>
 
@@ -60,9 +60,26 @@ docs/changes/                     # mức 1, brownfield
 - **File mẫu để bắt chước:**
 - **Luật chuyển xuống phạm vi:** <thư mục → luật>
 
-## 5. Bản đồ Năng lực & Spec dự kiến (Capability Map)
+## 5. Trực quan hoá Định hướng, Bản đồ Năng lực & Spec dự kiến (`C28` — Capability Map)
 
-<!-- Chiều phụ thuộc chỉ đi một chiều (Depends on), cấm vòng lặp. -->
+### 5.1 Scope Radar (`🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm` — `C28`)
+
+| 🟢 Làm ngay (MVP — GĐ 1) | 🟡 Đợt kế tiếp (Phase 2) | 🔴 Không làm (Out of Scope) |
+|---|---|---|
+| - <Hành vi cốt lõi 1> | - <Mở rộng sang GĐ 2> | - <Thứ loại bỏ rõ ràng để AI không làm thừa> |
+
+### 5.2 Luồng tương tác tổng thể & Phương án trực quan (`Visual Option Cards` — `C28`)
+
+```mermaid
+flowchart LR
+    U["Người dùng / Tác nhân"] --> A["Hành động chính"] --> S["Hệ thống xử lý"] --> R["Kết quả quan sát được"]
+```
+
+<!-- Nếu định hướng sản phẩm/kiến trúc còn mở (≥ 2 hướng), trình bày 2–3 Phương án trực quan kèm Snapshot I/O (ASCII wireframe / CLI / JSON mẫu) để người dùng chọn trước khi viết spec. Xoá khối Option Cards nếu chỉ có 1 hướng duy nhất. -->
+- **Phương án A (Khuyến nghị):** <Mô tả 1 dòng + ASCII wireframe / mẫu I-O + ưu/nhược>
+- **Phương án B:** <Mô tả 1 dòng + ASCII wireframe / mẫu I-O + ưu/nhược>
+
+### 5.3 Bản đồ Năng lực (`Capability Map` — Chiều phụ thuộc chỉ đi một chiều `Depends on`, cấm vòng lặp)
 
 | ID | Khu vực | Trách nhiệm | Phụ thuộc vào (`Depends on`) | Trạng thái dự kiến | Nguồn yêu cầu |
 |---|---|---|---|---|---|

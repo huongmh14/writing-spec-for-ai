@@ -1,6 +1,6 @@
 # AGENTS.md — <tên dự án>
 
-> Base: writing-spec-for-ai <phiên bản, vd. v1.2.2> · Profile: <S | M | L> · Pack: <PK-… hoặc "không">
+> Base: writing-spec-for-ai <phiên bản, vd. v1.3.0> · Profile: <S | M | L> · Pack: <PK-… hoặc "không">
 
 <2–4 câu: hệ thống làm gì, cho ai. Stack: <framework + major version>, <DB>, <FE>. Phiên bản chính xác: xem `package.json`, `.nvmrc`.>
 
@@ -67,6 +67,7 @@
 
 - `<lint> && <typecheck> && <test> && <build>` xanh (và đạt sàn `CONSTRAINTS.md` nếu có).
 - Mọi AC trong phạm vi có test qua (hoặc `[~]` kèm lý do).
+- **In Bảng Bằng chứng Chạy Test (`Visible Test Execution Ledger` — `C29`):** khi báo xong task hoặc mở PR, bắt buộc in bảng `AC-ID | Kịch bản đã chạy | Input đã bơm | Output & Tác dụng phụ thực tế | Độ thật (0 Mock hay Mock gì) | Kết quả` để người review thấy rõ test đã kiểm cái gì (cấm chỉ báo *"All tests passed"*).
 - Spec/decisions/progress cập nhật; spec đủ AC thì chuyển `Done`.
 
 ## Quy ước code

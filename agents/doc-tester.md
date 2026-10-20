@@ -24,10 +24,10 @@ For each sample task provided in your prompt (typically: 1 routine feature task,
    - **(B) Stop and ask for human approval (`⚠️ Ask First` boundary)**, or
    - **(C) Stop and ask clarifying questions (`[CẦN LÀM RÕ]` / missing spec)**, or
    - **(D) Refuse (`🚫 Never` boundary)**.
-3. **Concrete Action Plan:**
-   - Which `SPEC-xx`, `REQ-xx`, `AC-xx`, and `D-xx` govern this task?
+3. **Concrete Action Plan & Visible Test Plan (`C28`, `C29`):**
+   - Which `SPEC-xx`, `REQ-xx`, `AC-xx`, and `D-xx` govern this task, and does the spec's visual flow / I-O snapshot (`C28`) make the expected behavior unmistakable?
    - Which files would you create or modify?
-   - Which exact single-test command and DoD command from `AGENTS.md` would you run to verify your work?
+   - What is your **Visible Test Matrix (`C29`)** (exact input, expected output/side-effect, `0 Mock` vs. mocked boundary) and which single-test + DoD command from `AGENTS.md` would you run?
 4. **Friction & Blind-Spot Report (Most Important):**
    - **Questions you had to ask:** Did you have to ask a question whose answer *should* have been in the docs?
    - **Buried or confusing rules:** Was any rule hard to find, contradicted by another file, or missing a clear context pointer in `AGENTS.md`?

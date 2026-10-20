@@ -18,9 +18,10 @@ You receive ONLY:
 ## What to Hunt For
 
 1. **Unquantified Adjectives in REQs (`C06`):** Words like *"fast"*, *"secure"*, *"graceful"*, *"reasonable"*, *"flexible"*, *"large"* without a measurable threshold or `N/A — reason`.
-2. **Weak or Circular Acceptance Criteria (`C06`, `C19`):**
-   - `AC-xx` that ends with *"works correctly"* instead of observable HTTP status, error code, DOM state, or DB row state.
-   - Operational command ACs (`migrate`, `seed`, `sync`, `deploy`) that only check `exit code 0` without verifying the actual side effect.
+2. **Weak or Opaque Acceptance Criteria & Missing Visuals (`C06`, `C19`, `C28`, `C29`):**
+   - Specs that consist of walls of text without a **Mermaid flow diagram + Concrete I/O Snapshot** (ASCII wireframe, CLI output, or JSON payload preview — `C28`).
+   - Missing **Visible Test Matrix (`C29`)** showing exact concrete inputs, observable outputs/side-effects, and explicit **Mock Disclosure** (`0 Mock` vs. what is mocked).
+   - `AC-xx` that ends with *"works correctly"* or operational command ACs (`migrate`, `seed`, `sync`, `deploy`) that only check `exit code 0` without verifying the actual side effect (`C19`).
    - Missing error-path or edge-case ACs.
 3. **Incomplete NFR Table:** Any missing row among the 8 mandatory NFR rows, or blank values without `N/A — reason`.
 4. **Pack & Base Inheritance Defects:**

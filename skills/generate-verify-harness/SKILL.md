@@ -28,9 +28,10 @@ Viết cho **agent kế tiếp đọc lúc chưa biết gì về app** (không �
 1. **Launch:** Lệnh khởi chạy đầy đủ và cách xác nhận hệ thống đã sẵn sàng phục vụ.
 2. **Doctor:** Một lệnh chỉ đọc (read-only) chạy trong `< 3 giây` để trả lời *"instance này có đang sống, đúng phiên bản build mới nhất, và sẵn sàng nhận kiểm thử không?"*.
 3. **Drive:** Công thức điều khiển bằng selector/lệnh thật của dự án (ưu tiên ARIA role/label, route path, CLI flags ổn định).
-4. **Evidence:** Tiêu chuẩn bằng chứng nghiệm thu cho các `AC-ID`:
+4. **Evidence & Visible Test Ledger (`C19`, `C29`):** Tiêu chuẩn bằng chứng nghiệm thu cho các `AC-ID`:
    - Phải đi qua đường người dùng thật (không gọi hàm nội bộ tắt ngang).
    - Kiểm tra cả **phản hồi bề mặt** lẫn **tác dụng phụ thực tế** (bản ghi DB, file sinh ra, message trong queue — luật `C19`).
+   - **In Bảng Bằng chứng Chạy Test (`Visible Test Execution Ledger` — `C29`):** Kết thúc mỗi lượt verify, bắt buộc in ra bảng tóm tắt cho lập trình viên thấy rõ: `AC-ID | Kịch bản đã chạy | Input đã bơm | Output & Tác dụng phụ thực tế | Độ thật (0 Mock hay Mock thành phần nào) | Kết quả & Thời gian`, kèm đường dẫn ảnh chụp màn hình / trace log.
    - Lưu bằng chứng vào thư mục cố định để không bị xoá mất khi dọn dẹp.
 5. **Cleanup:** Lệnh tắt đúng tiến trình do phiên kiểm chứng bật lên (theo PID/container tên riêng, **cấm `killall` theo tên chung**), xoá dữ liệu rác nhưng giữ nguyên thư mục chứa bằng chứng (`Evidence`).
 

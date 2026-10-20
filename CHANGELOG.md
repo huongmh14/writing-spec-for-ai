@@ -2,6 +2,21 @@
 
 Mỗi phiên bản liệt kê ID luật đổi (Core `C-xx`, Pack `PK-…-Rnn`; sổ đăng ký: [references/base-kit.md](references/base-kit.md)). Dự án đang dùng base grep các ID này trong docs của mình để biết chỗ phải xem lại.
 
+## v1.3.0 — 2026-10-20
+
+### Thêm (Giải quyết Điểm mù Định hướng & Kiểm thử Hộp đen)
+
+- **2 Luật Core mới (`C28–C29` trong `references/base-kit.md` & `references/principles.md` §2):**
+  - **C28 — Trực quan hoá Định hướng & Phương án (`Visual Direction & Option Cards`):** cấm trình bày định hướng sản phẩm/kiến trúc chỉ bằng chữ dài dễ gây "gật đầu mù" (*rubber-stamping*). Bắt buộc có:
+    1. **Scope Radar (`🟢 Làm ngay (MVP) / 🟡 Đợt kế (Phase 2) / 🔴 Không làm`)** ngay ở Cổng 1 (`propose-doc-design`).
+    2. **Luồng tương tác trực quan (`Mermaid User Journey / State Flow`)** + **Snapshot I/O cụ thể** (ASCII UI wireframe, mẫu CLI, hoặc JSON request/response thực tế) trong mọi `SPEC-xx`.
+    3. **2–3 Phương án trực quan (`Visual Option Cards`)** kèm đánh đổi khi hướng phát triển còn mở để người dùng nhìn thấy và chọn trước khi viết spec.
+  - **C29 — Minh bạch hoá & Trực quan hoá Kiểm thử (`Visible Test Plan & Execution Ledger`):** cấm chạy test ngầm dạng hộp đen rồi chỉ báo *"All tests passed"*. Bắt buộc 2 lớp minh bạch:
+    1. **Trước khi code (`Visible Test Matrix` trong `SPEC-xx` & `plan-tasks`):** bảng đối chiếu từng `AC-ID` với `Đầu vào cụ thể (Input)`, `Kỳ vọng quan sát được (Output & Tác dụng phụ DB/DOM)`, và **`Tầng & Độ thật (Mock Disclosure: 0 Mock hay Mock thành phần nào)`**.
+    2. **Sau khi chạy test (`Visible Test Execution Ledger` trong DoD của `AGENTS.md`, mẫu PR `pull_request_template.md`, và skill `verify-<app>`):** bắt buộc in bảng kết quả thực tế cho từng `AC-ID` để lập trình viên thấy rõ AI đã test cái gì và có tự mock mất logic thật hay không.
+- **Ví dụ chuẩn & Kịch bản Đánh giá (`references/examples.md` §8–9, `evals/evals.json`):** bổ sung mẫu Scope Radar, ASCII wireframe + payload, bảng `Visible Test Execution Ledger` thực tế và kịch bản benchmark `eval-06-visual-direction-and-visible-testing`.
+- **Nâng cấp Templates, Sub-Skills, Subagents & Validator (`scripts/validate.ps1`):** cập nhật đồng bộ `propose-doc-design`, `write-spec`, `plan-tasks`, `generate-verify-harness`, `review-docs`, `spec-challenger`, `doc-tester`, `templates/` và thêm kiểm tra tự động các marker `C28`/`C29`.
+
 ## v1.2.2 — 2026-10-20
 
 ### Sửa lỗi & Đồng bộ kiến trúc

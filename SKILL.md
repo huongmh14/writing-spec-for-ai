@@ -7,7 +7,7 @@ description: Kích hoạt khi bắt đầu dự án mới, khi repo chưa có ho
 
 Mục tiêu: bộ tài liệu giúp mọi AI agent **làm đúng luật, tự chứng minh việc đã xong, biết dừng khi mơ hồ** — và ngắn nhất có thể.
 
-Skill này là **bộ điều phối**. Mỗi bước có một sub-skill chi tiết trong [skills/](skills/) và 3 subagent chuyên biệt trong [agents/](agents/) — **bắt buộc mở đọc đúng file sub-skill trước khi thực hiện bước đó**. Nền tảng nguyên tắc: [references/principles.md](references/principles.md). Ví dụ chuẩn từ dự án thật: [references/examples.md](references/examples.md). Mẫu file: [templates/](templates/). Luật kế thừa cho mọi dự án (Core `C01–C27`, 8 Domain Packs `PK-*`, Profile `S/M/L`, luật ghi đè): [references/base-kit.md](references/base-kit.md) — dự án ghi phiên bản base đang dùng ở đầu `AGENTS.md`.
+Skill này là **bộ điều phối**. Mỗi bước có một sub-skill chi tiết trong [skills/](skills/) và 3 subagent chuyên biệt trong [agents/](agents/) — **bắt buộc mở đọc đúng file sub-skill trước khi thực hiện bước đó**. Nền tảng nguyên tắc: [references/principles.md](references/principles.md). Ví dụ chuẩn từ dự án thật: [references/examples.md](references/examples.md). Mẫu file: [templates/](templates/). Luật kế thừa cho mọi dự án (Core `C01–C29`, 8 Domain Packs `PK-*`, Profile `S/M/L`, luật ghi đè): [references/base-kit.md](references/base-kit.md) — dự án ghi phiên bản base đang dùng ở đầu `AGENTS.md`.
 
 ## Luật cứng
 
@@ -25,6 +25,7 @@ Skill này là **bộ điều phối**. Mỗi bước có một sub-skill chi ti
 | *"Dự án nhỏ / đang gấp, viết luôn `AGENTS.md` khỏi cần đề xuất Cổng 1"* | **Dừng.** Dự án nhỏ dùng Profile `S` (đề xuất gọn ~15 dòng), vẫn bắt buộc chốt Cổng 1 trước khi tạo file trong repo. |
 | *"Chỉ thiếu vài chi tiết nhỏ, tự đoán luôn cho nhanh"* | **Dừng.** Đánh dấu `[CẦN LÀM RÕ]` hoặc hỏi theo `HYPOTHESIS + GUESS` ở Bước 4; tuyệt đối không bịa REQ/AC. |
 | *"Tự đọc lại thấy ổn rồi, bỏ qua `spec-challenger` (Cổng 2) và `doc-tester` (Cổng 3)"* | **Dừng.** Người viết luôn mắc điểm mù xác nhận (`C26`); phải chạy kiểm tra context sạch và được người dùng duyệt mới sang bước tiếp. |
+| *"Trình bày định hướng bằng đoạn chữ dài / chỉ báo 'All tests passed' là đủ"* | **Dừng.** Chữ dài gây "gật đầu mù" (`C28` — phải có Scope Radar, Mermaid + ASCII wireframe/I-O mẫu); báo test xanh mà giấu Input/Output/Mock là test hộp đen (`C29` — phải in Bảng Bằng chứng Chạy Test). |
 | *"Mô tả trong bảng/YAML đã tóm tắt rồi, khỏi mở đọc file sub-skill"* | **Dừng.** YAML `description` chỉ là con trỏ kích hoạt; bắt buộc mở đọc `skills/<bước>/SKILL.md` trước khi làm. |
 
 ## Quy trình — bước nào mở sub-skill / subagent đó

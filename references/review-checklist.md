@@ -12,6 +12,7 @@
 - [ ] Ranh giới 3 tầng ✅ Luôn / ⚠️ Hỏi trước / 🚫 Không bao giờ; có "không commit secret".
 - [ ] **Chống hạ chuẩn âm thầm (`C23`):** mục 🚫 có cấm thêm suppression (`@ts-ignore`, `eslint-disable`, `# noqa`, `.skip`) hoặc hạ ngưỡng kiểm tra để làm test xanh.
 - [ ] **Đánh dấu trần đơn giản hoá (`C27`):** mục ✅ có quy ước gắn `ceiling:` khi chọn giải pháp đơn giản có giới hạn đã biết.
+- [ ] **Minh bạch kiểm thử trong DoD (`C29`):** mục DoD / quy trình task yêu cầu in **Bảng Bằng chứng Chạy Test (`Visible Test Execution Ledger`)** nêu rõ Input, Output thực tế, và **Mock Disclosure** (0 Mock hay Mock thành phần nào) thay vì chỉ báo "test xanh".
 - [ ] DoD là lệnh/điều kiện kiểm chứng được.
 - [ ] Quy ước code có ≥ 1 ví dụ thật hoặc file mẫu để bắt chước.
 - [ ] Phủ đủ 6 mảng: lệnh, test, cấu trúc, style, git, ranh giới.
@@ -23,10 +24,12 @@
 ## 2. Spec (từng spec)
 
 - [ ] Có mục tiêu, phạm vi trong/ngoài (ngoài không rỗng).
+- [ ] **Trực quan hoá luồng & Snapshot I/O (`C28`):** có sơ đồ luồng tương tác (Mermaid) và ít nhất 1 phác thảo đầu vào/đầu ra cụ thể (ASCII UI wireframe, mẫu CLI, hoặc JSON request/response) để người duyệt nhìn thấy hình hài tính năng trước khi đọc REQ.
 - [ ] Mỗi REQ có ID, mức, một câu; theo mẫu EARS khi được.
 - [ ] NFR đủ dòng: số liệu hoặc `N/A — lý do`.
 - [ ] Có trường hợp biên; mỗi biên có AC hoặc nằm ở ngoài phạm vi.
 - [ ] Mỗi REQ ≥ 1 AC; có AC cho lỗi; AC có tầng test.
+- [ ] **Ma trận Kiểm thử Minh bạch (`Visible Test Matrix` — `C29`):** bảng AC nêu rõ cho từng `AC-ID`: `Kịch bản | Đầu vào cụ thể (Input) | Kỳ vọng quan sát được (Output & Tác dụng phụ) | Tầng & Độ thật (0 Mock hay Mock thành phần nào)`.
 - [ ] Không tính từ không đo được ("nhanh", "an toàn", "hợp lý").
 - [ ] Không còn `[CẦN LÀM RÕ]` nếu trạng thái `Ready`.
 - [ ] Câu hỏi mở có mặt (ghi "Không có" nếu rỗng); mâu thuẫn ghi ở cả hai spec liên quan.

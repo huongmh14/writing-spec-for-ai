@@ -17,18 +17,11 @@ Ví dụ chuẩn đạt: [references/examples.md](../../references/examples.md).
 3. Đọc `docs/decisions.md` — quyết định nào chạm khu vực này thì chỉ ghi `D-xx` trong spec, không chép lý do.
 4. Chốt ID: `SPEC-<TÊN>` + tiền tố REQ/AC `<TÊN>-Rnn`/`<TÊN>-ACnn`. Đã dùng trong đề xuất được duyệt; không đổi ID sau khi viết.
 
-## 1. Trích yêu cầu từ nguồn
+## 1. Trực quan hoá Luồng & Trích yêu cầu từ nguồn (`C28`)
 
-**Nguồn là tài liệu/phỏng vấn (greenfield, Draft):**
-- Gạch hết động từ hành động (xem, tạo, sửa, xoá, duyệt, xuất…) → mỗi động từ một REQ ứng viên.
-- Gạch ràng buộc và điều kiện xấu ("không được", "chỉ khi", "tối đa") → REQ mẫu Lỗi.
-- Mục tiêu số ("đồng thời 100 user") → NFR.
-- Mục nào không suy ra được → `[CẦN LÀM RÕ: …]` ngay trong dòng REQ, đừng tự bịa.
-
-**Nguồn là code (brownfield, As-built):**
-- Đọc route/service/UI chính của khu vực; mỗi **hành vi quan sát được từ ngoài** (response, hiệu ứng dữ liệu, trạng thái UI) một REQ.
-- Mỗi REQ ghi bằng chứng: file:hàm hoặc test đang chứng minh.
-- Hành vi đáng ngờ (không có test, có vẻ bug) → **câu hỏi mở**, không chuẩn hoá thành yêu cầu.
+- **Vẽ Luồng & Snapshot I/O trước khi viết REQ (`C28` — mục 3 của spec):** Vẽ 1 sơ đồ Mermaid (User Journey / State Flow) + 1 **Snapshot I/O cụ thể** (ASCII wireframe màn hình, mẫu lệnh CLI, hoặc JSON request/response thực tế) để lập trình viên nhìn thấy ngay hình hài tính năng thay vì đọc chay bảng REQ.
+- **Nguồn là tài liệu/phỏng vấn (greenfield, Draft):** Gạch động từ hành động → REQ ứng viên; điều kiện xấu ("không được", "chỉ khi", "tối đa") → REQ mẫu Lỗi; mục tiêu số → NFR; chỗ không suy ra được → `[CẦN LÀM RÕ: …]` ngay trong dòng REQ, không tự bịa.
+- **Nguồn là code (brownfield, As-built):** Mỗi hành vi quan sát được từ ngoài (response, hiệu ứng dữ liệu, trạng thái UI) một REQ kèm bằng chứng `file:hàm` hoặc test; hành vi đáng ngờ (không test, nghi bug) → đưa vào **câu hỏi mở**, không chuẩn hoá.
 
 ## 2. Viết REQ — mẫu EARS
 
@@ -67,15 +60,15 @@ Quy tắc chặt:
 
 Với mỗi REQ dữ liệu, hỏi theo danh sách: rỗng · đúng 1 · đầy · vượt ngưỡng · âm/sai định dạng · quyền hết hạn giữa thao tác · hai người sửa đồng thời · dữ liệu đã bị xoá mềm · ngôn ngữ/kích thước cực đại · dịch vụ phụ tắt (Redis/SMTP). Mỗi biên → một AC, hoặc ghi vào "Ngoài phạm vi". Không để biên nào không có số phận.
 
-## 5. Viết AC — Cho / Khi / Thì
+## 5. Viết AC & Ma trận Kiểm thử Minh bạch (`C29` — Cho / Khi / Thì)
 
 Công thức: **Cho** <trạng thái ban đầu với dữ liệu cụ thể>, **khi** <hành động đúng như người/test gọi>, **thì** <kết quả quan sát được: mã HTTP, mã lỗi, dữ liệu, trạng thái DOM>.
 
-- Mỗi REQ ≥ 1 AC; phải có ≥ 1 AC cho nhánh lỗi của khu vực.
-- Ghi tầng test sau mỗi AC: *(unit)*, *(integration)*, *(contract)*, *(e2e)*, *(thủ công — lý do + cách đóng)*.
+- Mỗi REQ ≥ 1 AC; phải có ≥ 1 AC cho nhánh lỗi của khu vực. Tên hàm test chứa `AC-ID` (xem `examples.md` §2, §9).
+- **Ma trận Kiểm thử Minh bạch (`Visible Test Matrix` — `C29`):** Điền bảng tóm tắt ngay trong mục 7 của spec để lập trình viên duyệt trước kịch bản test mà AI sẽ chạy:
+  `AC-ID | Kịch bản | Đầu vào cụ thể (Input) | Kỳ vọng quan sát được (Output & Tác dụng phụ DB/DOM) | Tầng & Độ thật (0 Mock hay Mock thành phần nào)`.
 - AC phụ thuộc hạ tầng thật (registry, email) → gắn `[~]` ngay từ đầu + lý do + cách đóng.
-- AC cho lệnh vận hành (migrate, sync, seed, deploy) phải kiểm **tác dụng** (bảng tồn tại, số bản ghi, file sinh ra), không chỉ exit code 0. Kèm AC nhánh lỗi: không làm được thì exit ≠ 0.
-- Cách đặt tên/test: tên test chứa AC-ID (đối chiếu examples.md §2).
+- AC cho lệnh vận hành (`migrate`, `sync`, `seed`, `deploy`) phải kiểm **tác dụng** (bảng tồn tại, số bản ghi, file sinh ra — `C19`), không chỉ exit code 0; kèm AC lỗi (`exit ≠ 0`).
 
 ## 6. Đóng gói
 
@@ -94,10 +87,9 @@ Công thức: **Cho** <trạng thái ban đầu với dữ liệu cụ thể>, *
 
 ## Kiểm tra trước khi trình
 
+- [ ] Có sơ đồ luồng Mermaid và **Snapshot I/O cụ thể** (ASCII wireframe / CLI / JSON mẫu) theo `C28`.
 - [ ] Mỗi REQ: 1 câu, có ID + mức, theo 1 mẫu EARS, không tính từ mơ hồ.
 - [ ] NFR đủ 8 dòng: số hoặc `N/A — lý do`.
-- [ ] Mỗi REQ ≥ 1 AC; có AC lỗi; có AC biên; AC có tầng test.
-- [ ] "Ngoài phạm vi" không rỗng.
-- [ ] Có kiểm end-to-end; câu hỏi mở có mặt (hoặc "Không có").
-- [ ] Không còn `[CẦN LÀM RÕ]` nếu người dùng đã chuyển `Ready`.
-- [ ] As-built: mỗi REQ có bằng chứng file/test; `[x]` chỉ khi test hiện có chứng minh.
+- [ ] Mỗi REQ ≥ 1 AC; có AC lỗi; có AC biên; có **Ma trận Kiểm thử Minh bạch (`Visible Test Matrix` — `C29`)** nêu rõ Input, Output kỳ vọng và độ thật (`0 Mock` hay `Mock gì`).
+- [ ] "Ngoài phạm vi" không rỗng; có kiểm end-to-end; câu hỏi mở có mặt (hoặc "Không có").
+- [ ] Không còn `[CẦN LÀM RÕ]` nếu người dùng đã chuyển `Ready`; As-built có bằng chứng file/test.

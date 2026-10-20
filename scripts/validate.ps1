@@ -124,10 +124,15 @@ Get-ChildItem -Path (Join-Path $root "packs") -File -Filter "PK-*.md" | ForEach-
 $templateChecks = @(
     @{ File = "templates/doc-design-proposal.md"; Pattern = "Depends on"; Label = "Capability Map 'Depends on' column" },
     @{ File = "templates/doc-design-proposal.md"; Pattern = "HYPOTHESIS"; Label = "Frontier Q&A 'HYPOTHESIS' block" },
+    @{ File = "templates/doc-design-proposal.md"; Pattern = "Scope Radar"; Label = "Visual Direction 'Scope Radar' section (C28)" },
     @{ File = "templates/docs/specs/_template.md"; Pattern = "PK-"; Label = "Domain Pack inheritance table" },
+    @{ File = "templates/docs/specs/_template.md"; Pattern = "Concrete I/O Snapshot"; Label = "Visual I/O Snapshot section (C28)" },
+    @{ File = "templates/docs/specs/_template.md"; Pattern = "Visible Test Matrix"; Label = "Visible Test Matrix section (C29)" },
     @{ File = "templates/docs/specs/_design-template.md"; Pattern = "Interface & Seam"; Label = "Deep Modules & Seams column" },
     @{ File = "templates/docs/specs/_design-template.md"; Pattern = "Design It Twice"; Label = "Design It Twice section" },
-    @{ File = "templates/docs/plans/_plan-template.md"; Pattern = "Blocked by"; Label = "Tracer-Bullet Task Graph 'Blocked by' column" }
+    @{ File = "templates/docs/plans/_plan-template.md"; Pattern = "Blocked by"; Label = "Tracer-Bullet Task Graph 'Blocked by' column" },
+    @{ File = "templates/AGENTS.md"; Pattern = "Visible Test Execution Ledger"; Label = "DoD Visible Test Execution Ledger requirement (C29)" },
+    @{ File = "templates/adapters/pull_request_template.md"; Pattern = "Visible Test Execution Ledger"; Label = "PR Visible Test Execution Ledger table (C29)" }
 )
 foreach ($tc in $templateChecks) {
     $tPath = Join-Path $root $tc.File

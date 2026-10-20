@@ -33,13 +33,19 @@ Các task không phải danh sách phẳng mà là một **đồ thị có hư�
 - Mỗi task khai báo rõ **`Blocked by:`** (danh sách mã task phải xong trước; ghi `None` nếu làm được ngay).
 - **Frontier (Mặt trận sẵn sàng):** tập hợp mọi task có toàn bộ `Blocked by` đã hoàn tất. Các task cùng nằm trên Frontier và không chạm trùng file có thể giao cho nhiều **implementer subagent** chạy song song trên các `git worktree` riêng biệt, chỉ truyền **context pointers** (link tới `SPEC-xx`, mã `AC-ID`, commit nền).
 
-## 4. Mẫu trình bày một Task trong Plan
+## 4. Mẫu trình bày một Task & Bảng Bằng chứng Kiểm thử (`C29`)
+
+Mỗi task không chỉ ghi lệnh chạy test mà phải khai báo rõ **Ma trận Test dự kiến (`Pre-Code Test Plan`)** và khi hoàn tất phải điền **Bảng Bằng chứng Chạy Test (`Visible Test Execution Ledger` — `C29`)** để lập trình viên thấy rõ AI đã bơm dữ liệu gì và có dùng mock hay không:
 
 ```markdown
 ### T-01: <Tên hành vi đầu-cuối ngắn gọn, đúng thuật ngữ glossary>
 - **REQ / AC nghiệm thu:** `<TÊN>-R01`, `<TÊN>-AC01`, `<TÊN>-AC02`
 - **Blocked by:** `None` (hoặc `T-01, T-02`)
 - **Phạm vi file dự kiến (≤ 5 file):** `<đường dẫn>`
+- **Kế hoạch & Bằng chứng Kiểm thử Minh bạch (`C29`):**
+  | AC-ID | Kịch bản | Input bơm vào | Output & Tác dụng phụ quan sát được | Tầng & Độ thật (`0 Mock` / `Mock gì`) | Kết quả |
+  |---|---|---|---|---|---|
+  | `<TÊN>-AC01` | <nhánh chính> | `<payload/tham số>` | `<HTTP 200 / DB row / DOM>` | `integration` (`0 Mock`) | `[ ]` |
 - **Lệnh kiểm chứng (Verify):** `<lệnh chạy đúng test chứa AC-ID>`
 - **Trạng thái:** `[ ]`
 ```

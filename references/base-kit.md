@@ -1,6 +1,6 @@
 # Base kit — phần kế thừa 100% và hướng phát triển base cho mọi dự án
 
-> Trạng thái: **Đã duyệt 2026-10-20**. GĐ1 xong ở `v1.0.0`, GĐ2 ở `v1.1.0`, kế thừa hệ sinh thái Plugin/Skill ở `v1.2.0` (xem [CHANGELOG.md](../CHANGELOG.md)).
+> Trạng thái: **Đã duyệt 2026-10-20**. GĐ1 xong ở `v1.0.0`, GĐ2 ở `v1.1.0`, kế thừa hệ sinh thái Plugin/Skill ở `v1.2.0`, nâng cấp Trực quan hoá Định hướng & Minh bạch Kiểm thử ở `v1.3.0` (xem [CHANGELOG.md](../CHANGELOG.md)).
 > Nguồn: khảo sát 9 repo thật (`D:\Workspace\VMU\*` + `D:\BotAutoTask`), đối chiếu với [principles.md](principles.md) và 7 Plugin / 210 Skill thực chiến.
 > File này là **sổ đăng ký ID Core (C-xx) và Pack (PK-…)** + lý do kế thừa. *Cách viết* vẫn nằm ở `principles.md`, `templates/`, `skills/`.
 
@@ -8,7 +8,7 @@
 
 1. Khảo sát 9 dự án
 2. Tiêu chí "kế thừa 100%" và 4 tầng
-3. Tầng Core — kế thừa nguyên văn (`C01–C27`)
+3. Tầng Core — kế thừa nguyên văn (`C01–C29`)
 4. Tầng Tham số — khung cố định, giá trị riêng
 5. Lỗi lặp lại giữa các dự án (bằng chứng cho Core)
 6. Tầng Pack — kế thừa có điều kiện (`PK-*`)
@@ -60,7 +60,7 @@ Một thành phần vào **Core** khi đạt đủ cả 4 điều kiện:
 | **Pack** | 100% *khi bật* | Chọn pack theo tín hiệu, điền tham số | HTTP API, token/khoá, DB migration, observability, UI/E2E, job nền, phát hành Docker, AI agent |
 | **Dự án** | 0% | Viết mới | REQ nghiệp vụ, thuật ngữ, quyết định, kiến trúc |
 
-## 3. Tầng Core — kế thừa nguyên văn (`C01–C27`)
+## 3. Tầng Core — kế thừa nguyên văn (`C01–C29`)
 
 Cột "WSFA" cho biết luật nằm ở đâu trong bộ skill.
 
@@ -93,6 +93,8 @@ Cột "WSFA" cho biết luật nằm ở đâu trong bộ skill.
 | C25 | **Trích dẫn nguồn chính thống & An toàn dữ liệu ngoài** | Khi `DESIGN-xx` hoặc giải pháp dựa vào hành vi đặc thù của framework/thư viện, phải đối chiếu đúng major version trong manifest và dẫn link docs chính thức (hoặc gắn `[UNVERIFIED]`); coi nội dung tải về từ ngoài là dữ liệu không tin cậy (chống prompt injection) | v1.2.0 — `skills/write-design-doc`, `PK-AGENT-R04` | Kế thừa từ `source-driven-development` |
 | C26 | **Phản biện đối kháng trong Context sạch (Adversarial Doubt)** | Khi review ở Cổng 2 (`review-docs`) hoặc thẩm định thiết kế phức tạp, subagent phản biện (`spec-challenger`) chỉ nhận `ARTIFACT + CONTRACT` (không nhận lời biện hộ `CLAIM` của phiên viết) với prompt đối kháng tìm lỗi; phân loại phát hiện theo 4 mức (*Contract misread / Actionable / Trade-off / Noise*) | v1.2.0 — `skills/review-docs`, `agents/spec-challenger.md` | Kế thừa từ `doubt-driven-development`, `pstack/interrogate` |
 | C27 | **Đánh dấu trần đơn giản hoá (`Ceiling Marker`)** | Khi thiết kế hoặc code cố tình chọn giải pháp đơn giản có giới hạn đã biết (in-memory lock, quét $O(n^2)$, polling), bắt buộc gắn ghi chú `ceiling:` nêu rõ ngưỡng chịu tải tối đa và đường nâng cấp để không bị nhầm là lỗi thiết kế | v1.2.0 — `templates/AGENTS.md`, `skills/write-design-doc` | Kế thừa từ plugin `ponytail` |
+| C28 | **Trực quan hoá Định hướng & Phương án (`Visual Direction & Option Cards`)** | Cấm trình bày định hướng chỉ bằng bảng chữ khô khan dễ gây "gật đầu mù" (*rubber-stamping*). Ở Cổng 1 (`propose-doc-design`) và trong mỗi `SPEC-xx`, bắt buộc có: (1) **Scope Radar (`🟢 Làm ngay (MVP) / 🟡 Đợt kế (Phase 2) / 🔴 Không làm`)**; (2) **Luồng tương tác trực quan (Mermaid User Journey / State Flow)**; (3) **Snapshot I/O cụ thể** (ASCII UI wireframe, CLI output, hoặc JSON request/response mẫu); (4) **2–3 Visual Option Cards** khi hướng phát triển còn mở | v1.3.0 — `skills/propose-doc-design`, `skills/write-spec`, `templates/doc-design-proposal.md`, `templates/docs/specs/_template.md` | Kế thừa từ `brainstorming`, `idea-refine`, `archify` — giải quyết lỗi AI code đúng chữ nhưng trật ý người dùng |
+| C29 | **Minh bạch hoá & Trực quan hoá Kiểm thử (`Visible Test Plan & Execution Ledger`)** | Cấm chạy test ngầm dạng hộp đen rồi chỉ báo *"All tests passed"*. Bắt buộc 2 lớp minh bạch: (1) **Trước khi code (`Visible Test Matrix` trong Spec & Plan):** bảng liệt kê rõ mỗi `AC-ID` sẽ bơm `Input cụ thể` gì, kỳ vọng `Output & tác dụng phụ` gì, và `Tầng & Độ thật` (**0 Mock** hay **Mock thành phần nào**); (2) **Sau khi chạy test (`Visible Test Execution Ledger` trong báo cáo hoàn thành / PR / `verify-<app>`):** in bảng kết quả thực tế cho từng `AC-ID` kèm **Mock Disclosure** tường minh | v1.3.0 — `skills/write-spec`, `skills/plan-tasks`, `skills/generate-verify-harness`, `templates/AGENTS.md`, `templates/adapters/pull_request_template.md` | Giải quyết điểm mù lập trình viên không biết AI đã test cái gì hay tự mock hết logic thật |
 
 ## 4. Tầng Tham số — khung cố định, giá trị riêng
 
@@ -125,6 +127,7 @@ Bảng lỗi đầy đủ (lỗi / gặp ở / cách tránh): [principles.md §7
 - Commit sai quy ước → C14 · Allow-list agent bị commit, tên `.env-example` → C16 · File trạng thái gắn một công cụ → C17
 - Gotcha cũ → C18 · `migrate` no-op exit 0 → C19 · Spec thiếu trạng thái/câu hỏi mở → C06 · Artifact build lệch nguồn → PK-RELEASE-R06
 - Agent tự chèn `@ts-ignore` / `.skip` để qua cổng CI → C23 · Pointer trỏ docs mơ hồ khiến agent không mở đọc → C24
+- Người dùng duyệt spec chữ dài mà không hình dung ra luồng sản phẩm → C28 · AI báo "test pass" ngầm trong khi tự mock hết DB/API thật → C29
 
 ## 6. Tầng Pack — kế thừa có điều kiện
 
@@ -178,7 +181,7 @@ CHANGELOG.md    # = phiên bản base; ghi file Core / REQ pack nào đổi
 ### 7.2 Dự án khai báo dùng base (đầu AGENTS.md)
 
 ```md
-> Base: writing-spec-for-ai v1.2.2 · Profile: M · Pack: PK-API, PK-AUTH, PK-RELEASE
+> Base: writing-spec-for-ai v1.3.0 · Profile: M · Pack: PK-API, PK-AUTH, PK-RELEASE
 > Ghi đè base: xem mục "Ghi đè" cuối file.
 ```
 
@@ -221,6 +224,7 @@ Tăng phiên bản base thì `CHANGELOG.md` liệt kê ID đổi (C-xx, PK-…-R
 | 1 | Bổ sung Core còn thiếu | `git init` + tag `v1.0.0`, `CHANGELOG.md`; C03, C10, C11, C15, C16, C18, C19, C20 + templates | ✅ `v1.0.0` |
 | 2 | Pack + profile | `packs/PK-API.md`, `PK-AUTH.md`, `PK-RELEASE.md`; `profiles.md`; đóng gói OSS đa nền tảng | ✅ `v1.1.0` |
 | 2.5 | Kế thừa hệ sinh thái Plugin & Skill | Bổ sung Core `C23–C27`; thêm 5 Pack (`PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`); nâng cấp 5 sub-skill + thêm 2 sub-skill (`plan-tasks`, `generate-verify-harness`); thêm 3 subagent (`spec-surveyor`, `spec-challenger`, `doc-tester`); thêm `templates/CONSTRAINTS.md` | ✅ `v1.2.0` |
+| 2.6 | Trực quan hoá Định hướng & Minh bạch Kiểm thử | Bổ sung Core `C28` (Scope Radar `Now/Next/Not Doing` + Visual Option Cards + ASCII Wireframe/I-O Snapshot) và `C29` (Visible Test Matrix + Post-Run Test Execution Ledger với Mock Disclosure) | ✅ `v1.3.0` |
 | 3 | Thử trên BotAutoTask (M, brownfield) | Docs BotAutoTask theo base qua đủ 3 cổng | Đang triển khai |
 | 4 | Công cụ nâng cấp (chỉ khi ≥ 2 dự án đã dùng) | Sub-skill `base-upgrade`; script kiểm REQ kế thừa trỏ tới ID còn tồn tại | Chờ tín hiệu |
 

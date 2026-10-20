@@ -68,3 +68,30 @@ Kèm "ngữ cảnh tối thiểu" mỗi PR: link đúng mục spec + file liên 
 | "Đăng nhập an toàn" | `AUTH-R01` — Khi nhận ID token Google, hệ thống MUST verify chữ ký, `aud`, `iss`, `exp`, `email_verified` phía server; sai ⇒ 401 `AUTH_INVALID_TOKEN`. |
 | "Xuất báo cáo không làm chậm hệ thống" | `REP-R04` — Xuất file chạy nền qua hàng đợi; `POST /reports/:code/runs` rate limit 10 lần/phút/user (D-27). |
 | "Giao diện phân quyền theo vai trò" | `RBAC-R41` — Directive `v-can` (ẩn) và `v-can.disable` (vô hiệu hoá) theo quyền hiệu lực. |
+
+## 8. Trực quan hoá định hướng (`C28` — Scope Radar & Visual Option Card)
+
+Khi người dùng mới nêu ý tưởng mơ hồ (*"Làm tính năng thông báo đơn hàng"*), thay vì viết ngay 20 REQ chữ khô khan, trình **Scope Radar** + **2 Phương án trực quan** ở Cổng 1 / Spec:
+
+- **Scope Radar:**
+  - 🟢 **Làm ngay (MVP):** Chuông thông báo in-app (`WebSocket`) + lưu DB `notifications` + đánh dấu đã đọc.
+  - 🟡 **Đợt kế (Phase 2):** Gửi email tổng hợp khi user offline > 15 phút.
+  - 🔴 **Không làm (Out of scope):** Web Push trình duyệt ngầm, SMS OTP.
+- **Snapshot I/O cụ thể (ASCII Wireframe + Payload mẫu):**
+```text
++--------------------------------------------------+
+| [Chuông (3)]  Thông báo mới        [Đánh dấu đọc]|
+|--------------------------------------------------|
+| * Đơn #ORD-102 đã chuyển sang ĐANG GIAO   1p trước|
+|   Payload: {"id":"n_1","type":"ORDER_SHIPPED"}   |
++--------------------------------------------------+
+```
+
+## 9. Ma trận Kiểm thử Minh bạch & Bằng chứng Chạy Test (`C29`)
+
+Thay vì báo *"All 12 tests passed"*, hiển thị bảng để lập trình viên nhìn thấy ngay độ thật của test:
+
+| AC-ID | Kịch bản kiểm thử | Đầu vào cụ thể (Input) | Kết quả & Tác dụng phụ thực tế (Observed Output) | Tầng & Độ thật (Mock Disclosure) | Kết quả |
+|---|---|---|---|---|---|
+| `RBAC-AC03` | `DENY` thắng wildcard `orders:*` | `user={allow:["orders:*"], deny:["orders:delete"]}` gọi `DELETE /api/v1/orders/42` | HTTP `403`, body `{"error":{"code":"AUTH_FORBIDDEN"}}`; bản ghi `orders#42` còn nguyên trong PG | `integration` — **0 Mock** (PostgreSQL + Redis thật) | ✅ PASS (42ms) |
+| `NFR-AC08` | Chặn vượt rate limit 10 lần/phút | Gửi 11 request `POST /reports/sales/runs` từ `user_1`, 1 request từ `user_2` | Lần 1..10: `202`; lần 11 (`user_1`): `429 RATE_LIMITED`; `user_2`: `202` | `integration` — Redis thật, **Mock:** `GotenbergClient.renderPdf` | ✅ PASS (68ms) |

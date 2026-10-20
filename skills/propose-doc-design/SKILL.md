@@ -18,18 +18,21 @@ description: Dùng ở Bước 3–4 (Cổng 1) ngay sau khi khảo sát dự á
 - Mục 4 (nội dung `AGENTS.md` & `CONSTRAINTS.md`): viết sẵn các giá trị chính — lệnh, 3 tầng ranh giới, DoD, context pointers có điều kiện kích hoạt ở đầu câu (`C24`), dòng khai báo base/profile/pack.
 - Mục 7 (cưỡng chế/hook/skill): chỉ đề xuất khi có tín hiệu; ghi luật nào rút thành check trong `CONSTRAINTS.md` được.
 
-## 2. Chia bộ spec theo khu vực & Capability Map (mục 5 của đề xuất) — phần quan trọng nhất
+## 2. Trực quan hoá Định hướng & Chia bộ Spec theo Capability Map (`C28` — mục 5 của đề xuất)
 
-Cách chia, theo thứ tự (kế thừa `spec-driven-development` Phase 0):
+Người dùng rất dễ "gật đầu mù" (*rubber-stamp*) trước một bảng chữ dài rồi sau đó phát hiện AI hiểu trật hướng sản phẩm. Trước khi liệt kê danh sách spec, bắt buộc trực quan hoá định hướng theo luật Core `C28` (kế thừa `brainstorming`, `idea-refine`, `archify`):
 
-1. Liệt kê **thực thể và năng lực miền** từ tài liệu nguồn/khảo sát: người dùng, đơn, vai trò, kho, thông báo, báo cáo…
-2. Gom thành các khu vực độc lập có thể kiểm thử riêng, mỗi khu vực trả lời *"ai dùng tính năng này để làm gì"*. Đặt tên theo miền (`RBAC`, `ORDERS`, `NOTIF`), không theo tầng kỹ thuật.
-3. Tách riêng các spec **phương tiện** mọi phần cùng phải theo: `ARCH`, `REPO`, `API`, `NFR` — chỉ khi dự án đủ lớn (nhiều module/team).
+1. **Scope Radar (`🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm`):** Đặt bảng/khối 3 cột ngay đầu mục định hướng để người dùng thấy rõ ranh giới MVP, phần hoãn sang đợt sau và phần loại bỏ hoàn toàn.
+2. **Luồng tương tác tổng thể & Visual Option Cards (khi hướng phát triển còn mở):**
+   - Vẽ **1 sơ đồ Mermaid** (User Journey / System Flow) thể hiện đường đi của tác nhân chính từ đầu vào đến kết quả.
+   - Nếu bài toán có `≥ 2` hướng tiếp cận sản phẩm/kiến trúc khả dĩ, trình bày **2–3 Phương án trực quan (`Option Card A / B`)** kèm phác thảo **Snapshot I/O cụ thể** (ASCII UI wireframe, mẫu lệnh CLI, hoặc JSON payload) + bảng đánh đổi để người dùng nhìn thấy và chọn hướng trước khi đi vào chi tiết.
+3. **Chia khu vực độc lập theo miền năng lực:**
+   - Liệt kê thực thể và năng lực miền (người dùng, đơn, vai trò, kho, thông báo…); gom thành khu vực kiểm thử độc lập trả lời *"ai dùng tính năng này để làm gì"*.
+   - Tách riêng spec **phương tiện** (`ARCH`, `REPO`, `API`, `NFR`) chỉ khi dự án đủ lớn.
 4. **Xác định chiều phụ thuộc một chiều (`Depends on`) & Thứ tự xây dựng (`Build Order`):**
    - Mỗi dòng bảng: `SPEC-<TÊN> | Trách nhiệm khu vực | Phụ thuộc vào (Depends on) | Trạng thái dự kiến (Draft/As-built) | Nguồn yêu cầu`.
-   - Mũi tên phụ thuộc chỉ đi một chiều, **cấm vòng lặp**. Nếu 2 module phụ thuộc lẫn nhau, chúng là 1 module hoặc phải tách phần giao diện chung ra trước.
-5. Kiểm khối lượng: 1 spec ≈ 10–25 REQ. Khu vực lớn hơn → tách; nhỏ hơn 5 REQ → gộp.
-6. **REQ từ pack:** nếu dự án bật pack (`PK-API`, `PK-AUTH`, `PK-RELEASE`, `PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`), ghi REQ kế thừa bằng bảng kèm giá trị tham số `{…}` cụ thể thay vì chép lại lý do (xem `base-kit.md` §7.2).
+   - Mũi tên phụ thuộc chỉ đi một chiều, **cấm vòng lặp**. Kiểm khối lượng: 1 spec ≈ 10–25 REQ.
+5. **REQ kế thừa từ Pack (`PK-*`):** Nếu dự án bật pack (`PK-API`, `PK-AUTH`, `PK-RELEASE`, `PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`), ghi REQ kế thừa bằng bảng kèm giá trị tham số `{…}` cụ thể (xem `base-kit.md` §7.2).
 
 ## 3. Câu hỏi làm rõ theo `HYPOTHESIS + Frontier + GUESS` (mục 10)
 
@@ -52,5 +55,6 @@ Rút từ mọi `[CẦN LÀM RÕ]` phát hiện được khi điền đề xuấ
 
 - [ ] Chưa file docs nào trong repo được tạo/sửa.
 - [ ] Mọi thành phần mức 1–2 và Pack được chọn đều có tín hiệu đi kèm.
+- [ ] Có **Scope Radar (`🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm`)**, sơ đồ luồng Mermaid, và **Visual Option Cards + Snapshot I/O** khi hướng phát triển còn mở (`C28`).
 - [ ] Bảng chia bộ spec có cột `Depends on` một chiều (không vòng lặp) + `Build Order` + nguồn yêu cầu truy được.
 - [ ] Mục câu hỏi mở đầu bằng `HYPOTHESIS + CONFIDENCE %`, ≤ 5 câu thuộc Frontier, mỗi câu có `➡️ Đề xuất (GUESS)`.

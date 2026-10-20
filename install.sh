@@ -9,7 +9,7 @@ set -euo pipefail
 
 REPO_URL="https://github.com/huongmh14/writing-spec-for-ai.git"
 SKILL_NAME="writing-spec-for-ai"
-VERSION="1.2.2"
+VERSION="1.3.0"
 TEMP_DIR=""
 
 echo "===================================================="

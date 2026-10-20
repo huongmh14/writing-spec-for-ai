@@ -32,6 +32,8 @@ Chạy đủ 6 nhóm theo thứ tự; mỗi mục phải có **bằng chứng tr
 
 | Triệu chứng thấy được | Sửa ngay trước khi trình |
 |---|---|
+| Spec chỉ có chữ và bảng REQ, thiếu hình dung trực quan (`C28`) | Thêm sơ đồ luồng Mermaid + ít nhất 1 **Snapshot I/O cụ thể** (ASCII wireframe / CLI / JSON mẫu) |
+| AC chỉ ghi chữ chung chung, thiếu Ma trận Kiểm thử Minh bạch (`C29`) | Bổ sung bảng `Visible Test Matrix` nêu rõ `Input cụ thể | Output & Tác dụng phụ | Tầng & Độ thật (0 Mock / Mock gì)` |
 | REQ chứa "nhanh", "linh hoạt", "an toàn", "hợp lý" | Thay bằng số ngưỡng đo được hoặc chuyển sang câu hỏi mở |
 | AC kết thúc bằng "hoạt động đúng" / lệnh vận hành chỉ kiểm exit 0 | Thay bằng mã HTTP, mã lỗi, dữ liệu DB/file sinh ra (`C19`) |
 | "Ngoài phạm vi" rỗng | Thêm ít nhất 1 thứ lân cận bị loại (phần GĐ sau, dịch vụ ngoài, màn không làm) |

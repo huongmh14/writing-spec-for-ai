@@ -6,11 +6,17 @@
 
 ## Thay đổi
 
-## Cách kiểm thử
+## Cách kiểm thử & Bảng Bằng chứng Chạy Test (`Visible Test Execution Ledger` — `C29`)
+
+<!-- Không chỉ ghi "đã chạy test pass". Bắt buộc điền bảng dưới đây để người review nhìn thấy rõ từng AC đã được bơm dữ liệu gì và có dùng mock hay không. -->
+
+| Mã AC | Kịch bản đã chạy | Đầu vào đã bơm (`Input`) | Kết quả & Tác dụng phụ thực tế (`Observed Output / DB / DOM`) | Tầng & Độ thật (`0 Mock` hay `Mock thành phần nào`) | Kết quả |
+|---|---|---|---|---|---|
+| `XXX-AC01` | | | | `integration` — **0 Mock** | ✅ PASS |
 
 ## Checklist
 
-- [ ] Test mới chứa AC-ID trong tên
+- [ ] Test mới chứa AC-ID trong tên và đã khai báo rõ `0 Mock` / `Mock gì` trong bảng Bằng chứng ở trên (`C29`)
 - [ ] Lint, typecheck, test xanh
 - [ ] Đã đánh `[x]` AC trong PR này (hoặc `[~]` kèm lý do)
 - [ ] Đổi schema/API công khai: có mục trong `docs/upgrade/`

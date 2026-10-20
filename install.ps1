@@ -7,7 +7,7 @@
 $ErrorActionPreference = "Stop"
 $RepoUrl = "https://github.com/huongmh14/writing-spec-for-ai.git"
 $SkillName = "writing-spec-for-ai"
-$Version = "1.2.2"
+$Version = "1.3.0"
 
 Write-Host "====================================================" -ForegroundColor Cyan
 Write-Host "  Installing Writing Spec for AI v$Version             " -ForegroundColor Cyan

@@ -73,6 +73,8 @@ flowchart TD
 | 0.14 | **Tiêu chí cắt** | Mỗi dòng: "bỏ đi agent có làm sai không?" Không thì xoá. AGENTS.md ≤ ~150 dòng | Dài thì luật quan trọng bị chìm |
 | 0.15 | **Quyền AI theo trạng thái spec** | Bảng trạng thái × được làm / không được làm trong `docs/specs/README.md`; không code spec `Draft`; hotfix sửa spec trong ≤ 1 ngày làm việc | Trạng thái chỉ có nghĩa khi gắn với việc agent được phép làm |
 | 0.16 | **Loại thay đổi → file phải sửa** | Bảng trong `docs/specs/README.md`, gồm dòng "đổi stack" | Docs lệch code vì không ai biết phải sửa file nào |
+| 0.17 | **Trực quan hoá định hướng & phương án (`C28`)** | Scope Radar (`🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm`), Visual Option Cards (2–3 hướng kèm sơ đồ Mermaid + ASCII wireframe/I-O mẫu) | Chống "gật đầu mù" trước bảng chữ dài khiến AI code lệch ý người dùng |
+| 0.18 | **Minh bạch hoá & trực quan hoá kiểm thử (`C29`)** | Ma trận Test Minh bạch trong spec (`Input cụ thể / Output kỳ vọng / Tầng & Độ thật: 0 Mock hay Mock gì`) + Bảng Bằng chứng Chạy Test sau khi code | Chống "test hộp đen ngầm" chỉ báo pass mà lập trình viên không biết AI đã test cái gì |
 
 ### Mức 1 — Thêm khi có tín hiệu
 

@@ -36,7 +36,7 @@ Profile là điểm xuất phát để repo nhỏ không gánh chi phí docs c�
 **Dấu hiệu:** Có API công khai, hoặc worker background, hoặc DB tự quản lý, hoặc orchestrator AI agent. Quy mô trung bình (~50–200 file).
 
 **File tối thiểu:**
-- Toàn bộ mức 0 (Core `C01–C27`):
+- Toàn bộ mức 0 (Core `C01–C29`):
   - `AGENTS.md` (đầy đủ theo template).
   - `README.md`.
   - `.env.example`.
@@ -103,11 +103,11 @@ Profile là điểm xuất phát để repo nhỏ không gánh chi phí docs c�
 
 **Ghi trong đề xuất docs (doc-design-proposal.md):**
 ```
-- Base: writing-spec-for-ai v1.2.2 · Profile: M · Pack: PK-API, PK-AUTH, PK-DB, PK-RELEASE
+- Base: writing-spec-for-ai v1.3.0 · Profile: M · Pack: PK-API, PK-AUTH, PK-DB, PK-RELEASE
 ```
 
 **Ghi trong AGENTS.md (đầu file):**
 ```md
-> Base: writing-spec-for-ai v1.2.2 · Profile: M · Pack: PK-API, PK-AUTH, PK-DB, PK-RELEASE
+> Base: writing-spec-for-ai v1.3.0 · Profile: M · Pack: PK-API, PK-AUTH, PK-DB, PK-RELEASE
 > Ghi đè base: xem mục "Ghi đè" cuối file.
 ```

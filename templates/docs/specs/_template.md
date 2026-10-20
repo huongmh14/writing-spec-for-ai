@@ -17,9 +17,30 @@
 **Trong phạm vi:**
 **Ngoài phạm vi:** <!-- không được rỗng -->
 
-## 3. Kịch bản người dùng <!-- tuỳ chọn -->
+## 3. Luồng tương tác, Snapshot I/O & Kịch bản người dùng (`C28`)
 
 - **US1 (P1)** — Là <vai trò>, tôi muốn <…> để <…>. Kiểm độc lập: <…>. AC: XXX-AC01..AC03.
+
+### Luồng tương tác chính (`Mermaid Flow` — `C28`)
+
+```mermaid
+sequenceDiagram
+    actor U as Tác nhân
+    participant S as Hệ thống
+    U->>S: <Hành động / Request đầu vào>
+    S-->>U: <Phản hồi / Trạng thái đầu ra>
+```
+
+### Phác thảo trực quan Đầu vào / Đầu ra (`Concrete I/O Snapshot` — `C28`)
+
+<!-- Vẽ ASCII UI wireframe (nếu có màn hình), mẫu lệnh + output CLI, hoặc JSON request/response thực tế để lập trình viên nhìn thấy ngay hình hài tính năng. -->
+```text
++-------------------------------------------------------------------+
+| [Tiêu đề màn hình / Lệnh CLI / Endpoint POST /api/v1/...]         |
+| Input:  { ... }                                                   |
+| Output: { ... } (Trạng thái UI / DB thay đổi gì)                  |
++-------------------------------------------------------------------+
+```
 
 ## 4. Yêu cầu
 
@@ -53,16 +74,20 @@
 
 - <câu hỏi biên> → XXX-AC0n | ngoài phạm vi
 
-## 7. Điều kiện nghiệm thu
+## 7. Điều kiện nghiệm thu & Ma trận Kiểm thử Minh bạch (`Visible Test Matrix` — `C29`)
 
 | Trạng thái | ý nghĩa |
 |---|---|
 | `[ ]` | chưa đạt |
-| `[x]` | test xanh trong CI của PR làm AC đó |
+| `[x]` | test xanh trong CI của PR làm AC đó (đã có bằng chứng trong `Visible Test Execution Ledger`) |
 | `[~]` | cần môi trường thật — ghi lý do và cách đóng |
 
-- [ ] **XXX-AC01** *(integration)* — *Cho* <trạng thái ban đầu cụ thể>, *khi* <hành động>, *thì* <kết quả quan sát được: mã HTTP, mã lỗi, dữ liệu>.
-- [~] **XXX-AC02** *(e2e)* — … — *Lý do:* <…>. *Cách đóng:* <…>.
+### Ma trận Kiểm thử Minh bạch (`Visible Test Matrix` — duyệt trước khi code theo `C29`)
+
+| Mã AC | Kịch bản (`Cho / Khi / Thì`) | Đầu vào cụ thể (`Concrete Input`) | Kỳ vọng quan sát được (`Expected Output & Side-Effect`) | Tầng & Độ thật (`0 Mock` hay `Mock thành phần nào`) | Trạng thái |
+|---|---|---|---|---|---|
+| **XXX-AC01** | Nhánh chính: <…> | `<payload / tham số / thao tác>` | `<HTTP 200 + body / bản ghi DB / trạng thái DOM>` | `integration` — **0 Mock** (DB thật) | `[ ]` |
+| **XXX-AC02** | Nhánh lỗi / biên: <…> | `<input lỗi / vượt ngưỡng>` | `<HTTP 4xx + errorCode / không ghi DB>` | `unit` / `integration` — **Mock:** `<nêu rõ hoặc 0 Mock>` | `[~]` *Lý do:* <…>. *Cách đóng:* <…> |
 
 ## 8. Kiểm tra end-to-end
 

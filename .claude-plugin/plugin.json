@@ -1,7 +1,7 @@
 {
   "name": "writing-spec-for-ai",
   "description": "Spec-driven documentation framework & 3-gate orchestrator skill for AI coding agents — AGENTS.md, CONSTRAINTS.md, EARS specs, 8 reusable domain packs (PK-API, PK-AUTH, PK-RELEASE, PK-DB, PK-OBS, PK-FE, PK-JOB, PK-AGENT), S/M/L project profiles, and 3 specialized subagents.",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "author": {
     "name": "huongmh14"
   },

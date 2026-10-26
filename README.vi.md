@@ -41,6 +41,7 @@ skills/                                  # 9 Sub-skill chuyên biệt theo từn
   test-docs/SKILL.md                     #   7.   Thử docs bằng task mẫu trong phiên sạch (Cổng 3)
   plan-tasks/SKILL.md                    #   7.5. Chẻ Spec thành đồ thị Tracer-Bullet Slices (Blocked by)
   generate-verify-harness/SKILL.md       #        Sinh skill kiểm chứng runtime (.agents/skills/verify-<app>/)
+  explore-options/SKILL.md               #        Khám phá 2–4 phương án đa góc nhìn, người dùng chọn → D-xx
 agents/                                  # 3 Subagents chạy trong context cô lập
   spec-surveyor.md                       #   Khảo sát repo chỉ đọc (read-only), trả về bảng path:line nén gọn
   spec-challenger.md                     #   Phản biện đối kháng ở Cổng 2 (chỉ nhận ARTIFACT + CONTRACT)
@@ -58,6 +59,7 @@ references/
   principles.md                          #   Mô hình, bộ kỹ năng mức 0/1/2, EARS, ma trận công cụ
   examples.md                            #   Ví dụ chuẩn từ dự án thật (gồm Scope Radar & bảng test hiển thị)
   glossary.md                            #   Thuật ngữ kit bằng lời thường (Cổng, Profile, Pack, Frontier, EARS…)
+  lenses.md                              #   Góc nhìn chuyên môn chọn theo tín hiệu (thay "đóng vai senior")
   review-checklist.md                    #   Checklist chấm Cổng 2 & Cổng 3
   base-kit.md                            #   Sổ đăng ký luật Core (C01–C31), 8 Pack (PK-*), Profile S/M/L
 templates/
@@ -86,4 +88,4 @@ curl -fsSL https://raw.githubusercontent.com/huongmh14/writing-spec-for-ai/main/
 > Dùng skill `writing-spec-for-ai` khảo sát và thiết kế bộ docs cho dự án này.
 
 Hoặc gọi trực tiếp từng sub-skill khi cần:
-- `survey-project` / `propose-doc-design` / `write-spec` / `write-design-doc` / `review-docs` / `test-docs` / `plan-tasks` / `generate-verify-harness` / `change-spec`.
+- `survey-project` / `propose-doc-design` / `write-spec` / `write-design-doc` / `review-docs` / `test-docs` / `plan-tasks` / `generate-verify-harness` / `explore-options` / `change-spec`.

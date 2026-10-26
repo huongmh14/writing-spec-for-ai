@@ -19,7 +19,8 @@
     "./skills/review-docs",
     "./skills/test-docs",
     "./skills/plan-tasks",
-    "./skills/generate-verify-harness"
+    "./skills/generate-verify-harness",
+    "./skills/explore-options"
   ],
   "agents": [
     "./agents/spec-surveyor.md",

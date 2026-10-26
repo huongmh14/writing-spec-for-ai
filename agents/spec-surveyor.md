@@ -1,6 +1,6 @@
 ---
 name: spec-surveyor
-description: Use when surveying a repository in Step 1–2 (survey-project) of writing-spec-for-ai, especially for repositories with > 50 files. Performs a strictly read-only audit of stack, commands, AI docs, CI alignment, secret hygiene, and quality ratchets, returning a compact path:line evidence table to keep the main context clean.
+description: Use when surveying a repository in Step 1–2 (survey-project) of writing-spec-for-ai, especially for repositories with > ~30 files. Performs a strictly read-only audit of stack, commands, AI docs, CI alignment, secret hygiene, and quality ratchets, returning a compact path:line evidence table to keep the main context clean.
 tools: Read, Glob, Grep, Bash
 model: sonnet
 ---
@@ -36,12 +36,12 @@ Your job is to inspect the target repository thoroughly and return a **compact, 
    - Locate high-risk directories: auth/tokens, permissions/RBAC, DB migrations, billing/payments, PII, AI command execution (`policy.js`).
 8. **Baseline Quality Metrics (for `CONSTRAINTS.md` ratchets — **Không hạ chuẩn âm thầm**, `C23`):**
    - Note existing linter/typechecker configs and any current coverage/suppress comment counts (`@ts-ignore`, `eslint-disable`, `# noqa`, `.skip`).
-9. **Sizing & Pack Signals:**
-   - Recommend **Greenfield vs. Brownfield (As-built = spec describing existing code)**, **Profile (`S` / `M` / `L`)**, **Level (`0` / `1` / `2`; Mức 0 mandatory, 1–2 only with signals)**, and matching **Domain Packs** (`PK-API`, `PK-AUTH`, `PK-RELEASE`, `PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`) with explicit repo signals.
+9. **Sizing, Pack & Lens Signals:**
+   - Recommend **Greenfield vs. Brownfield (As-built = spec describing existing code)**, **Profile (`S` / `M` / `L`)**, **Level (`0` / `1` / `2`; Mức 0 mandatory, 1–2 only with signals)**, matching **Domain Packs** (`PK-API`, `PK-AUTH`, `PK-RELEASE`, `PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`), and **Active Expert Lenses** (`≤ 3` lenses from `references/lenses.md`) with explicit repo signals.
 
 ## Output Format
 
 Return ONLY:
 1. **Survey Evidence Table** (`Category | Finding | Evidence (path:line)`).
-2. **Recommended Profile (`S/M/L`), Level (`0/1/2`), and Active Packs (`PK-*`)** with triggering signals.
+2. **Recommended Profile (`S/M/L`), Level (`0/1/2`), Active Packs (`PK-*`), and Active Lenses (`Góc nhìn: … — vì …`)** with triggering signals.
 3. **Detected Risks, Contradictions & `[CẦN LÀM RÕ]` items** (ranked by architectural impact).

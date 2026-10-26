@@ -28,9 +28,9 @@ For each sample task provided in your prompt (typically: 1 routine feature task,
    - Check the real task instruction and current RUN in progress (`C30`); state scope and stop. `Ready`, a "task sẵn sàng" (unblocked task) and HANDOFF do not grant execution. An explicit finite batch permits its full scope; a completed RUN does not authorize the next task.
    - Which `SPEC-xx`, `REQ-xx`, `AC-xx`, and `D-xx` govern this task, and does the spec's visual flow / I-O snapshot (`C28`) make the expected behavior unmistakable?
    - Which files would you create or modify?
-   - What is your **Ma trận Kiểm thử Minh bạch** (visible test matrix, `C29`) (exact input, expected output/side-effect, `0 Mock` vs. mocked boundary) and which single-test + DoD command from `AGENTS.md` would you run?
+   - What is your **bảng test hiển thị** (visible test matrix, `C29`) (exact input, expected output/side-effect, `0 Mock` vs. mocked boundary) and which single-test + DoD command from `AGENTS.md` would you run?
 4. **Friction & Blind-Spot Report (Most Important):**
    - **Questions you had to ask:** Did you have to ask a question whose answer *should* have been in the docs?
    - **Buried or confusing rules:** Was any rule hard to find, contradicted by another file, or missing a clear context pointer in `AGENTS.md`?
    - **Temptation to guess:** Was there any place where you were tempted to invent a requirement, error code, or env var because the spec left a gap?
-   - **Knowledge limits (**Nguồn & giới hạn hiểu biết**, `C31`):** Does each claim carry one of the four labels (`Người dùng chốt` / `Đã xác minh` / `AI đề xuất` / `Chưa biết`) with its pointer? Who verifies unknown technical/domain facts? Do not make the user guess or mark mocked/unrun checks as full proof; `[~]` blocks `Done`.
+   - **Knowledge limits & Decision Cards (**Nguồn & giới hạn hiểu biết**, `C31`):** Does each claim carry one of the four labels (`Người dùng chốt` / `Đã xác minh` / `AI đề xuất` / `Chưa biết`) with its pointer? Do significant technical decisions include a "Thẻ quyết định kỹ thuật" with a runnable `Tự kiểm ≤ 5 phút` step? Do not make the user guess or mark mocked/unrun checks as full proof; `[~]` blocks `Done`.

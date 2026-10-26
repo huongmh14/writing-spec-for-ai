@@ -52,6 +52,7 @@ SUBSKILLS=(
     "test-docs"
     "plan-tasks"
     "generate-verify-harness"
+    "explore-options"
 )
 
 echo "[2/4] Installing main orchestrator skill ($SKILL_NAME)..."
@@ -68,7 +69,7 @@ for ROOT in "${TARGET_ROOTS[@]}"; do
     echo "  [+] Installed orchestrator -> $DEST"
 done
 
-echo "[3/4] Installing 9 standalone sub-skills at top level for direct discovery..."
+echo "[3/4] Installing ${#SUBSKILLS[@]} standalone sub-skills at top level for direct discovery..."
 
 for ROOT in "${TARGET_ROOTS[@]}"; do
     for SUB in "${SUBSKILLS[@]}"; do
@@ -84,7 +85,7 @@ for ROOT in "${TARGET_ROOTS[@]}"; do
             -e 's|\.\./\.\./profiles\.md|./profiles.md|g' \
             "$SOURCE_DIR/skills/$SUB/SKILL.md" > "$SUB_DEST/SKILL.md"
     done
-    echo "  [+] Installed 9 sub-skills -> $ROOT"
+    echo "  [+] Installed ${#SUBSKILLS[@]} sub-skills -> $ROOT"
 done
 
 echo "[4/4] Installing specialized subagents (spec-surveyor, spec-challenger, doc-tester)..."
@@ -93,6 +94,8 @@ AGENT_DIRS=(
     "$HOME/.claude/agents"
     "$HOME/.agents/agents"
     "$HOME/.cursor/agents"
+    "$HOME/.gemini/config/agents"
+    "$HOME/.config/opencode/agents"
 )
 
 if [ -d "$SOURCE_DIR/agents" ]; then
@@ -105,5 +108,5 @@ fi
 
 
 echo ""
-echo "Done! Installed 10 skills + 3 subagents. Try asking your agent:"
+echo "Done! Installed $((${#SUBSKILLS[@]} + 1)) skills + 3 subagents. Try asking your agent:"
 echo '  "Use skill writing-spec-for-ai to survey this repo and propose a doc design."'

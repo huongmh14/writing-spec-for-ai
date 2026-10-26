@@ -176,6 +176,7 @@ Use skill writing-spec-for-ai to survey this repository and design the AI docume
 | **`test-docs`** *(+ `doc-tester`)* | Step 7 (Gate 3): Clean-room dry-run of 2–3 sample tasks (Profile S: 2; M/L: 3) using only the written docs | *"Use `test-docs` to dry-run sample tasks against our new specs."* |
 | **`plan-tasks`** | Step 7.5: Break an approved spec into a DAG of Tracer-Bullet vertical slices (`Blocked by` + ready tasks) | *"Use `plan-tasks` to break `SPEC-auth` into tracer-bullet implementation tasks."* |
 | **`generate-verify-harness`** | Generate a project-local `.agents/skills/verify-<app>/SKILL.md` runtime verification skill | *"Use `generate-verify-harness` to create an automated verification skill for this app."* |
+| **`explore-options`** | Any decision with ≥ 2 viable, hard-to-reverse options: 2–4 genuinely different options from signal-selected lenses (`references/lenses.md`), one critique round, comparison table — the user chooses, recorded as `D-xx` | *"Use `explore-options` to compare session storage approaches for SPEC-auth."* |
 | **`change-spec`** | Manage spec evolution: new sub-spec vs. `CHG-xx` delta proposal & `P-xx → D-xx` | *"Use `change-spec` to update `SPEC-upload` rate limits from 100/m to 500/m."* |
 
 ---
@@ -259,7 +260,8 @@ writing-spec-for-ai/
 │   ├── review-docs/SKILL.md             #   Step 6: Adversarial checklist audit (Gate 2)
 │   ├── test-docs/SKILL.md               #   Step 7: Clean-room dry-run task verification (Gate 3)
 │   ├── plan-tasks/SKILL.md              #   Step 7.5: Tracer-Bullet vertical slices & Task Graph DAG
-│   └── generate-verify-harness/SKILL.md #   Runtime verification skill generator (verify-<app>)
+│   ├── generate-verify-harness/SKILL.md #   Runtime verification skill generator (verify-<app>)
+│   └── explore-options/SKILL.md         #   Multi-lens options, user chooses -> D-xx
 ├── agents/                              # 3 Native Clean-Context Subagents
 │   ├── spec-surveyor.md                 #   Read-only repository evidence & pack signal scanner
 │   ├── spec-challenger.md               #   Adversarial Gate 2 reviewer (ARTIFACT + CONTRACT only)
@@ -278,6 +280,7 @@ writing-spec-for-ai/
 │   ├── base-kit.md                      #   Core rules registry (C01–C31), Pack architecture, override rules
 │   ├── examples.md                      #   Real-world production examples (REQ, AC, NFR, D-xx, plans)
 │   ├── glossary.md                      #   Kit terms in plain words (Gate, Profile, Pack, Frontier, EARS…)
+│   ├── lenses.md                        #   Expert lenses chosen by signal (replaces "act as senior X")
 │   └── review-checklist.md              #   Gate 2 & Gate 3 quantitative audit rubric
 ├── templates/                           # Ready-to-Use Document & Adapter Templates
 │   ├── doc-design-proposal.md           #   Gate 1 proposal template

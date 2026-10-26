@@ -18,7 +18,7 @@ $failures = @()
 
 Write-Host "=== Validating writing-spec-for-ai at $root ===" -ForegroundColor Cyan
 
-$subSkillNames = @("survey-project","propose-doc-design","write-spec","write-design-doc","change-spec","review-docs","test-docs","plan-tasks","generate-verify-harness")
+$subSkillNames = @("survey-project","propose-doc-design","write-spec","write-design-doc","change-spec","review-docs","test-docs","plan-tasks","generate-verify-harness","explore-options")
 
 # 1. Validate JSON manifests, evals & version sync
 $jsonFiles = @(
@@ -55,7 +55,8 @@ foreach ($rel in $jsonFiles) {
                 "eval-10-risky-domain-outside-user-expertise",
                 "eval-11-stale-handoff-and-continue",
                 "eval-12-unverified-ac-prevents-done",
-                "eval-13-staged-doc-authoring-c30"
+                "eval-13-staged-doc-authoring-c30",
+                "eval-15-explore-options-user-chooses"
             )
             foreach ($evalId in $requiredEvalIds) {
                 if ($evalIds -notcontains $evalId) {
@@ -229,6 +230,14 @@ if (Test-Path $tplDir) {
 }
 $glossaryPath = Join-Path $root "references/glossary.md"
 if ((Test-Path (Join-Path $root "references")) -and -not (Test-Path $glossaryPath)) { $failures += "[READABILITY] references/glossary.md missing" }
+if ((Test-Path (Join-Path $root "references")) -and -not (Test-Path (Join-Path $root "references/lenses.md"))) { $failures += "[LENS] references/lenses.md missing" }
+$exploreSkill = Join-Path $root "skills/explore-options/SKILL.md"; if (-not (Test-Path $exploreSkill)) { $exploreSkill = Join-Path (Split-Path $root -Parent) "explore-options/SKILL.md" }
+if (Test-Path $exploreSkill) {
+    $exploreRaw = Get-Content $exploreSkill -Raw -Encoding UTF8
+    foreach ($pat in @('(?i)ng\u01B0\u1EDDi d\u00F9ng ch\u1ECDn', '(?i)gi\u1EEF nguy\u00EAn', '(?i)1 v\u00F2ng')) {
+        if ($exploreRaw -notmatch $pat) { $failures += "[LENS] skills/explore-options/SKILL.md missing /$pat/" }
+    }
+}
 Get-ChildItem $root -Recurse -File -Include *.md, *.json, *.ps1, *.sh | Where-Object { $_.FullName -notmatch "\\(\.git|dist)\\" } | ForEach-Object {
     $rel = $_.FullName.Substring($root.Length + 1).Replace('\', '/')
     $raw = Get-Content $_.FullName -Raw -Encoding UTF8

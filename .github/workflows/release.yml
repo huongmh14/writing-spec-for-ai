@@ -53,6 +53,7 @@ jobs:
             "test-docs"
             "plan-tasks"
             "generate-verify-harness"
+            "explore-options"
           )
 
           for SUB in "${SUBSKILLS[@]}"; do

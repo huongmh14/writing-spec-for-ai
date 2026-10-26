@@ -35,6 +35,7 @@ $RawTargets = @(
     @{ Name = "Universal (.agents)"; Root = "$HOME\.agents\skills" },
     @{ Name = "Antigravity";         Root = "$HOME\.gemini\config\skills" },
     @{ Name = "Claude Code";         Root = "$HOME\.claude\skills" },
+    @{ Name = "Codex";               Root = "$HOME\.codex\skills" },
     @{ Name = "OpenCode";            Root = "$HOME\.config\opencode\skills" },
     @{ Name = "Cursor";              Root = "$HOME\.cursor\skills" },
     @{ Name = "ZCode";               Root = "$HOME\.zcode\skills" }
@@ -126,7 +127,9 @@ Write-Host "[4/4] Installing specialized subagents (spec-surveyor, spec-challeng
 $AgentDirs = @(
     "$HOME\.claude\agents",
     "$HOME\.agents\agents",
-    "$HOME\.cursor\agents"
+    "$HOME\.cursor\agents",
+    "$HOME\.gemini\config\agents",
+    "$HOME\.config\opencode\agents"
 )
 
 if (Test-Path (Join-Path $SourceDir "agents")) {

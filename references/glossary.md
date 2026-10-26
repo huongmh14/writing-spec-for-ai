@@ -18,6 +18,8 @@ Tra một từ hoặc một mã lạ trong bộ kit ở đây. Mỗi file trong 
 | HYPOTHESIS / GUESS | Cách hỏi ở Bước 4: AI nêu giả thuyết kèm bằng chứng (HYPOTHESIS) và đáp án đoán sẵn (GUESS) để người dùng chỉ cần xác nhận hoặc sửa | `skills/propose-doc-design` |
 | Scope Radar | Bảng 3 cột phạm vi: 🟢 làm ngay · 🟡 đợt sau · 🔴 không làm | base-kit `C28` |
 | Task sẵn sàng | Task trong plan mà mọi task nó phụ thuộc đã xong. "Sẵn sàng" không có nghĩa là đã được giao | `skills/plan-tasks` |
+| Góc nhìn (lens) | Bộ câu hỏi bắt buộc + đầu ra của một chuyên môn (BA, bảo mật, dữ liệu…), AI bật theo tín hiệu thật trong repo/task. Thay cho câu "bạn là senior X", vốn không làm AI chính xác hơn | [lenses.md](lenses.md) |
+| Khám phá phương án | Khi một quyết định khó đảo ngược có ≥ 2 lựa chọn: AI trình 2–4 phương án khác nhau thật (luôn có "giữ nguyên"), phản biện 1 vòng, người dùng chọn rồi ghi D-xx | `skills/explore-options` |
 
 ## Trạng thái và ID
 

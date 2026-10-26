@@ -14,6 +14,7 @@ Chỉ có **một block hiện tại**. Đây là bản ghi chỉ dẫn thật c
 | Ngoài phạm vi | Mọi task/spec chưa được giao; không tự lấy việc từ danh sách task sẵn sàng |
 | Điều kiện dừng | Làm → kiểm → báo cáo → dừng ở hết phạm vi được giao; hoặc nêu blocker ngăn phần còn lại |
 | Bằng chứng / điều chưa kiểm chứng | Chưa chạy |
+| Bàn giao phiên mới (ghi đè trước `/compact` hoặc khi đổi cửa sổ) | Việc đang dở trong đợt · Việc chỉ người làm được · Câu hỏi mở (link về spec; không cấp quyền chạy task kế) |
 
 Vòng đời: `Chưa cấp quyền` → `Được phép` → `Đang làm` → `Chờ kiểm chứng` → `Đã đóng`. Chuyển sang `Được phép` chỉ khi có chỉ dẫn thật xác định phạm vi; AI được ghi nhận chỉ dẫn, không tự phê duyệt. Khi báo cáo đợt, cập nhật `Chờ kiểm chứng` rồi dừng; không tự gia hạn hoặc chọn task/spec khác. Đợt mới cần chỉ dẫn mới xác định phạm vi; lưu kết quả đợt cũ vào nhật ký trước khi thay block.
 

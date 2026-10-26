@@ -6,4 +6,4 @@
 
 - Dùng plan mode khi sửa: <các thư mục rủi ro cao>.
 - Khi compact: giữ danh sách file đã sửa, lệnh test đang dùng, AC đang làm.
-- Kết thúc phiên dài: cập nhật `docs/progress.md` và `docs/plans/HANDOFF.md`.
+- Kết thúc phiên dài hoặc trước `/compact`: cập nhật điểm dừng và bàn giao ngay trong `docs/progress.md`.

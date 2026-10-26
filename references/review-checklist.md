@@ -51,7 +51,7 @@
 - [ ] `decisions.md` append-only, có cột trạng thái (hiệu lực / bị thay bởi).
 - [ ] Bảng P-xx không chứa mục đã làm xong.
 - [ ] `glossary.md` có các thuật ngữ miền chính, cột "không gọi là", không lẫn chi tiết cài đặt.
-- [ ] File trạng thái (progress, HANDOFF, plan) có ngày cập nhật; HANDOFF mới bằng dòng cuối progress.
+- [ ] File trạng thái (`progress.md`, plan) có ngày cập nhật; bàn giao phiên mới nằm ngay trong `progress.md` (không tách `HANDOFF.md` riêng).
 - [ ] Chỉ một đợt thực thi hiện tại; progress/HANDOFF không tạo quyền từ việc còn dở. `[~]` không đủ chuyển `Done`; báo cáo có link bằng chứng, không chép kỳ vọng thành kết quả.
 - [ ] progress tách khỏi danh mục spec; ≤ ~5 KB; ≤ 3 câu/dòng.
 - [ ] `docs/specs/README.md` có bảng quyền AI theo trạng thái, luật hotfix, bảng "loại thay đổi → file phải sửa" (có dòng đổi stack), và **bảng phụ thuộc một chiều / thứ tự xây dựng giữa các spec (Capability Map)** nếu có ≥ 2 spec.

@@ -53,7 +53,7 @@ Mọi profile áp dụng **Quyền thực thi theo đợt** (`C30`) và **Nguồ
   - `docs/decisions.md` — quyết định đã chốt.
   - `docs/glossary.md` — thuật ngữ miền.
   - `docs/progress.md` — bộ nhớ phiên.
-  - `docs/plans/` — đồ thị task lát cắt dọc (Tracer Bullet, xem [glossary](references/glossary.md)) từ `plan-tasks` / handoff khi cần.
+  - `docs/plans/` — đồ thị task lát cắt dọc (Tracer Bullet, xem [glossary](references/glossary.md)) từ `plan-tasks` khi cần.
   - `docs/changelog/` — changelog theo version.
 - Pack — theo tín hiệu (từ 8 pack trong `packs/`):
   - `PK-API` nếu có endpoint HTTP.

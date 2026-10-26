@@ -230,6 +230,7 @@ if (Test-Path $tplDir) {
 }
 $glossaryPath = Join-Path $root "references/glossary.md"
 if ((Test-Path (Join-Path $root "references")) -and -not (Test-Path $glossaryPath)) { $failures += "[READABILITY] references/glossary.md missing" }
+if (Test-Path (Join-Path $root "templates/docs/plans/HANDOFF.md")) { $failures += "[RETIRED] templates/docs/plans/HANDOFF.md must stay merged into templates/docs/progress.md (C17)" }
 if ((Test-Path (Join-Path $root "references")) -and -not (Test-Path (Join-Path $root "references/lenses.md"))) { $failures += "[LENS] references/lenses.md missing" }
 $exploreSkill = Join-Path $root "skills/explore-options/SKILL.md"; if (-not (Test-Path $exploreSkill)) { $exploreSkill = Join-Path (Split-Path $root -Parent) "explore-options/SKILL.md" }
 if (Test-Path $exploreSkill) {

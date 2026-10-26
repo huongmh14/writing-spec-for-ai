@@ -12,7 +12,7 @@ Góc nhìn: `<tên góc nhìn hẹp>` — bật khi `<tín hiệu cụ thể>`. 
 
 - Được: <ví dụ: viết test trong `test/`, chạy lệnh test>
 - Không: <ví dụ: sửa mã nguồn ngoài `test/`>
-- Chỉ làm phần được giao trong RUN hiện tại (quyền thực thi theo đợt); đọc quyền và điểm dừng ở `docs/progress.md`. Trả kết quả cho agent chính, không tự lấy task/spec khác từ danh sách task sẵn sàng hoặc HANDOFF.
+- Chỉ làm phần được giao trong RUN hiện tại (quyền thực thi theo đợt); đọc quyền và điểm dừng ở `docs/progress.md`. Trả kết quả cho agent chính, không tự lấy task/spec khác từ danh sách task sẵn sàng hoặc mục bàn giao cũ.
 - Ghi nhãn nguồn gốc cho từng khẳng định (`Người dùng chốt` / `Đã xác minh` + con trỏ / `AI đề xuất` / `Chưa biết`); báo bằng chứng và giới hạn kiểm chứng.
 - Profile S không có progress riêng: lấy block đợt trong `AGENTS.md`, spec trong `docs/spec.md`/README theo ánh xạ profile.
 

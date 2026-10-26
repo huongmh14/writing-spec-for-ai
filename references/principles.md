@@ -29,7 +29,7 @@ flowchart TD
     CH["changes/ — đề xuất thay đổi spec (delta)"] --> C
     D --> E["Code + test tên chứa AC-ID"]
     E --> F["Commit/PR [SPEC-XXX]"]
-    F --> P["progress.md + HANDOFF.md"]
+    F --> P["progress.md (tiến độ + bàn giao)"]
     H["Adapter: CLAUDE.md, .github/, .cursor/"] --> A
     I["Lint, hook, CI, deny-rules"] -.cưỡng chế.-> E
 ```
@@ -44,7 +44,7 @@ flowchart TD
 | Thay đổi | Spec đã chạy đổi gì | `docs/changes/` |
 | Kế hoạch | Thứ tự nào, song song gì | `docs/plans/` |
 | Tra cứu | Biến nào, mã nào nghĩa gì, bản nào đổi gì | `docs/reference/config.md`, `docs/reference/error-codes.md`, `docs/changelog/` |
-| Bộ nhớ | Đang ở đâu | `docs/progress.md`, `docs/plans/HANDOFF.md` |
+| Bộ nhớ | Đang ở đâu | `docs/progress.md` (gồm cả mục bàn giao phiên mới) |
 | Cưỡng chế | Máy chặn | lint, hook, CI, settings deny |
 
 **Chuỗi truy vết:** `D-xx → XXX-Rnn → XXX-ACnn → tên test → commit [SPEC-XXX] → PR → progress`.
@@ -89,7 +89,7 @@ flowchart TD
 | **Spec hiện trạng (as-built)** | Repo có code nhưng chưa có spec | Trạng thái `As-built`; mỗi REQ ghi bằng chứng (file/test); hành vi đáng ngờ vào câu hỏi mở, không chuẩn hoá; `[x]` chỉ khi test hiện có chứng minh |
 | **Kịch bản người dùng + giai đoạn** | Nhiều đợt giao hàng | US có ưu tiên P1/P2/P3, kiểm độc lập được; REQ ghi giai đoạn (`MUST (GĐ2)`) để agent không làm trước |
 | **Plan theo milestone** | Spec > 2 PR | Bảng PR + nhánh + AC + **phụ thuộc + song song [P]**; lý do thứ tự; checklist kích hoạt theo loại thay đổi (schema/API/bảo mật); dependency duyệt theo lô; "ngữ cảnh tối thiểu" mỗi PR (link mục spec, file, AC) |
-| **Bộ nhớ phiên** | Nhiều phiên, đổi agent | `progress.md` tách khỏi danh mục, ≤ 3 câu/dòng; HANDOFF có ngày, mới bằng progress; quy tắc ai chuyển spec sang `Done` |
+| **Bộ nhớ phiên** | Nhiều phiên, đổi agent | `progress.md` là nơi duy nhất ghi đợt hiện tại, bàn giao phiên mới và lịch sử (≤ 3 câu/dòng); quy tắc ai chuyển spec sang `Done` |
 | **Quản lý context phiên** | Phiên dài, agent lạc hướng | Viết spec xong → phiên mới để code; sửa agent > 2 lần cùng lỗi → xoá context, viết lại prompt; chỉ dẫn compaction (giữ danh sách file đã sửa + lệnh test); khảo sát bằng subagent |
 | **Adapter + luật theo phạm vi** | > 1 công cụ, AGENTS.md > 150 dòng | Adapter chỉ trỏ về AGENTS.md; luật chuyên sâu xuống `AGENTS.md` thư mục con / `.github/instructions/*.instructions.md` (`applyTo`) / `.cursor/rules/*.mdc` (`globs`) |
 | **Mẫu PR có phần điều kiện** | AI mở PR thường xuyên | Phần chỉ điền khi vào nhánh môi trường (tag, migration, rollback), máy kiểm |
@@ -109,7 +109,7 @@ flowchart TD
 | **Skill dự án** | Quy trình lặp ≥ 2 lần → `.agents/skills/` theo luật authoring (§4.3) |
 | **Subagent vai trò hẹp** | Persona chỉ đặt trong file agent riêng (`.claude/agents/`, `.github/agents/`), giới hạn tool; không đặt persona ở AGENTS.md gốc |
 | **Gotchas / knowledge base** | Lỗi đã gặp → nguyên nhân → cách tránh, đặt trong skill/guide liên quan; lỗi biết mà chưa sửa phải có issue |
-| **Kiểm tài liệu tự động** | AC-ID có test; không còn `[CẦN LÀM RÕ]` ở spec `Ready`; spec có đủ mục; link không gãy; HANDOFF/plan không cũ hơn commit `[SPEC]` cuối; REQ không có AC, PR trong plan không có REQ |
+| **Kiểm tài liệu tự động** | AC-ID có test; không còn `[CẦN LÀM RÕ]` ở spec `Ready`; spec có đủ mục; link không gãy; progress/plan không cũ hơn commit `[SPEC]` cuối; REQ không có AC, PR trong plan không có REQ |
 | **Code sinh từ template** | Code scaffold/mẫu không sửa tay; CI so lệch với template |
 | **Tỉa context** | Lưu trữ progress cũ; file đọc mỗi phiên ≤ ~5 KB |
 | **Phân loại guide (Diátaxis)** | how-to / reference / explanation; không trộn hướng dẫn vào spec |

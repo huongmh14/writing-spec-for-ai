@@ -66,7 +66,7 @@
 4. Test + code chỉ trong đợt được phép. Subagent chỉ nhận phần việc thuộc đợt; không tự lấy task/spec tiếp theo. Rủi ro hoặc hành vi mới chưa duyệt → cập nhật phạm vi trước khi làm phần đó.
 5. Chạy DoD; đánh `[x]` AC có bằng chứng. Cập nhật tiến độ và chuyển đợt sang `Chờ kiểm chứng`, báo kết quả, rồi dừng ở ranh giới đã ghi. Commit/PR khi được giao hoặc theo quy trình repo.
 
-**Báo cáo đợt:** kết quả quan sát được · cách demo/lệnh kiểm và bằng chứng · điều chưa kiểm chứng · ranh giới đã dừng. Đợt mới cần chỉ dẫn người dùng xác định phạm vi; không tự gia hạn từ plan, HANDOFF hay một đợt cũ.
+**Báo cáo đợt:** kết quả quan sát được · cách demo/lệnh kiểm và bằng chứng · điều chưa kiểm chứng · ranh giới đã dừng. Đợt mới cần chỉ dẫn người dùng xác định phạm vi; không tự gia hạn từ plan hay mục bàn giao của đợt cũ.
 
 ## Definition of Done
 

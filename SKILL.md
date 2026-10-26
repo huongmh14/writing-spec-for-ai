@@ -60,5 +60,5 @@ Luật xuyên các bước:
 - Luật vi phạm ≥ 2 lần → đưa vào `CONSTRAINTS.md` / lint / test / hook, thông báo lỗi kèm ID luật + cách sửa; rút văn xuôi.
 - Quy trình lặp ≥ 2 lần hoặc cần kiểm chứng runtime tự động → dùng [skills/generate-verify-harness](skills/generate-verify-harness/SKILL.md) hoặc [templates/project-skill](templates/project-skill/SKILL.md).
 - Lỗi khó đã gặp → gotchas kèm ngày kiểm lần cuối (**gotcha có ngày kiểm**, `C18`); chưa sửa thì có issue.
-- Phiên làm việc dài: trước khi nén ngữ cảnh hoặc mở phiên mới, ghi quyết định vào `decisions.md`, điểm dừng vào `progress.md` / `HANDOFF.md` (**bộ nhớ phiên**, `C17`). Việc đo độ dài ngữ cảnh do công cụ AI tự làm, không thuộc bộ kit.
+- Phiên làm việc dài: trước khi nén ngữ cảnh hoặc mở phiên mới, ghi quyết định vào `decisions.md`, điểm dừng và bàn giao vào `progress.md` (**bộ nhớ phiên**, `C17`; một file duy nhất, không tách `HANDOFF.md`). Việc đo độ dài ngữ cảnh do công cụ AI tự làm, không thuộc bộ kit.
 - Làm xong P-xx → chuyển D-xx hoặc xoá. Spec chỉ `Done` khi mọi AC còn hiệu lực của spec `[x]` có bằng chứng, không chỉ AC của đợt; `[~]` chưa kiểm chứng.

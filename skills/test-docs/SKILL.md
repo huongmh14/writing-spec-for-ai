@@ -1,6 +1,6 @@
 ---
 name: test-docs
-description: Dùng ở Bước 7 (Cổng 3) sau khi qua Cổng 2 và trước khi bắt đầu code theo bộ spec mới, hoặc khi người dùng nói "thử docs", "test tài liệu", "Cổng 3". Kiểm chứng khả năng dẫn đường của AGENTS.md và docs/ bằng subagent doc-tester trong context sạch với 2–3 task mẫu đại diện.
+description: Dùng ở Bước 7 (Cổng 3) sau khi đã qua Cổng 2, hoặc khi người dùng nói "thử docs", "test bộ tài liệu", "Cổng 3". Chỉ mở ở Bước 7 để kiểm chứng khả năng dẫn đường của AGENTS.md và docs/ bằng doc-tester với 2–3 task mẫu; không mở ở các bước trước.
 ---
 
 # Test docs — thử tài liệu bằng task mẫu trong phiên sạch (Bước 7, Cổng 3)

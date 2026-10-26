@@ -1,12 +1,12 @@
 ---
 name: propose-doc-design
-description: Dùng ở Bước 3–4 (Cổng 1) ngay sau khi khảo sát dự án, hoặc khi người dùng nói "đề xuất docs", "thiết kế tài liệu cho AI", "Cổng 1". Lập bản đề xuất kiến trúc tài liệu AI (Capability Map, Profile S/M/L, Pack PK-*, câu hỏi làm rõ theo Frontier + HYPOTHESIS/GUESS) và dừng chờ người dùng duyệt trước khi tạo file trong repo.
+description: Dùng ở Bước 3–4 (Cổng 1) sau khi đã có bảng khảo sát Bước 1–2, hoặc khi người dùng nói "lập đề xuất thiết kế bộ docs", "Capability Map", "duyệt Cổng 1". Chỉ mở ở Bước 3–4 để viết bản đề xuất và dừng chờ duyệt; không mở khi đang khảo sát hoặc viết spec.
 ---
 
 # Propose doc design — đề xuất thiết kế docs (Bước 3–4 của writing-spec-for-ai)
 
 Đầu vào: kết quả `survey-project` (bảng hiện trạng + Profile + mức + Pack).
-Đầu ra: MỘT file đề xuất theo `templates/doc-design-proposal.md`, lưu ở thư mục artifact của phiên (hoặc `docs/proposals/` nếu người dùng muốn). **Chưa tạo bất kỳ file docs thật nào trong repo.**
+Đầu ra: MỘT file đề xuất theo `templates/doc-design-proposal.md`, lưu ở thư mục artifact của phiên (hoặc `docs/proposals/` nếu người dùng muốn). **Chưa tạo bất kỳ file docs thật nào trong repo.** Chỉ mở `templates/doc-design-proposal.md` và các file `packs/PK-*.md` đã bật ở Bước 1–2; không đọc trước `templates/docs/specs/*` hay các sub-skill bước 5–8 (`C17`).
 
 → Gửi đề xuất, dừng, chờ duyệt (Cổng 1). Không duyệt thì sửa đề xuất, không lách sang viết docs.
 

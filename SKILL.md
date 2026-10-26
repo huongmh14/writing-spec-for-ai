@@ -1,13 +1,13 @@
 ---
 name: writing-spec-for-ai
-description: Kích hoạt khi bắt đầu dự án mới, khi repo chưa có hoặc có tài liệu AI rời rạc, hoặc khi người dùng nói "viết spec", "viết AGENTS.md", "thiết kế docs cho AI", "chuẩn hoá tài liệu cho agent". Điều phối quy trình thiết kế bộ tài liệu điều khiển AI agent (AGENTS.md, CONSTRAINTS.md, glossary, decisions, spec REQ/NFR/AC, design, plan, verify skill) qua 3 cổng duyệt trước khi viết code.
+description: Kích hoạt khi bắt đầu dự án mới, khi repo chưa có hoặc có tài liệu AI rời rạc, hoặc khi người dùng nói "viết spec cho dự án", "viết AGENTS.md", "thiết kế docs cho AI", "chuẩn hoá tài liệu cho agent". Bộ điều phối 3 cổng duyệt; mỗi lượt chỉ mở đúng 1 sub-skill của bước hiện tại, cấm mở nhiều sub-skill cùng lúc.
 ---
 
 # Writing Spec For AI
 
 Mục tiêu: bộ tài liệu giúp mọi AI agent **làm đúng luật, tự chứng minh việc đã xong, biết dừng khi mơ hồ** — và ngắn nhất có thể.
 
-Skill này là **bộ điều phối**. Mỗi bước mở đúng sub-skill trong [skills/](skills/) trước khi làm. Nguyên tắc: [references/principles.md](references/principles.md). Ví dụ: [references/examples.md](references/examples.md). Mẫu: [templates/](templates/). Luật Core `C01–C31`, Pack và Profile: [references/base-kit.md](references/base-kit.md). Gặp từ/mã lạ: [references/glossary.md](references/glossary.md). Nghiên cứu cho bản sửa: [references/research-controlled-execution.md](references/research-controlled-execution.md).
+Skill này là **bộ điều phối**. **Đọc đúng lúc (tiết kiệm ngữ cảnh, `C17`):** mỗi lượt **chỉ mở đúng 1 sub-skill của bước đang làm** trong [skills/](skills/) và đúng mẫu trong [templates/](templates/); **cấm đọc trước** sub-skill bước sau và **cấm nạp nguyên file** [references/principles.md](references/principles.md), [references/base-kit.md](references/base-kit.md), [references/research-controlled-execution.md](references/research-controlled-execution.md) hay cả thư mục `packs/` (chỉ tra mục lẻ khi vướng: [glossary](references/glossary.md), [examples](references/examples.md)).
 
 ## Luật cứng
 
@@ -32,7 +32,7 @@ Skill này là **bộ điều phối**. Mỗi bước mở đúng sub-skill tron
 | *"Trình bày định hướng bằng đoạn chữ dài / chỉ báo 'All tests passed' là đủ"* | **Dừng.** Chữ dài khiến người đọc gật đầu mà không thật sự hiểu (**trình bày định hướng bằng hình**, `C28`: Scope Radar 🟢/🟡/🔴, sơ đồ Mermaid, ví dụ vào/ra). Báo test xanh mà giấu đầu vào/đầu ra/mock là không kiểm được (**bằng chứng test hiển thị**, `C29`: in bảng bằng chứng chạy test). |
 | *"Đã qua Cổng 1 rồi, viết luôn một mạch toàn bộ `AGENTS.md`, `glossary`, `decisions` và tất cả các file `SPEC-xx` cho nhanh"* | **Dừng.** Vi phạm `C30`: mỗi lượt ở Bước 5 chỉ làm **một bước con** (5a → dừng chờ review → 5b từng spec một → dừng chờ review → 5c). |
 | *"AI viết nghe rất hợp lý, cứ ghi là đã xác minh"* | **Dừng.** Văn trôi chảy không phải bằng chứng. Không mở được nguồn hoặc không có câu trích khớp → nhãn `AI đề xuất` hoặc `Chưa biết` (`C31`). |
-| *"Mô tả trong bảng/YAML đã tóm tắt rồi, khỏi mở đọc file sub-skill"* | **Dừng.** YAML `description` chỉ là con trỏ kích hoạt; bắt buộc mở đọc `skills/<bước>/SKILL.md` trước khi làm. |
+| *"Đọc luôn một lượt nhiều sub-skill + `principles.md` + `base-kit.md` cho chắc / hoặc khỏi mở sub-skill bước hiện tại"* | **Dừng.** Mỗi lượt **chỉ mở đúng 1 `skills/<bước-hiện-tại>/SKILL.md`**; cấm đọc trước sub-skill bước sau hoặc nạp nguyên các file `references/` nặng làm tràn cửa sổ ngữ cảnh (`C17`). |
 
 ## Quy trình — bước nào mở sub-skill / subagent đó
 

@@ -1,6 +1,6 @@
 ---
 name: plan-tasks
-description: Dùng ở Bước 7.5 (sau Cổng 3, trước khi code) hoặc khi người dùng nói "lập plan", "chia task", "chẻ ticket từ spec". Chuyển hoá spec/design đã duyệt thành đồ thị task triển khai dạng lát cắt dọc (Tracer-Bullet Vertical Slices) hoặc chuỗi Expand–Migrate–Contract có cạnh phụ thuộc (Blocked by) rõ ràng.
+description: Dùng ở Bước 7.5 (sau Cổng 3) hoặc khi người dùng yêu cầu "chẻ SPEC thành đồ thị task", "chia task Tracer-Bullet" từ một SPEC đã duyệt. Chỉ mở ở Bước 7.5 để lập đồ thị task có Blocked by; không mở khi chưa có SPEC hoặc khi đang khảo sát/viết spec.
 ---
 
 # Plan tasks — chẻ Spec thành Đồ thị Task & Tracer Bullets (Bước 7.5)

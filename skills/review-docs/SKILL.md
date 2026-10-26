@@ -1,11 +1,11 @@
 ---
 name: review-docs
-description: Dùng ở Bước 6 (Cổng 2) ngay sau khi viết hoặc sửa bộ tài liệu/spec, hoặc khi người dùng nói "review docs", "kiểm tra spec", "chấm checklist", "Cổng 2". Thực hiện phản biện đối kháng trong context sạch (qua subagent spec-challenger) và chấm checklist trước khi trình người dùng duyệt.
+description: Dùng ở Bước 6 (Cổng 2) sau khi đã viết xong file docs/spec, hoặc khi người dùng nói "review docs", "chấm checklist", "phản biện Cổng 2". Chỉ mở ở Bước 6 để chạy spec-challenger trong phiên sạch và trình báo cáo; không mở trước khi viết xong docs.
 ---
 
 # Review docs — phản biện đối kháng & tự kiểm trước khi trình duyệt (Cổng 2)
 
-Đầu vào: danh sách file vừa viết/sửa (`ARTIFACT`) + `references/review-checklist.md`, `references/base-kit.md`, `packs/PK-*.md` (`CONTRACT`).
+Đầu vào: danh sách file vừa viết/sửa (`ARTIFACT`) + đường dẫn `references/review-checklist.md`, các `packs/PK-*.md` đang bật (`CONTRACT` — truyền đường dẫn cho subagent `spec-challenger` đọc trong phiên sạch, phiên chính không tự nạp toàn bộ `references/base-kit.md` vào ngữ cảnh, `C17`).
 Đầu ra: báo cáo gửi người dùng gồm (1) danh sách file, (2) kết quả chấm từng mục, (3) phân loại phát hiện phản biện & mọi mục `[ ]` kèm đề xuất sửa, (4) câu hỏi mở còn lại. **Mục `[ ]` không được giấu** — đó là thông tin người duyệt cần nhất.
 
 > Gốc ý tưởng (skill tham khảo nội bộ, không phải bằng chứng): `doubt-driven-development` (luật Core **Phản biện trong phiên sạch**, `C26`), `pstack/interrogate`, `open-code-review-delegate`.

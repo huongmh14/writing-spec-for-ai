@@ -1,6 +1,6 @@
 ---
 name: survey-project
-description: Dùng ở Bước 1–2 khi bắt đầu dự án mới, khi repo chưa có hoặc có tài liệu AI rời rạc, hoặc khi người dùng nói "khảo sát dự án", "audit docs", "chuẩn bị viết spec". Thu thập bằng chứng hiện trạng repo (stack, lệnh, CI, vùng rủi ro, số đo sàn chất lượng) và đề xuất Profile S/M/L cùng các Domain Pack (PK-*).
+description: Dùng ở Bước 1–2 hoặc khi người dùng gọi riêng việc "khảo sát dự án", "audit docs", "khảo sát repo". Chỉ thu thập bằng chứng hiện trạng repo (stack, lệnh, CI, vùng rủi ro, sàn chất lượng) và chấm Profile S/M/L + Pack PK-*; không mở kèm các sub-skill bước 3–8.
 ---
 
 # Survey project — khảo sát dự án (Bước 1–2 của writing-spec-for-ai)
@@ -26,13 +26,13 @@ Chỉ đọc, không sửa file nào của dự án. Repo lớn (`> 50` file ho�
 | **Secret & cấu hình** (`C16`) | Tên file env mẫu (`.env.example`?); `.env` có bị ignore không; `git ls-files .claude .cursor .vscode .zcode` | File quyền cá nhân của agent bị commit (allow-list, đường dẫn máy, mật khẩu) |
 | **Lệnh vận hành** (**Kiểm tác dụng lệnh vận hành**, `C19`) | Chạy thử an toàn (`migrate`, `sync`, `seed`) trên môi trường local hoặc đọc code của lệnh | Lệnh không làm gì mà vẫn exit 0 |
 | Quy ước git thực tế | `git log --oneline -30` | Dạng commit thật, tên nhánh thật (khớp hay lệch quy định viết) |
-| Vùng rủi ro & **Tín hiệu bật Pack** | Quét theo 8 pack trong [`packs/`](../../packs/): HTTP API (`PK-API`), Auth/Token/Webhook (`PK-AUTH`), Docker/Release (`PK-RELEASE`), DB/Migration (`PK-DB`), Logging/Metrics (`PK-OBS`), Frontend UI/E2E (`PK-FE`), Worker/Cron/Queue (`PK-JOB`), AI Agent/MCP (`PK-AGENT`) | Danh sách thư mục/file rủi ro + Pack nào có tín hiệu bật kèm câu hỏi khảo sát bổ sung ở cuối mỗi file `packs/PK-*.md` |
+| Vùng rủi ro & **Tín hiệu bật Pack** | Đối chiếu tín hiệu trong repo trước (HTTP API → `PK-API`, Auth/Token/Webhook → `PK-AUTH`, Docker/Release → `PK-RELEASE`, DB/Migration → `PK-DB`, Logging/Metrics → `PK-OBS`, Frontend UI/E2E → `PK-FE`, Worker/Cron/Queue → `PK-JOB`, AI Agent/MCP → `PK-AGENT`); **chỉ mở đọc file trong [`packs/`](../../packs/) của Pack thực sự có tín hiệu** (cấm mở cả 8 file) | Danh sách thư mục/file rủi ro + Pack nào có tín hiệu bật kèm câu hỏi khảo sát bổ sung ở cuối file `packs/PK-*.md` đã bật |
 | Hạ tầng bên ngoài | CI config (runner, hạn mức), registry, secrets dùng trong workflow, team/org GitHub | Điều kiện có thể chặn AC: gói Free, hết hạn mức, team chưa tồn tại |
 | Brownfield? | Có code chạy + có test + không có spec? | "Brownfield — cần spec As-built (mô tả code đã có)" hoặc "Greenfield" |
 
 ## 2. Chấm Profile, Mức đề xuất & Pack (theo `profiles.md` & `base-kit.md`)
 
-- **Profile (`S` / `M` / `L`):** đối chiếu với [`profiles.md`](../../profiles.md): S < ~30 file, M ~30–200, L > 200; số file chỉ là gợi ý, tín hiệu (số người, CI, vùng rủi ro, số spec) quyết định cuối cùng.
+- **Profile (`S` / `M` / `L`):** đối chiếu với [`profiles.md`](../../profiles.md): S < ~30 file, M ~30–200, L > 200; số file chỉ là gợi ý, tín hiệu (số người, CI, vùng rủi ro, số spec) quyết định cuối cùng. Không nạp nguyên `references/base-kit.md` vào ngữ cảnh (`C17`).
 - **Mức 0 (0.1–0.16):** luôn đủ toàn bộ sau khảo sát.
 - **Mức 1–2:** liệt kê từng thành phần kèm **tín hiệu thấy được trong repo** (vd. `CONSTRAINTS.md`, `DESIGN-xx`, `adr/`, `upgrade/`, skill `verify-<app>`).
 - **Pack miền (`PK-*`):** chỉ bật pack có tín hiệu thật trong repo; đọc mục *"Mục khảo sát bổ sung"* của từng pack được bật để thu thập đủ tham số `{…}`.

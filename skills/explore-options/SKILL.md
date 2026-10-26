@@ -1,6 +1,6 @@
 ---
 name: explore-options
-description: Dùng khi một quyết định có ≥ 2 lựa chọn khả thi và khó đảo ngược (chạm schema, API công khai, bảo mật, chi phí, kiến trúc), hoặc khi người dùng nói "cho tôi các phương án", "đa góc nhìn", "so sánh cách làm". Sinh 2–4 phương án thật sự khác nhau từ nhiều góc nhìn, phản biện 1 vòng, trình bảng so sánh để người dùng chọn rồi ghi D-xx.
+description: Dùng khi đứng trước một quyết định cụ thể có ≥ 2 lựa chọn khó đảo ngược hoặc khi người dùng nói "cho tôi các phương án", "so sánh đa góc nhìn". Chỉ mở khi cần so sánh 2–4 phương án để người dùng chọn (ghi D-xx); không mở tự động cho quyết định nhỏ.
 ---
 
 # Explore options — khám phá phương án đa góc nhìn

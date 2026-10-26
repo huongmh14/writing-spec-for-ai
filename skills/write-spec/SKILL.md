@@ -1,6 +1,6 @@
 ---
 name: write-spec
-description: Dùng ở Bước 5b khi viết spec mới (Draft) hoặc đặc tả hiện trạng code (As-built) sau khi qua Cổng 1, hoặc khi người dùng nói "viết spec", "đặc tả", "SPEC-XXX", "yêu cầu nghiệm thu". Tạo file đặc tả REQ (mẫu EARS), NFR định lượng, trường hợp biên và AC (Cho/Khi/Thì kèm tầng test).
+description: Dùng ở Bước 5b (sau khi đã qua Cổng 1 và 5a) hoặc khi người dùng yêu cầu viết một file SPEC-XXX cụ thể (REQ theo EARS, NFR, AC Cho/Khi/Thì). Chỉ mở khi đang ở Bước 5b; mỗi lượt viết đúng 1 file SPEC-XXX rồi dừng, không mở kèm sub-skill bước khác.
 ---
 
 # Write spec — viết một spec xây dựng cụ thể (Bước 5, phần spec)
@@ -8,7 +8,7 @@ description: Dùng ở Bước 5b khi viết spec mới (Draft) hoặc đặc t�
 Đầu vào: một khu vực đã có trong đề xuất được duyệt + nguồn yêu cầu (PRD/phỏng vấn/code) + `docs/glossary.md`, `docs/decisions.md`.
 Đầu ra: một file `docs/specs/<nn>-<khu-vực>.md` theo `templates/docs/specs/_template.md`, mọi placeholder đã xoá.
 
-Ví dụ chuẩn đạt: [references/examples.md](../../references/examples.md). Nguyên tắc nền: [references/principles.md](../../references/principles.md) §3.
+Chỉ mở mẫu `templates/docs/specs/_template.md`; chỉ tra đoạn cần thiết trong [references/examples.md](../../references/examples.md) khi cần xem ví dụ, **không nạp nguyên file** [references/principles.md](../../references/principles.md) hay `references/base-kit.md` vào ngữ cảnh (`C17`).
 
 Profile S không có cây docs: dùng `docs/spec.md` hoặc README và block đợt trong `AGENTS.md`; bỏ các lượt đọc file không tồn tại. Giữ cùng luật nguồn, AC, quyền và điểm dừng; không sinh thêm cây docs.
 

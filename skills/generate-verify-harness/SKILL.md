@@ -1,6 +1,6 @@
 ---
 name: generate-verify-harness
-description: Dùng ở Bước 7.5–8 khi dự án bước sang giai đoạn code/nghiệm thu hoặc khi người dùng nói "tạo skill verify", "tạo bộ kiểm chứng tự động cho app". Sinh skill kiểm chứng thực tế cấp dự án (.agents/skills/verify-<app>/SKILL.md) để AI agent tự khởi chạy, kiểm tra sức khoẻ, điều khiển ứng dụng và thu bằng chứng nghiệm thu.
+description: Dùng ở Bước 7.5–8 hoặc khi người dùng yêu cầu rõ "tạo skill verify", "tạo bộ kiểm chứng tự động cho app". Chỉ mở khi cần sinh .agents/skills/verify-<app>/SKILL.md (Launch, Doctor, Drive, Evidence, Cleanup); không mở ở các bước viết spec.
 ---
 
 # Generate verify harness — sinh Skill Kiểm chứng Thực tế cho Dự án

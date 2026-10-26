@@ -1,6 +1,6 @@
 ---
 name: change-spec
-description: Dùng ở Bước 8 khi yêu cầu thay đổi sau khi spec đã duyệt (Ready/Done), khi phát hiện spec sai trong lúc code, hoặc khi người dùng nói "sửa spec", "change proposal", "cập nhật đặc tả". Phân luồng giữa tách spec con và lập Change Proposal CHG-xx (ADDED/MODIFIED/REMOVED) kèm đồng bộ decisions/AC.
+description: Dùng ở Bước 8 khi cần đổi yêu cầu của một spec đã Ready/Done, hoặc khi người dùng nói "lập change proposal CHG-xx", "cập nhật SPEC đã duyệt". Chỉ mở khi sửa spec đã duyệt (ADDED/MODIFIED/REMOVED); không mở khi viết spec mới.
 ---
 
 # Change spec — thay đổi spec đã duyệt

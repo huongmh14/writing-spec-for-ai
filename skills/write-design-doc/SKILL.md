@@ -1,6 +1,6 @@
 ---
 name: write-design-doc
-description: Dùng ở Bước 5c khi một spec cần > 2 PR, chạm schema dữ liệu, API công khai hoặc bảo mật/thanh toán, hoặc khi người dùng nói "viết design doc", "thiết kế cho SPEC-XXX". Tạo tài liệu thiết kế kiến trúc (Deep Modules, Seams, Design It Twice, mô hình đe doạ STRIDE và kế hoạch rollback).
+description: Dùng ở Bước 5c (sau khi đã có SPEC-XXX) khi spec cần > 2 PR, chạm schema/API/bảo mật, hoặc khi người dùng nói "viết design doc cho SPEC-XXX". Chỉ mở ở Bước 5c để viết 1 file design (Deep Modules, Seams, Design It Twice, STRIDE, rollback); không mở ở bước khác.
 ---
 
 # Write design doc — tài liệu thiết kế của một spec (Bước 5c)

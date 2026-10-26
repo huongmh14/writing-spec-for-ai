@@ -35,7 +35,7 @@ $RawTargets = @(
     @{ Name = "Universal (.agents)"; Root = "$HOME\.agents\skills" },
     @{ Name = "Antigravity";         Root = "$HOME\.gemini\config\skills" },
     @{ Name = "Claude Code";         Root = "$HOME\.claude\skills" },
-    @{ Name = "Codex";               Root = "$HOME\.codex\skills" },
+    # Codex natively discovers ~/.agents/skills; avoid duplicating skills into ~/.codex/skills
     @{ Name = "OpenCode";            Root = "$HOME\.config\opencode\skills" },
     @{ Name = "Cursor";              Root = "$HOME\.cursor\skills" },
     @{ Name = "ZCode";               Root = "$HOME\.zcode\skills" }

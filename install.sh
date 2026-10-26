@@ -36,7 +36,7 @@ TARGET_ROOTS=(
     "$HOME/.agents/skills"
     "$HOME/.gemini/config/skills"
     "$HOME/.claude/skills"
-    "$HOME/.codex/skills"
+    # Codex natively discovers ~/.agents/skills; avoid duplicating skills into ~/.codex/skills
     "$HOME/.config/opencode/skills"
     "$HOME/.cursor/skills"
     "$HOME/.zcode/skills"

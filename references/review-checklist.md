@@ -14,6 +14,7 @@
 - [ ] **Đánh dấu trần đơn giản hoá (`C27`):** mục ✅ có quy ước gắn `ceiling:` khi chọn giải pháp đơn giản có giới hạn đã biết.
 - [ ] **Minh bạch kiểm thử trong DoD (`C29`):** mục DoD / quy trình task yêu cầu in **Bảng Bằng chứng Chạy Test (`Visible Test Execution Ledger`)** nêu rõ Input, Output thực tế, và **Mock Disclosure** (0 Mock hay Mock thành phần nào) thay vì chỉ báo "test xanh".
 - [ ] DoD là lệnh/điều kiện kiểm chứng được.
+- [ ] `C30`: `Ready` không cấp quyền code; một đợt có chỉ dẫn thật, spec/task/AC, điểm dừng. Mặc định 1 task; batch đã giao không hỏi lại; xong không tự chạy task kế.
 - [ ] Quy ước code có ≥ 1 ví dụ thật hoặc file mẫu để bắt chước.
 - [ ] Phủ đủ 6 mảng: lệnh, test, cấu trúc, style, git, ranh giới.
 - [ ] ≤ ~150 dòng; không câu hiển nhiên; không số dòng/phiên bản patch; nhấn mạnh (IMPORTANT/viết hoa) chỉ ở vài dòng.
@@ -26,7 +27,8 @@
 - [ ] Có mục tiêu, phạm vi trong/ngoài (ngoài không rỗng).
 - [ ] **Trực quan hoá luồng & Snapshot I/O (`C28`):** có sơ đồ luồng tương tác (Mermaid) và ít nhất 1 phác thảo đầu vào/đầu ra cụ thể (ASCII UI wireframe, mẫu CLI, hoặc JSON request/response) để người duyệt nhìn thấy hình hài tính năng trước khi đọc REQ.
 - [ ] Mỗi REQ có ID, mức, một câu; theo mẫu EARS khi được.
-- [ ] NFR đủ dòng: số liệu hoặc `N/A — lý do`.
+- [ ] `C31`: REQ/NFR và khẳng định quan trọng có nguồn, trạng thái đã xác minh/đề xuất/chưa biết; số đo có điều kiện, N/A chỉ khi không áp dụng, Draft unknown có cách xác minh.
+- [ ] Có bản đọc ngắn bằng hành vi và ví dụ; không bắt người dùng duyệt kiến thức chuyên môn chưa được chứng minh hoặc tự chấm độ tự tin %.
 - [ ] Có trường hợp biên; mỗi biên có AC hoặc nằm ở ngoài phạm vi.
 - [ ] Mỗi REQ ≥ 1 AC; có AC cho lỗi; AC có tầng test.
 - [ ] **Ma trận Kiểm thử Minh bạch (`Visible Test Matrix` — `C29`):** bảng AC nêu rõ cho từng `AC-ID`: `Kịch bản | Đầu vào cụ thể (Input) | Kỳ vọng quan sát được (Output & Tác dụng phụ) | Tầng & Độ thật (0 Mock hay Mock thành phần nào)`.
@@ -47,6 +49,7 @@
 - [ ] Bảng P-xx không chứa mục đã làm xong.
 - [ ] `glossary.md` có các thuật ngữ miền chính, cột "không gọi là", không lẫn chi tiết cài đặt.
 - [ ] File trạng thái (progress, HANDOFF, plan) có ngày cập nhật; HANDOFF mới bằng dòng cuối progress.
+- [ ] Chỉ một đợt thực thi hiện tại; progress/HANDOFF không tạo quyền từ việc còn dở. `[~]` không đủ chuyển `Done`; báo cáo có link bằng chứng, không chép kỳ vọng thành kết quả.
 - [ ] progress tách khỏi danh mục spec; ≤ ~5 KB; ≤ 3 câu/dòng.
 - [ ] `docs/specs/README.md` có bảng quyền AI theo trạng thái, luật hotfix, bảng "loại thay đổi → file phải sửa" (có dòng đổi stack), và **bảng phụ thuộc một chiều / thứ tự xây dựng giữa các spec (Capability Map)** nếu có ≥ 2 spec.
 - [ ] Nợ spec của hotfix (nếu có) nằm trong progress và chưa quá 1 ngày làm việc.
@@ -80,7 +83,7 @@
 - [ ] Mỗi thành phần mức 1–2 có tín hiệu biện minh trong đề xuất.
 - [ ] Design có ≥ 1 phương án đã loại kèm lý do (**Design It Twice**), chỉ rõ **Seam (điểm ghép nối)** và độ sâu giao diện (**Deep Module**), rủi ro + rollback, map REQ → thành phần, trích dẫn nguồn docs chính thức theo version (`C25`).
 - [ ] Contract là file máy đọc; spec chỉ link.
-- [ ] Plan (`plan-tasks`) chia theo lát cắt dọc (**Tracer Bullets**), có cạnh `Blocked by`, danh sách Frontier chạy song song, và chuỗi Expand–Migrate–Contract cho thay đổi diện rộng.
+- [ ] Plan chia theo lát cắt dọc, có `Blocked by`; Frontier chỉ chạy song song trong đợt được giao (`C30`). Plan riêng tuỳ nhu cầu nhưng lát cắt/AC/kiểm chứng/điểm dừng luôn có.
 - [ ] AC phụ thuộc hạ tầng gắn `[~]` kèm lý do + cách đóng.
 - [ ] Skill dự án (gồm cả `verify-<app>` nếu có): `name` ≤ 64 ký tự, `description` ngôi thứ ba nêu làm gì + khi nào, body < 500 dòng; không trùng skill global.
 - [ ] Hook/settings đã review; deny-rules cho file nhạy cảm.
@@ -92,3 +95,4 @@
 
 - [ ] Đã giao 2–3 task mẫu trong phiên mới (`doc-tester`, không mang context viết docs).
 - [ ] Ghi lại luật bị bỏ qua, câu hỏi thừa, việc làm thừa — và đã sửa docs tương ứng.
+- [ ] Có ca nhiều spec Ready nhưng chỉ giao 1 task; đợt hết quyền/HANDOFF cũ; batch hữu hạn đã giao; ngưỡng kỹ thuật chưa có nguồn (`C30`, `C31`). Thử docs không chứng minh runtime hay chuyên môn của sản phẩm.

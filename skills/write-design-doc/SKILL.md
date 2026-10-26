@@ -16,7 +16,7 @@ Khi nào viết (tín hiệu, phải có thật trước khi mở file):
 
 ## Các bước
 
-1. Tạo `docs/specs/<nn>-<khu-vực>-design.md` từ `templates/docs/specs/_design-template.md`; bảng Thuộc tính link về spec.
+1. **Viết từng file design một & dừng chờ review (`C30` — Checkpoint 5c):** Tạo **ĐÚNG 1 file** `docs/specs/<nn>-<khu-vực>-design.md` từ `templates/docs/specs/_design-template.md` (bảng Thuộc tính link về spec); sau khi viết xong file này, trình tóm tắt ngắn cho người dùng và **BẮT BUỘC DỪNG LẠI** chờ người dùng review/duyệt trước khi viết file design khác hoặc chuyển sang Bước 6 (`review-docs`).
 2. **Bối cảnh và ràng buộc**: chỉ liệt kê ràng buộc *ảnh hưởng chọn phương án* (từ `decisions.md` D-xx, `CONSTRAINTS.md`, AGENTS.md, hạ tầng). Không tả lại spec.
 3. **Thiết kế Module Sâu & Điểm ghép nối (`Deep Modules & Seams`):**
    - Sơ đồ luồng (Mermaid) cho luồng chính + luồng lỗi (nếu người dùng cần bản HTML tương tác để duyệt thiết kế phức tạp, dùng thêm skill `archify`).
@@ -45,4 +45,4 @@ Khi nào viết (tín hiệu, phải có thật trước khi mở file):
 - [ ] Contract là file máy đọc, design chỉ link.
 - [ ] Có ≥ 1 phương án đối trọng thực sự đã loại kèm lý do (**Design It Twice**).
 - [ ] Vùng rủi ro: có bảng STRIDE, biện pháp truy về REQ/AC.
-- [ ] Có rollback; đổi schema có đường migration Expand–Contract.
+- [ ] Có rollback; đổi schema có đường migration Expand–Contract; dừng chờ người dùng review sau khi viết xong 1 file design (`C30` — Checkpoint 5c).

@@ -17,8 +17,8 @@ Một chỗ duy nhất cho tên dễ đổi.
 
 ## Đề xuất (chưa chốt)
 
-Làm xong hoặc chốt → chuyển thành D-xx và xoá dòng ở đây.
+Làm xong hoặc chốt → chuyển thành D-xx và xoá dòng ở đây. Đề xuất chưa có bằng chứng không trở thành quyết định chỉ vì AI khác đồng ý (`C31`); chỉ hỏi người dùng về hệ quả họ quyết được.
 
-| ID | Vấn đề | Đề xuất hiện tại |
-|---|---|---|
-| P-01 | | |
+| ID | Vấn đề / điều chưa biết | Đề xuất & cơ sở hiện tại | Cách xác minh / người phụ trách | Phần bị chặn |
+|---|---|---|---|---|
+| P-01 | | | | |

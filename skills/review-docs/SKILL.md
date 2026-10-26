@@ -22,7 +22,7 @@ Người vừa viết tài liệu luôn mang thiên kiến xác nhận (confirma
 3. **Đối chiếu & Phân loại phát hiện (`RECONCILE`):**
    Đọc lại văn bản thật đối chiếu với từng phát hiện của `spec-challenger` và phân loại theo thứ tự ưu tiên:
    - **Loại 1 — `Valid & Actionable` (Lỗi thật, sửa được ngay):** sửa thẳng vào file docs trước khi trình người dùng (xem bảng mục 2).
-   - **Loại 2 — `Decision Needed` (Thiếu quyết định của người dùng):** giữ `[ ]` và đưa vào mục "Câu hỏi còn lại" kèm phương án đề xuất.
+   - **Loại 2 — `Decision Needed`:** hành vi/phạm vi/đánh đổi → hỏi người dùng bằng ví dụ; thiếu kiến thức kỹ thuật → AI nghiên cứu/thử nghiệm trong quyền đã giao hoặc đề nghị người có chuyên môn (`C31`), không bắt người dùng xác nhận điều chưa chứng minh.
    - **Loại 3 — `Valid Trade-off` (Đánh đổi có chủ đích):** ghi rõ lý do hoặc gắn `ceiling:` (`C27`) / `D-xx` để người dùng thấy.
    - **Loại 4 — `Noise` (Báo động giả do thiếu ngữ cảnh):** nếu người đọc mới hiểu nhầm vì câu chữ trong docs chưa rõ, hãy làm sắc nét câu chữ đó để người sau không hiểu nhầm tương tự.
 
@@ -34,13 +34,15 @@ Chạy đủ 6 nhóm theo thứ tự; mỗi mục phải có **bằng chứng tr
 |---|---|
 | Spec chỉ có chữ và bảng REQ, thiếu hình dung trực quan (`C28`) | Thêm sơ đồ luồng Mermaid + ít nhất 1 **Snapshot I/O cụ thể** (ASCII wireframe / CLI / JSON mẫu) |
 | AC chỉ ghi chữ chung chung, thiếu Ma trận Kiểm thử Minh bạch (`C29`) | Bổ sung bảng `Visible Test Matrix` nêu rõ `Input cụ thể | Output & Tác dụng phụ | Tầng & Độ thật (0 Mock / Mock gì)` |
-| REQ chứa "nhanh", "linh hoạt", "an toàn", "hợp lý" | Thay bằng số ngưỡng đo được hoặc chuyển sang câu hỏi mở |
+| REQ mơ hồ hoặc chứa số không có nguồn | Tìm cơ sở yêu cầu/số đo; chưa có → `Chưa biết` + cách xác minh, không tự điền ngưỡng (`C31`) |
 | AC kết thúc bằng "hoạt động đúng" / lệnh vận hành chỉ kiểm exit 0 | Thay bằng mã HTTP, mã lỗi, dữ liệu DB/file sinh ra (`C19`) |
 | "Ngoài phạm vi" rỗng | Thêm ít nhất 1 thứ lân cận bị loại (phần GĐ sau, dịch vụ ngoài, màn không làm) |
 | Spec `Ready` còn `[CẦN LÀM RÕ]` | Chuyển về `Draft` hoặc hỏi người dùng giải quyết trước khi trình |
 | Sự thật xuất hiện ở 2 file | Chọn 1 nguồn thật (spec/contract/`config.md`/`error-codes.md`), chỗ còn lại chỉ đặt context pointer |
 | Dòng trỏ file trong `AGENTS.md` chỉ ghi tên file chung chung | Viết lại theo mẫu Context Pointer `C24`: *"Khi chạm <nhánh X> → đọc `<file Y>`"* |
-| REQ kế thừa từ `PK-*` còn để trống `{tham-số}` | Điền giá trị thật của dự án vào bảng kế thừa |
+| REQ kế thừa từ `PK-*` còn `{tham-số}` | Tìm giá trị có cơ sở; chưa có thì P-xx và giữ Draft, không đoán cho đủ mẫu |
+| `Ready`/Frontier/HANDOFF bị coi là quyền code | Đối chiếu lệnh người dùng và đợt hiện tại; xác định điểm dừng (`C30`) |
+| Có AC `[~]` nhưng spec `Done` | Trả về trạng thái chưa hoàn tất; nêu ai/cách kiểm chứng, không tính là pass |
 | Lệnh trong `AGENTS.md` / `CONSTRAINTS.md` chưa chạy thử | Chạy thử nếu an toàn; không an toàn → ghi rõ "chưa chạy + lý do" trong báo cáo |
 
 ## 3. Format báo cáo Cổng 2
@@ -75,3 +77,4 @@ Câu hỏi còn lại: <danh sách hoặc "Không có">
 - [ ] Mọi mục `[ ]` đều xuất hiện tường minh trong báo cáo.
 - [ ] Mọi kết luận có bằng chứng đường dẫn trong file.
 - [ ] Không file mới nào bị bỏ quên (không được trỏ tới, nằm ngoài git).
+- [ ] Đã kiểm `C30–C31`; AI phản biện không thay nguồn sơ cấp/test/chuyên gia, báo cáo kiểm docs không chứng minh sản phẩm đã đúng.

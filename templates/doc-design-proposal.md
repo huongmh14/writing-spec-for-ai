@@ -2,6 +2,14 @@
 
 > Trạng thái: **Chờ review (Cổng 1)**. Chưa tạo file nào trong repo.
 
+## Bản đọc ngắn (`C30`, `C31`)
+
+- **Kết quả đầu tiên:** <ai làm gì, thấy kết quả nào>.
+- **Ví dụ nghiệm thu:** <thao tác → kết quả; trỏ AC dự kiến>.
+- **Giới hạn lần đầu:** <một spec/lát cắt; phần sau giữ ở bản đồ, chưa viết chi tiết>.
+- **Điều chưa biết:** <ảnh hưởng, cách xác minh, người phụ trách>.
+- **Bạn duyệt:** <hành vi/phạm vi/đánh đổi>; AI chịu trách nhiệm kiểm chứng kỹ thuật. Duyệt bản đồ chưa cấp quyền chạy các spec.
+
 ## 1. Hiện trạng
 
 | Hạng mục | Phát hiện | Bằng chứng |
@@ -22,7 +30,7 @@
 
 - Base: writing-spec-for-ai v1.3.0 · Profile: <S | M | L> — xem `profiles.md` về dấu hiệu và file tối thiểu.
 - Pack: <PK-… — tín hiệu: …> — xem `packs/PK-….md` về tín hiệu bật và REQ.
-- Mức 0: toàn bộ (0.1–0.18 / `C01–C29`).
+- Mức 0: toàn bộ (Core `C01–C31`).
 - Mức 1: <thành phần> — tín hiệu: <…>
 - Mức 2: <thành phần> — tín hiệu: <…>
 
@@ -86,9 +94,10 @@ flowchart LR
 | SPEC-ARCH | Kiến trúc & nguyên tắc | | — | Draft / As-built | |
 
 - **Thứ tự xây dựng (`Build Order`):** `SPEC-ARCH → ...`
+- **Spec viết chi tiết đầu tiên:** <ID + hành vi nhỏ có thể kiểm>; các spec sau chỉ có tên, mục tiêu, phụ thuộc. Không có số REQ tối thiểu.
 - **REQ kế thừa từ Pack (`PK-*`):**
 
-| Spec | Kế thừa từ Pack | Tham số `{…}` điền giá trị |
+| Spec | Kế thừa từ Pack | Tham số & cơ sở; chưa biết thì P-xx |
 |---|---|---|
 
 ## 6. Thuật ngữ cần chốt (`glossary.md`)
@@ -111,9 +120,10 @@ flowchart LR
 ## 10. Làm rõ theo `HYPOTHESIS + Frontier + GUESS`
 
 - **HYPOTHESIS (Giả thuyết hiện tại):** <1–2 câu tóm tắt mục tiêu, phạm vi và ràng buộc chính của dự án theo bằng chứng khảo sát.>
-- **CONFIDENCE:** `<XX>%` — Còn khuyết: <những điểm chưa có bằng chứng>.
+- **EVIDENCE (Cơ sở):** <lời người dùng, path:line, nguồn chính thức đúng version>.
+- **GAPS (Chưa biết):** <điều chưa chứng minh + ảnh hưởng + cách xác minh; không tự chấm %>.
 
-<!-- Chỉ hỏi tối đa ≤ 5 câu thuộc Mặt trận (Frontier), câu ảnh hưởng kiến trúc lớn nhất đứng đầu. -->
+<!-- Chỉ hỏi tối đa 3 câu người dùng quyết được trên Frontier: hành vi/phạm vi/chi phí. Chi tiết kỹ thuật dễ đảo ngược có thể uỷ quyền; phần chưa có chuyên môn thì cần kiểm chứng, không bắt người dùng đoán. -->
 
 1. **[CẦN LÀM RÕ]** <Câu hỏi 1>
    - ➡️ **Đề xuất (`GUESS`):** <Phương án khuyến nghị + lý do>

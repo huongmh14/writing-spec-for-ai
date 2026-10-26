@@ -4,6 +4,18 @@
   <a href="./README.md">English</a> · <strong>Tiếng Việt</strong>
 </p>
 
+**Bản sửa đang thử (2026-10-25):** mặc định mỗi đợt AI chỉ làm **1 spec + 1 task có thể kiểm**, báo bằng chứng rồi dừng. `Ready` xác nhận yêu cầu, chưa phải quyền chạy toàn bộ. Bạn duyệt hành vi/phạm vi qua ví dụ; AI phải tìm nguồn và kiểm kỹ thuật, ghi rõ điều chưa biết.
+
+Đọc [nghiên cứu và nguồn sơ cấp](references/research-controlled-execution.md), [bản thử trước/sau và 6 tình huống kiểm](references/controlled-spec-demo.md), [mẫu spec đã sửa](templates/docs/specs/_template.md). Luật `C30–C31` ở [base-kit](references/base-kit.md); thay đổi chưa phát hành ở [CHANGELOG](CHANGELOG.md).
+
+```text
+Chỉ làm T-01 của SPEC-[tên], phạm vi AC-[01,02].
+Kiểm ví dụ đã chốt, báo kết quả thật và điều chưa kiểm rồi dừng.
+Chưa làm task/spec tiếp theo. Kỹ thuật cần có nguồn/phép kiểm.
+```
+
+Giao rõ toàn spec/batch hữu hạn thì AI làm hết phạm vi đó, không hỏi lại từng task. Chỉ viết chi tiết spec sắp làm. Markdown hướng dẫn; cưỡng chế thật cần quyền công cụ/sandbox và review diff phù hợp nền tảng.
+
 Bộ skill & plugin `writing-spec-for-ai`: AI khảo sát dự án (`spec-surveyor`) → trình **đề xuất thiết kế docs + Scope Radar (`🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm`) + Visual Option Cards (`C28`) + Capability Map** → làm rõ theo **Frontier + HYPOTHESIS/GUESS** → viết docs (`AGENTS.md`, `CONSTRAINTS.md`, `SPEC-xx` kèm **ASCII Wireframe/I-O Snapshot** & **Ma trận Kiểm thử Minh bạch `C29`**, `DESIGN-xx`) → phản biện đối kháng trong context sạch (`spec-challenger`) → thử docs bằng task mẫu trong phòng sạch (`doc-tester`) → chẻ đồ thị Tracer-Bullet tasks (`plan-tasks`) & sinh skill tự kiểm (`generate-verify-harness`) in **Bảng Bằng chứng Chạy Test (`Visible Test Execution Ledger` — công khai rõ `0 Mock` hay `Mock gì`)** → chỉ sau 3 cổng duyệt của bạn mới code.
 
 ## Cấu trúc (`v1.3.0`)
@@ -39,7 +51,7 @@ references/
   principles.md                          #   Mô hình, bộ kỹ năng mức 0/1/2, EARS, ma trận công cụ
   examples.md                            #   Ví dụ chuẩn từ dự án thật (gồm Scope Radar & Visible Test Ledger)
   review-checklist.md                    #   Checklist chấm Cổng 2 & Cổng 3
-  base-kit.md                            #   Sổ đăng ký luật Core (C01–C29), 8 Pack (PK-*), Profile S/M/L
+  base-kit.md                            #   Sổ đăng ký luật Core (C01–C31), 8 Pack (PK-*), Profile S/M/L
 templates/
   doc-design-proposal.md                 #   Mẫu đề xuất Cổng 1
   AGENTS.md                              #   Mẫu AGENTS.md (≤ 150 dòng, Context Pointers C24)

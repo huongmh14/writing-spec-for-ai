@@ -129,16 +129,18 @@ flowchart TD
    - Lỗi: `Nếu <điều kiện không mong muốn>, thì hệ thống MUST …`
    - Tuỳ chọn: `Khi bật <tính năng>, hệ thống MUST …`
 5. AC *Cho / Khi / Thì* với dữ liệu cụ thể; mỗi REQ ≥ 1 AC; có AC cho lỗi và biên.
-6. Số thay tính từ: "nhanh" → "p95 < 5 ms"; "giới hạn" → "10 lần/phút/user".
-7. NFR luôn có mặt: hiệu năng, bảo mật, giới hạn, khả dụng, quan sát (log/metric/audit), i18n, a11y, trạng thái UI (loading/empty/error/forbidden). Không áp dụng thì ghi `N/A — lý do`.
+6. Số thay tính từ khi có nguồn yêu cầu hoặc số đo kèm điều kiện (`C31`); không tự đặt p95/rate limit cho đủ mẫu. Chưa biết → câu hỏi mở và cách kiểm chứng, không là cam kết.
+7. NFR luôn có mặt: hiệu năng, bảo mật, giới hạn, khả dụng, quan sát, i18n, a11y, trạng thái UI. Không áp dụng → `N/A — lý do`; Draft chưa rõ → `Chưa biết — P-xx + cách xác minh + phần bị chặn`.
 8. "Ngoài phạm vi" không được rỗng.
 9. Một sự thật một chỗ; contract máy đọc là nguồn thật, spec link tới.
 10. Quyết định đổi giá trị trong REQ thì **cùng PR** sửa REQ đó.
 11. Mâu thuẫn giữa hai spec → ghi vào câu hỏi mở của **cả hai**; không đánh `[x]` AC đang có mâu thuẫn mở.
-12. `[x]` trong chính PR có CI xanh, không để "PR sau". Spec chuyển `Done` khi mọi AC `[x]` hoặc `[~]` có lý do.
+12. `[x]` cần bằng chứng test xanh; có CI thì trong chính PR. Spec chỉ `Done` khi mọi AC còn hiệu lực của spec `[x]`, không chỉ AC của đợt; `[~]` chặn `Done`. Hoãn yêu cầu cần đổi phạm vi được duyệt qua change-spec.
 13. Spec `Ready` không nối thêm phần lớn; tạo spec con hoặc change proposal.
 14. Spec trước code cho phần mới; nội dung chia việc thuộc plan, không thuộc spec.
 15. Spec kết thúc bằng cách kiểm end-to-end (lệnh/kịch bản) để agent tự xác nhận.
+16. `Ready` không là quyền chạy (`C30`): mặc định 1 spec/1 task, ghi đợt trong progress; làm hết phạm vi đã giao, báo bằng chứng rồi dừng. Plan/Frontier/HANDOFF không tự giao thêm việc.
+17. Người dùng duyệt hành vi/phạm vi, AI chịu trách nhiệm chứng minh lựa chọn kỹ thuật (`C31`). Tự viết cả kỳ vọng lẫn test chưa chứng minh nhu cầu đúng: đối chiếu ví dụ đã chốt/contract; AI khác đồng ý không thay nguồn, đo đạc hay chuyên gia.
 
 ---
 

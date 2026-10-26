@@ -8,8 +8,9 @@
     3. Valid YAML frontmatter (name, description) on SKILL.md, skills/*/SKILL.md, and agents/*.md
     4. SDO Trigger-First compliance: descriptions must start with trigger conditions and stay <= 450 chars
     5. Line-count ratchets (Progressive Disclosure budget)
-    6. Template structural markers (Capability Map, HYPOTHESIS/CONFIDENCE, Pack Inheritance, Deep Modules & Seams, Tracer Bullets)
+    6. Template structural markers (Capability Map, evidence/gaps, Pack Inheritance, Deep Modules & Seams, bounded execution C30, provenance C31)
     7. Zero broken relative Markdown links & zero stray non-Latin/non-Vietnamese script characters
+    8. Behavioral eval scenario structure only (does not execute or score model behavior)
 #>
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
@@ -43,6 +44,32 @@ foreach ($rel in $jsonFiles) {
     }
     try {
         $parsed = Get-Content $full -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($rel -eq "evals/evals.json") {
+            $evalIds = @($parsed.evals | ForEach-Object { $_.id })
+            $requiredEvalIds = @(
+                "eval-07-one-current-task-many-ready-specs",
+                "eval-08-explicit-bounded-batch",
+                "eval-09-unknown-p95-and-token-ttl",
+                "eval-10-risky-domain-outside-user-expertise",
+                "eval-11-stale-handoff-and-continue",
+                "eval-12-unverified-ac-prevents-done",
+                "eval-13-staged-doc-authoring-c30",
+                "eval-14-auto-caveman-context-guard-c32"
+            )
+            foreach ($evalId in $requiredEvalIds) {
+                if ($evalIds -notcontains $evalId) {
+                    $failures += "[EVAL] Missing behavioral scenario: $evalId"
+                }
+            }
+            if (@($evalIds | Select-Object -Unique).Count -ne $evalIds.Count) {
+                $failures += "[EVAL] Scenario IDs must be unique"
+            }
+            foreach ($scenario in $parsed.evals) {
+                if (-not $scenario.prompt -or -not $scenario.expected_output -or @($scenario.assertions).Count -lt 1) {
+                    $failures += "[EVAL] $($scenario.id) needs a prompt, expected_output and assertions"
+                }
+            }
+        }
         if ($parsed.PSObject.Properties.Name -contains "version") {
             $versions[$rel] = $parsed.version
         }
@@ -65,20 +92,29 @@ if ($uniqueVersions.Count -gt 1) {
 }
 
 # 2. Validate SKILL.md and agents/*.md frontmatter, SDO rules & line budgets
-$skillFiles = @("SKILL.md") + (Get-ChildItem -Path (Join-Path $root "skills") -Recurse -File -Filter "SKILL.md" | ForEach-Object { $_.FullName.Substring($root.Length + 1).Replace('\','/') })
+$subSkillNames = @("survey-project","propose-doc-design","write-spec","write-design-doc","change-spec","review-docs","test-docs","plan-tasks","generate-verify-harness")
+if (Test-Path (Join-Path $root "skills")) {
+    $skillFiles = @("SKILL.md") + (Get-ChildItem -Path (Join-Path $root "skills") -Recurse -File -Filter "SKILL.md" | ForEach-Object { $_.FullName.Substring($root.Length + 1).Replace('\','/') })
+} else {
+    $skillFiles = @("SKILL.md") + ($subSkillNames | ForEach-Object { "../$_/SKILL.md" } | Where-Object { Test-Path (Join-Path $root $_) })
+}
 $agentFiles = Get-ChildItem -Path (Join-Path $root "agents") -File -Filter "*.md" | ForEach-Object { $_.FullName.Substring($root.Length + 1).Replace('\','/') }
 
 $totalSkillDescChars = 0
 
 foreach ($rel in ($skillFiles + $agentFiles)) {
     $full = Join-Path $root $rel
+    if (-not (Test-Path $full)) {
+        $failures += "[FILE] Missing skill/agent file: $rel"
+        continue
+    }
     $raw = Get-Content $full -Raw -Encoding UTF8
     $lines = ($raw -split "`r?`n").Count
 
     # Line-count ratchets
     if ($rel -eq "SKILL.md" -and $lines -gt 65) {
         $failures += "[RATCHET] $rel has $lines lines (max 65)"
-    } elseif ($rel -like "skills/*" -and $lines -gt 110) {
+    } elseif (($rel -like "skills/*" -or $rel -like "../*") -and $lines -gt 110) {
         $failures += "[RATCHET] $rel has $lines lines (max 110)"
     } elseif ($rel -like "agents/*" -and $lines -gt 55) {
         $failures += "[RATCHET] $rel has $lines lines (max 55)"
@@ -124,6 +160,8 @@ Get-ChildItem -Path (Join-Path $root "packs") -File -Filter "PK-*.md" | ForEach-
 $templateChecks = @(
     @{ File = "templates/doc-design-proposal.md"; Pattern = "Depends on"; Label = "Capability Map 'Depends on' column" },
     @{ File = "templates/doc-design-proposal.md"; Pattern = "HYPOTHESIS"; Label = "Frontier Q&A 'HYPOTHESIS' block" },
+    @{ File = "templates/doc-design-proposal.md"; Pattern = "EVIDENCE"; Label = "Evidence supporting the current hypothesis" },
+    @{ File = "templates/doc-design-proposal.md"; Pattern = "GAPS"; Label = "Unverified knowledge and verification path" },
     @{ File = "templates/doc-design-proposal.md"; Pattern = "Scope Radar"; Label = "Visual Direction 'Scope Radar' section (C28)" },
     @{ File = "templates/docs/specs/_template.md"; Pattern = "PK-"; Label = "Domain Pack inheritance table" },
     @{ File = "templates/docs/specs/_template.md"; Pattern = "Concrete I/O Snapshot"; Label = "Visual I/O Snapshot section (C28)" },
@@ -132,13 +170,49 @@ $templateChecks = @(
     @{ File = "templates/docs/specs/_design-template.md"; Pattern = "Design It Twice"; Label = "Design It Twice section" },
     @{ File = "templates/docs/plans/_plan-template.md"; Pattern = "Blocked by"; Label = "Tracer-Bullet Task Graph 'Blocked by' column" },
     @{ File = "templates/AGENTS.md"; Pattern = "Visible Test Execution Ledger"; Label = "DoD Visible Test Execution Ledger requirement (C29)" },
-    @{ File = "templates/adapters/pull_request_template.md"; Pattern = "Visible Test Execution Ledger"; Label = "PR Visible Test Execution Ledger table (C29)" }
+    @{ File = "templates/adapters/pull_request_template.md"; Pattern = "Visible Test Execution Ledger"; Label = "PR Visible Test Execution Ledger table (C29)" },
+    @{ File = "SKILL.md"; Pattern = "C30"; Label = "Bounded execution rule (C30)" },
+    @{ File = "SKILL.md"; Pattern = "C31"; Label = "Provenance and knowledge limits rule (C31)" },
+    @{ File = "references/base-kit.md"; Pattern = "| C30 |"; Label = "Core bounded execution contract (C30)" },
+    @{ File = "references/base-kit.md"; Pattern = "| C31 |"; Label = "Core provenance contract (C31)" },
+    @{ File = "templates/AGENTS.md"; Pattern = "C30"; Label = "Task execution boundary (C30)" },
+    @{ File = "templates/AGENTS.md"; Pattern = "C31"; Label = "Task knowledge boundary (C31)" },
+    @{ File = "templates/docs/specs/README.md"; Pattern = "C30"; Label = "Spec readiness versus execution authority (C30)" },
+    @{ File = "templates/docs/specs/_template.md"; Pattern = "C31"; Label = "Requirement provenance (C31)" },
+    @{ File = "templates/docs/specs/_template.md"; Pattern = "../progress.md"; Label = "Pointer to current execution grant" },
+    @{ File = "templates/docs/progress.md"; Pattern = "C30"; Label = "Current execution grant (C30)" },
+    @{ File = "templates/docs/plans/_plan-template.md"; Pattern = "C30"; Label = "Plan is not execution authority (C30)" },
+    @{ File = "agents/doc-tester.md"; Pattern = "C30"; Label = "Clean-room execution boundary check (C30)" },
+    @{ File = "agents/spec-challenger.md"; Pattern = "C31"; Label = "Adversarial provenance check (C31)" },
+    @{ File = "skills/write-design-doc/SKILL.md"; Pattern = "C30"; Label = "Staged design doc authoring checkpoint (C30)" },
+    @{ File = "SKILL.md"; Pattern = "C32"; Label = "Context & Token Budget Guard rule (C32)" },
+    @{ File = "references/base-kit.md"; Pattern = "| C32 |"; Label = "Core Context & Token Budget Guard contract (C32)" },
+    @{ File = "templates/AGENTS.md"; Pattern = "C32"; Label = "Auto-Caveman & Token Alert rule in AGENTS.md (C32)" },
+    @{ File = "templates/adapters/claude-settings.json"; Pattern = "context-guard.ps1"; Label = "UserPromptSubmit context-guard hook in claude-settings.json (C32)" },
+    @{ File = "scripts/context-guard.ps1"; Pattern = "CONTEXT-GUARD C32"; Label = "Deterministic Context & Token Guard script (C32)" },
+    @{ File = "install.ps1"; Pattern = "UserPromptSubmit"; Label = "Auto-registration of UserPromptSubmit hook in install.ps1 (C32)" }
 )
 foreach ($tc in $templateChecks) {
     $tPath = Join-Path $root $tc.File
+    if (-not (Test-Path $tPath) -and $tc.File -like "skills/*") {
+        $tPath = Join-Path $root ($tc.File -replace '^skills/', '../')
+    }
+    if (-not (Test-Path $tPath)) {
+        $failures += "[TEMPLATE] Missing required file for '$($tc.Label)': $($tc.File)"
+        continue
+    }
     $tRaw = Get-Content $tPath -Raw -Encoding UTF8
     if ($tRaw -notmatch [regex]::Escape($tc.Pattern)) {
         $failures += "[TEMPLATE] $($tc.File) is missing required marker: $($tc.Label)"
+    }
+}
+
+# Prevent the previous completion rule from silently returning in a shared contract.
+$completionFiles = @("SKILL.md", "references/principles.md", "templates/AGENTS.md", "templates/docs/specs/README.md")
+foreach ($rel in $completionFiles) {
+    $raw = Get-Content (Join-Path $root $rel) -Raw -Encoding UTF8
+    if ($raw -match '\[x\][^\r\n]{0,20}ho\u1EB7c[^\r\n]{0,20}\[~\]') {
+        $failures += "[COMPLETION] $rel still accepts unresolved [~] alongside [x]; unresolved ACs must prevent Done"
     }
 }
 
@@ -172,6 +246,7 @@ foreach ($f in $allMd) {
 
 Write-Host ("Checked {0} Markdown files, {1} Skills, {2} Subagents, {3} JSON manifests." -f $allMd.Count, $skillFiles.Count, $agentFiles.Count, $jsonFiles.Count) -ForegroundColor Gray
 Write-Host ("Total always-loaded description budget (10 skills): {0} chars (~{1} tokens)" -f $totalSkillDescChars, [math]::Round($totalSkillDescChars / 3.8)) -ForegroundColor Gray
+Write-Host "Behavioral eval prompts checked structurally only; no model run or behavior score." -ForegroundColor Gray
 
 if ($failures.Count -gt 0) {
     Write-Host "`nVALIDATION FAILED ($($failures.Count) issues):" -ForegroundColor Red

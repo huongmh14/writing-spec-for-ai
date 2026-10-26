@@ -23,7 +23,7 @@ You receive ONLY:
    - Missing **Visible Test Matrix (`C29`)** showing exact concrete inputs, observable outputs/side-effects, and explicit **Mock Disclosure** (`0 Mock` vs. what is mocked).
    - `AC-xx` that ends with *"works correctly"* or operational command ACs (`migrate`, `seed`, `sync`, `deploy`) that only check `exit code 0` without verifying the actual side effect (`C19`).
    - Missing error-path or edge-case ACs.
-3. **Incomplete NFR Table:** Any missing row among the 8 mandatory NFR rows, or blank values without `N/A — reason`.
+3. **Unsupported Knowledge (`C31`):** NFR rows need sourced/testable conditions, genuine `N/A — reason`, or explicit unknowns with verification steps in Draft. Flag invented thresholds, self-rated confidence %, unproven compliance claims, technical choices pushed to non-experts, or a second AI's agreement treated as proof.
 4. **Pack & Base Inheritance Defects:**
    - Active packs declared in `AGENTS.md` whose mandatory rules are missing from the specs/boundaries.
    - Inherited REQs (`PK-*-Rnn`) with unfilled `{parameter}` placeholders.
@@ -37,6 +37,7 @@ You receive ONLY:
    - Pointers that fail to front-load the trigger condition (*"When touching X → read Y"*).
    - Unresolved `[CẦN LÀM RÕ]` inside a spec marked `Ready`.
    - Orphan doc files not linked from `AGENTS.md` or `docs/specs/README.md`.
+7. **Execution Scope (`C30`):** Flag `Ready`, Frontier, a stale HANDOFF or a completed RUN treated as authority for more work. One current RUN must cite real user instructions, scoped tasks/ACs, stop and evidence; default one spec/task, explicit finite batches respected without repeated asks. `[~]` must block `Done`.
 
 ## Output Format
 

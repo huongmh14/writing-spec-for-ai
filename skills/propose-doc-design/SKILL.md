@@ -31,20 +31,20 @@ Người dùng rất dễ "gật đầu mù" (*rubber-stamp*) trước một b�
    - Tách riêng spec **phương tiện** (`ARCH`, `REPO`, `API`, `NFR`) chỉ khi dự án đủ lớn.
 4. **Xác định chiều phụ thuộc một chiều (`Depends on`) & Thứ tự xây dựng (`Build Order`):**
    - Mỗi dòng bảng: `SPEC-<TÊN> | Trách nhiệm khu vực | Phụ thuộc vào (Depends on) | Trạng thái dự kiến (Draft/As-built) | Nguồn yêu cầu`.
-   - Mũi tên phụ thuộc chỉ đi một chiều, **cấm vòng lặp**. Kiểm khối lượng: 1 spec ≈ 10–25 REQ.
+   - Mũi tên phụ thuộc chỉ đi một chiều, **cấm vòng lặp**. Không có số REQ tối thiểu: chỉ viết chi tiết spec sắp làm, khu vực sau giữ tên/mục tiêu/phụ thuộc. Duyệt Capability Map chưa cấp quyền triển khai (`C30`).
 5. **REQ kế thừa từ Pack (`PK-*`):** Nếu dự án bật pack (`PK-API`, `PK-AUTH`, `PK-RELEASE`, `PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`), ghi REQ kế thừa bằng bảng kèm giá trị tham số `{…}` cụ thể (xem `base-kit.md` §7.2).
 
 ## 3. Câu hỏi làm rõ theo `HYPOTHESIS + Frontier + GUESS` (mục 10)
 
 Rút từ mọi `[CẦN LÀM RÕ]` phát hiện được khi điền đề xuất. Áp dụng kỷ luật phỏng vấn từ `interview-me` và `grilling`:
 
-1. **Nêu giả thuyết & Độ tự tin (`HYPOTHESIS + CONFIDENCE %`):** Mở đầu phần làm rõ bằng 1 câu tóm tắt cách bạn đang hiểu mục tiêu/ràng buộc của dự án kèm `%` độ tự tin và những gì còn khuyết.
-2. **Chỉ hỏi các câu trên Mặt trận (`Frontier`):** Xem các quyết định như một cây thiết kế (design tree). Chỉ hỏi những câu mà tiền đề của nó đã rõ; câu nào phụ thuộc vào đáp án của câu trước thì để lượt sau, tối đa **≤ 5 câu** mỗi lượt, câu ảnh hưởng kiến trúc/phạm vi đứng đầu.
-3. **Đính kèm phương án đề xuất (`➡️ GUESS / Đề xuất`):** Mỗi câu hỏi bắt buộc có phương án bạn khuyến nghị kèm lý do và hệ quả nếu chọn khác, viết sao cho người dùng chỉ cần trả lời `"Đồng ý"` là chốt được ngay.
+1. **Nêu giả thuyết & Cơ sở (`HYPOTHESIS + EVIDENCE` — `C31`):** Tóm tắt mục tiêu/ràng buộc; dẫn lời người dùng, `path:line` hoặc nguồn chính thức, ghi rõ khoảng trống. Không tự chấm phần trăm độ tin cậy.
+2. **Chỉ hỏi trên Mặt trận (`Frontier`):** Tối đa 3 câu về hành vi/phạm vi/chi phí mà người dùng quyết được; câu phụ thuộc đáp án trước để lượt sau. Dùng ví dụ đầu vào → kết quả thay cho thuật ngữ chuyên môn.
+3. **Đính kèm đề xuất (`➡️ GUESS`):** Nêu kết quả quan sát được, đánh đổi và phần chưa chứng minh. Đồng ý hành vi không xác nhận mọi khẳng định kỹ thuật hay cấp quyền chạy toàn bộ roadmap.
 4. **Bóc tách Buzzwords & Không nhận uỷ quyền mơ hồ:**
    - Nếu người dùng trả lời bằng từ khoá chung chung (*"cần scalable, clean, hiện đại"*), hỏi thẳng ngưỡng cụ thể hoặc *"Nếu không phải giải trình với ai, bạn thực sự cần điều gì chạy được trước?"*.
-   - Không coi câu trả lời *"Tuỳ bạn"* / *"Sao cũng được"* là đã chốt cho quyết định kiến trúc — hãy rút gọn thành 2 lựa chọn cụ thể A/B nêu rõ cái giá phải trả của mỗi bên để người dùng chọn.
-5. Đáp án là quyết định kiến trúc/quy tắc → ghi `D-xx`; là yêu cầu hành vi → ghi vào mục "Làm rõ" của spec.
+   - *"Tuỳ bạn"* có thể uỷ quyền chi tiết kỹ thuật dễ đảo ngược trong phạm vi đã giao: ưu tiên pattern/dependency sẵn có và ghi cơ sở. Với dữ liệu, phân quyền, tiền hoặc cam kết nghiệp vụ, nêu hệ quả dễ hiểu; AI tự nghiên cứu/thử nghiệm được phép. Nếu vẫn thiếu chuyên môn, ghi cần người có chuyên môn kiểm tra và chặn phần phụ thuộc, không ép người dùng đoán A/B.
+5. Đáp án đã chốt → `D-xx` hoặc "Làm rõ" của spec. Khuyến nghị chưa được chứng minh → `P-xx`, không tự biến thành sự thật hay REQ đã duyệt.
 
 ## 4. Kế hoạch thử docs (mục 8) & Cố ý không làm (mục 9)
 
@@ -57,4 +57,5 @@ Rút từ mọi `[CẦN LÀM RÕ]` phát hiện được khi điền đề xuấ
 - [ ] Mọi thành phần mức 1–2 và Pack được chọn đều có tín hiệu đi kèm.
 - [ ] Có **Scope Radar (`🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm`)**, sơ đồ luồng Mermaid, và **Visual Option Cards + Snapshot I/O** khi hướng phát triển còn mở (`C28`).
 - [ ] Bảng chia bộ spec có cột `Depends on` một chiều (không vòng lặp) + `Build Order` + nguồn yêu cầu truy được.
-- [ ] Mục câu hỏi mở đầu bằng `HYPOTHESIS + CONFIDENCE %`, ≤ 5 câu thuộc Frontier, mỗi câu có `➡️ Đề xuất (GUESS)`.
+- [ ] Có bản đọc ngắn: hành vi đầu tiên, ví dụ nghiệm thu, ngoài phạm vi, điều chưa biết; chỉ chi tiết hoá phần sắp làm (`C30`, `C31`).
+- [ ] `HYPOTHESIS + EVIDENCE` chỉ rõ nguồn/khoảng trống, ≤ 3 câu người dùng quyết được; phần kỹ thuật có cách kiểm chứng và người chịu trách nhiệm.

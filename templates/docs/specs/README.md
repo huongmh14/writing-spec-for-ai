@@ -6,8 +6,8 @@ Nguồn sự thật về yêu cầu. Quyết định ở `../decisions.md`, thu�
 
 - ID spec `SPEC-<KHU-VỰC>`; yêu cầu `<KHU-VỰC>-R<số>`; nghiệm thu `<KHU-VỰC>-AC<số>`. Không đánh số lại; bỏ thì ghi deprecated.
 - Mức: **MUST**, **SHOULD** (lệch phải ghi lý do), **MAY**. Giai đoạn ghi kèm: `MUST (GĐ2)`.
-- AC *Cho / Khi / Thì*, tên test chứa AC-ID. `[x]` trong chính PR có CI xanh; `[~]` cần môi trường thật, kèm lý do + cách đóng.
-- Trạng thái: `Draft` → `Ready` (người dùng duyệt, không còn `[CẦN LÀM RÕ]`) → `In progress` → `Done` (mọi AC `[x]` hoặc `[~]`, chuyển trong PR cuối). Code có sẵn chưa spec: `As-built`.
+- AC *Cho / Khi / Thì*, tên test chứa AC-ID. `[x]` có lệnh/kết quả làm bằng chứng, có CI thì trong chính PR; `[~]` chưa kiểm chứng, kèm lý do + cách đóng.
+- Trạng thái: `Draft` → `Ready` (người dùng duyệt yêu cầu, không còn câu hỏi chặn) → `In progress` (có đợt thực thi được giao) → `Done` (mọi AC của spec `[x]` có bằng chứng, chuyển trong PR cuối). `[~]` là chưa kiểm chứng, chưa đủ `Done`. Code có sẵn chưa spec: `As-built`.
 - Spec `Ready`/`Done` cần đổi: qua `../changes/`. Phần lớn mới: spec con.
 - Spec mới dùng `_template.md`; thiết kế dùng `_design-template.md`.
 
@@ -15,15 +15,18 @@ Nguồn sự thật về yêu cầu. Quyết định ở `../decisions.md`, thu�
 
 | Trạng thái | AI được làm | AI không được làm |
 |---|---|---|
-| `Draft` | Đọc, chỉ chỗ thiếu/mâu thuẫn/mơ hồ, đề xuất phương án kèm đánh đổi, viết AC | **Viết code triển khai**; tự chọn phương án thay người dùng |
-| `Ready` | Lập plan (`plan-tasks`), chia PR, chuẩn bị migration, viết test theo AC | Đổi nội dung spec trong lúc làm |
-| `In progress` | Viết code + test, đánh `[x]` AC khi CI xanh, báo blocker | Lệch khỏi spec mà không nói; thêm chức năng "nhân tiện" |
-| `Done` | Sửa lỗi đã xác nhận, đúng hành vi spec mô tả | Đổi hành vi khi chưa có `../changes/CHG-xx` được duyệt |
+| `Draft` | Đọc, nêu chỗ thiếu, nghiên cứu, đề xuất hành vi và AC | **Viết code triển khai**; biến đề xuất chưa kiểm chứng thành yêu cầu đã chốt |
+| `Ready` | Lập plan (`plan-tasks`), mô tả migration/test dự kiến | **Tự bắt đầu code, test triển khai hoặc migration** chỉ vì spec Ready; đổi yêu cầu |
+| `In progress` | Code + test **trong đợt được giao**, đánh `[x]` AC khi có bằng chứng, báo blocker | Lấy task/spec tiếp theo ngoài đợt; thêm chức năng "nhân tiện" |
+| `Done` | Phân tích lỗi; sửa đúng hành vi đã chốt khi có đợt sửa lỗi được giao | Tự bắt đầu sửa; đổi hành vi khi chưa có `../changes/CHG-xx` được duyệt |
 | `As-built` | Ghi bằng chứng, nêu hành vi đáng ngờ vào câu hỏi mở | Coi code hiện có là chuẩn; "sửa cho hợp lý" |
 
-- Được yêu cầu code cho spec `Draft`: trả lời spec chưa duyệt, hỏi có chuyển `Ready` không.
-- Code không theo được spec: dừng, nêu chỗ lệch, đề xuất sửa spec trước.
-- **Hotfix** là ngoại lệ duy nhất được sửa code trước spec: spec phải cập nhật trong ≤ 1 ngày làm việc; tới lúc đó ghi nợ vào `../progress.md` (`Còn dở: nợ spec <SPEC-X>`).
+- **`Ready` là duyệt yêu cầu, không phải quyền thực thi (`C30`).** Một đợt hiện tại ở `../progress.md` ghi chỉ dẫn thật của người dùng, SPEC/task/AC, vùng file, phần loại trừ và điều kiện dừng; AI không tự cấp quyền bằng cách sửa block này.
+- Mặc định khi chưa nêu ranh giới đợt: **1 SPEC + 1 task**; làm → kiểm → báo cáo → dừng. Yêu cầu rõ toàn bộ spec/batch hữu hạn được thực hiện đủ mà không hỏi lại từng task; ghi chính xác phạm vi ấy. Plan, Frontier, Build Order và subagent không mở rộng quyền.
+- Chỉ dẫn hiện hành của người dùng được ưu tiên; đã duyệt rõ thì không hỏi lại. Yêu cầu triển khai spec `Draft` chưa chốt hành vi: nêu phần chặn và chốt kết quả cần đạt trước.
+- Code không theo được spec: dừng phần phụ thuộc, nêu chỗ lệch và đề xuất sửa; phần độc lập đã được giao vẫn tiếp tục được.
+- **Hotfix** được giao vẫn có đợt và điểm dừng như trên; được sửa code trước spec, nhưng cập nhật spec trong ≤ 1 ngày làm việc; trước đó ghi nợ vào `../progress.md` (`Còn dở: nợ spec <SPEC-X>`).
+- Còn `[~]` thì spec giữ `In progress`; chỉ loại AC khỏi phạm vi khi người dùng chốt thay đổi qua `../changes/`.
 
 ## Tài liệu phải sửa theo loại thay đổi
 

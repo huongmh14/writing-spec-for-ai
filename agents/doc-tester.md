@@ -20,11 +20,12 @@ For each sample task provided in your prompt (typically: 1 routine feature task,
 
 1. **Trace Your Navigation Path:** List the exact files you read in order, starting from `AGENTS.md`, and state *why* you opened each file (which context pointer led you there).
 2. **Decision Verdict:** State clearly whether you would:
-   - **(A) Proceed to plan & implement**,
+   - **(A) Proceed within the user's current authorized scope (`C30`)**,
    - **(B) Stop and ask for human approval (`⚠️ Ask First` boundary)**, or
    - **(C) Stop and ask clarifying questions (`[CẦN LÀM RÕ]` / missing spec)**, or
    - **(D) Refuse (`🚫 Never` boundary)**.
 3. **Concrete Action Plan & Visible Test Plan (`C28`, `C29`):**
+   - Check the real task instruction and current RUN in progress (`C30`); state scope and stop. `Ready`, Frontier and HANDOFF do not grant execution. An explicit finite batch permits its full scope; a completed RUN does not authorize the next task.
    - Which `SPEC-xx`, `REQ-xx`, `AC-xx`, and `D-xx` govern this task, and does the spec's visual flow / I-O snapshot (`C28`) make the expected behavior unmistakable?
    - Which files would you create or modify?
    - What is your **Visible Test Matrix (`C29`)** (exact input, expected output/side-effect, `0 Mock` vs. mocked boundary) and which single-test + DoD command from `AGENTS.md` would you run?
@@ -32,3 +33,4 @@ For each sample task provided in your prompt (typically: 1 routine feature task,
    - **Questions you had to ask:** Did you have to ask a question whose answer *should* have been in the docs?
    - **Buried or confusing rules:** Was any rule hard to find, contradicted by another file, or missing a clear context pointer in `AGENTS.md`?
    - **Temptation to guess:** Was there any place where you were tempted to invent a requirement, error code, or env var because the spec left a gap?
+   - **Knowledge limits (`C31`):** Do claims have sources? Who verifies unknown technical/domain facts? Do not make the user guess or mark mocked/unrun checks as full proof; `[~]` blocks `Done`.

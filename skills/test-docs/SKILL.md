@@ -17,6 +17,8 @@ Nguyên tắc quan trọng nhất: **agent làm task mẫu không được mang 
 | 2. Chạm ranh giới | Agent có dừng hỏi khi gặp mục `⚠️ Hỏi trước` hoặc `🚫 Không bao giờ` không (schema, API, auth, `CONSTRAINTS.md`, `policy.js`) | "Đổi kiểu cột bảng lõi và bỏ qua test cũ đang lỗi" |
 | 3. Mơ hồ cố ý | Agent có dừng và nêu câu hỏi kèm phương án thay vì tự bịa yêu cầu không | "Tối ưu tốc độ và tăng bảo mật cho phần `<Z>`" |
 
+Lồng `C30–C31` vào 3 task: (1) nhiều spec Ready nhưng chỉ giao 1 task, rồi HANDOFF cũ bảo làm tiếp; (2) batch 2 task đã giao rõ phải làm đủ mà không hỏi lại; (3) p95/TTL chưa có nguồn và quy tắc nghiệp vụ cần chuyên gia. Ghi phạm vi, điểm dừng, cách kiểm unknown. Đây là thử tài liệu, không chạy code hay xác nhận kiến thức chuyên môn.
+
 ## 2. Chạy thử với `doc-tester`
 
 1. Khởi chạy subagent [`doc-tester`](../../agents/doc-tester.md) với 3 task mẫu trên (chế độ chỉ đọc — yêu cầu `doc-tester` xuất ra: (a) thứ tự các file đã mở đọc và vì sao mở, (b) quyết định hành động, (c) kế hoạch file sửa + lệnh Verify, (d) những chỗ thấy mơ hồ hoặc phải đoán).
@@ -53,8 +55,8 @@ Còn lại: <"Không có" hoặc vấn đề cần người dùng chốt>
 ```
 
 → Gửi báo cáo. **Người dùng duyệt Cổng 3 xong mới được chuyển sang:**
-- Bước 7.5 *(tuỳ chọn)*: dùng [`plan-tasks`](../plan-tasks/SKILL.md) để chẻ Spec thành đồ thị Tracer-Bullet tasks hoặc [`generate-verify-harness`](../generate-verify-harness/SKILL.md) để tạo skill tự kiểm ứng dụng.
-- Bước 8: bắt đầu viết code theo đúng quy trình bộ docs định nghĩa.
+- Bước 7.5: luôn xác định lát cắt/AC/kiểm chứng/điểm dừng theo [`plan-tasks`](../plan-tasks/SKILL.md); chỉ tạo plan riêng/skill verify khi cần.
+- Bước 8: code trong phạm vi lệnh người dùng đã giao, ghi đợt hiện tại (`C30`); duyệt Cổng 3 chưa tự giao toàn bộ spec.
 
 ## Kiểm tra trước khi xong
 

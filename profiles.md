@@ -2,6 +2,8 @@
 
 Profile là điểm xuất phát để repo nhỏ không gánh chi phí docs của repo lớn. Chỉ là preset, tín hiệu mức 1–2 (principles §2) vẫn quyết định thêm gì.
 
+Mọi profile áp dụng `C30–C31`: phạm vi thực thi tách khỏi `Ready`, yêu cầu/kỹ thuật có cơ sở. Profile S không cần thêm file: ghi đợt hiện tại trong `AGENTS.md` và câu hỏi trong `docs/spec.md`/README; M/L dùng `docs/progress.md` và `decisions.md` hiện có.
+
 ## Profile S — Script, hạ tầng
 
 **Dấu hiệu:** < ~30 file, không có API công khai, thường là script, config, hạ tầng.
@@ -36,7 +38,7 @@ Profile là điểm xuất phát để repo nhỏ không gánh chi phí docs c�
 **Dấu hiệu:** Có API công khai, hoặc worker background, hoặc DB tự quản lý, hoặc orchestrator AI agent. Quy mô trung bình (~50–200 file).
 
 **File tối thiểu:**
-- Toàn bộ mức 0 (Core `C01–C29`):
+- Toàn bộ mức 0 (Core `C01–C31`):
   - `AGENTS.md` (đầy đủ theo template).
   - `README.md`.
   - `.env.example`.

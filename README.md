@@ -16,7 +16,7 @@ Turn any new or existing codebase into an evidence-backed, 3-gate specification 
   <a href="#installation">Installation</a> ·
   <a href="#quick-start--commands">Quick Start</a> ·
   <a href="#how-it-works--3-gate-workflow">3-Gate Workflow</a> ·
-  <a href="#3-tier-base-kit-core--packs--profiles">Base Kit (29 Core + 8 Packs)</a> ·
+  <a href="#3-tier-base-kit-core--packs--profiles">Base Kit (31 Core + 8 Packs)</a> ·
   <a href="#repository-structure">Structure</a>
 </p>
 
@@ -25,6 +25,10 @@ Turn any new or existing codebase into an evidence-backed, 3-gate specification 
 </p>
 
 </div>
+
+**Unreleased design update (2026-10-25):** `Ready` approves requirements; execution follows the user's actual bounded assignment. Default to one spec and one verifiable task, report evidence and stop. Honor explicitly assigned finite batches without repeated approval. Users review behavior and trade-offs; agents must source or verify technical claims and disclose unknowns (`C30–C31`).
+
+Read the [research and primary sources](references/research-controlled-execution.md), [before/after walkthrough](references/controlled-spec-demo.md), and [updated spec template](templates/docs/specs/_template.md). Markdown guides behavior; tool permissions and sandboxes provide enforcement.
 
 ---
 
@@ -41,7 +45,7 @@ Most AI-assisted projects fail in one of two ways: either the agent jumps straig
 | Agent quietly adds `@ts-ignore`, `eslint-disable`, or `.skip` to force CI green | **Floor Guard & Ratchets (`C23` + `CONSTRAINTS.md`)** block suppression comments and quality regressions |
 | Vague prose requirements (*"handle webhook retries gracefully"*) that humans rubber-stamp without picturing the product | **Visual Direction (`C28`)** (`🟢 Now / 🟡 Next / 🔴 Not Doing` Scope Radar, Mermaid flows, ASCII UI wireframes/JSON snapshots) + testable **EARS** `REQ-xx` |
 | Opaque background testing where the agent says *"All tests passed"* while mocking out real logic | **Visible Testing (`C29`)**: Pre-Code **Visible Test Matrix** + Post-Run **Test Execution Ledger** with explicit **Mock Disclosure (`0 Mock` vs. mocked boundary)** |
-| Every repository reinvents security, API, DB, UI, and agent conventions | **3-Tier Base Kit**: inherit 29 `Core` rules (`C01–C29`), attach 8 domain `Packs` (`PK-*`), and pick size `Profile` (`S / M / L`) |
+| Every repository reinvents security, API, DB, UI, and agent conventions | **3-Tier Base Kit**: inherit 31 `Core` rules (`C01–C31`), attach 8 domain `Packs` (`PK-*`), and pick size `Profile` (`S / M / L`) |
 | Author agent reviews its own specs with confirmation bias | **3 Native Subagents** (`spec-surveyor`, `spec-challenger`, `doc-tester`) isolate context and perform adversarial review |
 
 ---
@@ -63,7 +67,7 @@ The main orchestrator coordinates **9 specialized sub-skills** and **3 clean-con
 
 ### 🧱 3-Tier Reusable Base Kit (`Core` · `8 Packs` · `Profiles`)
 Stop copy-pasting boilerplate rules between repositories:
-- **Core (`C01–C29`)**: 29 universal rules (progressive disclosure, EARS, Floor Guard & Ratchets, Context Pointers, Official Source Citations, Adversarial Doubt, Ceiling Markers, Visual Direction & Option Cards, Visible Test Ledger).
+- **Core (`C01–C31`)**: 31 universal rules (progressive disclosure, EARS, Floor Guard & Ratchets, Context Pointers, Official Source Citations, Adversarial Doubt, Ceiling Markers, Visual Direction & Option Cards, Visible Test Ledger).
 - **8 Domain Packs (`packs/PK-*.md`)**: `PK-API`, `PK-AUTH`, `PK-RELEASE`, `PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`.
 - **Profiles (`S`, `M`, `L`)**: Scale ceremony from a 3-file script (`S`) to a multi-service monorepo (`L`) with `CONSTRAINTS.md` and `verify-<app>` harnesses.
 
@@ -73,7 +77,7 @@ Stop copy-pasting boilerplate rules between repositories:
 <td width="50%" valign="top">
 
 ### 📐 Deep Modules, Tracer Bullets & Verification Harnesses
-- **Hypothesis-Driven Frontier Interviews**: `propose-doc-design` states `HYPOTHESIS + CONFIDENCE %` and asks only unblocked **Frontier** questions with recommended `➡️ GUESS` answers.
+- **Evidence-Based Frontier Interviews**: `propose-doc-design` states `HYPOTHESIS + EVIDENCE + GAPS` and asks at most three questions about observable behavior, scope and trade-offs. Technical details can be delegated and verified.
 - **Deep Modules & Design It Twice (`write-design-doc`)**: Enforces high interface depth, explicit test seams, and official framework documentation citations (`C25`).
 - **Tracer-Bullet Task Graphs (`plan-tasks`) & Runtime Verification (`generate-verify-harness`)**: Slice approved specs into parallelizable vertical slices (`Blocked by`) and generate `.agents/skills/verify-<app>/SKILL.md` harnesses.
 
@@ -190,15 +194,15 @@ flowchart TD
     G2 -->|Approved| S7["7. test-docs (doc-tester)<br/>Clean-room dry-run of 3 sample tasks using ONLY the docs"]
     S7 --> G3{{"🛑 GATE 3: Human Approves Dry-Run Plan"}}
     G3 -->|Approved| S75["7.5. plan-tasks & generate-verify-harness<br/>Tracer-Bullet Task Graph (Blocked by) + verify-<app> skill"]
-    S75 --> S8["8. Implementation & Delta Evolution<br/>Parallel worktree execution & change-spec (CHG-xx)"]
+    S75 --> S8["8. Bounded Implementation<br/>Record assigned RUN scope; implement, verify, report and stop"]
 ```
 
 ---
 
 ## 3-Tier Base Kit (`Core` → `Packs` → `Profiles`)
 
-### 1. Tier 1 — Core Rules (`C01–C29`)
-29 universal rules inherited by every project (documented in [`references/base-kit.md`](./references/base-kit.md)):
+### 1. Tier 1 — Core Rules (`C01–C31`)
+31 universal rules inherited by every project (documented in [`references/base-kit.md`](./references/base-kit.md)):
 - **Structure, Truth & Lifecycle (`C01–C11`)**: Truth hierarchy (`decisions > specs > CONSTRAINTS > AGENTS > code`), 3 approval gates, AI permissions by spec status (`C03`), EARS + Given/When/Then traceability (`C04–C06`), append-only decisions (`C07`), Ubiquitous Language glossary (`C08`), delta `CHG-xx` (`C09`), 1-business-day hotfix debt rule (`C10`), and change-type-to-file matrix (`C11`).
 - **Execution, Safety & Hygiene (`C12–C22`)**: 3-tier boundaries, DoD, 3 error-handling laws (`C15`), `.env.example` + `config.md` + zero personal agent settings in git (`C16`), last-verified dates on gotchas (`C18`), side-effect verification for operational commands (`C19`), stack change as atomic change (`C20`), and multi-agent placement (`C21–C22`).
 - **Quality Bar, Context, Epistemics & Human-in-the-Loop Visibility (`C23–C29`)**:
@@ -209,6 +213,8 @@ flowchart TD
   - **`C27` Deliberate Simplification Ceiling Marker**: Mark intentional simplifications (`in-memory lock`, $O(n^2)$ scan) with `ceiling: <limit + upgrade path>`.
   - **`C28` Visual Direction & Option Cards**: Eliminate prose rubber-stamping via a **Scope Radar (`🟢 Now / 🟡 Next / 🔴 Not Doing`)**, **Mermaid User Journeys**, **Concrete I/O Snapshots** (ASCII wireframes/CLI/JSON), and **2–3 Visual Option Cards** when product direction is open.
   - **`C29` Visible Test Plan & Execution Ledger**: Eliminate black-box background testing via a Pre-Code **Visible Test Matrix** and a Post-Run **Visible Test Execution Ledger** with explicit **Mock Disclosure (`0 Mock` vs. mocked boundary)**.
+  - **`C30` Bounded Execution** (unreleased): One current RUN records actual user authority, task/AC scope, stop and evidence; readiness, dependency graphs and handoffs cannot extend it.
+  - **`C31` Provenance & Knowledge Limits** (unreleased): Separate verified facts, proposals and unknowns; do not invent thresholds or use agreement between AI reviewers as proof. Unverified `[~]` ACs prevent `Done`.
 
 ### 2. Tier 2 — 8 Domain Packs (`packs/PK-*.md`)
 
@@ -228,7 +234,7 @@ flowchart TD
 | Profile | Target Project Size | Included Artifacts | Gate Ceremony |
 | :--- | :--- | :--- | :--- |
 | **`S` (Small)** | CLI scripts, infra configs (`< ~30` files, no public API) | `AGENTS.md` (`≤ 60` lines), `README.md`, `.env.example`, optional single `docs/spec.md` |Lightweight |
-| **`M` (Medium)** | Production services, web apps, bots (`~50–200` files) | Full Level 0 (`C01–C29`) + `CONSTRAINTS.md` + `docs/specs/` (with Capability Map, Visual Flows & Visible Test Matrix) + matching `PK-*` packs + CI DoD | **3 Full Gates** |
+| **`M` (Medium)** | Production services, web apps, bots (`~50–200` files) | Full Level 0 (`C01–C31`) + `CONSTRAINTS.md` + `docs/specs/` (with Capability Map, Visual Flows & Visible Test Matrix) + matching `PK-*` packs + CI DoD | **3 Full Gates** |
 | **`L` (Large)** | Multi-service platforms, monorepos (`> 200` files) | Full Profile M + mandatory `CONSTRAINTS.md`, `docs/architecture/`, `docs/upgrade/`, `.agents/skills/verify-<app>/`, scoped rules, hooks, CODEOWNERS | **3 Full Gates + `spec-challenger` & `doc-tester`** |
 
 ---
@@ -267,7 +273,7 @@ writing-spec-for-ai/
 │   └── PK-AGENT.md                      #   Hard-refuse policy, read-only sandbox, prompt-injection defense
 ├── references/                          # Deep Engineering References
 │   ├── principles.md                    #   Progressive disclosure, EARS grammar, multi-agent matrix
-│   ├── base-kit.md                      #   Core rules registry (C01–C29), Pack architecture, override rules
+│   ├── base-kit.md                      #   Core rules registry (C01–C31), Pack architecture, override rules
 │   ├── examples.md                      #   Real-world production examples (REQ, AC, NFR, D-xx, plans)
 │   └── review-checklist.md              #   Gate 2 & Gate 3 quantitative audit rubric
 ├── templates/                           # Ready-to-Use Document & Adapter Templates

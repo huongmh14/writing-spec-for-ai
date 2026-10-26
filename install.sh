@@ -75,7 +75,7 @@ for ROOT in "${TARGET_ROOTS[@]}"; do
         SUB_DEST="$ROOT/$SUB"
         rm -rf "$SUB_DEST"
         mkdir -p "$SUB_DEST"
-        cp -r "$SOURCE_DIR/references" "$SOURCE_DIR/packs" "$SOURCE_DIR/agents" "$SOURCE_DIR/templates" "$SOURCE_DIR/profiles.md" "$SOURCE_DIR/LICENSE" "$SUB_DEST/"
+        cp -r "$SOURCE_DIR/references" "$SOURCE_DIR/packs" "$SOURCE_DIR/agents" "$SOURCE_DIR/templates" "$SOURCE_DIR/scripts" "$SOURCE_DIR/profiles.md" "$SOURCE_DIR/LICENSE" "$SUB_DEST/"
         sed \
             -e 's|\.\./\.\./references/|./references/|g' \
             -e 's|\.\./\.\./templates/|./templates/|g' \
@@ -102,6 +102,13 @@ if [ -d "$SOURCE_DIR/agents" ]; then
         echo "  [+] Installed subagents -> $ADIR"
     done
 fi
+
+for HDIR in "$HOME/.agents/hooks" "$HOME/.claude/hooks"; do
+    mkdir -p "$HDIR"
+    cp -f "$SOURCE_DIR/scripts/context-guard.ps1" "$SOURCE_DIR/scripts/context-guard.sh" "$HDIR/"
+    chmod +x "$HDIR/context-guard.sh" 2>/dev/null || true
+    echo "  [+] Installed Context & Token Guard Hook (C32) -> $HDIR"
+done
 
 echo ""
 echo "Done! Installed 10 skills + 3 subagents. Try asking your agent:"

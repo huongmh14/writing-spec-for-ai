@@ -2,6 +2,14 @@
 
 Mỗi phiên bản liệt kê ID luật đổi (Core `C-xx`, Pack `PK-…-Rnn`; sổ đăng ký: [references/base-kit.md](references/base-kit.md)). Dự án đang dùng base grep các ID này trong docs của mình để biết chỗ phải xem lại.
 
+## Chưa phát hành — 2026-10-26
+
+- **C30 — Quyền thực thi theo đợt & Checkpoint soạn thảo (`5a` / `5b` / `5c`):** `Ready`/plan không cấp quyền chạy backlog; mặc định 1 spec/1 task, có bằng chứng và điểm dừng. Khi viết bộ docs dự án, mỗi lượt chỉ viết 1 file lớn hoặc 1 cụm $\le 3$ file nhỏ liên quan rồi dừng chờ review (`5a` nền tảng -> dừng; `5b` đúng 1 `SPEC-xx.md` -> dừng; `5c` 1 design/plan -> dừng). Batch hữu hạn đã giao được làm đủ, không hỏi lại. Một block RUN trong progress; HANDOFF/subagent không mở rộng quyền.
+- **C31 — Nguồn & giới hạn hiểu biết:** bản đọc ngắn bằng hành vi; REQ/NFR có cơ sở và trạng thái kiểm chứng. Bỏ tự chấm confidence %, không bịa ngưỡng; AI kiểm kỹ thuật trong quyền đã giao, cần chuyên môn thì nêu cách kiểm và phần bị chặn.
+- **C32 — Auto-Caveman, Cảnh báo Đốt Token & Chắt lọc Tri thức (`scripts/context-guard.ps1` & `.sh`):** tự động kích hoạt giọng `caveman`, in banner cảnh báo `[CẢNH BÁO TOKEN & NGỮ CẢNH — C32]` và yêu cầu chắt lọc tri thức vào `docs/decisions.md` + `docs/progress.md` ($\le 5\text{ KB}$) + `docs/plans/HANDOFF.md` khi vượt ngưỡng hội thoại (`~30k tokens` / `120 KB` / `20 turns`), chuyển pha Cổng 3 -> Bước 8, hoặc `docs/progress.md > 5 KB` / `AGENTS.md > 150 dòng`. Tự động đăng ký hook `UserPromptSubmit` (`.claude/settings.json`) và `preToolUse` (`.cursor/hooks.json`) khi chạy `install.ps1` / `install.sh`.
+- **Sửa C03/C05/C13:** duyệt yêu cầu tách khỏi quyền chạy; `[~]` chưa đủ `Done`. Chỉ chi tiết hoá spec sắp làm, bỏ chỉ tiêu 10–25 REQ. Đổi nghĩa spec Ready qua change-spec.
+- Đồng bộ luồng, template, reviewer/tester, checklist; thêm [nghiên cứu](references/research-controlled-execution.md), [bản thử](references/controlled-spec-demo.md), eval 07–13 và kiểm cấu trúc (`scripts/validate.ps1` hỗ trợ cả cấu trúc repo nguồn lẫn cấu trúc phẳng đã cài).
+
 ## v1.3.0 — 2026-10-20
 
 ### Thêm (Giải quyết Điểm mù Định hướng & Kiểm thử Hộp đen)

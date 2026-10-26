@@ -3,12 +3,14 @@
 > Trạng thái: **Đã duyệt 2026-10-20**. GĐ1 xong ở `v1.0.0`, GĐ2 ở `v1.1.0`, kế thừa hệ sinh thái Plugin/Skill ở `v1.2.0`, nâng cấp Trực quan hoá Định hướng & Minh bạch Kiểm thử ở `v1.3.0` (xem [CHANGELOG.md](../CHANGELOG.md)).
 > Nguồn: khảo sát 9 repo thật (`D:\Workspace\VMU\*` + `D:\BotAutoTask`), đối chiếu với [principles.md](principles.md) và 7 Plugin / 210 Skill thực chiến.
 > File này là **sổ đăng ký ID Core (C-xx) và Pack (PK-…)** + lý do kế thừa. *Cách viết* vẫn nằm ở `principles.md`, `templates/`, `skills/`.
+> Bản sửa chưa phát hành 2026-10-26: thêm `C30–C32`, sửa `C03/C05/C13`; nghiên cứu và giới hạn bằng chứng ở [research-controlled-execution.md](research-controlled-execution.md). Không coi ngày duyệt bản cũ là đã duyệt bản sửa này.
+> Với Profile S, con trỏ `docs/progress.md` ở mọi luật/skill/adapter là block đợt ngay trong `AGENTS.md`; spec dùng `docs/spec.md`/README, các file bổ trợ chỉ đọc khi có. Không bắt repo nhỏ tạo thêm cây docs.
 
 ## Mục lục
 
 1. Khảo sát 9 dự án
 2. Tiêu chí "kế thừa 100%" và 4 tầng
-3. Tầng Core — kế thừa nguyên văn (`C01–C29`)
+3. Tầng Core — kế thừa nguyên văn (`C01–C32`)
 4. Tầng Tham số — khung cố định, giá trị riêng
 5. Lỗi lặp lại giữa các dự án (bằng chứng cho Core)
 6. Tầng Pack — kế thừa có điều kiện (`PK-*`)
@@ -60,7 +62,7 @@ Một thành phần vào **Core** khi đạt đủ cả 4 điều kiện:
 | **Pack** | 100% *khi bật* | Chọn pack theo tín hiệu, điền tham số | HTTP API, token/khoá, DB migration, observability, UI/E2E, job nền, phát hành Docker, AI agent |
 | **Dự án** | 0% | Viết mới | REQ nghiệp vụ, thuật ngữ, quyết định, kiến trúc |
 
-## 3. Tầng Core — kế thừa nguyên văn (`C01–C29`)
+## 3. Tầng Core — kế thừa nguyên văn (`C01–C32`)
 
 Cột "WSFA" cho biết luật nằm ở đâu trong bộ skill.
 
@@ -68,9 +70,9 @@ Cột "WSFA" cho biết luật nằm ở đâu trong bộ skill.
 |---|---|---|---|---|
 | C01 | Thứ tự nguồn sự thật | decisions > specs > AGENTS.md > code; skill ngoài thua docs dự án; mơ hồ thì dừng | Có — principles §1 | dashboard; notification claim "Single Source of Truth" ở 2 file (§5) |
 | C02 | Ba cổng duyệt | Đề xuất → docs → thử docs → mới code | Có — SKILL.md | dashboard |
-| C03 | **Quyền AI theo trạng thái spec** | Bảng trạng thái × được làm / không được làm. Không code khi spec `Draft`. Lệch spec thì đưa spec về trạng thái chưa duyệt | v1.0.0 — `templates/docs/specs/README.md` | notification `WORKFLOW.md` §1–2 |
+| C03 | **Quyền AI theo trạng thái spec** | `Ready` là yêu cầu đã duyệt, quyền thực thi phải có phạm vi theo `C30`. Không code khi spec `Draft`; lệch yêu cầu thì qua change-spec | `templates/docs/specs/README.md` | notification `WORKFLOW.md` §1–2; bản sửa kiểm soát đợt chạy |
 | C04 | Hệ ID + truy vết | `SPEC-X`, `X-Rnn`, `X-ACnn`, `D-xx`, `P-xx`, `CHG-xx`; tên test chứa AC-ID; commit `[SPEC-X]`; không đánh số lại | Có — principles §3 | dashboard; cdn `EC-xx` không có ID xuyên suốt nên không truy được test |
-| C05 | Trạng thái AC | `[ ]` / `[x]` (CI xanh trong chính PR) / `[~]` (lý do + cách đóng) | Có | dashboard |
+| C05 | Trạng thái AC | `[ ]` chưa đạt; `[x]` có bằng chứng test xanh; `[~]` chưa kiểm chứng, có lý do + người/cách đóng, chặn `Done` | Có | dashboard; phân biệt hoàn thành và chưa xác minh |
 | C06 | Mục bắt buộc của spec | Mục tiêu, trong/ngoài phạm vi (không rỗng), REQ EARS, NFR hoặc `N/A — lý do`, biên, AC, kiểm e2e, câu hỏi mở ("Không có") | Có — `templates/docs/specs/_template.md` | cdn, notification: spec không có câu hỏi mở |
 | C07 | Quyết định append-only | Cột trạng thái, định danh hiện hành, P-xx | Có — `templates/docs/decisions.md` | dashboard |
 | C08 | Thuật ngữ | Thuật ngữ / định nghĩa / không gọi là / tên trong code | Có | — |
@@ -78,7 +80,7 @@ Cột "WSFA" cho biết luật nằm ở đâu trong bộ skill.
 | C10 | **Ngoại lệ hotfix** | Hotfix được sửa code trước; spec phải cập nhật trong ≤ 1 ngày làm việc; nợ spec ghi vào `progress.md` tới khi đóng | v1.0.0 — `templates/docs/specs/README.md` | notification `WORKFLOW.md` §13 |
 | C11 | **Ma trận loại thay đổi → file phải sửa** | Các dòng cố định: feature mới, đổi hành vi, contract công khai, schema, cấu hình/env, breaking, quyết định, khuôn mẫu code, **đổi stack** | v1.0.0 — `templates/docs/specs/README.md` | cdn `WORKFLOW` R8, notification §14 |
 | C12 | Ranh giới 3 tầng — phần chung | 🚫 Không bao giờ: secret, `.env`, token, log credential, force push, `--no-verify`, tự merge. ⚠️ Hỏi trước: schema, contract, auth, mặc định bảo mật, thêm dependency, xoá dữ liệu/migration, sửa CI/CODEOWNERS/AGENTS. ✅ Luôn: viết test cùng code, chạy DoD trước khi báo xong | Có — `templates/AGENTS.md` | mọi repo |
-| C13 | Khung DoD | Lệnh xanh + AC + cập nhật trạng thái docs | Có | — |
+| C13 | Khung DoD | Lệnh xanh + bằng chứng AC + cập nhật docs; chỉ `Done` khi mọi AC còn hiệu lực của spec `[x]`, không chỉ AC của đợt. Xong đợt `C30` thì báo cáo và dừng; `[~]` không là pass | Có | — |
 | C14 | Commit | `type(scope): mô tả [SPEC-X]` | Có | dashboard, notification, BotAutoTask đã theo; cdn, khaosat, citad chưa theo |
 | C15 | **3 luật xử lý lỗi** | Không nuốt lỗi im lặng; message lỗi nội bộ không trả cho phía ngoài; việc best-effort được bỏ qua lỗi nhưng phải log kèm ngữ cảnh | v1.0.0 — `templates/AGENTS.md` | cdn `CONVENTIONS.md` §Error Handling — áp được cho mọi stack |
 | C16 | **Secret & cấu hình** | `.env.example` (đúng tên này) đủ mọi khoá, không có giá trị thật; `.env` bị ignore; deny-rule chặn agent đọc `.env`; **file quyền cá nhân của agent không commit** | v1.0.0 — `templates/AGENTS.md`, `adapters/claude-settings.json`, `docs/reference/config.md` | khaosat commit `.claude/settings.json` chứa mật khẩu DB + đường dẫn máy; citad-res, deploy-tool dùng tên `.env-example` |
@@ -95,6 +97,9 @@ Cột "WSFA" cho biết luật nằm ở đâu trong bộ skill.
 | C27 | **Đánh dấu trần đơn giản hoá (`Ceiling Marker`)** | Khi thiết kế hoặc code cố tình chọn giải pháp đơn giản có giới hạn đã biết (in-memory lock, quét $O(n^2)$, polling), bắt buộc gắn ghi chú `ceiling:` nêu rõ ngưỡng chịu tải tối đa và đường nâng cấp để không bị nhầm là lỗi thiết kế | v1.2.0 — `templates/AGENTS.md`, `skills/write-design-doc` | Kế thừa từ plugin `ponytail` |
 | C28 | **Trực quan hoá Định hướng & Phương án (`Visual Direction & Option Cards`)** | Cấm trình bày định hướng chỉ bằng bảng chữ khô khan dễ gây "gật đầu mù" (*rubber-stamping*). Ở Cổng 1 (`propose-doc-design`) và trong mỗi `SPEC-xx`, bắt buộc có: (1) **Scope Radar (`🟢 Làm ngay (MVP) / 🟡 Đợt kế (Phase 2) / 🔴 Không làm`)**; (2) **Luồng tương tác trực quan (Mermaid User Journey / State Flow)**; (3) **Snapshot I/O cụ thể** (ASCII UI wireframe, CLI output, hoặc JSON request/response mẫu); (4) **2–3 Visual Option Cards** khi hướng phát triển còn mở | v1.3.0 — `skills/propose-doc-design`, `skills/write-spec`, `templates/doc-design-proposal.md`, `templates/docs/specs/_template.md` | Kế thừa từ `brainstorming`, `idea-refine`, `archify` — giải quyết lỗi AI code đúng chữ nhưng trật ý người dùng |
 | C29 | **Minh bạch hoá & Trực quan hoá Kiểm thử (`Visible Test Plan & Execution Ledger`)** | Cấm chạy test ngầm dạng hộp đen rồi chỉ báo *"All tests passed"*. Bắt buộc 2 lớp minh bạch: (1) **Trước khi code (`Visible Test Matrix` trong Spec & Plan):** bảng liệt kê rõ mỗi `AC-ID` sẽ bơm `Input cụ thể` gì, kỳ vọng `Output & tác dụng phụ` gì, và `Tầng & Độ thật` (**0 Mock** hay **Mock thành phần nào**); (2) **Sau khi chạy test (`Visible Test Execution Ledger` trong báo cáo hoàn thành / PR / `verify-<app>`):** in bảng kết quả thực tế cho từng `AC-ID` kèm **Mock Disclosure** tường minh | v1.3.0 — `skills/write-spec`, `skills/plan-tasks`, `skills/generate-verify-harness`, `templates/AGENTS.md`, `templates/adapters/pull_request_template.md` | Giải quyết điểm mù lập trình viên không biết AI đã test cái gì hay tự mock hết logic thật |
+| C30 | **Quyền thực thi theo đợt (Docs & Code)** | Lệnh người dùng cấp phạm vi, spec/plan/Cổng 1 chỉ mô tả. **Khi viết docs (Bước 5):** chia thành từng đợt nhỏ (**1 file lớn hoặc 1 cụm ≤ 3 file liên quan**: 5a `AGENTS.md` + `glossary/decisions` → dừng chờ review; 5b **đúng 1 file `SPEC-xx`** + `specs/README.md` → dừng chờ review; 5c **1 file design/plan** → dừng chờ review); cấm xả toàn bộ cây `docs/` trong 1 lượt. **Khi viết code (Bước 8):** mặc định 1 spec + 1 task/AC kiểm được; ghi một RUN hiện tại trong `docs/progress.md`: nguồn chỉ dẫn thật, task/AC, vùng file, ngoài phạm vi, điểm dừng, trạng thái, bằng chứng. Không tự lấy task/spec tiếp | Chưa phát hành — `SKILL.md`, `templates/AGENTS.md`, `skills/write-spec`, `skills/write-design-doc`, `skills/plan-tasks`, `templates/docs/progress.md` | [Nguồn sơ cấp & thiết kế](research-controlled-execution.md) |
+| C31 | **Nguồn & giới hạn hiểu biết** | REQ/NFR và khẳng định kỹ thuật ảnh hưởng quyết định phải có cơ sở, phân biệt `Đã xác minh / Đề xuất / Chưa biết`. Người dùng chốt hành vi/phạm vi/đánh đổi; AI nghiên cứu/thử nghiệm kỹ thuật trong quyền đã giao. Không tự chấm %, bịa ngưỡng, dùng N/A che unknown hoặc coi AI thứ hai là chứng cứ. Unknown rủi ro cao cần nguồn/thử nghiệm/người có chuyên môn; chỉ chặn nhánh phụ thuộc | Chưa phát hành — `skills/write-spec`, `skills/propose-doc-design`, mẫu spec/decisions | [Nguồn sơ cấp & thiết kế](research-controlled-execution.md) |
+| C32 | **Cảnh báo Ngốn Token, Auto-Caveman & Chắt lọc Tri thức (`Context & Token Budget Guard`)** | Khi ngữ cảnh phiên dài ($\ge 20$ lượt, transcript $\ge 120\text{ KB} \approx 30\text{k tokens}$, hoặc chuyển pha Cổng 3 → Bước 8 Code) hoặc `docs/progress.md > 5 KB` (`C17`) / `AGENTS.md > 150 dòng` (`C24`): (1) **Tự động kích hoạt `Auto-Caveman`** (bỏ câu dẫn/xã giao, trả lời thẳng `[Kết quả/Nguyên nhân] → [Code/Lệnh] → [Bước tiếp]`, giữ nguyên 100% code/lệnh/AC-ID/từ phủ định); (2) **In Cảnh báo Đốt Token (`[CẢNH BÁO TOKEN & NGỮ CẢNH — C32]`)** báo rõ ước lượng token/lượt để người dùng kiểm tra; (3) **Chắt lọc tri thức quan trọng** vào `docs/decisions.md` (`D-xx`), `docs/progress.md` ($\le 5\text{ KB}$, chuyển lịch sử cũ sang `progress-archive/`) và `docs/plans/HANDOFF.md` trước khi chạy `/compact` hoặc mở phiên mới | Chưa phát hành — `templates/AGENTS.md`, `templates/adapters/claude-settings.json`, `scripts/context-guard.ps1` | Kế thừa từ `caveman`, `caveman-compress` — chống Context Rot và chi phí token luỹ tiến $O(N^2)$ |
 
 ## 4. Tầng Tham số — khung cố định, giá trị riêng
 

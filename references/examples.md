@@ -50,7 +50,7 @@ Kiến trúc/lõi phương tiện: ARCH, REPO, MOD, DATA, API, NFR, ROADMAP, DOC
 Miền năng lực:            RBAC, AUTH, MFA, PASSKEY, ADMIN, UIKIT, WIDGET, REPORT, DATASET, NOTIF, INTEG, CLI
 ```
 
-Quy tắc rút ra: mỗi spec trả lời được "ai dùng tính năng này để làm gì"; spec phương tiện (REPO, API, NFR) chỉ dành cho cái mọi module cùng phải theo. Đơn vị tự nhiên: 1 spec ≈ 10–25 REQ ≈ 1–3 giai đoạn làm việc.
+Quy tắc rút ra: mỗi spec trả lời được "ai dùng tính năng này để làm gì"; không có số REQ tối thiểu. Con số trong ví dụ lịch sử không là mục tiêu phải điền cho đủ: chỉ viết chi tiết phần sắp làm (`C30`, `C31`). Bản thử dễ đọc: [controlled-spec-demo.md](controlled-spec-demo.md).
 
 ## 6. Plan theo PR (docs/plans/M6.md, rút gọn)
 

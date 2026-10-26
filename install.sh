@@ -103,12 +103,6 @@ if [ -d "$SOURCE_DIR/agents" ]; then
     done
 fi
 
-for HDIR in "$HOME/.agents/hooks" "$HOME/.claude/hooks"; do
-    mkdir -p "$HDIR"
-    cp -f "$SOURCE_DIR/scripts/context-guard.ps1" "$SOURCE_DIR/scripts/context-guard.sh" "$HDIR/"
-    chmod +x "$HDIR/context-guard.sh" 2>/dev/null || true
-    echo "  [+] Installed Context & Token Guard Hook (C32) -> $HDIR"
-done
 
 echo ""
 echo "Done! Installed 10 skills + 3 subagents. Try asking your agent:"

@@ -1,12 +1,12 @@
 # PK-AUTH — Token, khoá, chữ ký
 
 > Tín hiệu bật: Có xác thực, API key, webhook, hoặc token
-> Nguồn: cdn, notification-service, dashboard, BotAutoTask
+> Gốc ý tưởng (skill/repo tham khảo nội bộ, không phải bằng chứng): cdn, notification-service, dashboard, BotAutoTask
 
 ## Tham số
 
 | Tham số | Mặc định | Mô tả |
-|---|---|---|---|
+|---|---|---|
 | `{hash-algo}` | `bcrypt` hoặc `argon2` | Thuật toán hash cho secret/khoá |
 | `{salt}` | - | Salt dùng khi hash (không hardcode) |
 | `{token-typ-claim}` | `typ` | Claim trong JWT chỉ định loại token (access/refresh/api-key) |

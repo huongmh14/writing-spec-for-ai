@@ -21,8 +21,8 @@ Nguồn sự thật về yêu cầu. Quyết định ở `../decisions.md`, thu�
 | `Done` | Phân tích lỗi; sửa đúng hành vi đã chốt khi có đợt sửa lỗi được giao | Tự bắt đầu sửa; đổi hành vi khi chưa có `../changes/CHG-xx` được duyệt |
 | `As-built` | Ghi bằng chứng, nêu hành vi đáng ngờ vào câu hỏi mở | Coi code hiện có là chuẩn; "sửa cho hợp lý" |
 
-- **`Ready` là duyệt yêu cầu, không phải quyền thực thi (`C30`).** Một đợt hiện tại ở `../progress.md` ghi chỉ dẫn thật của người dùng, SPEC/task/AC, vùng file, phần loại trừ và điều kiện dừng; AI không tự cấp quyền bằng cách sửa block này.
-- Mặc định khi chưa nêu ranh giới đợt: **1 SPEC + 1 task**; làm → kiểm → báo cáo → dừng. Yêu cầu rõ toàn bộ spec/batch hữu hạn được thực hiện đủ mà không hỏi lại từng task; ghi chính xác phạm vi ấy. Plan, Frontier, Build Order và subagent không mở rộng quyền.
+- **`Ready` là duyệt yêu cầu, không phải quyền thực thi (quyền thực thi theo đợt).** Một đợt hiện tại ở `../progress.md` ghi chỉ dẫn thật của người dùng, SPEC/task/AC, vùng file, phần loại trừ và điều kiện dừng; AI không tự cấp quyền bằng cách sửa block này.
+- Mặc định khi chưa nêu ranh giới đợt: **1 SPEC + 1 task**; làm → kiểm → báo cáo → dừng. Yêu cầu rõ toàn bộ spec/batch hữu hạn được thực hiện đủ mà không hỏi lại từng task; ghi chính xác phạm vi ấy. Plan, danh sách task sẵn sàng, thứ tự xây dựng và subagent không mở rộng quyền.
 - Chỉ dẫn hiện hành của người dùng được ưu tiên; đã duyệt rõ thì không hỏi lại. Yêu cầu triển khai spec `Draft` chưa chốt hành vi: nêu phần chặn và chốt kết quả cần đạt trước.
 - Code không theo được spec: dừng phần phụ thuộc, nêu chỗ lệch và đề xuất sửa; phần độc lập đã được giao vẫn tiếp tục được.
 - **Hotfix** được giao vẫn có đợt và điểm dừng như trên; được sửa code trước spec, nhưng cập nhật spec trong ≤ 1 ngày làm việc; trước đó ghi nợ vào `../progress.md` (`Còn dở: nợ spec <SPEC-X>`).

@@ -1,13 +1,13 @@
 # Bản thử — giao AI một phần việc có thể kiểm tra
 
-Đây là **ví dụ giả lập**, không phải ứng dụng đã có trong repo. Lời giao việc mẫu bên dưới không phải quyền thực thi thật. Quy tắc: [C30–C31 trong base-kit](base-kit.md); cơ sở: [nghiên cứu](research-controlled-execution.md).
+Đây là **ví dụ giả lập**, không phải ứng dụng đã có trong repo. Lời giao việc mẫu bên dưới không phải quyền thực thi thật. Quy tắc: **Quyền thực thi theo đợt** (`C30`) và **Nguồn & giới hạn hiểu biết** (`C31`) trong [base-kit](base-kit.md); cơ sở: [nghiên cứu](research-controlled-execution.md).
 
 ## Trước và sau
 
 | Trước | Sau bản sửa |
 |---|---|
 | Các spec Ready, AI chạy hết danh sách | Chọn một hành vi đầu tiên, ghi task/AC và điểm dừng |
-| AI đặt p95, rate limit cho đủ mẫu | Có nguồn/số đo hoặc ghi Chưa biết và cách xác minh |
+| AI đặt p95, rate limit cho đủ mẫu | Có nguồn/số đo hoặc gắn nhãn `Chưa biết` kèm cách xác minh |
 | AI tự viết kỳ vọng, test xanh và báo xong | Đối chiếu ví dụ đã chốt; nêu mock và điều chưa kiểm |
 
 ## Mẫu spec để người dùng đọc trước
@@ -20,17 +20,17 @@
 - **Điều chưa biết:** tải lớn chưa đo, chưa cam kết p95; lưu giữa hai phiên cần chốt riêng, không tự suy ra từ chữ Lưu.
 - **Bạn chốt:** hành vi và hai ví dụ trên. AI chọn cách cài đặt sẵn có và chứng minh kết quả; bạn không phải chọn thuật toán.
 
-| ID | Yêu cầu | Nguồn / trạng thái |
+| ID | Yêu cầu | Nhãn nguồn gốc |
 |---|---|---|
-| NOTES-R01 | Khi lưu nội dung hợp lệ, hệ thống MUST thêm và hiển thị một ghi chú. | Ví dụ hành vi giả lập đã chốt cho bài thử; không là dữ kiện repo |
-| NOTES-R02 | Nếu nội dung chỉ có dấu cách, hệ thống MUST báo lỗi và không thêm ghi chú. | Ví dụ hành vi giả lập đã chốt cho bài thử |
+| NOTES-R01 | Khi lưu nội dung hợp lệ, hệ thống MUST thêm và hiển thị một ghi chú. | `Người dùng chốt` — ví dụ hành vi giả lập cho bài thử; không là dữ kiện repo |
+| NOTES-R02 | Nếu nội dung chỉ có dấu cách, hệ thống MUST báo lỗi và không thêm ghi chú. | `Người dùng chốt` — ví dụ hành vi giả lập cho bài thử |
 
 | AC | Cho / Khi / Thì | Cách kiểm | Trạng thái |
 |---|---|---|---|
 | NOTES-AC01 | Danh sách rỗng / lưu `Mua sữa` / có đúng một dòng `Mua sữa` | Thao tác UI, kiểm danh sách | `[ ]` — chưa chạy |
 | NOTES-AC02 | Có một dòng / lưu `   ` / thấy lỗi, vẫn một dòng | Thao tác UI, kiểm số dòng trước/sau | `[ ]` — chưa chạy |
 
-**P-01 — chưa biết:** khả năng chịu tải. Cần chốt tải dự kiến và đo trên môi trường nêu rõ. Chặn tuyên bố hiệu năng; không chặn hai hành vi độc lập trên.
+**P-01 — `Chưa biết`:** khả năng chịu tải. Cách xác minh: người dùng chốt tải dự kiến, AI đo trên môi trường nêu rõ. Chặn tuyên bố hiệu năng; không chặn hai hành vi độc lập trên.
 
 ## Đợt thực thi minh hoạ
 

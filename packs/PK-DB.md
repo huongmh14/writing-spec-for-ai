@@ -1,7 +1,7 @@
 # PK-DB — Database, Schema & Migration
 
 > Tín hiệu bật: Có cơ sở dữ liệu tự quản lý (PostgreSQL, MySQL, SQLite/D1, MongoDB…), ORM/query builder (Kysely, Prisma, EF Core, SQLAlchemy), hoặc thư mục `migrations/`
-> Nguồn: cdn, notification-service, dashboard, khaosatvmu, BotAutoTask + skill `migration`, `deprecation-and-migration`, `performance-optimization`
+> Gốc ý tưởng (skill/repo tham khảo nội bộ, không phải bằng chứng): cdn, notification-service, dashboard, khaosatvmu, BotAutoTask + skill `migration`, `deprecation-and-migration`, `performance-optimization`
 
 ## Tham số
 
@@ -17,7 +17,7 @@
 
 | ID | REQ |
 |---|---|
-| PK-DB-R01 | Khi thay đổi schema không tương thích ngược (đổi tên cột, đổi kiểu, xoá cột/bảng đang được đọc), hệ thống MUST thực hiện theo chuỗi **Expand → Migrate → Verify → Contract**, trong đó bước xoá (`Contract`) tách sang PR/release sau khi toàn bộ code đọc/ghi đã chuyển sang cấu trúc mới. |
+| PK-DB-R01 | Khi thay đổi schema không tương thích ngược (đổi tên cột, đổi kiểu, xoá cột/bảng đang được đọc), hệ thống MUST thực hiện theo chuỗi **Expand–Migrate–Contract** (Mở rộng → Chuyển dữ liệu, kiểm chứng ngay trong bước này → Thu gọn; xem [glossary](../references/glossary.md)), trong đó bước xoá (`Contract`) tách sang PR/release sau khi toàn bộ code đọc/ghi đã chuyển sang cấu trúc mới. |
 | PK-DB-R02 | Khi chạy `{migrate-cmd}` hoặc `{seed-cmd}` nhiều lần liên tiếp trên cùng môi trường, hệ thống MUST lũy đẳng (idempotent): không sinh lỗi, không tạo bản ghi trùng lặp, và trả mã thoát `≠ 0` nếu kết nối hoặc câu lệnh SQL thất bại. |
 | PK-DB-R03 | Trong khi một DB transaction đang mở, hệ thống MUST NOT thực hiện lời gọi mạng ra bên ngoài (HTTP API, gửi email/webhook, hàng đợi bên ngoài) và thời gian giữ transaction MUST ≤ `{max-tx-ms}` ms. |
 | PK-DB-R04 | Khi truy vấn danh sách hoặc xử lý hàng loạt trên bảng có thể tăng trưởng theo thời gian, hệ thống MUST giới hạn số bản ghi mỗi lần đọc/ghi (`LIMIT` ≤ `{default-batch-size}`) và tránh truy vấn lặp $N+1$ trong vòng lặp. |
@@ -53,8 +53,8 @@
 ## Mục khảo sát bổ sung (cho survey-project)
 
 - Dự án dùng DB engine nào, ORM/query builder nào?
-- Lệnh `{migrate-cmd}` và `{seed-cmd}` thực chất làm gì? Chạy thử hoặc đọc code xem có nuốt lỗi trả exit 0 không (bài học C19)?
-- Đã có migration nào sửa đè lên file migration cũ hoặc `DROP` trực tiếp không qua Expand–Contract chưa?
+- Lệnh `{migrate-cmd}` và `{seed-cmd}` thực chất làm gì? Chạy thử hoặc đọc code xem có nuốt lỗi trả exit 0 không (bài học **Kiểm tác dụng lệnh vận hành**, `C19`)?
+- Đã có migration nào sửa đè lên file migration cũ hoặc `DROP` trực tiếp không qua Expand–Migrate–Contract chưa?
 - Có chỗ nào gọi `fetch` / gửi mail / bắn queue bên trong `db.transaction(...)` không?
 
 ## Gotchas
@@ -62,5 +62,5 @@
 | Triệu chứng | Nguyên nhân | Cách tránh | Kiểm lần cuối |
 |---|---|---|---|
 | Pool kết nối DB cạn kiệt khi dịch vụ bên thứ ba (SMTP/Webhook) chậm | Gọi HTTP/SMTP bên trong `db.transaction()`, giữ lock và connection chờ mạng | Tách bước gọi mạng ra sau khi transaction đã commit hoặc đẩy qua bảng outbox / job nền | 2026-10-20 |
-| Deploy zero-downtime bị lỗi 500 trong vài phút lúc chuyển giao | Migration `RENAME`/`DROP` cột ngay khi container bản cũ vẫn đang chạy | Áp dụng Expand–Contract: thêm cột mới ở PR 1, xoá cột cũ ở PR 2 sau khi rollout xong | 2026-10-20 |
+| Deploy zero-downtime bị lỗi 500 trong vài phút lúc chuyển giao | Migration `RENAME`/`DROP` cột ngay khi container bản cũ vẫn đang chạy | Áp dụng Expand–Migrate–Contract: thêm cột mới ở PR 1, xoá cột cũ ở PR 2 sau khi rollout xong | 2026-10-20 |
 | `{migrate-cmd}` báo thành công trên CI nhưng bảng mới không tồn tại | Script wrapper bắt `catch` chỉ `console.error` rồi thoát bình thường (exit 0) | Kiểm tra tác dụng thật trên schema (`information_schema` / `sqlite_master`) trong AC | 2026-10-20 |

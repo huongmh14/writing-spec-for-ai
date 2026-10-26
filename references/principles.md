@@ -1,6 +1,8 @@
 # Nguyên tắc tài liệu cho AI
 
-Tổng hợp từ: phân tích repo `vmu-tools/dashboard`; GitHub "How to write a great agents.md" (2.500 repo); Anthropic "Claude Code best practices", "Effective context engineering", "Skill authoring best practices"; GitHub Spec Kit; AWS Kiro; OpenSpec; BMAD; EARS; ADR/MADR; Diátaxis. Nguồn đầy đủ ở §8.
+Tổng hợp từ: phân tích repo `vmu-tools/dashboard` (repo nội bộ); GitHub "How to write a great agents.md" (2.500 repo); Anthropic "Claude Code best practices", "Effective context engineering", "Skill authoring best practices"; GitHub Spec Kit; AWS Kiro; OpenSpec; BMAD; EARS; ADR/MADR; Diátaxis. Nguồn đầy đủ ở §8. Thuật ngữ kit: [glossary.md](glossary.md).
+
+> Các ngưỡng số trong file (AGENTS.md ≤ ~150 dòng, file đọc mỗi phiên ≤ ~5 KB, hotfix ≤ 1 ngày làm việc, spec > ~300 dòng…) là **quy ước của bộ kit**, không có nguồn đo lường. Bài GitHub (2.500 repo) khuyên viết AGENTS.md ngắn gọn nhưng không đưa con số.
 
 ## Mục lục
 
@@ -47,7 +49,7 @@ flowchart TD
 
 **Chuỗi truy vết:** `D-xx → XXX-Rnn → XXX-ACnn → tên test → commit [SPEC-XXX] → PR → progress`.
 
-**Thứ tự nguồn sự thật:** decisions > specs > AGENTS.md > code hiện có. Skill/hướng dẫn ngoài thua tài liệu dự án.
+**Thứ tự nguồn sự thật:** định nghĩa chuẩn ở **Thứ tự nguồn sự thật** (`C01`) trong [base-kit.md §3](base-kit.md); không chép lại ở đây.
 
 ---
 
@@ -73,8 +75,8 @@ flowchart TD
 | 0.14 | **Tiêu chí cắt** | Mỗi dòng: "bỏ đi agent có làm sai không?" Không thì xoá. AGENTS.md ≤ ~150 dòng | Dài thì luật quan trọng bị chìm |
 | 0.15 | **Quyền AI theo trạng thái spec** | Bảng trạng thái × được làm / không được làm trong `docs/specs/README.md`; không code spec `Draft`; hotfix sửa spec trong ≤ 1 ngày làm việc | Trạng thái chỉ có nghĩa khi gắn với việc agent được phép làm |
 | 0.16 | **Loại thay đổi → file phải sửa** | Bảng trong `docs/specs/README.md`, gồm dòng "đổi stack" | Docs lệch code vì không ai biết phải sửa file nào |
-| 0.17 | **Trực quan hoá định hướng & phương án (`C28`)** | Scope Radar (`🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm`), Visual Option Cards (2–3 hướng kèm sơ đồ Mermaid + ASCII wireframe/I-O mẫu) | Chống "gật đầu mù" trước bảng chữ dài khiến AI code lệch ý người dùng |
-| 0.18 | **Minh bạch hoá & trực quan hoá kiểm thử (`C29`)** | Ma trận Test Minh bạch trong spec (`Input cụ thể / Output kỳ vọng / Tầng & Độ thật: 0 Mock hay Mock gì`) + Bảng Bằng chứng Chạy Test sau khi code | Chống "test hộp đen ngầm" chỉ báo pass mà lập trình viên không biết AI đã test cái gì |
+| 0.17 | **Trình bày định hướng bằng hình** (`C28`) | Scope Radar (`🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm`), thẻ phương án — Option Card (2–3 hướng kèm sơ đồ Mermaid + ASCII wireframe/I-O mẫu) | Chống "gật đầu mù" trước bảng chữ dài khiến AI code lệch ý người dùng |
+| 0.18 | **Bằng chứng test hiển thị** (`C29`) | Ma trận Test Minh bạch trong spec (`Input cụ thể / Output kỳ vọng / Tầng & Độ thật: 0 Mock hay Mock gì`) + Bảng Bằng chứng Chạy Test sau khi code | Chống "test hộp đen ngầm" chỉ báo pass mà lập trình viên không biết AI đã test cái gì |
 
 ### Mức 1 — Thêm khi có tín hiệu
 
@@ -94,7 +96,7 @@ flowchart TD
 | **Nâng cấp / tương thích** | Có dự án phía dưới | `docs/upgrade/<ver>.md` bổ sung theo từng PR (schema / env / API công khai); `compatibility.md`; CI bắt buộc khi đổi schema |
 | **Đối chiếu tài liệu nguồn** | Spec dựng từ PRD/docx | Bảng mục nguồn → SPEC/REQ; mục "phần lệch so với nguồn" |
 | **ADR đầy đủ + định danh hiện hành** | Quyết định có ≥ 2 phương án đáng kể; định danh đổi nhiều lần | `docs/adr/D-xx-<slug>.md` (bối cảnh, lựa chọn, kết quả, hệ quả); bảng "định danh hiện hành" (org, scope, registry, domain) một chỗ |
-| **Mô hình đe doạ** | Auth, phân quyền, dữ liệu cá nhân, thanh toán | Bảng tài sản / mối đe doạ (STRIDE) / biện pháp / REQ-AC |
+| **Mô hình đe doạ** | Auth, phân quyền, dữ liệu cá nhân, thanh toán | Bảng tài sản / mối đe doạ (STRIDE — Microsoft, Kohnfelder & Garg 1999) / biện pháp / REQ-AC |
 | **Fake/stub cho AC phụ thuộc ngoài** | AC cần dịch vụ bên ngoài | Fake chạy được trong CI; test tích hợp bỏ qua ở local khi thiếu dịch vụ nhưng **thất bại** trên CI |
 | **Bảo mật tài liệu** | Repo có nhiều người đóng góp | AGENTS.md, skill, rule, hook nằm dưới CODEOWNERS; không chép nội dung chưa tin cậy (issue, web) vào docs; deny-rules chặn đọc `.env` thay vì chỉ viết văn xuôi |
 
@@ -129,7 +131,7 @@ flowchart TD
    - Lỗi: `Nếu <điều kiện không mong muốn>, thì hệ thống MUST …`
    - Tuỳ chọn: `Khi bật <tính năng>, hệ thống MUST …`
 5. AC *Cho / Khi / Thì* với dữ liệu cụ thể; mỗi REQ ≥ 1 AC; có AC cho lỗi và biên.
-6. Số thay tính từ khi có nguồn yêu cầu hoặc số đo kèm điều kiện (`C31`); không tự đặt p95/rate limit cho đủ mẫu. Chưa biết → câu hỏi mở và cách kiểm chứng, không là cam kết.
+6. Số thay tính từ khi có nguồn yêu cầu hoặc số đo kèm điều kiện (**Nguồn & giới hạn hiểu biết**, `C31`); không tự đặt p95/rate limit cho đủ mẫu. Chưa biết → câu hỏi mở và cách kiểm chứng, không là cam kết.
 7. NFR luôn có mặt: hiệu năng, bảo mật, giới hạn, khả dụng, quan sát, i18n, a11y, trạng thái UI. Không áp dụng → `N/A — lý do`; Draft chưa rõ → `Chưa biết — P-xx + cách xác minh + phần bị chặn`.
 8. "Ngoài phạm vi" không được rỗng.
 9. Một sự thật một chỗ; contract máy đọc là nguồn thật, spec link tới.
@@ -139,8 +141,14 @@ flowchart TD
 13. Spec `Ready` không nối thêm phần lớn; tạo spec con hoặc change proposal.
 14. Spec trước code cho phần mới; nội dung chia việc thuộc plan, không thuộc spec.
 15. Spec kết thúc bằng cách kiểm end-to-end (lệnh/kịch bản) để agent tự xác nhận.
-16. `Ready` không là quyền chạy (`C30`): mặc định 1 spec/1 task, ghi đợt trong progress; làm hết phạm vi đã giao, báo bằng chứng rồi dừng. Plan/Frontier/HANDOFF không tự giao thêm việc.
+16. `Ready` không là quyền chạy (**Quyền thực thi theo đợt**, `C30`): mặc định 1 spec/1 task, ghi đợt trong progress; làm hết phạm vi đã giao, báo bằng chứng rồi dừng. Plan/danh sách task sẵn sàng/HANDOFF không tự giao thêm việc.
 17. Người dùng duyệt hành vi/phạm vi, AI chịu trách nhiệm chứng minh lựa chọn kỹ thuật (`C31`). Tự viết cả kỳ vọng lẫn test chưa chứng minh nhu cầu đúng: đối chiếu ví dụ đã chốt/contract; AI khác đồng ý không thay nguồn, đo đạc hay chuyên gia.
+
+### 3.1 Viết để người không chuyên duyệt được
+
+1. **Nghĩa trước, mã sau.** Mẫu chép sang repo đích không chứa mã luật `Cxx`; viết nghĩa ngắn ngay trong câu. File nội bộ kit: lần đầu viết ``**tên ngắn** (`Cxx`)``; thuật ngữ kit lần đầu giải nghĩa hoặc link [glossary.md](glossary.md). Nguồn: [Google — Abbreviations](https://developers.google.com/style/abbreviations).
+2. **Bốn nhãn nguồn gốc, một khẳng định một dòng:** `Người dùng chốt` (ngày/câu nói) · `Đã xác minh` (đúng 1 con trỏ mở được: `path:line` | URL + trích nguyên văn + ngày đọc | lệnh + kết quả thật) · `AI đề xuất` (lý do + hậu quả nếu sai) · `Chưa biết` (cách xác minh + ai + phần bị chặn). Không tự chấm %; có link chưa đủ, phải có câu trích để đối chiếu. Nguồn: [Liu et al. 2023](https://arxiv.org/abs/2304.09848), [Anthropic — Reduce hallucinations](https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations).
+3. **Thẻ quyết định kỹ thuật** cho quyết định người dùng không tự thẩm định được: *Nói đơn giản · Nếu sai thì sao · Tự kiểm trong ≤ 5 phút (lệnh/thao tác + kết quả mong đợi, trỏ AC-ID) · Nguồn · Không tự kiểm được*. Người dùng duyệt kết quả quan sát được ở dòng "Tự kiểm", không duyệt lập luận. Vùng đắt kiểm (bảo mật, thanh toán, pháp lý, dữ liệu cá nhân) ghi "cần chuyên gia: <vai trò>"; lời duyệt không chứng nhận phần đó. Nguồn: [Bansal et al. 2021](https://arxiv.org/abs/2006.14779), [Vasconcelos et al. 2023](https://arxiv.org/abs/2212.06823).
 
 ---
 
@@ -203,6 +211,8 @@ Bối cảnh + stack → **Lệnh** → Nguồn sự thật → Ranh giới 3 t�
 
 ## 7. Bài học từ thất bại thực tế (repo dashboard)
 
+> Giai thoại ở §7 và §7.1 lấy từ repo nội bộ của tác giả, người ngoài không kiểm được; dùng minh hoạ, không phải số liệu thống kê.
+
 | Thất bại | Quy tắc phòng tránh |
 |---|---|
 | Mâu thuẫn giữa spec chỉ ghi trong plan/HANDOFF, AC vẫn bị `[x]` theo "ý" | Mâu thuẫn ghi vào câu hỏi mở của cả hai spec; cấm `[x]` khi còn mâu thuẫn mở |
@@ -257,3 +267,15 @@ Bối cảnh + stack → **Lệnh** → Nguồn sự thật → Ranh giới 3 t�
 - Diátaxis: https://diataxis.fr/
 - Ubiquitous language: https://martinfowler.com/bliki/UbiquitousLanguage.html
 - OWASP Threat Modeling: https://owasp.org/www-community/Threat_Modeling · WCAG 2.2: https://www.w3.org/TR/WCAG22/
+- STRIDE (Microsoft; Kohnfelder & Garg 1999): https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats
+- Deep Module, Design It Twice — John Ousterhout, *A Philosophy of Software Design* (sách)
+- Tracer Bullet — Andrew Hunt & David Thomas, *The Pragmatic Programmer* (sách)
+- Seam — Michael Feathers, *Working Effectively with Legacy Code* (sách)
+- Expand–Contract (Parallel Change, Danilo Sato): https://martinfowler.com/bliki/ParallelChange.html
+
+Nguồn cho §3.1 (đọc dễ & nguồn gốc khẳng định) — đã mở trang và đối chiếu nguyên văn ngày 2026-10-26:
+- Google developer style — Abbreviations: https://developers.google.com/style/abbreviations — *"Spell out abbreviations on first reference, except for widely recognized ones"*
+- Anthropic — Reduce hallucinations: https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations
+- Liu, Zhang, Liang 2023 — Evaluating Verifiability in Generative Search Engines: https://arxiv.org/abs/2304.09848
+- Bansal et al. 2021 — Does the Whole Exceed its Parts? (giải thích của AI và hiệu quả nhóm người–AI): https://arxiv.org/abs/2006.14779
+- Vasconcelos et al. 2023 — Explanations Can Reduce Overreliance on AI Systems During Decision-Making: https://arxiv.org/abs/2212.06823 — khung chi phí–lợi ích: lời giải thích chỉ giảm phụ thuộc quá mức khi nó làm việc kiểm tra dự đoán của AI đủ rẻ

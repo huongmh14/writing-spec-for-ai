@@ -34,7 +34,7 @@ Dùng cho các chỉ số toàn cục chưa đạt ngưỡng lý tưởng nhưng
 
 ## 4. Ngoại lệ có thời hạn (Exceptions)
 
-Mọi ngoại lệ phải có chủ sở hữu (`Owner`) và ngày hết hạn (`Expires` ≤ 90 ngày). Không xoá luật chung để chiều một ngoại lệ.
+Mọi ngoại lệ phải có chủ sở hữu (`Owner`) và ngày hết hạn (`Expires` ≤ 90 ngày — quy ước của bộ kit, chỉnh được qua D-xx). Không xoá luật chung để chiều một ngoại lệ.
 
 | ID | Luật được miễn | Phạm vi đường dẫn | Lý do & Ticket xử lý | Owner | Ngày hết hạn |
 |---|---|---|---|---|---|

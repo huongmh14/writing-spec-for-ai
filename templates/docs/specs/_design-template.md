@@ -2,6 +2,21 @@
 
 Dùng khi spec cần > 2 PR hoặc chạm schema / API công khai / bảo mật. Spec nói *cái gì*; file này nói *ghép thế nào*.
 
+Khái niệm mượn: Module sâu (Deep Module) & Thiết kế hai lần (Design It Twice) — John Ousterhout, *A Philosophy of Software Design*; Điểm ghép nối (Seam) — Michael Feathers, *Working Effectively with Legacy Code*; STRIDE — Microsoft (Kohnfelder & Garg, 1999); Mở rộng → Chuyển → Thu gọn (Expand–Migrate–Contract / Parallel Change) — Danilo Sato, martinfowler.com/bliki/ParallelChange.html.
+
+Mỗi quyết định thiết kế đáng kể ghi bằng thẻ dưới đây (người dùng duyệt dòng "Tự kiểm", không duyệt lập luận; lời duyệt không chứng nhận phần "cần chuyên gia"):
+
+```
+**Quyết định:** <…> · Nhãn: <Người dùng chốt | Đã xác minh | AI đề xuất | Chưa biết>
+- **Nói đơn giản:** <1–2 câu không thuật ngữ>
+- **Nếu sai thì sao:** <hậu quả quan sát được>
+- **Tự kiểm trong ≤ 5 phút:** <lệnh/thao tác + kết quả mong đợi, trỏ AC-ID>
+- **Nguồn:** <con trỏ mở được + trích nguyên văn>
+- **Không tự kiểm được:** <phần nào; bảo mật/thanh toán/pháp lý/dữ liệu cá nhân → "cần chuyên gia: <vai trò>"; hoặc "Không có">
+```
+
+**Nhãn nguồn gốc:** `Người dùng chốt` — kèm ngày/câu nói · `Đã xác minh` — kèm đúng 1 con trỏ mở được (`path:line`, URL + trích nguyên văn + ngày đọc, hoặc lệnh + kết quả thật) · `AI đề xuất` — lý do 1 dòng + hậu quả nếu sai · `Chưa biết` — cách xác minh + ai + phần bị chặn.
+
 | Thuộc tính | Giá trị |
 |---|---|
 | Spec | SPEC-XXX |
@@ -20,16 +35,16 @@ sequenceDiagram
     U->>A: …
 ```
 
-| Thành phần (Module) | Giao diện & Điểm ghép nối (`Interface & Seam`) | Trách nhiệm ẩn bên trong (`Depth`) | REQ | Nguồn / Trần (`C25` / `C27`) |
+| Thành phần (Module) | Giao diện & Điểm ghép nối (`Interface & Seam`) | Trách nhiệm ẩn bên trong (`Depth`) | REQ | Nguồn chính thống / Trần giới hạn (`ceiling`) |
 |---|---|---|---|---|
 | `<Tên module>` | `<Hàm/route công khai + Seam đặt bài test>` | `<Logic phức tạp được che giấu>` | XXX-R01 | `<Link docs chính thức version X>` / `ceiling: <ngưỡng → đường nâng cấp>` |
 
-## 3. Mô hình dữ liệu & Migration (`Expand–Contract`)
+## 3. Mô hình dữ liệu & Migration (Expand–Migrate–Contract)
 
 | Thực thể | Trường chính | Ràng buộc | Vòng đời |
 |---|---|---|---|
 
-<!-- Nếu sửa schema đang chạy: nêu rõ 4 bước Expand → Migrate → Verify → Contract (PK-DB-R01). -->
+<!-- Nếu sửa schema đang chạy: nêu rõ 3 bước Expand → Migrate → Contract (Mở rộng → Chuyển dữ liệu, gồm bước kiểm chứng → Thu gọn) (PK-DB-R01). -->
 
 ## 4. Hợp đồng
 

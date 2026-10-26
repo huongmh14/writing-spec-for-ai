@@ -4,9 +4,9 @@
   <a href="./README.md">English</a> · <strong>Tiếng Việt</strong>
 </p>
 
-**Bản sửa đang thử (2026-10-25):** mặc định mỗi đợt AI chỉ làm **1 spec + 1 task có thể kiểm**, báo bằng chứng rồi dừng. `Ready` xác nhận yêu cầu, chưa phải quyền chạy toàn bộ. Bạn duyệt hành vi/phạm vi qua ví dụ; AI phải tìm nguồn và kiểm kỹ thuật, ghi rõ điều chưa biết.
+**Bản sửa đang thử (2026-10-25):** mặc định mỗi đợt AI chỉ làm **1 spec + 1 task có thể kiểm**, báo bằng chứng rồi dừng. `Ready` xác nhận yêu cầu, chưa phải quyền chạy toàn bộ. Bạn duyệt hành vi/phạm vi qua ví dụ; AI phải tìm nguồn và kiểm kỹ thuật, ghi rõ điều chưa biết. Mỗi khẳng định quan trọng gắn 1 trong 4 nhãn: `Người dùng chốt` · `Đã xác minh` (con trỏ mở được + trích nguyên văn) · `AI đề xuất` · `Chưa biết`. Quyết định kỹ thuật bạn không tự thẩm định được đi kèm **thẻ quyết định**: bạn duyệt bước tự kiểm ≤ 5 phút, không duyệt lập luận; vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân ghi "cần chuyên gia". Thuật ngữ kit: [references/glossary.md](references/glossary.md).
 
-Đọc [nghiên cứu và nguồn sơ cấp](references/research-controlled-execution.md), [bản thử trước/sau và 6 tình huống kiểm](references/controlled-spec-demo.md), [mẫu spec đã sửa](templates/docs/specs/_template.md). Luật `C30–C31` ở [base-kit](references/base-kit.md); thay đổi chưa phát hành ở [CHANGELOG](CHANGELOG.md).
+Đọc [nghiên cứu và nguồn sơ cấp](references/research-controlled-execution.md), [bản thử trước/sau và 6 tình huống kiểm](references/controlled-spec-demo.md), [mẫu spec đã sửa](templates/docs/specs/_template.md). Luật **Quyền thực thi theo đợt** (`C30`) và **Nguồn & giới hạn hiểu biết** (`C31`) ở [base-kit](references/base-kit.md); thay đổi chưa phát hành ở [CHANGELOG](CHANGELOG.md).
 
 ```text
 Chỉ làm T-01 của SPEC-[tên], phạm vi AC-[01,02].
@@ -16,7 +16,14 @@ Chưa làm task/spec tiếp theo. Kỹ thuật cần có nguồn/phép kiểm.
 
 Giao rõ toàn spec/batch hữu hạn thì AI làm hết phạm vi đó, không hỏi lại từng task. Chỉ viết chi tiết spec sắp làm. Markdown hướng dẫn; cưỡng chế thật cần quyền công cụ/sandbox và review diff phù hợp nền tảng.
 
-Bộ skill & plugin `writing-spec-for-ai`: AI khảo sát dự án (`spec-surveyor`) → trình **đề xuất thiết kế docs + Scope Radar (`🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm`) + Visual Option Cards (`C28`) + Capability Map** → làm rõ theo **Frontier + HYPOTHESIS/GUESS** → viết docs (`AGENTS.md`, `CONSTRAINTS.md`, `SPEC-xx` kèm **ASCII Wireframe/I-O Snapshot** & **Ma trận Kiểm thử Minh bạch `C29`**, `DESIGN-xx`) → phản biện đối kháng trong context sạch (`spec-challenger`) → thử docs bằng task mẫu trong phòng sạch (`doc-tester`) → chẻ đồ thị Tracer-Bullet tasks (`plan-tasks`) & sinh skill tự kiểm (`generate-verify-harness`) in **Bảng Bằng chứng Chạy Test (`Visible Test Execution Ledger` — công khai rõ `0 Mock` hay `Mock gì`)** → chỉ sau 3 cổng duyệt của bạn mới code.
+Bộ skill & plugin `writing-spec-for-ai` giúp AI viết bộ tài liệu điều khiển agent theo trình tự, và **bạn duyệt ở 3 cổng trước khi có dòng code nào**:
+
+1. AI khảo sát repo (`spec-surveyor`).
+2. AI trình đề xuất: bảng phạm vi 🟢 làm ngay / 🟡 đợt sau / 🔴 không làm, các phương án vẽ trực quan kèm đánh đổi, và tối đa 3 câu hỏi chỉ bạn quyết được. → **Cổng 1**
+3. AI viết docs, mỗi lượt một phần rồi dừng cho bạn xem: `AGENTS.md`, `CONSTRAINTS.md`, từng `SPEC-xx` (có ví dụ đầu vào/đầu ra cụ thể và bảng kiểm thử), design doc.
+4. Một AI khác ở phiên sạch phản biện bộ docs (`spec-challenger`). → **Cổng 2**
+5. Thử docs bằng 2–3 task mẫu (Profile S: 2; M/L: 3) ở phiên sạch (`doc-tester`). → **Cổng 3**
+6. Chia việc thành lát cắt nhỏ (`plan-tasks`), sinh skill tự kiểm (`generate-verify-harness`), rồi mới code. Mỗi lần báo xong đều có bảng bằng chứng chạy test, ghi rõ có dùng mock hay không.
 
 ## Cấu trúc (`v1.3.0`)
 
@@ -42,14 +49,15 @@ packs/                                   # 8 Domain Packs kế thừa theo tín 
   PK-API.md                              #   HTTP API, error envelope, phân trang, CORS, health check
   PK-AUTH.md                             #   Token, khoá, chữ ký constant-time, log redaction
   PK-RELEASE.md                          #   Docker hardening, SemVer, đồng bộ artifact build
-  PK-DB.md                               #   Schema, Expand–Contract migration, idempotent seed, chống N+1
+  PK-DB.md                               #   Schema, Expand–Migrate–Contract migration, idempotent seed, chống N+1
   PK-OBS.md                              #   Structured JSON log, correlationId + entryPoint, RED metrics, runbook
   PK-FE.md                               #   UI 4 trạng thái, Design Tokens, WCAG 2.2 AA, Playwright E2E
   PK-JOB.md                              #   Job nền lũy đẳng, backoff + DLQ, CAS lease lock, SIGTERM
   PK-AGENT.md                            #   Điều phối AI agent, hard-refuse policy, sandbox, chống prompt injection
 references/
   principles.md                          #   Mô hình, bộ kỹ năng mức 0/1/2, EARS, ma trận công cụ
-  examples.md                            #   Ví dụ chuẩn từ dự án thật (gồm Scope Radar & Visible Test Ledger)
+  examples.md                            #   Ví dụ chuẩn từ dự án thật (gồm Scope Radar & bảng test hiển thị)
+  glossary.md                            #   Thuật ngữ kit bằng lời thường (Cổng, Profile, Pack, Frontier, EARS…)
   review-checklist.md                    #   Checklist chấm Cổng 2 & Cổng 3
   base-kit.md                            #   Sổ đăng ký luật Core (C01–C31), 8 Pack (PK-*), Profile S/M/L
 templates/

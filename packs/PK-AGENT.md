@@ -1,7 +1,7 @@
 # PK-AGENT — AI Agent Orchestration, Tooling & Sandboxed Execution
 
 > Tín hiệu bật: Hệ thống có điều phối AI agent, gọi LLM API / CLI agent (Claude Code, Codex, OpenCode, Gemini/Antigravity), cung cấp MCP server/tools, hoặc thực thi lệnh/code do AI sinh ra
-> Nguồn: BotAutoTask + plugins `pstack`, `superpowers`, `caveman`, skills `botautotask`, `subagent-driven-development`, `doubt-driven-development`
+> Gốc ý tưởng (skill/repo tham khảo nội bộ, không phải bằng chứng): BotAutoTask + plugins `pstack`, `superpowers`, skills `botautotask`, `subagent-driven-development`, `doubt-driven-development`
 
 ## Tham số
 

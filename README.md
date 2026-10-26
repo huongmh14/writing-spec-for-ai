@@ -26,7 +26,7 @@ Turn any new or existing codebase into an evidence-backed, 3-gate specification 
 
 </div>
 
-**Unreleased design update (2026-10-25):** `Ready` approves requirements; execution follows the user's actual bounded assignment. Default to one spec and one verifiable task, report evidence and stop. Honor explicitly assigned finite batches without repeated approval. Users review behavior and trade-offs; agents must source or verify technical claims and disclose unknowns (`C30–C31`).
+**Unreleased design update (2026-10-25):** `Ready` approves requirements; execution follows the user's actual bounded assignment. Default to one spec and one verifiable task, report evidence and stop. Honor explicitly assigned finite batches without repeated approval. Users review behavior and trade-offs; agents must source or verify technical claims and disclose unknowns (`C30–C31`). Each important claim carries one of four provenance labels — `Người dùng chốt` (user-decided), `Đã xác minh` (verified: one openable pointer + verbatim quote), `AI đề xuất` (AI-proposed), `Chưa biết` (unknown). Technical decisions users cannot judge come as a decision card: users approve the observable ≤ 5-minute self-check, not the reasoning; security/payment/legal/personal-data areas are flagged "needs an expert". Kit terms are defined in [references/glossary.md](references/glossary.md).
 
 Read the [research and primary sources](references/research-controlled-execution.md), [before/after walkthrough](references/controlled-spec-demo.md), and [updated spec template](templates/docs/specs/_template.md). Markdown guides behavior; tool permissions and sandboxes provide enforcement.
 
@@ -173,8 +173,8 @@ Use skill writing-spec-for-ai to survey this repository and design the AI docume
 | **`write-spec`** | Step 5b: Author a domain spec (`REQ-xx` EARS, 8-row `NFR-xx`, Given/When/Then `AC-xx`) | *"Use `write-spec` to write `SPEC-webhook-delivery`."* |
 | **`write-design-doc`** | Step 5c: Author `DESIGN-xx` (Deep Modules, Seams, Design It Twice, `C25` citations, `C27` ceiling markers) | *"Use `write-design-doc` to design the database migration for `SPEC-auth`."* |
 | **`review-docs`** *(+ `spec-challenger`)* | Step 6 (Gate 2): Fresh-context adversarial checklist review (`ARTIFACT + CONTRACT` only) | *"Use `review-docs` to run an adversarial audit on `AGENTS.md` and `docs/specs/`."* |
-| **`test-docs`** *(+ `doc-tester`)* | Step 7 (Gate 3): Clean-room dry-run of 3 sample tasks using only the written docs | *"Use `test-docs` to dry-run sample tasks against our new specs."* |
-| **`plan-tasks`** | Step 7.5: Break an approved spec into a DAG of Tracer-Bullet vertical slices (`Blocked by` + Frontier) | *"Use `plan-tasks` to break `SPEC-auth` into tracer-bullet implementation tasks."* |
+| **`test-docs`** *(+ `doc-tester`)* | Step 7 (Gate 3): Clean-room dry-run of 2–3 sample tasks (Profile S: 2; M/L: 3) using only the written docs | *"Use `test-docs` to dry-run sample tasks against our new specs."* |
+| **`plan-tasks`** | Step 7.5: Break an approved spec into a DAG of Tracer-Bullet vertical slices (`Blocked by` + ready tasks) | *"Use `plan-tasks` to break `SPEC-auth` into tracer-bullet implementation tasks."* |
 | **`generate-verify-harness`** | Generate a project-local `.agents/skills/verify-<app>/SKILL.md` runtime verification skill | *"Use `generate-verify-harness` to create an automated verification skill for this app."* |
 | **`change-spec`** | Manage spec evolution: new sub-spec vs. `CHG-xx` delta proposal & `P-xx → D-xx` | *"Use `change-spec` to update `SPEC-upload` rate limits from 100/m to 500/m."* |
 
@@ -191,7 +191,7 @@ flowchart TD
     S5B --> S5C["5c. write-design-doc & Tool Adapters<br/>DESIGN-xx (Deep Modules, Seams, Design It Twice), CLAUDE.md, hooks"]
     S5C --> S6["6. review-docs (spec-challenger)<br/>Fresh-context adversarial audit (ARTIFACT + CONTRACT only)"]
     S6 --> G2{{"🛑 GATE 2: Human Approves Written Docs"}}
-    G2 -->|Approved| S7["7. test-docs (doc-tester)<br/>Clean-room dry-run of 3 sample tasks using ONLY the docs"]
+    G2 -->|Approved| S7["7. test-docs (doc-tester)<br/>Clean-room dry-run of 2–3 sample tasks using ONLY the docs"]
     S7 --> G3{{"🛑 GATE 3: Human Approves Dry-Run Plan"}}
     G3 -->|Approved| S75["7.5. plan-tasks & generate-verify-harness<br/>Tracer-Bullet Task Graph (Blocked by) + verify-<app> skill"]
     S75 --> S8["8. Bounded Implementation<br/>Record assigned RUN scope; implement, verify, report and stop"]
@@ -214,7 +214,7 @@ flowchart TD
   - **`C28` Visual Direction & Option Cards**: Eliminate prose rubber-stamping via a **Scope Radar (`🟢 Now / 🟡 Next / 🔴 Not Doing`)**, **Mermaid User Journeys**, **Concrete I/O Snapshots** (ASCII wireframes/CLI/JSON), and **2–3 Visual Option Cards** when product direction is open.
   - **`C29` Visible Test Plan & Execution Ledger**: Eliminate black-box background testing via a Pre-Code **Visible Test Matrix** and a Post-Run **Visible Test Execution Ledger** with explicit **Mock Disclosure (`0 Mock` vs. mocked boundary)**.
   - **`C30` Bounded Execution** (unreleased): One current RUN records actual user authority, task/AC scope, stop and evidence; readiness, dependency graphs and handoffs cannot extend it.
-  - **`C31` Provenance & Knowledge Limits** (unreleased): Separate verified facts, proposals and unknowns; do not invent thresholds or use agreement between AI reviewers as proof. Unverified `[~]` ACs prevent `Done`.
+  - **`C31` Provenance & Knowledge Limits** (unreleased): Tag claims with four provenance labels (user-decided / verified with pointer + quote / AI-proposed / unknown), one claim per line; do not invent thresholds or use agreement between AI reviewers as proof. Unverified `[~]` ACs prevent `Done`.
 
 ### 2. Tier 2 — 8 Domain Packs (`packs/PK-*.md`)
 
@@ -223,7 +223,7 @@ flowchart TD
 | **[`PK-API`](./packs/PK-API.md)** | HTTP / REST / Webhook API | Web routers, controllers, OpenAPI | Unified `{error, code, statusCode}` envelope, `5xx` redaction, pagination bounds (`limit ≤ Max`), CORS allowlist, `/health` probe |
 | **[`PK-AUTH`](./packs/PK-AUTH.md)** | Tokens, Keys & Signatures | JWT/OAuth, API keys, HMAC webhooks | Salted key hashing, constant-time signature verify, key rotation (`kid`), log redaction (`Authorization`, `token`), replay window |
 | **[`PK-RELEASE`](./packs/PK-RELEASE.md)** | Containers & Release | `Dockerfile`, CI/CD release workflows | Pinned base images, non-root runtime user, zero secrets in layers, SemVer tag discipline, rebuilt dist artifacts (`PK-RELEASE-R06`) |
-| **[`PK-DB`](./packs/PK-DB.md)** | Database, Schema & Migration | SQL/NoSQL DB, ORM, `migrations/` | 4-phase **Expand → Migrate → Verify → Contract**, idempotent migrate/seed with non-zero failure exit, zero external HTTP inside open DB transactions, bounded batch queries |
+| **[`PK-DB`](./packs/PK-DB.md)** | Database, Schema & Migration | SQL/NoSQL DB, ORM, `migrations/` | **Expand–Migrate–Contract** (verification happens inside Migrate), idempotent migrate/seed with non-zero failure exit, zero external HTTP inside open DB transactions, bounded batch queries |
 | **[`PK-OBS`](./packs/PK-OBS.md)** | Observability, Logs & Metrics | Long-running services, on-call alerts | Structured JSON logs with `event`, mandatory `requestId` + `entryPoint` (`http`/`scheduler`/`queue`/`cli`) propagation, bounded-cardinality RED metrics, symptom alerts linked to 3-line runbooks |
 | **[`PK-FE`](./packs/PK-FE.md)** | Frontend UI, A11y & E2E | Web/Desktop UI, React/Vue/Quasar | Mandatory 4-state UI (`loading`/`empty`/`error`/`data`), Design Tokens (`{tokens-path}`), WCAG 2.2 AA (`axe-core`), Core Web Vitals (`LCP`/`CLS`), non-flaky Playwright role/label locators |
 | **[`PK-JOB`](./packs/PK-JOB.md)** | Background Jobs, Queues & Cron | Workers, queues, cron, daemons | Business-key idempotency (`PK-JOB-R01`), bounded timeouts + jittered backoff, Dead-Letter Queue (DLQ) isolation, atomic CAS lease locks with TTL, `SIGTERM` graceful shutdown |
@@ -234,8 +234,10 @@ flowchart TD
 | Profile | Target Project Size | Included Artifacts | Gate Ceremony |
 | :--- | :--- | :--- | :--- |
 | **`S` (Small)** | CLI scripts, infra configs (`< ~30` files, no public API) | `AGENTS.md` (`≤ 60` lines), `README.md`, `.env.example`, optional single `docs/spec.md` |Lightweight |
-| **`M` (Medium)** | Production services, web apps, bots (`~50–200` files) | Full Level 0 (`C01–C31`) + `CONSTRAINTS.md` + `docs/specs/` (with Capability Map, Visual Flows & Visible Test Matrix) + matching `PK-*` packs + CI DoD | **3 Full Gates** |
+| **`M` (Medium)** | Production services, web apps, bots (`~30–200` files) | Full Level 0 (`C01–C31`) + `CONSTRAINTS.md` (Level 1, only when signals call for it) + `docs/specs/` (with Capability Map, Visual Flows & Visible Test Matrix) + matching `PK-*` packs + CI DoD | **3 Full Gates** |
 | **`L` (Large)** | Multi-service platforms, monorepos (`> 200` files) | Full Profile M + mandatory `CONSTRAINTS.md`, `docs/architecture/`, `docs/upgrade/`, `.agents/skills/verify-<app>/`, scoped rules, hooks, CODEOWNERS | **3 Full Gates + `spec-challenger` & `doc-tester`** |
+
+File counts and line budgets are kit conventions, only a hint; signals (team size, CI, risk areas, number of specs) decide.
 
 ---
 
@@ -266,7 +268,7 @@ writing-spec-for-ai/
 │   ├── PK-API.md                        #   HTTP API, error envelope, pagination, CORS, health probes
 │   ├── PK-AUTH.md                       #   Tokens, signing keys, constant-time verify, redaction
 │   ├── PK-RELEASE.md                    #   Docker hardening, SemVer tags, artifact sync
-│   ├── PK-DB.md                         #   Expand-Contract migrations, idempotent seed, N+1 & tx bounds
+│   ├── PK-DB.md                         #   Expand–Migrate–Contract migrations, idempotent seed, N+1 & tx bounds
 │   ├── PK-OBS.md                        #   Structured JSON logs, correlationId + entryPoint, RED metrics
 │   ├── PK-FE.md                         #   4-state UI, Design Tokens, WCAG 2.2 AA, Playwright E2E
 │   ├── PK-JOB.md                        #   Idempotent jobs, backoff + DLQ, CAS leases, SIGTERM shutdown
@@ -275,6 +277,7 @@ writing-spec-for-ai/
 │   ├── principles.md                    #   Progressive disclosure, EARS grammar, multi-agent matrix
 │   ├── base-kit.md                      #   Core rules registry (C01–C31), Pack architecture, override rules
 │   ├── examples.md                      #   Real-world production examples (REQ, AC, NFR, D-xx, plans)
+│   ├── glossary.md                      #   Kit terms in plain words (Gate, Profile, Pack, Frontier, EARS…)
 │   └── review-checklist.md              #   Gate 2 & Gate 3 quantitative audit rubric
 ├── templates/                           # Ready-to-Use Document & Adapter Templates
 │   ├── doc-design-proposal.md           #   Gate 1 proposal template

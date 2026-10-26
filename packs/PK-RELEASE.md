@@ -1,12 +1,12 @@
 # PK-RELEASE — Docker, registry, phát hành
 
 > Tín hiệu bật: Có Docker image hoặc binary phát hành
-> Nguồn: cdn, citad-crawler-work-schedule, citad-vmu-resources, dashboard, BotAutoTask
+> Gốc ý tưởng (skill/repo tham khảo nội bộ, không phải bằng chứng): cdn, citad-crawler-work-schedule, citad-vmu-resources, dashboard, BotAutoTask
 
 ## Tham số
 
 | Tham số | Mặc định | Mô tả |
-|---|---|---|---|
+|---|---|---|
 | `{release-branch}` | `release/v*` | Nhánh/hoặc pattern tag cho phát hành |
 | `{image-registry}` | - | Registry nơi push image (Docker Hub, GHCR, private) |
 | `{artifact-path}` | `dist/` | Đường dẫn artifact build được (binary, bundle) |

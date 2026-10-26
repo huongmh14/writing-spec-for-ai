@@ -5,7 +5,7 @@ Ngày đối chiếu nguồn: **2026-10-25**. Phạm vi: giới hạn lượt tr
 ## 1. Vấn đề trong bộ hiện tại
 
 - Bộ đã có trạng thái spec, ba cổng duyệt, Scope Radar và ma trận test. Tuy nhiên, duyệt nội dung một spec chưa trả lời rõ **lượt này AI được thực hiện phần nào và kết thúc ở đâu**. Nhiều spec `Ready` dễ bị hiểu thành hàng đợi được phép chạy.
-- Mẫu spec chứa mục tiêu, REQ, NFR và thiết kế, nhưng chưa buộc từng kết luận quan trọng phân biệt **người dùng yêu cầu / quan sát được / AI đề xuất / chưa biết**. Một ngưỡng kỹ thuật do AI tự điền có thể trông giống yêu cầu đã chốt.
+- Mẫu spec chứa mục tiêu, REQ, NFR và thiết kế, nhưng chưa buộc từng kết luận quan trọng phân biệt `Người dùng chốt / Đã xác minh / AI đề xuất / Chưa biết`. Một ngưỡng kỹ thuật do AI tự điền có thể trông giống yêu cầu đã chốt.
 - Review bởi một AI khác và test do AI viết đều hữu ích, nhưng chưa thay thế được tiêu chí đúng lấy từ ví dụ nghiệp vụ, tài liệu nguồn hoặc người có chuyên môn.
 
 Các nhận định trên là **phân tích repo**, dựa trên [README.vi.md](../README.vi.md), [base-kit.md](base-kit.md) và [mẫu spec](../templates/docs/specs/_template.md); không phải kết luận thực nghiệm về mọi agent.
@@ -47,18 +47,20 @@ Tận dụng REQ, bảng quyết định và ghi chú thiết kế sẵn có; kh
 | Trường | Nội dung |
 |---|---|
 | Kết luận | Câu có thể kiểm chứng; tránh thuật ngữ mơ hồ như “chuẩn”, “tối ưu”. |
-| Nguồn gốc | Lệnh người dùng; repo `path:line`; tài liệu chính thức đúng phiên bản; hoặc `Đề xuất` / `Chưa biết`. |
+| Nguồn gốc | Một trong 4 nhãn: `Người dùng chốt` (ngày/câu nói) · `Đã xác minh` (đúng 1 con trỏ mở được: `path:line`, hoặc URL + trích nguyên văn + ngày đọc, hoặc lệnh + kết quả thật) · `AI đề xuất` (lý do + hậu quả nếu sai) · `Chưa biết` (cách xác minh + ai + phần bị chặn). |
 | Bằng chứng | Thí nghiệm, test, log hoặc review có thể xem lại; chưa chạy thì ghi rõ. |
 | Phạm vi và giới hạn | Điều phép kiểm chứng minh được và điều còn ngoài phép kiểm. |
 
-Không bắt truy vết mọi câu văn. Không biến tỷ lệ “tự tin 95%” thành bằng chứng. AI được đề xuất nhưng cần giữ nguyên nhãn đề xuất đến khi có quyết định hoặc kiểm chứng phù hợp.
+Không bắt truy vết mọi câu văn. Không biến tỷ lệ “tự tin 95%” thành bằng chứng. AI được đề xuất nhưng cần giữ nhãn `AI đề xuất` đến khi có quyết định hoặc kiểm chứng phù hợp. Một khẳng định một dòng.
+
+Vì sao cần câu trích chứ không chỉ link: Liu et al. 2023 ([arXiv:2304.09848](https://arxiv.org/abs/2304.09848)) đo được chỉ 51,5% câu do công cụ tìm kiếm sinh nội dung được trích dẫn đỡ đầy đủ, và chỉ 74,5% trích dẫn thực sự đỡ câu đi kèm. Vì sao bước tự kiểm phải rẻ: Bansal et al. 2021 ([arXiv:2006.14779](https://arxiv.org/abs/2006.14779)) thấy lời giải thích của AI làm người dùng chấp nhận khuyến nghị nhiều hơn bất kể AI đúng hay sai; Vasconcelos et al. 2023 ([arXiv:2212.06823](https://arxiv.org/abs/2212.06823)) thấy lời giải thích chỉ giảm phụ thuộc quá mức khi nó làm việc kiểm tra dự đoán của AI đủ rẻ. Hệ quả: người dùng duyệt kết quả của bước tự kiểm (thẻ quyết định kỹ thuật, [principles §3.1](principles.md)), không duyệt lập luận. *Đã mở ba nguồn và đối chiếu nguyên văn ngày 2026-10-26.*
 
 ### D. Xử lý thiếu hiểu biết theo mức ảnh hưởng
 
 1. Tra repo và nguồn chính thức trước khi hỏi điều đã có thể tìm được.
 2. Nếu chưa chắc hành vi thư viện hoặc tính đúng thuật toán, chạy thí nghiệm nhỏ có tiêu chí thất bại rõ.
 3. Nếu thiếu quyết định nghiệp vụ, hỏi bằng ví dụ cụ thể và hệ quả lựa chọn.
-4. Nếu cần chuyên môn mà nguồn và thí nghiệm chưa giải quyết, giữ `Chưa xác minh`, chỉ rõ ai/cách nào có thể kiểm. Tránh ép người dùng duyệt một tuyên bố họ không có cơ sở đánh giá.
+4. Nếu cần chuyên môn mà nguồn và thí nghiệm chưa giải quyết, giữ `Chưa biết`, ghi "cần chuyên gia: <vai trò>", chỉ rõ ai/cách nào có thể kiểm. Tránh ép người dùng duyệt một tuyên bố họ không có cơ sở đánh giá.
 5. Chỉ chặn phần việc phụ thuộc điều chưa biết; tiếp tục phần độc lập đã được giao.
 
 ### E. Báo kết quả để kiểm tra lại được

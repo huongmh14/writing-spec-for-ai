@@ -2,13 +2,13 @@
 
 > Trạng thái: **Chờ review (Cổng 1)**. Chưa tạo file nào trong repo.
 
-## Bản đọc ngắn (`C30`, `C31`)
+## Bản đọc ngắn
 
 - **Kết quả đầu tiên:** <ai làm gì, thấy kết quả nào>.
 - **Ví dụ nghiệm thu:** <thao tác → kết quả; trỏ AC dự kiến>.
 - **Giới hạn lần đầu:** <một spec/lát cắt; phần sau giữ ở bản đồ, chưa viết chi tiết>.
 - **Điều chưa biết:** <ảnh hưởng, cách xác minh, người phụ trách>.
-- **Bạn duyệt:** <hành vi/phạm vi/đánh đổi>; AI chịu trách nhiệm kiểm chứng kỹ thuật. Duyệt bản đồ chưa cấp quyền chạy các spec.
+- **Bạn duyệt:** <hành vi/phạm vi/đánh đổi>; AI chịu trách nhiệm kiểm chứng kỹ thuật; quyết định kỹ thuật bạn không tự thẩm định được sẽ kèm một dòng "Tự kiểm trong ≤ 5 phút". Duyệt bản đồ chưa cấp quyền chạy các spec.
 
 ## 1. Hiện trạng
 
@@ -20,7 +20,7 @@
 | Tài liệu sẵn có + vị trí đúng/sai công cụ đọc | | |
 | File mồ côi / bị ignore / cũ / mâu thuẫn | | |
 | Tài liệu nguồn bên ngoài (PRD, docx) | | |
-| Cưỡng chế & Sàn chất lượng hiện tại (Ratchets `C23`) | | |
+| Cưỡng chế & sàn chất lượng hiện tại (chỉ được siết, không hạ âm thầm) | | |
 | Quy ước git thực tế | | `git log` |
 | Vùng rủi ro & tín hiệu bật Pack (`PK-*`) | | |
 | Điều kiện hạ tầng bên ngoài có thể chặn AC | | |
@@ -28,9 +28,9 @@
 
 ## 2. Mức đề xuất
 
-- Base: writing-spec-for-ai v1.3.0 · Profile: <S | M | L> — xem `profiles.md` về dấu hiệu và file tối thiểu.
+- Base: writing-spec-for-ai v1.3.0 · Profile: <S | M | L> — gợi ý S < ~30 file, M ~30–200, L > 200; số file chỉ là gợi ý, tín hiệu (số người, CI, vùng rủi ro, số spec) quyết định cuối cùng. Xem `profiles.md` về file tối thiểu.
 - Pack: <PK-… — tín hiệu: …> — xem `packs/PK-….md` về tín hiệu bật và REQ.
-- Mức 0: toàn bộ (Core `C01–C31`).
+- Mức 0: toàn bộ luật Core của base.
 - Mức 1: <thành phần> — tín hiệu: <…>
 - Mức 2: <thành phần> — tín hiệu: <…>
 
@@ -38,7 +38,7 @@
 
 ```
 AGENTS.md
-CONSTRAINTS.md                    # Profile M/L: sàn chất lượng & ratchets (C23)
+CONSTRAINTS.md                    # Profile L; Profile M chỉ khi có tín hiệu: sàn chất lượng chỉ được siết
 CLAUDE.md                         # adapter
 .github/copilot-instructions.md   # adapter (nếu dùng Copilot)
 docs/glossary.md
@@ -60,23 +60,23 @@ docs/changes/                     # mức 1, brownfield
 ## 4. Nội dung dự kiến của AGENTS.md & CONSTRAINTS.md
 
 - **Lệnh (gồm lệnh chạy 1 test):**
-- **Context Pointers (`C24` — "Khi chạm X → đọc Y"):**
-- ✅ **Luôn (`C27` ceiling marker):**
+- **Con trỏ có điều kiện ("Khi chạm X → đọc Y"):**
+- ✅ **Luôn (đánh dấu `ceiling:` khi cố ý chọn giải pháp đơn giản có giới hạn):**
 - ⚠️ **Hỏi trước:**
-- 🚫 **Không bao giờ (`C23` floor guard):**
+- 🚫 **Không bao giờ (không hạ chuẩn âm thầm):**
 - **DoD & Sàn `CONSTRAINTS.md`:**
 - **File mẫu để bắt chước:**
 - **Luật chuyển xuống phạm vi:** <thư mục → luật>
 
-## 5. Trực quan hoá Định hướng, Bản đồ Năng lực & Spec dự kiến (`C28` — Capability Map)
+## 5. Định hướng bằng hình, bản đồ năng lực & spec dự kiến
 
-### 5.1 Scope Radar (`🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm` — `C28`)
+### 5.1 Scope Radar (bảng phạm vi: 🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm)
 
 | 🟢 Làm ngay (MVP — GĐ 1) | 🟡 Đợt kế tiếp (Phase 2) | 🔴 Không làm (Out of Scope) |
 |---|---|---|
 | - <Hành vi cốt lõi 1> | - <Mở rộng sang GĐ 2> | - <Thứ loại bỏ rõ ràng để AI không làm thừa> |
 
-### 5.2 Luồng tương tác tổng thể & Phương án trực quan (`Visual Option Cards` — `C28`)
+### 5.2 Luồng tương tác tổng thể & phương án trực quan
 
 ```mermaid
 flowchart LR
@@ -107,7 +107,7 @@ flowchart LR
 | Thành phần | Luật/quy trình | Tín hiệu |
 |---|---|---|
 
-## 8. Kế hoạch thử tài liệu (Bước 7 — `doc-tester`)
+## 8. Kế hoạch thử tài liệu (Bước 7 — `doc-tester`; 2–3 task mẫu: Profile S 2, M/L 3)
 
 | Task mẫu | Kiểm điều gì |
 |---|---|
@@ -118,6 +118,8 @@ flowchart LR
 ## 9. Cố ý không làm
 
 ## 10. Làm rõ theo `HYPOTHESIS + Frontier + GUESS`
+
+<!-- HYPOTHESIS = giả thuyết hiện tại · Frontier = câu hỏi về kết quả/đánh đổi mà chỉ người dùng quyết được · GUESS = phương án AI đề xuất. -->
 
 - **HYPOTHESIS (Giả thuyết hiện tại):** <1–2 câu tóm tắt mục tiêu, phạm vi và ràng buộc chính của dự án theo bằng chứng khảo sát.>
 - **EVIDENCE (Cơ sở):** <lời người dùng, path:line, nguồn chính thức đúng version>.

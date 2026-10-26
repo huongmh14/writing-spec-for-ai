@@ -10,36 +10,36 @@ description: Dùng ở Bước 7.5 (sau Cổng 3, trước khi code) hoặc khi 
 
 Profile S dùng `docs/spec.md`/README và block đợt trong `AGENTS.md`; không cần plan/progress riêng, vẫn ghi hành vi/AC/kiểm chứng/điểm dừng.
 
-**Quyền thực thi (`C30`):** `Ready` và plan chỉ chốt yêu cầu/công việc dự kiến. Đợt hiện tại ở `docs/progress.md` phải ghi chỉ dẫn thật của người dùng, SPEC/task/AC, vùng file, phần loại trừ và điểm dừng. Mặc định chưa nêu ranh giới: **1 SPEC + 1 task**, làm → kiểm → báo cáo → dừng. Yêu cầu rõ batch/toàn spec hữu hạn thì ghi và làm đủ phạm vi ấy; không hỏi lại từng task. Chỉ dẫn hiện hành của người dùng được ưu tiên; AI không tự cấp quyền khi sửa block.
+**Quyền thực thi (**Quyền thực thi theo đợt**, `C30`):** `Ready` và plan chỉ chốt yêu cầu/công việc dự kiến. Đợt hiện tại ở `docs/progress.md` phải ghi chỉ dẫn thật của người dùng, SPEC/task/AC, vùng file, phần loại trừ và điểm dừng. Mặc định chưa nêu ranh giới: **1 SPEC + 1 task**, làm → kiểm → báo cáo → dừng. Yêu cầu rõ batch/toàn spec hữu hạn thì ghi và làm đủ phạm vi ấy; không hỏi lại từng task. Chỉ dẫn hiện hành của người dùng được ưu tiên; AI không tự cấp quyền khi sửa block.
 
-> Nguồn kế thừa: `to-tickets`, `implement-spec`, `planning-and-task-breakdown`, `migration`, `blast-radius`.
+> Gốc ý tưởng (skill tham khảo nội bộ, không phải bằng chứng): `to-tickets`, `implement-spec`, `planning-and-task-breakdown`, `migration`, `blast-radius`. Khái niệm mượn: Tracer Bullet (Hunt & Thomas, *The Pragmatic Programmer*); Expand–Migrate–Contract (Parallel Change — Danilo Sato, martinfowler.com/bliki/ParallelChange.html). Nghĩa ngắn: [glossary](../../references/glossary.md).
 
-## 1. Nguyên tắc lát cắt dọc (Tracer-Bullet Vertical Slices)
+## 1. Nguyên tắc lát cắt dọc (Tracer Bullet — lát mỏng chạy xuyên mọi tầng)
 
 Không chia task theo tầng ngang (*"Task 1: làm hết DB, Task 2: làm hết API, Task 3: làm hết UI"* — chỉ đến task cuối mới biết ghép vào bị lệch). Mọi task thông thường phải là một **Tracer Bullet**:
 
 - **Đi xuyên đủ các tầng** (schema → logic/API → UI/CLI → test nghiệm thu `AC-ID`) cho một hành vi hẹp nhưng **chạy được trọn vẹn từ đầu tới cuối**.
 - **Kích thước vừa một phiên sạch:** khoảng `5` file là dự kiến; task có thể hoàn tất và kiểm chứng trong một phiên. Sửa hàm chung/caller cần thiết trong cùng hành vi được phép; báo tác động, không tự thêm hành vi.
-- **Ưu tiên dọn đường trước (Prefactoring):** *"Make the change easy, then make the easy change"* — nếu cần tách hàm/module để lát cắt chính dễ lắp, đặt task prefactoring lên đầu.
+- **Ưu tiên dọn đường trước (Prefactoring):** *làm cho thay đổi trở nên dễ, rồi mới làm thay đổi dễ đó* — nếu cần tách hàm/module để lát cắt chính dễ lắp, đặt task prefactoring lên đầu.
 
-## 2. Ngoại lệ: Thay đổi diện rộng (Wide Blast Radius → Expand–Contract)
+## 2. Ngoại lệ: thay đổi lan rộng nhiều file → Expand–Migrate–Contract
 
 Khi một thay đổi cơ học (đổi tên cột, đổi chữ ký hàm/type dùng chung ở hàng chục nơi) làm vỡ hàng loạt file cùng lúc khiến lát cắt dọc không thể xanh:
 
-1. **Task 1 — Expand:** Thêm cấu trúc/cột/hàm mới bên cạnh cái cũ; giữ cả hai cùng sống để CI vẫn xanh.
-2. **Task 2..N — Migrate theo Batch:** Chuyển đổi các nơi gọi theo từng cụm thư mục/module (mỗi batch 1 task, `Blocked by: Task 1`).
-3. **Task cuối — Contract:** Xoá cấu trúc/cột/hàm cũ sau khi không còn nơi nào gọi (`Blocked by: tất cả các task Migrate`).
+1. **Task 1 — Expand (Mở rộng):** Thêm cấu trúc/cột/hàm mới bên cạnh cái cũ; giữ cả hai cùng sống để CI vẫn xanh.
+2. **Task 2..N — Migrate (Chuyển dữ liệu/nơi gọi) theo batch:** Chuyển các nơi gọi theo từng cụm thư mục/module, kiểm chứng ngay trong từng batch (mỗi batch 1 task, `Blocked by: Task 1`).
+3. **Task cuối — Contract (Thu gọn):** Xoá cấu trúc/cột/hàm cũ sau khi không còn nơi nào gọi (`Blocked by: tất cả các task Migrate`).
 
-## 3. Đồ thị phụ thuộc (Task Graph) & Frontier
+## 3. Đồ thị phụ thuộc (Task Graph) & task sẵn sàng
 
 Các task không phải danh sách phẳng mà là một **đồ thị có hướng (DAG)**:
 
 - Mỗi task khai báo rõ **`Blocked by:`** (danh sách mã task phải xong trước; ghi `None` nếu làm được ngay).
-- **Frontier (Mặt trận sẵn sàng):** mọi task có `Blocked by` đã hoàn tất; đây chỉ là quan hệ phụ thuộc, không cấp quyền bắt đầu. Subagent chỉ chạy phần thuộc đợt đã giao, dùng context pointers (SPEC/AC, commit nền, link đợt); không tự chọn task/spec kế. Song song các task khác chỉ khi batch đó đã được người dùng giao rõ.
+- **Task sẵn sàng:** mọi task trong `Blocked by` đã hoàn tất; đây chỉ là quan hệ phụ thuộc, không cấp quyền bắt đầu. Subagent chỉ chạy phần thuộc đợt đã giao, dùng context pointers (SPEC/AC, commit nền, link đợt); không tự chọn task/spec kế. Song song các task khác chỉ khi batch đó đã được người dùng giao rõ.
 
-## 4. Mẫu trình bày một Task & Bảng Bằng chứng Kiểm thử (`C29`)
+## 4. Mẫu trình bày một Task & Bảng Bằng chứng Kiểm thử (**Bằng chứng test hiển thị**, `C29`)
 
-Mỗi task không chỉ ghi lệnh chạy test mà phải khai báo rõ **Ma trận Test dự kiến (`Pre-Code Test Plan`)** và khi hoàn tất phải điền **Bảng Bằng chứng Chạy Test (`Visible Test Execution Ledger` — `C29`)** để lập trình viên thấy rõ AI đã bơm dữ liệu gì và có dùng mock hay không:
+Mỗi task không chỉ ghi lệnh chạy test mà phải khai báo rõ **Ma trận test dự kiến trước khi code** và khi hoàn tất phải điền **Bảng bằng chứng chạy test** (`C29`) để lập trình viên thấy rõ AI đã bơm dữ liệu gì và có dùng mock hay không:
 
 ```markdown
 ### T-01: <Tên hành vi đầu-cuối ngắn gọn, đúng thuật ngữ glossary>
@@ -69,4 +69,4 @@ Trình bảng `Mã | Hành vi nhìn thấy | Blocked by | AC-ID | Cách demo`. N
 - [ ] Mỗi task là một lát cắt dọc kiểm chứng được (hoặc một bước trong chuỗi Expand–Migrate–Contract).
 - [ ] Mỗi task có `Blocked by` tường minh và có lệnh Verify gắn với `AC-ID`.
 - [ ] Không có vòng lặp phụ thuộc trong đồ thị task.
-- [ ] Plan link tới một đợt hiện tại trong `docs/progress.md`; không tự duyệt batch/Frontier hoặc suy quyền từ HANDOFF cũ.
+- [ ] Plan link tới một đợt hiện tại trong `docs/progress.md`; không tự duyệt batch/task sẵn sàng hoặc suy quyền từ HANDOFF cũ.

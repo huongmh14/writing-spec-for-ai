@@ -18,6 +18,8 @@ $failures = @()
 
 Write-Host "=== Validating writing-spec-for-ai at $root ===" -ForegroundColor Cyan
 
+$subSkillNames = @("survey-project","propose-doc-design","write-spec","write-design-doc","change-spec","review-docs","test-docs","plan-tasks","generate-verify-harness")
+
 # 1. Validate JSON manifests, evals & version sync
 $jsonFiles = @(
     ".claude-plugin/plugin.json",
@@ -53,8 +55,7 @@ foreach ($rel in $jsonFiles) {
                 "eval-10-risky-domain-outside-user-expertise",
                 "eval-11-stale-handoff-and-continue",
                 "eval-12-unverified-ac-prevents-done",
-                "eval-13-staged-doc-authoring-c30",
-                "eval-14-auto-caveman-context-guard-c32"
+                "eval-13-staged-doc-authoring-c30"
             )
             foreach ($evalId in $requiredEvalIds) {
                 if ($evalIds -notcontains $evalId) {
@@ -74,8 +75,9 @@ foreach ($rel in $jsonFiles) {
             $versions[$rel] = $parsed.version
         }
         if ($rel -in $pluginManifests) {
-            if (-not ($parsed.skills -is [System.Array]) -or ($parsed.skills -notcontains "./") -or ($parsed.skills.Count -ne 10)) {
-                $failures += "[MANIFEST] $rel must declare all 10 skills as an array including './'"
+            $expectedSkillCount = $subSkillNames.Count + 1
+            if (-not ($parsed.skills -is [System.Array]) -or ($parsed.skills -notcontains "./") -or ($parsed.skills.Count -ne $expectedSkillCount)) {
+                $failures += "[MANIFEST] $rel must declare all $expectedSkillCount skills (./ + skills/*) as an array including './'"
             }
             if (-not ($parsed.agents -is [System.Array]) -or ($parsed.agents.Count -ne 3)) {
                 $failures += "[MANIFEST] $rel must declare all 3 subagents in 'agents' array"
@@ -92,7 +94,7 @@ if ($uniqueVersions.Count -gt 1) {
 }
 
 # 2. Validate SKILL.md and agents/*.md frontmatter, SDO rules & line budgets
-$subSkillNames = @("survey-project","propose-doc-design","write-spec","write-design-doc","change-spec","review-docs","test-docs","plan-tasks","generate-verify-harness")
+
 if (Test-Path (Join-Path $root "skills")) {
     $skillFiles = @("SKILL.md") + (Get-ChildItem -Path (Join-Path $root "skills") -Recurse -File -Filter "SKILL.md" | ForEach-Object { $_.FullName.Substring($root.Length + 1).Replace('\','/') })
 } else {
@@ -175,22 +177,16 @@ $templateChecks = @(
     @{ File = "SKILL.md"; Pattern = "C31"; Label = "Provenance and knowledge limits rule (C31)" },
     @{ File = "references/base-kit.md"; Pattern = "| C30 |"; Label = "Core bounded execution contract (C30)" },
     @{ File = "references/base-kit.md"; Pattern = "| C31 |"; Label = "Core provenance contract (C31)" },
-    @{ File = "templates/AGENTS.md"; Pattern = "C30"; Label = "Task execution boundary (C30)" },
-    @{ File = "templates/AGENTS.md"; Pattern = "C31"; Label = "Task knowledge boundary (C31)" },
-    @{ File = "templates/docs/specs/README.md"; Pattern = "C30"; Label = "Spec readiness versus execution authority (C30)" },
-    @{ File = "templates/docs/specs/_template.md"; Pattern = "C31"; Label = "Requirement provenance (C31)" },
+    @{ File = "templates/AGENTS.md"; Regex = $true; Pattern = '(?i)quy\u1EC1n th\u1EF1c thi theo \u0111\u1EE3t'; Label = "Task execution boundary (C30)" },
+    @{ File = "templates/AGENTS.md"; Regex = $true; Pattern = '(?i)ngu\u1ED3n & gi\u1EDBi h\u1EA1n hi\u1EC3u bi\u1EBFt'; Label = "Task knowledge boundary (C31)" },
+    @{ File = "templates/docs/specs/README.md"; Regex = $true; Pattern = '(?i)quy\u1EC1n th\u1EF1c thi theo \u0111\u1EE3t'; Label = "Spec readiness versus execution authority (C30)" },
+    @{ File = "templates/docs/specs/_template.md"; Regex = $true; Pattern = 'Nh\u00E3n ngu\u1ED3n g\u1ED1c'; Label = "Requirement provenance (C31)" },
     @{ File = "templates/docs/specs/_template.md"; Pattern = "../progress.md"; Label = "Pointer to current execution grant" },
-    @{ File = "templates/docs/progress.md"; Pattern = "C30"; Label = "Current execution grant (C30)" },
-    @{ File = "templates/docs/plans/_plan-template.md"; Pattern = "C30"; Label = "Plan is not execution authority (C30)" },
+    @{ File = "templates/docs/progress.md"; Regex = $true; Pattern = '(?i)quy\u1EC1n th\u1EF1c thi theo \u0111\u1EE3t'; Label = "Current execution grant (C30)" },
+    @{ File = "templates/docs/plans/_plan-template.md"; Regex = $true; Pattern = '(?i)quy\u1EC1n th\u1EF1c thi theo \u0111\u1EE3t'; Label = "Plan is not execution authority (C30)" },
     @{ File = "agents/doc-tester.md"; Pattern = "C30"; Label = "Clean-room execution boundary check (C30)" },
     @{ File = "agents/spec-challenger.md"; Pattern = "C31"; Label = "Adversarial provenance check (C31)" },
-    @{ File = "skills/write-design-doc/SKILL.md"; Pattern = "C30"; Label = "Staged design doc authoring checkpoint (C30)" },
-    @{ File = "SKILL.md"; Pattern = "C32"; Label = "Context & Token Budget Guard rule (C32)" },
-    @{ File = "references/base-kit.md"; Pattern = "| C32 |"; Label = "Core Context & Token Budget Guard contract (C32)" },
-    @{ File = "templates/AGENTS.md"; Pattern = "C32"; Label = "Auto-Caveman & Token Alert rule in AGENTS.md (C32)" },
-    @{ File = "templates/adapters/claude-settings.json"; Pattern = "context-guard.ps1"; Label = "UserPromptSubmit context-guard hook in claude-settings.json (C32)" },
-    @{ File = "scripts/context-guard.ps1"; Pattern = "CONTEXT-GUARD C32"; Label = "Deterministic Context & Token Guard script (C32)" },
-    @{ File = "install.ps1"; Pattern = "UserPromptSubmit"; Label = "Auto-registration of UserPromptSubmit hook in install.ps1 (C32)" }
+    @{ File = "skills/write-design-doc/SKILL.md"; Pattern = "C30"; Label = "Staged design doc authoring checkpoint (C30)" }
 )
 foreach ($tc in $templateChecks) {
     $tPath = Join-Path $root $tc.File
@@ -202,7 +198,7 @@ foreach ($tc in $templateChecks) {
         continue
     }
     $tRaw = Get-Content $tPath -Raw -Encoding UTF8
-    if ($tRaw -notmatch [regex]::Escape($tc.Pattern)) {
+    if ($tRaw -notmatch $(if ($tc.Regex) { $tc.Pattern } else { [regex]::Escape($tc.Pattern) })) {
         $failures += "[TEMPLATE] $($tc.File) is missing required marker: $($tc.Label)"
     }
 }
@@ -213,6 +209,32 @@ foreach ($rel in $completionFiles) {
     $raw = Get-Content (Join-Path $root $rel) -Raw -Encoding UTF8
     if ($raw -match '\[x\][^\r\n]{0,20}ho\u1EB7c[^\r\n]{0,20}\[~\]') {
         $failures += "[COMPLETION] $rel still accepts unresolved [~] alongside [x]; unresolved ACs must prevent Done"
+    }
+}
+
+# Readability & provenance: copied-out templates must not carry kit-internal rule codes; no machine paths; C32 stays retired.
+$tplDir = Join-Path $root "templates"
+if (Test-Path $tplDir) {
+    Get-ChildItem $tplDir -Recurse -File | Select-String -Pattern '\bC\d{2}\b' | ForEach-Object {
+        $failures += "[READABILITY] Kit rule code '$($_.Matches[0].Value)' in copied-out template $($_.Path.Substring($root.Length + 1)):$($_.LineNumber); write its meaning instead"
+    }
+    $agentsTpl = Join-Path $tplDir "AGENTS.md"
+    if ((Get-Content $agentsTpl -Encoding UTF8).Count -gt 150) { $failures += "[BUDGET] templates/AGENTS.md exceeds 150 lines" }
+    # Regex escapes keep this file ASCII-only for Windows PowerShell 5.1 (no BOM). Labels: Nguoi dung chot, Da xac minh, AI de xuat, Chua biet, Tu kiem.
+    foreach ($label in @('Ng\u01B0\u1EDDi d\u00F9ng ch\u1ED1t', '\u0110\u00E3 x\u00E1c minh', 'AI \u0111\u1EC1 xu\u1EA5t', 'Ch\u01B0a bi\u1EBFt', 'T\u1EF1 ki\u1EC3m')) {
+        if ((Get-Content (Join-Path $tplDir "docs/specs/_template.md") -Raw -Encoding UTF8) -notmatch $label) {
+            $failures += "[PROVENANCE] templates/docs/specs/_template.md missing provenance label /$label/"
+        }
+    }
+}
+$glossaryPath = Join-Path $root "references/glossary.md"
+if ((Test-Path (Join-Path $root "references")) -and -not (Test-Path $glossaryPath)) { $failures += "[READABILITY] references/glossary.md missing" }
+Get-ChildItem $root -Recurse -File -Include *.md, *.json, *.ps1, *.sh | Where-Object { $_.FullName -notmatch "\\(\.git|dist)\\" } | ForEach-Object {
+    $rel = $_.FullName.Substring($root.Length + 1).Replace('\', '/')
+    $raw = Get-Content $_.FullName -Raw -Encoding UTF8
+    if ($raw -match '\b[A-Z]:\\[A-Za-z]') { $failures += "[PRIVACY] Machine-specific path in ${rel}: $($Matches[0])" }
+    if ($rel -notin @("references/base-kit.md", "references/glossary.md", "CHANGELOG.md", "scripts/validate.ps1") -and $raw -match '\bC32\b|context-guard|Auto-Caveman') {
+        $failures += "[RETIRED] $rel still references retired C32 / context-guard"
     }
 }
 

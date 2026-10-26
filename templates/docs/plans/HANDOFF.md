@@ -4,7 +4,7 @@ Cập nhật: YYYY-MM-DD (<agent/người>). Cập nhật file này **mỗi khi*
 
 ## Trạng thái
 
-- Đợt thực thi hiện tại và bằng chứng: xem `../progress.md` (`C30`); file bàn giao này không cấp quyền mới.
+- Đợt thực thi hiện tại và bằng chứng: xem `../progress.md` (quyền thực thi theo đợt); file bàn giao này không cấp quyền mới.
 
 ## Việc tiếp theo cho agent
 

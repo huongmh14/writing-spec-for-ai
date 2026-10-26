@@ -1,7 +1,7 @@
 # PK-FE — Frontend UI, Design System, Accessibility & Browser Verification
 
 > Tín hiệu bật: Có giao diện người dùng (Web React/Vue/Quasar/Svelte/Next.js, HTML/CSS, Desktop/Electron, hoặc Dashboard)
-> Nguồn: dashboard, khaosatvmu + plugins `ui-ux-pro-max`, `playwright`, skills `impeccable`, `frontend-ui-engineering`, `design-system`
+> Gốc ý tưởng (skill/repo tham khảo nội bộ, không phải bằng chứng): dashboard, khaosatvmu + plugins `ui-ux-pro-max`, `playwright`, skills `impeccable`, `frontend-ui-engineering`, `design-system`
 
 ## Tham số
 

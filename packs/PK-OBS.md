@@ -1,7 +1,7 @@
 # PK-OBS — Observability, Structured Logging, Metrics & Runbooks
 
 > Tín hiệu bật: Dịch vụ chạy dài hạn (HTTP server, worker, daemon, bot) trên môi trường staging/production cần chẩn đoán sự cố, theo dõi SLO hoặc cảnh báo on-call
-> Nguồn: cdn, notification-service, dashboard, BotAutoTask + skill `observability-and-instrumentation`
+> Gốc ý tưởng (skill/repo tham khảo nội bộ, không phải bằng chứng): cdn, notification-service, dashboard, BotAutoTask + skill `observability-and-instrumentation`
 
 ## Tham số
 

@@ -2,7 +2,10 @@
 
 Profile là điểm xuất phát để repo nhỏ không gánh chi phí docs của repo lớn. Chỉ là preset, tín hiệu mức 1–2 (principles §2) vẫn quyết định thêm gì.
 
-Mọi profile áp dụng `C30–C31`: phạm vi thực thi tách khỏi `Ready`, yêu cầu/kỹ thuật có cơ sở. Profile S không cần thêm file: ghi đợt hiện tại trong `AGENTS.md` và câu hỏi trong `docs/spec.md`/README; M/L dùng `docs/progress.md` và `decisions.md` hiện có.
+> Số file (S < ~30, M ~30–200, L > 200) và các ngưỡng như `AGENTS.md` ≤ 60 dòng là **quy ước của bộ kit**, không có nguồn đo lường. Số file chỉ là gợi ý; tín hiệu (số người, CI, vùng rủi ro, số spec) quyết định cuối cùng.
+> Các repo trong mục "Ví dụ" là repo nội bộ của tác giả, người ngoài không kiểm được; chỉ dùng minh hoạ, không phải số liệu thống kê.
+
+Mọi profile áp dụng **Quyền thực thi theo đợt** (`C30`) và **Nguồn & giới hạn hiểu biết** (`C31`): phạm vi thực thi tách khỏi `Ready`, yêu cầu/kỹ thuật có cơ sở. Profile S không cần thêm file: ghi đợt hiện tại trong `AGENTS.md` và câu hỏi trong `docs/spec.md`/README; M/L dùng `docs/progress.md` và `decisions.md` hiện có.
 
 ## Profile S — Script, hạ tầng
 
@@ -35,7 +38,7 @@ Mọi profile áp dụng `C30–C31`: phạm vi thực thi tách khỏi `Ready`,
 
 ## Profile M — Dịch vụ
 
-**Dấu hiệu:** Có API công khai, hoặc worker background, hoặc DB tự quản lý, hoặc orchestrator AI agent. Quy mô trung bình (~50–200 file).
+**Dấu hiệu:** Có API công khai, hoặc worker background, hoặc DB tự quản lý, hoặc orchestrator AI agent. Quy mô trung bình (~30–200 file).
 
 **File tối thiểu:**
 - Toàn bộ mức 0 (Core `C01–C31`):
@@ -45,12 +48,12 @@ Mọi profile áp dụng `C30–C31`: phạm vi thực thi tách khỏi `Ready`,
   - `docs/reference/config.md` — bảng biến môi trường.
   - `docs/reference/error-codes.md` — danh mục mã lỗi.
 - Mức 1 — theo tín hiệu:
-  - `CONSTRAINTS.md` — sàn chất lượng được kiểm bằng lệnh máy (`check:fast`, `check:task`, `check:full`) và bảng Ratchets (`C23`).
+  - `CONSTRAINTS.md` — Mức 1, chỉ khi có tín hiệu: sàn chất lượng được kiểm bằng lệnh máy (`check:fast`, `check:task`, `check:full`) và bảng chốt một chiều (Ratchet) theo **Không hạ chuẩn âm thầm** (`C23`).
   - `docs/specs/` — spec theo khu vực (6–12 spec) kèm `Capability Map` trong `docs/specs/README.md`.
   - `docs/decisions.md` — quyết định đã chốt.
   - `docs/glossary.md` — thuật ngữ miền.
   - `docs/progress.md` — bộ nhớ phiên.
-  - `docs/plans/` — đồ thị task Tracer Bullets (`plan-tasks`) / handoff khi cần.
+  - `docs/plans/` — đồ thị task lát cắt dọc (Tracer Bullet, xem [glossary](references/glossary.md)) từ `plan-tasks` / handoff khi cần.
   - `docs/changelog/` — changelog theo version.
 - Pack — theo tín hiệu (từ 8 pack trong `packs/`):
   - `PK-API` nếu có endpoint HTTP.

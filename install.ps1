@@ -84,7 +84,7 @@ foreach ($Target in $Targets) {
     Write-Host ("  [+] Installed orchestrator -> {0,-20} ({1})" -f $Target.Name, $Dest) -ForegroundColor Green
 }
 
-Write-Host "[3/4] Installing 9 standalone sub-skills at top level for direct discovery..." -ForegroundColor Yellow
+Write-Host "[3/4] Installing $($SubSkills.Count) standalone sub-skills at top level for direct discovery..." -ForegroundColor Yellow
 
 foreach ($Target in $Targets) {
     $RootDir = $Target.Root
@@ -118,7 +118,7 @@ foreach ($Target in $Targets) {
             -replace '\.\./([a-z0-9-]+)/SKILL\.md', '../$1/SKILL.md'
         [System.IO.File]::WriteAllText((Join-Path $SubDest "SKILL.md"), $NormalizedSkill, (New-Object System.Text.UTF8Encoding($false)))
     }
-    Write-Host ("  [+] Installed 9 sub-skills -> {0,-20} ({1})" -f $Target.Name, $RootDir) -ForegroundColor Green
+    Write-Host ("  [+] Installed $($SubSkills.Count) sub-skills -> {0,-20} ({1})" -f $Target.Name, $RootDir) -ForegroundColor Green
 }
 
 Write-Host "[4/4] Installing specialized subagents (spec-surveyor, spec-challenger, doc-tester)..." -ForegroundColor Yellow
@@ -139,72 +139,10 @@ if (Test-Path (Join-Path $SourceDir "agents")) {
     }
 }
 
-$HookDirs = @(
-    "$HOME\.agents\hooks",
-    "$HOME\.claude\hooks"
-)
-foreach ($HookDir in $HookDirs) {
-    New-Item -ItemType Directory -Force -Path $HookDir | Out-Null
-    foreach ($HookScript in @("context-guard.ps1", "context-guard.sh")) {
-        $SrcHook = Join-Path $SourceDir "scripts\$HookScript"
-        if (Test-Path $SrcHook) {
-            Copy-Item -Path $SrcHook -Destination (Join-Path $HookDir $HookScript) -Force
-        }
-    }
-    Write-Host ("  [+] Installed Context & Token Guard Hook (C32) -> {0}" -f $HookDir) -ForegroundColor Green
-}
-
-# Register Context Guard Hook (C32) into Claude Code settings.json (UserPromptSubmit) and Cursor hooks.json (preToolUse)
-$HookCmd = "powershell -NoProfile -ExecutionPolicy Bypass -File `"$($HOME -replace '\\','\\')\\.agents\\hooks\\context-guard.ps1`""
-$ClaudeSettings = Join-Path $HOME ".claude\settings.json"
-if (Test-Path $ClaudeSettings) {
-    $rawClaude = Get-Content $ClaudeSettings -Raw -Encoding UTF8
-    if ($rawClaude -notmatch 'context-guard\.ps1') {
-        try {
-            $cfg = $rawClaude | ConvertFrom-Json
-            if (-not $cfg.hooks) { $cfg | Add-Member -NotePropertyName "hooks" -NotePropertyValue ([pscustomobject]@{}) }
-            $entry = [pscustomobject]@{
-                hooks = @(
-                    [pscustomobject]@{
-                        type    = "command"
-                        command = "powershell -NoProfile -ExecutionPolicy Bypass -File `"$HOME\.agents\hooks\context-guard.ps1`""
-                        timeout = 5
-                    }
-                )
-            }
-            if (-not $cfg.hooks.UserPromptSubmit) {
-                $cfg.hooks | Add-Member -NotePropertyName "UserPromptSubmit" -NotePropertyValue @($entry)
-            } else {
-                $cfg.hooks.UserPromptSubmit = @($cfg.hooks.UserPromptSubmit) + @($entry)
-            }
-            [System.IO.File]::WriteAllText($ClaudeSettings, ($cfg | ConvertTo-Json -Depth 10), (New-Object System.Text.UTF8Encoding($false)))
-            Write-Host "  [+] Registered UserPromptSubmit hook in $ClaudeSettings" -ForegroundColor Green
-        } catch { }
-    }
-}
-$CursorHooks = Join-Path $HOME ".cursor\hooks.json"
-if (Test-Path $CursorHooks) {
-    $rawCursor = Get-Content $CursorHooks -Raw -Encoding UTF8
-    if ($rawCursor -notmatch 'context-guard\.ps1') {
-        try {
-            $ccfg = $rawCursor | ConvertFrom-Json
-            if ($ccfg.hooks -and $ccfg.hooks.preToolUse) {
-                $cEntry = [pscustomobject]@{
-                    command = "powershell -NoProfile -ExecutionPolicy Bypass -File `"$HOME\.agents\hooks\context-guard.ps1`""
-                    timeout = 5
-                }
-                $ccfg.hooks.preToolUse = @($ccfg.hooks.preToolUse) + @($cEntry)
-                [System.IO.File]::WriteAllText($CursorHooks, ($ccfg | ConvertTo-Json -Depth 10), (New-Object System.Text.UTF8Encoding($false)))
-                Write-Host "  [+] Registered preToolUse hook in $CursorHooks" -ForegroundColor Green
-            }
-        } catch { }
-    }
-}
-
 if ($TempDir -and (Test-Path $TempDir)) {
     Remove-Item -Recurse -Force $TempDir
 }
 
 Write-Host ""
-Write-Host "Done! Installed 10 skills + 3 subagents. Try asking your agent:" -ForegroundColor Cyan
+Write-Host "Done! Installed $($SubSkills.Count + 1) skills + 3 subagents. Try asking your agent:" -ForegroundColor Cyan
 Write-Host '  "Use skill writing-spec-for-ai to survey this repo and propose a doc design."' -ForegroundColor White

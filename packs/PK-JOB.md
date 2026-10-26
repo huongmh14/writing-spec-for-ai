@@ -1,7 +1,7 @@
 # PK-JOB — Background Jobs, Queues, Cron & Daemons
 
 > Tín hiệu bật: Có tiến trình chạy nền (worker, consumer hàng đợi RabbitMQ/Redis/BullMQ/Cloudflare Queues, lịch định kỳ cron/scheduler, hoặc daemon đồng bộ dữ liệu)
-> Nguồn: cdn, notification-service, citad-crawler-work-schedule, BotAutoTask, vmu-deploy-tool + skill `principle-make-operations-idempotent`, `observability-and-instrumentation`
+> Gốc ý tưởng (skill/repo tham khảo nội bộ, không phải bằng chứng): cdn, notification-service, citad-crawler-work-schedule, BotAutoTask, vmu-deploy-tool + skill `principle-make-operations-idempotent`, `observability-and-instrumentation`
 
 ## Tham số
 

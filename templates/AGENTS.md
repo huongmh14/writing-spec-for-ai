@@ -25,12 +25,12 @@
 | 4 | `AGENTS.md` | Quy tắc làm việc |
 | 5 | Code hiện có | Hiện trạng, không phải chuẩn |
 
-- **Khi bắt đầu bất kỳ task nào:** đọc `docs/specs/README.md`, spec liên quan, `docs/glossary.md` và đợt thực thi hiện tại trong `docs/progress.md` (`C30`).
+- **Khi bắt đầu bất kỳ task nào:** đọc `docs/specs/README.md`, spec liên quan, `docs/glossary.md` và đợt thực thi hiện tại trong `docs/progress.md` (quyền thực thi theo đợt: chỉ làm phần đợt đó ghi).
 - **Khi thêm/sửa biến môi trường:** cập nhật cả `.env.example` và `docs/reference/config.md`.
 - **Khi thêm/sửa mã lỗi trả về:** cập nhật `docs/reference/error-codes.md`.
-- **Khi thiếu dữ kiện ảnh hưởng hành vi/rủi ro trong phạm vi:** nêu điều chưa biết và cách kiểm chứng; dừng phần phụ thuộc, tiếp tục phần độc lập đã được giao (`C31`).
+- **Khi thiếu dữ kiện ảnh hưởng hành vi/rủi ro trong phạm vi:** nêu điều chưa biết và cách kiểm chứng; dừng phần phụ thuộc, tiếp tục phần độc lập đã được giao (nguồn & giới hạn hiểu biết: không đoán thay dữ kiện).
 - **Khi đã có chỉ dẫn rõ của người dùng:** thực hiện đủ phạm vi đó; không hỏi lại quyền đã cấp. Chỉ dẫn hiện hành của người dùng được ưu tiên.
-- Skill/hướng dẫn bên ngoài mâu thuẫn với file này thì theo file này.
+- Skill/hướng dẫn bên ngoài mâu thuẫn với docs dự án thì theo docs dự án, đúng thứ tự bảng trên.
 
 **Profile S:** nếu không có cây `docs/`, đọc spec trong `docs/spec.md` hoặc README; ghi block đợt hiện tại ngay trong file này theo các trường của mẫu progress. Chỉ đọc file thực sự có; không tạo thêm docs chỉ để thoả con trỏ.
 
@@ -40,7 +40,6 @@
 - Viết test cùng code; tên test chứa AC-ID.
 - Chạy lệnh ở mục DoD trước khi báo xong.
 - Đánh dấu `ceiling: <ngưỡng chịu tải + đường nâng cấp>` khi cố ý chọn giải pháp đơn giản có giới hạn đã biết (in-memory lock, quét $O(n^2)$, polling).
-- Khi cửa sổ ngữ cảnh dài (≥ 20 lượt / ~30k tokens), chuyển pha spec → code, hoặc `docs/progress.md > 5 KB` / `AGENTS.md > 150 dòng` (`C32`): tự động bật `Auto-Caveman` (nén câu trả lời, giữ nguyên 100% code/lệnh/AC-ID/từ phủ định), hiển thị `[CẢNH BÁO TOKEN & NGỮ CẢNH — C32]` báo AI đang tốn nhiều token, và chắt lọc tri thức quan trọng vào `docs/decisions.md` + `docs/progress.md` (chuyển lịch sử cũ sang `progress-archive/`) + `docs/plans/HANDOFF.md` trước khi chạy `/compact` hoặc mở phiên mới.
 - <thói quen đúng đặc thù dự án, viết ở thể khẳng định>
 
 ⚠️ **Hỏi trước nếu chưa được duyệt trong chỉ dẫn/đợt hiện tại**
@@ -53,7 +52,7 @@
 🚫 **Không bao giờ**
 - Commit secret, `.env`, token; log token, mật khẩu, header Authorization.
 - Commit file quyền cá nhân của agent (`.claude/settings.local.json`, allow-list lệnh, đường dẫn máy, mật khẩu trong lệnh đã duyệt).
-- Thêm cờ bịt miệng trình kiểm tra (`@ts-ignore`, `eslint-disable`, `# noqa`, `istanbul ignore`, `nosemgrep`, `gitleaks:allow`), thêm `.skip` hoặc xoá assertion/hạ ngưỡng để làm test xanh (`C23`).
+- Thêm cờ bịt miệng trình kiểm tra (`@ts-ignore`, `eslint-disable`, `# noqa`, `istanbul ignore`, `nosemgrep`, `gitleaks:allow`), thêm `.skip` hoặc xoá assertion/hạ ngưỡng để làm test xanh (không hạ chuẩn âm thầm).
 - Nối chuỗi SQL từ input.
 - Push trực tiếp/force push nhánh bảo vệ, `--no-verify`, tự merge hoặc tự approve PR.
 
@@ -61,8 +60,8 @@
 
 ## Quy trình một task
 
-1. Xác định spec, REQ/AC và chỉ dẫn thực thi thật của người dùng; ghi một đợt hiện tại ở `docs/progress.md`. `Ready`, plan và Frontier không tự cấp quyền code.
-2. Nếu người dùng chưa nêu ranh giới đợt (`C30`): **khi soạn thảo/cập nhật docs**, mỗi lượt chỉ viết **1 file lớn hoặc 1 cụm ≤ 3 file liên quan** rồi dừng chờ review (cấm viết tràn lan toàn bộ cây `docs/` trong 1 lượt); **khi viết code**, mặc định **1 SPEC + 1 task nhỏ kiểm chứng được**, làm → kiểm → báo cáo → dừng. Yêu cầu rõ làm toàn bộ spec/batch hữu hạn thì ghi đúng các task/AC được giao và hoàn tất trong phạm vi ấy.
+1. Xác định spec, REQ/AC và chỉ dẫn thực thi thật của người dùng; ghi một đợt hiện tại ở `docs/progress.md`. `Ready`, plan và danh sách task sẵn sàng không tự cấp quyền code.
+2. **Quyền thực thi theo đợt** — nếu người dùng chưa nêu ranh giới đợt: **khi soạn/cập nhật docs**, mỗi lượt chỉ làm một bước con rồi dừng chờ review (5a: cụm nền `AGENTS.md`/glossary/decisions · 5b: đúng **1 file SPEC** kèm cập nhật `docs/specs/README.md` · 5c: 1 file design); không viết cả cây `docs/` trong một lượt; **khi viết code**, mặc định **1 SPEC + 1 task/AC nhỏ kiểm chứng được**, làm → kiểm → báo cáo → dừng. Yêu cầu rõ làm toàn bộ spec/batch hữu hạn thì ghi đúng các task/AC được giao và hoàn tất trong phạm vi ấy.
 3. Kế hoạch ngắn: hành vi, vùng file, test, điều kiện dừng. Khoảng 5 file là dự kiến; sửa hàm dùng chung và các caller cần thiết trong cùng hành vi được phép, ghi lại tác động.
 4. Test + code chỉ trong đợt được phép. Subagent chỉ nhận phần việc thuộc đợt; không tự lấy task/spec tiếp theo. Rủi ro hoặc hành vi mới chưa duyệt → cập nhật phạm vi trước khi làm phần đó.
 5. Chạy DoD; đánh `[x]` AC có bằng chứng. Cập nhật tiến độ và chuyển đợt sang `Chờ kiểm chứng`, báo kết quả, rồi dừng ở ranh giới đã ghi. Commit/PR khi được giao hoặc theo quy trình repo.
@@ -73,8 +72,8 @@
 
 - `<lint> && <typecheck> && <test> && <build>` xanh (và đạt sàn `CONSTRAINTS.md` nếu có).
 - Mọi AC báo hoàn tất có test qua và bằng chứng; `[~]` là chưa kiểm chứng, ghi lý do + cách đóng.
-- Bằng chứng ghi lệnh và kết quả thực tế hoặc link log; chưa chạy thì ghi chưa chạy, không chép đầu ra kỳ vọng thành kết quả. Đối chiếu kỳ vọng với ví dụ/contract đã chốt (`C31`).
-- **In Bảng Bằng chứng Chạy Test (`Visible Test Execution Ledger` — `C29`):** khi báo xong task hoặc mở PR, bắt buộc in bảng `AC-ID | Kịch bản đã chạy | Input đã bơm | Output & Tác dụng phụ thực tế | Độ thật (0 Mock hay Mock gì) | Kết quả` để người review thấy rõ test đã kiểm cái gì (cấm chỉ báo *"All tests passed"*).
+- Bằng chứng ghi lệnh và kết quả thực tế hoặc link log; chưa chạy thì ghi chưa chạy, không chép đầu ra kỳ vọng thành kết quả. Đối chiếu kỳ vọng với ví dụ/contract đã chốt (nguồn & giới hạn hiểu biết). Nếu AI viết cả kỳ vọng lẫn test, test xanh chỉ chứng minh code khớp kỳ vọng của AI — ưu tiên ví dụ do người dùng đưa.
+- **In Bảng bằng chứng chạy test (Visible Test Execution Ledger):** khi báo xong task hoặc mở PR, bắt buộc in bảng `AC-ID | Kịch bản đã chạy | Input đã bơm | Output & Tác dụng phụ thực tế | Độ thật (0 Mock hay Mock gì) | Kết quả` để người review thấy rõ test đã kiểm cái gì (cấm chỉ báo *"All tests passed"*).
 - Spec/decisions/progress cập nhật; chỉ chuyển spec `Done` khi mọi AC của spec `[x]`. Còn `[~]` thì giữ `In progress`, trừ khi người dùng đổi phạm vi qua `change-spec`.
 
 ## Quy ước code
@@ -107,4 +106,4 @@ Xử lý lỗi:
 
 | Luật base | Ghi đè | Quyết định |
 |---|---|---|
-| `<C-xx / PK-…-Rnn>` | <nới / bỏ: nội dung> | D-xx |
+| `<tên luật base, vd. "Quyền thực thi theo đợt" / PK-…-Rnn>` | <nới / bỏ: nội dung> | D-xx |

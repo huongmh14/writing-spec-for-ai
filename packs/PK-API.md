@@ -1,7 +1,7 @@
 # PK-API — HTTP API
 
 > Tín hiệu bật: Có endpoint HTTP công khai
-> Nguồn: cdn, notification-service, dashboard
+> Gốc ý tưởng (skill/repo tham khảo nội bộ, không phải bằng chứng): cdn, notification-service, dashboard
 
 ## Tham số
 

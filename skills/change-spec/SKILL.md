@@ -5,7 +5,7 @@ description: Dùng ở Bước 8 khi yêu cầu thay đổi sau khi spec đã du
 
 # Change spec — thay đổi spec đã duyệt
 
-Spec `Draft`/`As-built` chưa được duyệt → sửa trực tiếp trong phạm vi đã giao. Spec `Ready`/`In progress`/`Done` đổi nghĩa REQ/AC → quy trình này, kể cả chưa code; sửa lỗi chính tả/link không đổi nghĩa thì sửa trực tiếp.
+Spec `Draft`/`As-built` (spec mô tả code đã có) chưa được duyệt → sửa trực tiếp trong phạm vi đã giao. Spec `Ready`/`In progress`/`Done` đổi nghĩa REQ/AC → quy trình này, kể cả chưa code; sửa lỗi chính tả/link không đổi nghĩa thì sửa trực tiếp.
 
 ## 1. Chọn đường đi (hỏi 3 câu theo thứ tự)
 
@@ -33,7 +33,7 @@ Trạng thái proposal: `Đề xuất` → trình người dùng duyệt → `Đ
 2. AC bị MODIFIED mất hiệu lực cũ → chuyển `[ ]`, ghi ở "Làm rõ" của spec: ngày + CHG-id.
 3. Chuyển proposal sang `Đã áp dụng`, di chuyển vào `docs/changes/archive/`.
 4. Nếu AC đã `[x]` mà REQ đổi nghĩa → hạ về `[ ]`, test tương ứng sửa theo, chạy lại.
-5. Đối chiếu đợt hiện tại trong `docs/progress.md` (`C30`): CHG được duyệt không tự cấp quyền thực thi ngoài phạm vi đã giao. Thu hồi phần quyền dựa vào REQ/AC đã đổi, chỉ tiếp tục khi lệnh người dùng bao phủ nội dung mới.
+5. Đối chiếu đợt hiện tại trong `docs/progress.md` (**Quyền thực thi theo đợt**, `C30`): CHG được duyệt không tự cấp quyền thực thi ngoài phạm vi đã giao. Thu hồi phần quyền dựa vào REQ/AC đã đổi, chỉ tiếp tục khi lệnh người dùng bao phủ nội dung mới.
 6. Spec từng `Done` có AC mới hoặc mất bằng chứng thì bỏ `Done`: đổi yêu cầu chưa chốt giữ `Draft`; yêu cầu đã chốt và chưa có đợt thì `Ready`, đang thực thi thì `In progress`. Đồng bộ danh mục; không tự duyệt yêu cầu bằng cách đổi trạng thái.
 
 ## 4. Đóng P-xx
@@ -44,7 +44,7 @@ Trạng thái proposal: `Đề xuất` → trình người dùng duyệt → `Đ
 
 - Nối thẳng phần lớn vào spec `Ready` — lỗi phổ biến nhất; spec phình, chuỗi truy vết gãy.
 - Đổi REQ mà quên sửa AC tương ứng → AC chứng minh điều không còn đúng.
-- Proposal ghi "sửa một chút cho linh hoạt" — không quantified; MODIFIED phải có nguyên văn cũ để so.
+- Proposal ghi "sửa một chút cho linh hoạt" — không định lượng; MODIFIED phải có nguyên văn cũ để so.
 - decisions đổi giá trị (vd. ngưỡng rate limit) mà REQ giữ số cũ → mâu thuẫn hai nguồn sự thật.
 
 ## Kiểm tra trước khi trình

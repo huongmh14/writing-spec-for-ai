@@ -10,7 +10,7 @@ description: Dùng ở Bước 7.5–8 khi dự án bước sang giai đoạn co
 1. `.agents/skills/verify-<tên-app>/SKILL.md` (và đồng bộ sang `.claude/skills/` hoặc `.cursor/skills/` nếu dự án dùng).
 2. Bản đồ tính năng kiểm chứng `.agents/skills/verify-<tên-app>/features/README.md` + 3–5 luồng chính.
 
-> Nguồn kế thừa: `pstack/create-verification-skill`, `playwright`, luật Core `C19` (kiểm tác dụng thật, không chỉ exit code).
+> Gốc ý tưởng (skill tham khảo nội bộ, không phải bằng chứng): `pstack/create-verification-skill`, `playwright`; luật Core **Kiểm tác dụng lệnh vận hành** (`C19` — kiểm tác dụng thật, không chỉ exit code).
 
 ## 1. Khảo sát cơ chế điều khiển từ repo (Không hỏi điều đọc được từ code)
 
@@ -28,10 +28,10 @@ Viết cho **agent kế tiếp đọc lúc chưa biết gì về app** (không �
 1. **Launch:** Lệnh khởi chạy đầy đủ và cách xác nhận hệ thống đã sẵn sàng phục vụ.
 2. **Doctor:** Một lệnh chỉ đọc (read-only) chạy trong `< 3 giây` để trả lời *"instance này có đang sống, đúng phiên bản build mới nhất, và sẵn sàng nhận kiểm thử không?"*.
 3. **Drive:** Công thức điều khiển bằng selector/lệnh thật của dự án (ưu tiên ARIA role/label, route path, CLI flags ổn định).
-4. **Evidence & Visible Test Ledger (`C19`, `C29`):** Tiêu chuẩn bằng chứng nghiệm thu cho các `AC-ID`:
+4. **Evidence & bảng bằng chứng chạy test (`C19`, **Bằng chứng test hiển thị** `C29`):** Tiêu chuẩn bằng chứng nghiệm thu cho các `AC-ID`:
    - Phải đi qua đường người dùng thật (không gọi hàm nội bộ tắt ngang).
    - Kiểm tra cả **phản hồi bề mặt** lẫn **tác dụng phụ thực tế** (bản ghi DB, file sinh ra, message trong queue — luật `C19`).
-   - **In Bảng Bằng chứng Chạy Test (`Visible Test Execution Ledger` — `C29`):** Kết thúc mỗi lượt verify, bắt buộc in ra bảng tóm tắt cho lập trình viên thấy rõ: `AC-ID | Kịch bản đã chạy | Input đã bơm | Output & Tác dụng phụ thực tế | Độ thật (0 Mock hay Mock thành phần nào) | Kết quả & Thời gian`, kèm đường dẫn ảnh chụp màn hình / trace log.
+   - **In Bảng bằng chứng chạy test (`C29`):** Kết thúc mỗi lượt verify, bắt buộc in ra bảng tóm tắt cho lập trình viên thấy rõ: `AC-ID | Kịch bản đã chạy | Input đã bơm | Output & Tác dụng phụ thực tế | Độ thật (0 Mock hay Mock thành phần nào) | Kết quả & Thời gian`, kèm đường dẫn ảnh chụp màn hình / trace log.
    - Lưu bằng chứng vào thư mục cố định để không bị xoá mất khi dọn dẹp.
 5. **Cleanup:** Lệnh tắt đúng tiến trình do phiên kiểm chứng bật lên (theo PID/container tên riêng, **cấm `killall` theo tên chung**), xoá dữ liệu rác nhưng giữ nguyên thư mục chứa bằng chứng (`Evidence`).
 
@@ -41,9 +41,9 @@ Tạo danh mục 3–5 luồng cốt lõi tương ứng với các `SPEC-<TÊN>`
 - `Các hành vi con (AC-ID liên quan)`
 - `Cách đi tới luồng (góc nhìn người dùng)`
 - `Cách điều khiển bằng <harness>`
-- `Gotchas (bẫy đã biết + ngày kiểm lần cuối theo C18)`
+- `Gotchas (bẫy đã biết + ngày kiểm lần cuối — luật Gotcha có ngày kiểm, C18)`
 
-## 4. Chạy thử thực tế trước khi bàn giao (Prove It Works)
+## 4. Chạy thử thực tế trước khi bàn giao
 
 Bắt buộc tự thực thi đúng hướng dẫn vừa viết 1 vòng từ đầu tới cuối cho ít nhất 1 luồng: **Launch → Doctor → Drive → Capture Evidence → Cleanup**, rồi xác nhận file bằng chứng vẫn còn nguyên sau bước Cleanup. Nếu bước nào vấp, sửa ngay vào skill rồi chạy lại.
 

@@ -97,7 +97,7 @@ if ($uniqueVersions.Count -gt 1) {
 # 2. Validate SKILL.md and agents/*.md frontmatter, SDO rules & line budgets
 
 if (Test-Path (Join-Path $root "skills")) {
-    $skillFiles = @("SKILL.md") + (Get-ChildItem -Path (Join-Path $root "skills") -Recurse -File -Filter "SKILL.md" | ForEach-Object { $_.FullName.Substring($root.Length + 1).Replace('\','/') })
+    $skillFiles = @("SKILL.md") + (Get-ChildItem -Path (Join-Path $root "skills") -Recurse -File | Where-Object { $_.Name -in @("SKILL.md", "sub-skill.md") } | ForEach-Object { $_.FullName.Substring($root.Length + 1).Replace('\','/') })
 } else {
     $skillFiles = @("SKILL.md") + ($subSkillNames | ForEach-Object { "../$_/SKILL.md" } | Where-Object { Test-Path (Join-Path $root $_) })
 }
@@ -184,6 +184,10 @@ $templateChecks = @(
     @{ File = "references/base-kit.md"; Pattern = "| C31 |"; Label = "Core provenance contract (C31)" },
     @{ File = "templates/AGENTS.md"; Regex = $true; Pattern = '(?i)quy\u1EC1n th\u1EF1c thi theo \u0111\u1EE3t'; Label = "Task execution boundary (C30)" },
     @{ File = "templates/AGENTS.md"; Regex = $true; Pattern = '(?i)ngu\u1ED3n & gi\u1EDBi h\u1EA1n hi\u1EC3u bi\u1EBFt'; Label = "Task knowledge boundary (C31)" },
+    @{ File = "templates/AGENTS.md"; Regex = $true; Pattern = '(?i)Ph\u1EA3n bi\u1EC7n \u0111\u1ED9c l\u1EADp & t\u1EF1 s\u1EEDa'; Label = "Independent/cross-model critique before reporting done (C26)" },
+    @{ File = "templates/AGENTS.md"; Regex = $true; Pattern = '(?i)gi\u1EA3i th\u00EDch k\u1EF9 thu\u1EADt d\u1EC5 hi\u1EC3u'; Label = "Plain-language technical explanation in batch report (C31)" },
+    @{ File = "templates/docs/specs/_template.md"; Regex = $true; Pattern = 'B\u1EA3n ch\u1EA5t l\u00E0 g\u00EC'; Label = "Visible technical explanation essence field in spec template (C31)" },
+    @{ File = "templates/docs/glossary.md"; Regex = $true; Pattern = 'Gi\u1EA3i th\u00EDch kh\u00E1i ni\u1EC7m & c\u01A1 ch\u1EBF k\u1EF9 thu\u1EADt'; Label = "Technical concept explainer section in project glossary template (C31)" },
     @{ File = "templates/docs/specs/README.md"; Regex = $true; Pattern = '(?i)quy\u1EC1n th\u1EF1c thi theo \u0111\u1EE3t'; Label = "Spec readiness versus execution authority (C30)" },
     @{ File = "templates/docs/specs/_template.md"; Regex = $true; Pattern = 'Nh\u00E3n ngu\u1ED3n g\u1ED1c'; Label = "Requirement provenance (C31)" },
     @{ File = "templates/docs/specs/_template.md"; Pattern = "../progress.md"; Label = "Pointer to current execution grant" },
@@ -191,10 +195,19 @@ $templateChecks = @(
     @{ File = "templates/docs/plans/_plan-template.md"; Regex = $true; Pattern = '(?i)quy\u1EC1n th\u1EF1c thi theo \u0111\u1EE3t'; Label = "Plan is not execution authority (C30)" },
     @{ File = "agents/doc-tester.md"; Pattern = "C30"; Label = "Clean-room execution boundary check (C30)" },
     @{ File = "agents/spec-challenger.md"; Pattern = "C31"; Label = "Adversarial provenance check (C31)" },
-    @{ File = "skills/write-design-doc/SKILL.md"; Pattern = "C30"; Label = "Staged design doc authoring checkpoint (C30)" }
+    @{ File = "skills/write-design-doc/SKILL.md"; Pattern = "C30"; Label = "Staged design doc authoring checkpoint (C30)" },
+    # Token budget (C17): clean-session reviewer reads only the Core table, not the whole 8k-token base-kit.
+    @{ File = "agents/spec-challenger.md"; Regex = $true; Pattern = 'base-kit\.md` \u00A73 only'; Label = "Reviewer CONTRACT limited to base-kit section 3 (C17)" },
+    # Token budget (C17): lean install keeps sub-skills nested so only the orchestrator description is preloaded.
+    @{ File = "install.ps1"; Pattern = 'param([switch]$Standalone)'; Label = "Lean install default with opt-in -Standalone (C17)" },
+    @{ File = "install.sh"; Pattern = '--standalone'; Label = "Lean install default with opt-in --standalone (C17)" },
+    @{ File = "install.ps1"; Pattern = 'sub-skill.md'; Label = "Rename nested SKILL.md to sub-skill.md for recursive scanners (C17)" }
 )
 foreach ($tc in $templateChecks) {
     $tPath = Join-Path $root $tc.File
+    if (-not (Test-Path $tPath) -and $tc.File -like "skills/*/SKILL.md") {
+        $tPath = Join-Path $root ($tc.File -replace '/SKILL\.md$', '/sub-skill.md')
+    }
     if (-not (Test-Path $tPath) -and $tc.File -like "skills/*") {
         $tPath = Join-Path $root ($tc.File -replace '^skills/', '../')
     }
@@ -236,7 +249,9 @@ $glossaryPath = Join-Path $root "references/glossary.md"
 if ((Test-Path (Join-Path $root "references")) -and -not (Test-Path $glossaryPath)) { $failures += "[READABILITY] references/glossary.md missing" }
 if (Test-Path (Join-Path $root "templates/docs/plans/HANDOFF.md")) { $failures += "[RETIRED] templates/docs/plans/HANDOFF.md must stay merged into templates/docs/progress.md (C17)" }
 if ((Test-Path (Join-Path $root "references")) -and -not (Test-Path (Join-Path $root "references/lenses.md"))) { $failures += "[LENS] references/lenses.md missing" }
-$exploreSkill = Join-Path $root "skills/explore-options/SKILL.md"; if (-not (Test-Path $exploreSkill)) { $exploreSkill = Join-Path (Split-Path $root -Parent) "explore-options/SKILL.md" }
+$exploreSkill = Join-Path $root "skills/explore-options/SKILL.md"
+if (-not (Test-Path $exploreSkill)) { $exploreSkill = Join-Path $root "skills/explore-options/sub-skill.md" }
+if (-not (Test-Path $exploreSkill)) { $exploreSkill = Join-Path (Split-Path $root -Parent) "explore-options/SKILL.md" }
 if (Test-Path $exploreSkill) {
     $exploreRaw = Get-Content $exploreSkill -Raw -Encoding UTF8
     foreach ($pat in @('(?i)ng\u01B0\u1EDDi d\u00F9ng ch\u1ECDn', '(?i)gi\u1EEF nguy\u00EAn', '(?i)1 v\u00F2ng')) {
@@ -281,7 +296,7 @@ foreach ($f in $allMd) {
 }
 
 Write-Host ("Checked {0} Markdown files, {1} Skills, {2} Subagents, {3} JSON manifests." -f $allMd.Count, $skillFiles.Count, $agentFiles.Count, $jsonFiles.Count) -ForegroundColor Gray
-Write-Host ("Total always-loaded description budget ({0} skills): {1} chars (~{2} tokens)" -f $skillFiles.Count, $totalSkillDescChars, [math]::Round($totalSkillDescChars / 3.8)) -ForegroundColor Gray
+Write-Host ("Description metadata ({0} skills): {1} chars (~{2} tokens). Lean install preloads only SKILL.md; the rest only with -Standalone" -f $skillFiles.Count, $totalSkillDescChars, [math]::Round($totalSkillDescChars / 3.0)) -ForegroundColor Gray
 Write-Host "Behavioral eval prompts checked structurally only; no model run or behavior score." -ForegroundColor Gray
 
 if ($failures.Count -gt 0) {

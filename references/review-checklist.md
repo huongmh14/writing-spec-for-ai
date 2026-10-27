@@ -30,7 +30,7 @@
 - [ ] **Nguồn & giới hạn hiểu biết** (`C31`): REQ/NFR và khẳng định quan trọng gắn 1 trong 4 nhãn `Người dùng chốt / Đã xác minh / AI đề xuất / Chưa biết`, một khẳng định một dòng; số đo có điều kiện, N/A chỉ khi không áp dụng, Draft unknown có cách xác minh.
 - [ ] Có bản đọc ngắn bằng hành vi và ví dụ; không bắt người dùng duyệt kiến thức chuyên môn chưa được chứng minh hoặc tự chấm độ tự tin %.
 - [ ] Mỗi `Đã xác minh` có đúng 1 con trỏ mở được (`path:line`, URL + trích nguyên văn + ngày đọc, hoặc lệnh + kết quả thật); link không kèm câu trích chưa tính là xác minh.
-- [ ] Quyết định kỹ thuật người dùng không tự thẩm định được có thẻ quyết định với dòng "Tự kiểm trong ≤ 5 phút" rẻ, chạy được (lệnh/thao tác + kết quả mong đợi, trỏ AC-ID).
+- [ ] Mọi khái niệm chuyên môn, cơ chế hoặc quyết định kỹ thuật AI đưa vào có **Thẻ giải thích & quyết định kỹ thuật** hiển thị tường minh (không ẩn trong comment `<!-- ... -->`): giải thích rõ *Bản chất là gì (kèm ví dụ) · Tại sao bắt buộc cần (bỏ qua thì lỗi gì) · Chạy thế nào (Đầu vào → Xử lý → Đầu ra) · Tự kiểm trong ≤ 5 phút (lệnh/thao tác + kết quả mong đợi, trỏ AC-ID) · Nguồn*.
 - [ ] Vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân người dùng không tự kiểm được ghi "cần chuyên gia: <vai trò>"; lời duyệt không coi là chứng nhận đúng.
 - [ ] Có trường hợp biên; mỗi biên có AC hoặc nằm ở ngoài phạm vi.
 - [ ] Mỗi REQ ≥ 1 AC; có AC cho lỗi; AC có tầng test.
@@ -81,7 +81,7 @@
 - [ ] Mẫu chép sang repo đích (AGENTS.md, spec, decisions…) không chứa mã luật Core `Cxx`; mã truy vết (`SPEC-x`, `X-R01`, `D-xx`, `PK-…`) được giữ.
 - [ ] File nội bộ kit: mã luật lần đầu có tên ngắn (``**tên ngắn** (`Cxx`)``); thuật ngữ kit lần đầu được giải nghĩa hoặc link [glossary.md](glossary.md).
 - [ ] Viết khẳng định trước, câu cấm chỉ cho ranh giới cứng (`C24`).
-- [ ] Đã qua bước phản biện đối kháng trong context sạch (`spec-challenger` / `C26` — chỉ nhận `ARTIFACT + CONTRACT`).
+- [ ] Đã qua vòng lặp phản biện đối kháng trong context sạch / chéo model (`Writer → spec-challenger / codex read-only → Tự sửa lỗi thật` theo `C26` — chỉ nhận `ARTIFACT + CONTRACT`).
 
 ## 6. Mức 1–2 (nếu áp dụng)
 

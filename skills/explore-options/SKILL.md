@@ -50,9 +50,10 @@ Mục tiêu: người dùng **chọn được** giữa các phương án mà kh�
 | A. Giữ nguyên / tối thiểu | tốt / vừa / kém + 1 lý do | … | … | Dễ |
 | B. … | … | … | … | … |
 
-Mỗi phương án kèm một Thẻ quyết định kỹ thuật:
-- Nói đơn giản: <không dùng thuật ngữ>
-- Nếu sai thì sao: <hậu quả + chi phí quay lại>
+Mỗi phương án kèm một Thẻ giải thích & quyết định kỹ thuật:
+- Bản chất là gì (nói dễ hiểu + ví dụ thực tế): <không dùng thuật ngữ mù mờ>
+- Tại sao cần / Nếu sai thì sao: <hậu quả quan sát được + chi phí quay lại>
+- Chạy thế nào (Đầu vào → Xử lý → Đầu ra): <2–3 bước ngắn>
 - Tự kiểm ≤ 5 phút: <lệnh / link / thao tác người dùng tự làm được>
 - Nguồn: <path:line | URL + trích nguyên văn> · Nhãn: Người dùng chốt / Đã xác minh / AI đề xuất / Chưa biết
 - Không tự kiểm được: <phần cần chuyên gia, nếu có>

@@ -17,8 +17,9 @@ Người vừa viết tài liệu luôn mang thiên kiến xác nhận (confirma
 1. **Tách `ARTIFACT` và `CONTRACT` (Tuyệt đối không truyền `CLAIM`):**
    - Giao việc cho subagent chỉ đọc [`spec-challenger`](../../agents/spec-challenger.md) (hoặc chạy một lượt kiểm tra tách biệt hoàn toàn với lý lẽ lúc viết).
    - Chỉ cung cấp đường dẫn các file vừa viết (`ARTIFACT`) và [`references/review-checklist.md`](../../references/review-checklist.md) + các Pack đang bật (`CONTRACT`). Không kèm lời giải thích *"tôi viết thế này vì..."*.
-2. *(Tuỳ chọn cho dự án lớn / rủi ro cao)* **Hỏi ý kiến model thứ hai:**
-   - Nếu đang ở phiên tương tác và dự án có vùng bảo mật/kiến trúc phức tạp, hỏi người dùng có muốn chạy thêm một lượt phản biện chéo qua CLI model khác (`codex`, `gemini`, `claude` ở chế độ `--sandbox read-only`, truyền prompt qua file tạm `stdin`) hay không.
+2. **Chạy phản biện độc lập — phân biệt rõ `Chéo model (Cross-Model)` và `Phiên sạch cùng model (Same-Model Clean-Session)`:**
+   - Cùng một họ model vừa viết vừa tự đọc lại dễ chia sẻ chung điểm mù. Nếu môi trường có sẵn CLI của **họ model khác** với model đang viết (vd. đang viết bằng Antigravity/Claude thì gọi `"" | codex exec --sandbox read-only ...`, hoặc ngược lại; luôn đóng `stdin` bằng `"" |` để CLI không treo chờ nhập), **chủ động chạy luôn lượt phản biện chéo model** chỉ truyền `ARTIFACT + CONTRACT`. Nếu máy không có CLI của họ model khác thì chạy subagent [`spec-challenger`](../../agents/spec-challenger.md) trong phiên sạch và phải ghi trung thực trong báo cáo là `Phiên sạch cùng model (kèm lý do chưa chạy khác model)` — cấm khai gian là đã phản biện chéo model.
+   - **Cấm tự ý ỉm phát hiện của bộ phản biện:** Tác giả không được tự đánh dấu "báo động giả" rồi xoá im lặng. Mọi phát hiện từ lượt phản biện phải được liệt kê đầy đủ trong báo cáo người dùng dưới 2 nhóm: `Đã tự sửa (Fixed)` và `Không sửa / Cần người dùng quyết (Not Fixed / Needs Decision)` kèm lý do cụ thể. Phân biệt rõ với `C31`: hai AI cùng khen/đồng ý **không phải là bằng chứng đúng**, nhưng lỗi do model thứ hai / phiên sạch chỉ ra là tín hiệu bắt buộc phải đối chiếu công khai.
 3. **Đối chiếu & Phân loại phát hiện (`RECONCILE`):**
    Đọc lại văn bản thật đối chiếu với từng phát hiện của `spec-challenger` và phân loại theo thứ tự ưu tiên:
    - **Loại 1 — Lỗi thật, sửa được ngay:** sửa thẳng vào file docs trước khi trình người dùng (xem bảng mục 2).
@@ -34,6 +35,7 @@ Chạy đủ 6 nhóm theo thứ tự; mỗi mục phải có **bằng chứng tr
 |---|---|
 | Spec chỉ có chữ và bảng REQ, thiếu hình dung trực quan (**Trình bày định hướng bằng hình**, `C28`) | Thêm sơ đồ luồng Mermaid + ít nhất 1 **Snapshot I/O cụ thể** (ASCII wireframe / CLI / JSON mẫu) |
 | AC chỉ ghi chữ chung chung, thiếu Ma trận Kiểm thử Minh bạch (**Bằng chứng test hiển thị**, `C29`) | Bổ sung Ma trận Kiểm thử Minh bạch nêu rõ `Input cụ thể / Output & Tác dụng phụ / Tầng & Độ thật (0 Mock hay Mock gì)` |
+| Spec/Design dùng thuật ngữ hoặc cơ chế kỹ thuật chuyên sâu nhưng xoá mất / để ẩn trong comment phần **Giải thích kiến thức & quyết định kỹ thuật** (`C31`) | Mở comment, viết tường minh Thẻ giải thích kỹ thuật: *Bản chất là gì (kèm ví dụ) · Tại sao cần (không có thì lỗi gì) · Chạy thế nào (Đầu vào → Xử lý → Đầu ra) · Tự kiểm ≤ 5 phút · Nguồn* + thêm thuật ngữ vào `docs/glossary.md` |
 | REQ mơ hồ, chứa số không có nguồn, hoặc nhãn `Đã xác minh` mà con trỏ không chứa câu trích | Tìm cơ sở yêu cầu/số đo; chưa có → `Chưa biết` + cách xác minh, không tự điền ngưỡng (`C31`) |
 | AC kết thúc bằng "hoạt động đúng" / lệnh vận hành chỉ kiểm exit 0 | Thay bằng mã HTTP, mã lỗi, dữ liệu DB/file sinh ra (**Kiểm tác dụng lệnh vận hành**, `C19`) |
 | "Ngoài phạm vi" rỗng | Thêm ít nhất 1 thứ lân cận bị loại (phần GĐ sau, dịch vụ ngoài, màn không làm) |
@@ -60,11 +62,13 @@ File đã viết/sửa: <danh sách>
 | 3b. CI, cấu hình, CONSTRAINTS, gotcha | … | … | |
 | 4–6. Vị trí, chất lượng chung, Mức 1–2 | … | … | |
 
-Đã tự sửa sau phản biện `spec-challenger`:
+Chế độ phản biện đã chạy: <Chéo model: `<model viết> → <CLI model phản biện>` | Phiên sạch cùng model: `spec-challenger` — lý do chưa chạy khác model>
+
+Đã tự sửa sau phản biện (Fixed):
 - <file:dòng> — <lỗi phát hiện> → <đã sửa thế nào>
 
-Chưa đạt + kế hoạch (cần người dùng quyết định):
-- <mục> — <lý do> — <đề xuất phương án>
+Phát hiện giữ nguyên / cần người dùng quyết định (Not Fixed — cấm ẩn phát hiện):
+- <file:dòng> — <phát hiện của bộ phản biện> → <lý do giữ nguyên hoặc câu hỏi cần người dùng chốt>
 
 Câu hỏi còn lại: <danh sách hoặc "Không có">
 ```

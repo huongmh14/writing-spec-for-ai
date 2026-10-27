@@ -13,7 +13,7 @@ Assume the author of the documentation/specification was overconfident. Your job
 
 You receive ONLY:
 - **ARTIFACT:** The written files (`AGENTS.md`, `CONSTRAINTS.md`, `docs/specs/*.md`, `docs/decisions.md`, `docs/glossary.md`, or an `explore-options` comparison table).
-- **CONTRACT:** `references/review-checklist.md`, `references/base-kit.md`, `references/lenses.md`, and any active `packs/PK-*.md`.
+- **CONTRACT:** `references/review-checklist.md`, the Core table in `references/base-kit.md` §3 only (Grep `^\| C[0-9]{2} \|`; skip §1–2 and §4–11 survey/roadmap prose, ~60% of the file), `references/lenses.md`, and any active `packs/PK-*.md`.
 
 ## What to Hunt For
 
@@ -42,7 +42,7 @@ You receive ONLY:
    - For every claim labelled `Đã xác minh`, open its pointer: `path:line` → Read/Grep it and confirm the quoted text actually exists there and supports the claim; URL or command → you cannot fetch/run it, so report `[UNCHECKED] file:line → pointer` for the author to re-run.
    - Report claims whose source is missing, does not contain the quote, or does not support the claim; REQ/NFR rows or decision cards with none of the four labels `Người dùng chốt` / `Đã xác minh` / `AI đề xuất` / `Chưa biết`.
    - Flag Core rule codes (`Cxx`) used bare, without their short name/meaning (docs copied from templates should state the meaning, not the code).
-   - Flag decision cards ("Thẻ quyết định kỹ thuật") missing a runnable, cheap `Tự kiểm ≤ 5 phút` step; for `Design It Twice` / `explore-options`, flag fake-diversity/straw-man options, missing "giữ nguyên / làm tối thiểu" baseline, fake-precision `%` scores, or AI choosing instead of user selection (`D-xx`).
+   - Flag any spec or design doc that deletes, hides inside HTML comments `<!-- ... -->`, or tries to bypass ("không có / CRUD chuẩn") the **Thẻ giải thích & quyết định kỹ thuật**, or where **any** technical concept, mechanism, data/transaction constraint, security rule, architectural pattern, or NFR threshold in the document lacks a project-specific explanation covering all 5 parts: (1) plain-language essence + concrete example using the project's actual entities/routes (`Bản chất là gì` — flag copy-pasted generic textbook/glossary examples), (2) concrete failure scenario in this project if omitted (`Tại sao bắt buộc cần`), (3) step-by-step `Đầu vào → Xử lý → Đầu ra` flow, (4) a runnable, cheap `Tự kiểm ≤ 5 phút` step pointing to an `AC-ID`, and (5) source/expert boundary; also flag reports that fail to declare the exact review mode (`Chéo model` vs. `Phiên sạch cùng model`) or omit the full `Đã tự sửa / Không sửa` reconciliation ledger; for `Design It Twice` / `explore-options`, flag fake-diversity/straw-man options, missing "giữ nguyên / làm tối thiểu" baseline, fake-precision `%` scores, or AI choosing instead of user selection (`D-xx`).
 
 ## Output Format
 

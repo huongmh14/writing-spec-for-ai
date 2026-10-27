@@ -26,7 +26,7 @@ Turn any new or existing codebase into an evidence-backed, 3-gate specification 
 
 </div>
 
-**Unreleased design update (2026-10-25):** `Ready` approves requirements; execution follows the user's actual bounded assignment. Default to one spec and one verifiable task, report evidence and stop. Honor explicitly assigned finite batches without repeated approval. Users review behavior and trade-offs; agents must source or verify technical claims and disclose unknowns (`C30–C31`). Each important claim carries one of four provenance labels — `Người dùng chốt` (user-decided), `Đã xác minh` (verified: one openable pointer + verbatim quote), `AI đề xuất` (AI-proposed), `Chưa biết` (unknown). Technical decisions users cannot judge come as a decision card: users approve the observable ≤ 5-minute self-check, not the reasoning; security/payment/legal/personal-data areas are flagged "needs an expert". Kit terms are defined in [references/glossary.md](references/glossary.md).
+**Unreleased design update (2026-10-25):** `Ready` approves requirements; execution follows the user's actual bounded assignment. Default to one spec and one verifiable task, run an independent/cross-model critique (`Writer → Codex / spec-challenger → Self-Fix`, `C26`), report evidence with a plain-language technical explanation, and stop. Honor explicitly assigned finite batches without repeated approval. Users review behavior and trade-offs; agents must source or verify technical claims and disclose unknowns (`C30–C31`). Each important claim carries one of four provenance labels — `Người dùng chốt` (user-decided), `Đã xác minh` (verified: one openable pointer + verbatim quote), `AI đề xuất` (AI-proposed), `Chưa biết` (unknown). Technical mechanisms and decisions come with a visible **Technical Explanation & Decision Card** (*Plain-language essence + example · Why needed / what breaks without it · Input → Process → Output flow · ≤ 5-minute runnable self-check · Source & expert boundary*) so users genuinely understand the technical concepts while verifying correctness through the observable self-check; security/payment/legal/personal-data areas are flagged "needs an expert". Kit terms and domain-pack mechanisms are explained in [references/glossary.md](references/glossary.md).
 
 Read the [research and primary sources](references/research-controlled-execution.md), [before/after walkthrough](references/controlled-spec-demo.md), and [updated spec template](templates/docs/specs/_template.md). Markdown guides behavior; tool permissions and sandboxes provide enforcement.
 
@@ -115,6 +115,8 @@ irm https://raw.githubusercontent.com/huongmh14/writing-spec-for-ai/main/install
 ```bash
 curl -fsSL https://raw.githubusercontent.com/huongmh14/writing-spec-for-ai/main/install.sh | bash
 ```
+
+Default install is **lean**: sub-skills ship nested as `writing-spec-for-ai/skills/<name>/sub-skill.md`, so all agents—including recursive `SKILL.md` scanners like Codex and OpenCode—preload only the single orchestrator description (~0.8k–1.1k fewer tokens per turn). Need direct `/write-spec`, `/review-docs`…? Re-run with `-Standalone` (PowerShell: `& ([scriptblock]::Create((irm <url>))) -Standalone`) or `bash -s -- --standalone`. Evidence: [references/research-token-budget.md](references/research-token-budget.md).
 
 ---
 

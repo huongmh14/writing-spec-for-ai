@@ -18,7 +18,7 @@ Profile S không có cây docs: dùng `docs/spec.md` hoặc README và block đ�
 2. Đọc `docs/glossary.md` — dùng đúng thuật ngữ; thiếu thuật ngữ thì thêm vào glossary **trước** khi viết spec.
 3. Đọc `docs/decisions.md` — quyết định nào chạm khu vực này thì chỉ ghi `D-xx` trong spec, không chép lý do.
 4. Chốt ID: `SPEC-<TÊN>` + tiền tố REQ/AC `<TÊN>-Rnn`/`<TÊN>-ACnn`. Đã dùng trong đề xuất được duyệt; không đổi ID sau khi viết.
-5. **Mỗi lượt một bước con, 5b đúng 1 spec** (**Quyền thực thi theo đợt**, `C30` — Checkpoint 5b): mỗi lượt chỉ viết **ĐÚNG 1 file `SPEC-xx` sắp làm** (kèm cập nhật `docs/specs/README.md` và bản đọc ngắn cho người dùng), rồi **BẮT BUỘC DỪNG LẠI** chờ người dùng review xong mới viết spec tiếp hoặc sang 5c/6. Cấm viết nhiều file `SPEC-xx` trong một lượt. `Ready` xác nhận yêu cầu; quyền chạy code nằm ở đợt thực thi.
+5. **Mỗi lượt một bước con, 5b đúng 1 spec — phản biện chéo & tự sửa trước khi trình** (**Quyền thực thi theo đợt**, `C30` & **Phản biện trong phiên sạch**, `C26` — Checkpoint 5b): mỗi lượt chỉ viết **ĐÚNG 1 file `SPEC-xx` sắp làm** (kèm cập nhật `docs/specs/README.md` và `docs/glossary.md`). Trước khi trình người dùng, chạy ngay 1 lượt phản biện độc lập trên file vừa viết (ưu tiên gọi CLI model thứ hai như `codex` read-only nếu máy có sẵn, hoặc subagent [`spec-challenger`](../../agents/spec-challenger.md) chỉ nhận `ARTIFACT + CONTRACT`), **tự sửa hết lỗi thật phát hiện được**, rồi mới trình bản đọc ngắn + tóm tắt lỗi đã tự sửa và **BẮT BUỘC DỪNG LẠI** chờ người dùng review. Cấm viết nhiều file `SPEC-xx` trong một lượt. `Ready` xác nhận yêu cầu; quyền chạy code nằm ở đợt thực thi.
 
 ## 1. Trực quan hoá luồng & trích yêu cầu từ nguồn (**Trình bày định hướng bằng hình**, `C28`)
 
@@ -41,7 +41,7 @@ Mỗi REQ: 1 câu, có ID, có mức (MUST/SHOULD/MAY), kèm giai đoạn nếu 
 Quy tắc chặt:
 - **Số phải có cơ sở (**Nguồn & giới hạn hiểu biết**, `C31`):** ngưỡng cần nguồn yêu cầu, số đo có điều kiện, hoặc đề xuất ghi rõ chưa chốt. Không biến ví dụ `p95 < 5 ms`/`10 lần/phút` thành cam kết. Chưa biết → câu hỏi mở + cách xác minh, không điền số cho đủ mẫu.
 - **Cột nguồn của mỗi REQ/NFR ghi đúng 1 trong 4 nhãn** ([glossary](../../references/glossary.md)): `Người dùng chốt` (ngày/câu nói hoặc mục Làm rõ) · `Đã xác minh` (đúng 1 con trỏ mở được: `path:line` | URL + trích nguyên văn + ngày đọc | lệnh + kết quả thật) · `AI đề xuất` (lý do 1 dòng + hậu quả nếu sai) · `Chưa biết` (cách xác minh + ai + phần bị chặn). Một khẳng định một dòng, không tự chấm %. Code chứng minh hiện trạng, không chứng minh nhu cầu; docs chính thức chứng minh API, không chứng minh NFR sản phẩm.
-- **Quyết định kỹ thuật vượt hiểu biết người dùng → Thẻ quyết định kỹ thuật** (mẫu ở `templates/docs/specs/_template.md` §9; design doc dùng cùng khung): Nói đơn giản · Nếu sai thì sao · Tự kiểm trong ≤ 5 phút (trỏ AC-ID) · Nguồn · Không tự kiểm được. Người dùng duyệt dòng Tự kiểm, không duyệt lập luận; vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân ghi "cần chuyên gia: <vai trò>".
+- **Mọi khái niệm chuyên môn, cơ chế hoặc quyết định kỹ thuật AI đưa vào → Thẻ giải thích & quyết định kỹ thuật hiển thị tường minh** (mẫu ở `templates/docs/specs/_template.md` §9; cấm để ẩn trong comment `<!-- ... -->` rồi xoá mất): *Bản chất là gì (nói dễ hiểu + ví dụ thực tế) · Tại sao bắt buộc cần ở đây (nếu không có thì lỗi gì xảy ra) · Chạy thế nào trong dự án này (Đầu vào → Xử lý → Đầu ra) · Tự kiểm trong ≤ 5 phút (trỏ AC-ID) · Nguồn đối chiếu & Giới hạn không tự kiểm được*. Giải thích đủ rõ để người dùng **hiểu thật sự kiến thức AI viết**, đồng thời nghiệm thu bằng kết quả chạy thật ở dòng Tự kiểm (không duyệt mù theo văn xuôi); vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân ghi "cần chuyên gia: <vai trò>".
 - Tên mã lỗi, tên trường, tên hàm viết đúng như sẽ xuất hiện trong code/contract. Không viết cách cài đặt (thuộc design), không chia việc (thuộc plan).
 - Một REQ một hành vi; REQ ghép 3 hệ quả (vd. R21) chỉ khi các hệ quả luôn xảy ra cùng nhau và cùng được kiểm.
 
@@ -94,7 +94,7 @@ Công thức: **Cho** <trạng thái ban đầu với dữ liệu cụ thể>, *
 
 - [ ] Có sơ đồ luồng Mermaid và **Snapshot I/O cụ thể** (ASCII wireframe / CLI / JSON mẫu) theo `C28`.
 - [ ] Mỗi REQ: 1 câu, có ID + mức, theo 1 mẫu EARS, không tính từ mơ hồ.
-- [ ] NFR đủ 8 dòng; mỗi REQ/NFR có 1 trong 4 nhãn nguồn (`C31`), không có số tự bịa; `N/A` không che điều chưa biết; quyết định kỹ thuật vượt hiểu biết người dùng có Thẻ quyết định với dòng Tự kiểm rẻ.
+- [ ] NFR đủ 8 dòng; mỗi REQ/NFR có 1 trong 4 nhãn nguồn (`C31`), không có số tự bịa; `N/A` không che điều chưa biết; mọi cơ chế/quyết định kỹ thuật có **Thẻ giải thích & quyết định kỹ thuật** hiển thị tường minh (giải thích bản chất + tại sao cần + luồng chạy + dòng Tự kiểm rẻ) và đã qua 1 lượt phản biện độc lập/chéo (`C26`) trước khi trình.
 - [ ] Mỗi REQ ≥ 1 AC; có AC lỗi; có AC biên; có **Ma trận Kiểm thử Minh bạch** (`C29`) nêu rõ Input, Output kỳ vọng và độ thật (`0 Mock` hay `Mock gì`).
 - [ ] "Ngoài phạm vi" không rỗng; có kiểm end-to-end; câu hỏi mở có mặt (hoặc "Không có").
 - [ ] Không còn `[CẦN LÀM RÕ]` nếu người dùng đã chuyển `Ready`; As-built có bằng chứng file/test.

@@ -4,7 +4,7 @@
   <a href="./README.md">English</a> · <strong>Tiếng Việt</strong>
 </p>
 
-**Bản sửa đang thử (2026-10-25):** mặc định mỗi đợt AI chỉ làm **1 spec + 1 task có thể kiểm**, báo bằng chứng rồi dừng. `Ready` xác nhận yêu cầu, chưa phải quyền chạy toàn bộ. Bạn duyệt hành vi/phạm vi qua ví dụ; AI phải tìm nguồn và kiểm kỹ thuật, ghi rõ điều chưa biết. Mỗi khẳng định quan trọng gắn 1 trong 4 nhãn: `Người dùng chốt` · `Đã xác minh` (con trỏ mở được + trích nguyên văn) · `AI đề xuất` · `Chưa biết`. Quyết định kỹ thuật bạn không tự thẩm định được đi kèm **thẻ quyết định**: bạn duyệt bước tự kiểm ≤ 5 phút, không duyệt lập luận; vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân ghi "cần chuyên gia". Thuật ngữ kit: [references/glossary.md](references/glossary.md).
+**Bản sửa đang thử (2026-10-25):** mặc định mỗi đợt AI chỉ làm **1 spec + 1 task có thể kiểm**, chạy **phản biện độc lập / phản biện chéo (`Writer → Codex / spec-challenger → Tự sửa`)**, báo bằng chứng kèm giải thích kỹ thuật rồi dừng. `Ready` xác nhận yêu cầu, chưa phải quyền chạy toàn bộ. Bạn duyệt hành vi/phạm vi qua ví dụ; AI phải tìm nguồn và kiểm kỹ thuật, ghi rõ điều chưa biết. Mỗi khẳng định quan trọng gắn 1 trong 4 nhãn: `Người dùng chốt` · `Đã xác minh` (con trỏ mở được + trích nguyên văn) · `AI đề xuất` · `Chưa biết`. Mọi khái niệm chuyên môn hoặc quyết định kỹ thuật AI đưa vào đi kèm **Thẻ giải thích & quyết định kỹ thuật** hiển thị tường minh (giải thích rõ *Bản chất là gì + ví dụ · Tại sao bắt buộc cần / bỏ qua thì lỗi gì · Chạy thế nào* để bạn hiểu thấu kiến thức AI viết, và nghiệm thu qua bước *Tự kiểm ≤ 5 phút*); vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân ghi "cần chuyên gia". Thuật ngữ & giải thích chi tiết các cơ chế kỹ thuật: [references/glossary.md](references/glossary.md).
 
 Đọc [nghiên cứu và nguồn sơ cấp](references/research-controlled-execution.md), [bản thử trước/sau và 6 tình huống kiểm](references/controlled-spec-demo.md), [mẫu spec đã sửa](templates/docs/specs/_template.md). Luật **Quyền thực thi theo đợt** (`C30`) và **Nguồn & giới hạn hiểu biết** (`C31`) ở [base-kit](references/base-kit.md); thay đổi chưa phát hành ở [CHANGELOG](CHANGELOG.md).
 
@@ -71,7 +71,7 @@ templates/
   project-skill/SKILL.md                 #   Mẫu skill dự án
 ```
 
-## Cài đặt (1 dòng lệnh — cài đồng thời 9 Skills + 3 Subagents cho 7 công cụ)
+## Cài đặt (1 dòng lệnh — bộ điều phối + 10 sub-skill + 3 Subagents cho 7 công cụ)
 
 **Windows (PowerShell):**
 ```powershell
@@ -82,6 +82,8 @@ irm https://raw.githubusercontent.com/huongmh14/writing-spec-for-ai/main/install
 ```bash
 curl -fsSL https://raw.githubusercontent.com/huongmh14/writing-spec-for-ai/main/install.sh | bash
 ```
+
+Mặc định cài **gọn**: sub-skill nằm lồng dưới dạng `writing-spec-for-ai/skills/<tên>/sub-skill.md`, nên cả công cụ quét 1 cấp (Antigravity, Claude Code) lẫn công cụ quét đệ quy `SKILL.md` (Codex, OpenCode) đều chỉ nạp sẵn mô tả của bộ điều phối (bớt ~0,8k–1,1k token mỗi lượt). Cần gọi thẳng `/write-spec`, `/review-docs`… thì chạy lại với `-Standalone` (PowerShell: `& ([scriptblock]::Create((irm <url>))) -Standalone`) hoặc `bash -s -- --standalone`. Bằng chứng: [references/research-token-budget.md](references/research-token-budget.md).
 
 ## Cách dùng
 

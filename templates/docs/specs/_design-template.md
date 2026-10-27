@@ -4,15 +4,15 @@ Dùng khi spec cần > 2 PR hoặc chạm schema / API công khai / bảo mật.
 
 Khái niệm mượn: Module sâu (Deep Module) & Thiết kế hai lần (Design It Twice) — John Ousterhout, *A Philosophy of Software Design*; Điểm ghép nối (Seam) — Michael Feathers, *Working Effectively with Legacy Code*; STRIDE — Microsoft (Kohnfelder & Garg, 1999); Mở rộng → Chuyển → Thu gọn (Expand–Migrate–Contract / Parallel Change) — Danilo Sato, martinfowler.com/bliki/ParallelChange.html.
 
-Mỗi quyết định thiết kế đáng kể ghi bằng thẻ dưới đây (người dùng duyệt dòng "Tự kiểm", không duyệt lập luận; lời duyệt không chứng nhận phần "cần chuyên gia"):
+Mỗi cơ chế hoặc quyết định thiết kế đáng kể bắt buộc giải thích bằng thẻ dưới đây để người đọc **hiểu rõ bản chất kỹ thuật** và **nghiệm thu bằng bước "Tự kiểm"** (không duyệt mù chỉ vì văn xuôi nghe hợp lý; lời duyệt không chứng nhận phần "cần chuyên gia"):
 
 ```
-**Quyết định:** <…> · Nhãn: <Người dùng chốt | Đã xác minh | AI đề xuất | Chưa biết>
-- **Nói đơn giản:** <1–2 câu không thuật ngữ>
-- **Nếu sai thì sao:** <hậu quả quan sát được>
+**Khái niệm / Quyết định:** <…> · Nhãn: <Người dùng chốt | Đã xác minh | AI đề xuất | Chưa biết>
+- **Bản chất là gì (nói dễ hiểu + ví dụ thực tế):** <Giải thích bằng lời thường kèm ví dụ gắn với bài toán; không chỉ ném thuật ngữ>
+- **Tại sao bắt buộc cần ở đây (nếu không có thì lỗi gì xảy ra?):** <Kịch bản hỏng quan sát được nếu bỏ qua hoặc chọn sai>
+- **Chạy thế nào trong dự án này (Đầu vào → Xử lý → Đầu ra):** <2–3 bước cụ thể trong luồng thiết kế>
 - **Tự kiểm trong ≤ 5 phút:** <lệnh/thao tác + kết quả mong đợi, trỏ AC-ID>
-- **Nguồn:** <con trỏ mở được + trích nguyên văn>
-- **Không tự kiểm được:** <phần nào; bảo mật/thanh toán/pháp lý/dữ liệu cá nhân → "cần chuyên gia: <vai trò>"; hoặc "Không có">
+- **Nguồn & Không tự kiểm được:** <con trỏ mở được + trích nguyên văn; bảo mật/thanh toán/pháp lý/dữ liệu cá nhân → "cần chuyên gia: <vai trò>"; hoặc "Không có">
 ```
 
 **Nhãn nguồn gốc:** `Người dùng chốt` — kèm ngày/câu nói · `Đã xác minh` — kèm đúng 1 con trỏ mở được (`path:line`, URL + trích nguyên văn + ngày đọc, hoặc lệnh + kết quả thật) · `AI đề xuất` — lý do 1 dòng + hậu quả nếu sai · `Chưa biết` — cách xác minh + ai + phần bị chặn.

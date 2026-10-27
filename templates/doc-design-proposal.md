@@ -8,7 +8,7 @@
 - **Ví dụ nghiệm thu:** <thao tác → kết quả; trỏ AC dự kiến>.
 - **Giới hạn lần đầu:** <một spec/lát cắt; phần sau giữ ở bản đồ, chưa viết chi tiết>.
 - **Điều chưa biết:** <ảnh hưởng, cách xác minh, người phụ trách>.
-- **Bạn duyệt:** <hành vi/phạm vi/đánh đổi>; AI chịu trách nhiệm kiểm chứng kỹ thuật; quyết định kỹ thuật bạn không tự thẩm định được sẽ kèm một dòng "Tự kiểm trong ≤ 5 phút". Duyệt bản đồ chưa cấp quyền chạy các spec.
+- **Bạn duyệt:** <hành vi/phạm vi/đánh đổi>; AI chịu trách nhiệm kiểm chứng kỹ thuật; mọi khái niệm hoặc quyết định kỹ thuật AI đưa vào sẽ kèm **Thẻ giải thích kỹ thuật** (giải thích rõ bản chất + lý do + luồng chạy để bạn hiểu, kèm dòng "Tự kiểm trong ≤ 5 phút"). Duyệt bản đồ chưa cấp quyền chạy các spec.
 
 ## 1. Hiện trạng
 

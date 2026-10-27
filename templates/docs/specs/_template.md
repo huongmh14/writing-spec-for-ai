@@ -15,7 +15,8 @@
 - **Chưa làm trong lần đầu:** <các hành vi lân cận bị loại>.
 - **Điều chưa biết & hệ quả:** <điều chưa chứng minh, ảnh hưởng, ai/cách kiểm; hoặc Không có>.
 - **Phần người dùng chốt:** <hành vi, phạm vi, đánh đổi>; chi tiết kỹ thuật xem nguồn bên dưới.
-- **Quyết định kỹ thuật cần duyệt:** <xem thẻ ở §9; chỉ cần chạy dòng "Tự kiểm" — hoặc Không có>.
+- **Giải thích kiến thức & quyết định kỹ thuật:** <xem thẻ giải thích ở §9; giải thích rõ bản chất theo dữ liệu thật của dự án để người đọc hiểu và có dòng "Tự kiểm" chạy trong ≤ 5 phút>.
+- **Biên bản phản biện độc lập trước khi trình:** <Chế độ đã chạy: `Chéo model (<model viết> → <CLI model phản biện>)` hoặc `Phiên sạch cùng model (spec-challenger — lý do chưa chạy khác model)` · Đã tự sửa: `...` · Không sửa / Cần người dùng quyết: `...` (cấm giấu phát hiện)>.
 - **Quyền chạy:** `Ready` chưa cấp quyền code; đợt được giao nằm ở `../progress.md`.
 
 ## 1. Mục tiêu
@@ -111,18 +112,16 @@ sequenceDiagram
 
 <Chỉ ràng buộc kiến trúc. Chi tiết thiết kế ở file design. Không chia việc ở đây — thuộc plan.>
 
-### Quyết định kỹ thuật cần duyệt (thẻ quyết định kỹ thuật) <!-- tuỳ chọn; xoá nếu không có quyết định người dùng không tự thẩm định được -->
+### Giải thích kiến thức & quyết định kỹ thuật (Thẻ giải thích kỹ thuật)
 
-Người dùng duyệt dòng "Tự kiểm", không duyệt lập luận; lời duyệt không chứng nhận phần "cần chuyên gia".
+<!-- Bắt buộc có ít nhất 1 thẻ hiển thị tường minh (KHÔNG ẩn trong comment, KHÔNG ghi "không có / CRUD chuẩn" để lách) cho cơ chế, ràng buộc dữ liệu, ngưỡng NFR hoặc quyết định kỹ thuật của spec này. Phải giải thích gắn với thực thể/luồng thật của dự án (cấm chép ví dụ chung chung từ glossary); người đọc hiểu rõ bản chất và nghiệm thu tính đúng bằng bước "Tự kiểm". -->
 
-<!--
-**Quyết định:** <…> · Nhãn: <Người dùng chốt | Đã xác minh | AI đề xuất | Chưa biết>
-- **Nói đơn giản:** <1–2 câu không thuật ngữ>
-- **Nếu sai thì sao:** <hậu quả quan sát được>
-- **Tự kiểm trong ≤ 5 phút:** <lệnh/thao tác + kết quả mong đợi, trỏ AC-ID>
-- **Nguồn:** <con trỏ mở được + trích nguyên văn>
-- **Không tự kiểm được:** <phần nào; bảo mật/thanh toán/pháp lý/dữ liệu cá nhân → "cần chuyên gia: <vai trò>"; hoặc "Không có">
--->
+**Khái niệm / Quyết định 1:** `<Tên cơ chế / ràng buộc / quyết định kỹ thuật trong spec này>` · Nhãn: `<Người dùng chốt | Đã xác minh | AI đề xuất | Chưa biết>`
+- **Bản chất là gì (nói dễ hiểu + ví dụ thực tế của dự án):** <Giải thích bằng lời thường kèm 1 ví dụ dùng đúng tên bảng/API/màn hình của dự án đang làm; cấm chỉ nêu tên thuật ngữ tiếng Anh hoặc chép ví dụ mẫu>
+- **Tại sao bắt buộc cần ở đây (nếu không có thì lỗi gì xảy ra?):** <Kịch bản hỏng quan sát được trên dữ liệu/người dùng của dự án nếu bỏ qua cơ chế này>
+- **Chạy thế nào trong dự án này (Đầu vào → Xử lý → Đầu ra):** <2–3 bước ngắn mô tả dữ liệu đi vào, biến đổi gì, trả ra gì>
+- **Tự kiểm trong ≤ 5 phút:** <Lệnh hoặc thao tác + kết quả mong đợi, trỏ `AC-ID` để người dùng tự kiểm chứng>
+- **Nguồn đối chiếu & Giới hạn không tự kiểm được:** <Con trỏ mở được + trích nguyên văn; vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân → ghi "cần chuyên gia: <vai trò>"; hoặc "Không có">
 
 ## 10. Hướng dẫn vận hành <!-- tuỳ chọn; dành cho người vận hành, không phải REQ -->
 

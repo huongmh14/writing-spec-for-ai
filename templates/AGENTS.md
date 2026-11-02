@@ -60,7 +60,8 @@
 
 ## Quy trình một task
 
-1. Xác định spec, REQ/AC và chỉ dẫn thực thi thật của người dùng; ghi một đợt hiện tại ở `docs/progress.md`. `Ready`, plan và danh sách task sẵn sàng không tự cấp quyền code.
+1. **Phân loại chỉ dẫn trước khi đọc sâu hay sửa file.** *Rõ* (một cách hiểu về kết quả, xác định được SPEC/AC hoặc phạm vi hẹp, không chạm mục ⚠️ chưa duyệt) → làm luôn, không hỏi lại. *Mơ hồ* (≥ 2 cách hiểu cho ra kết quả khác nhau, không xác định được SPEC/AC lẫn phạm vi hẹp, hoặc chạm mục ⚠️ chưa duyệt) → tra cứu có mục tiêu để tự gỡ; vẫn mơ hồ thì chỉ trả **bản chốt nhanh ≤ 5 dòng** (kết quả hiểu được · SPEC/vùng file dự kiến · tối đa 3 điểm cần chốt, mỗi điểm kèm phương án đề xuất) rồi dừng, chưa sửa file.
+   Khi đã rõ: xác định spec, REQ/AC (nếu có; việc nhỏ chưa gắn spec thì ghi rõ phạm vi hẹp và cách kiểm chứng) cùng chỉ dẫn thực thi thật của người dùng; ghi một đợt hiện tại ở `docs/progress.md`. `Ready`, plan và danh sách task sẵn sàng không tự cấp quyền code.
 2. **Quyền thực thi theo đợt** — nếu người dùng chưa nêu ranh giới đợt: **khi soạn/cập nhật docs**, mỗi lượt chỉ làm một bước con rồi dừng chờ review (5a: cụm nền `AGENTS.md`/glossary/decisions · 5b: đúng **1 file SPEC** kèm cập nhật `docs/specs/README.md` · 5c: 1 file design); không viết cả cây `docs/` trong một lượt; **khi viết code**, mặc định **1 SPEC + 1 task/AC nhỏ kiểm chứng được**, làm → kiểm → báo cáo → dừng. Yêu cầu rõ làm toàn bộ spec/batch hữu hạn thì ghi đúng các task/AC được giao và hoàn tất trong phạm vi ấy.
 3. Kế hoạch ngắn: hành vi, vùng file, test, điều kiện dừng. Khoảng 5 file là dự kiến; sửa hàm dùng chung và các caller cần thiết trong cùng hành vi được phép, ghi lại tác động.
 4. Test + code chỉ trong đợt được phép. Subagent chỉ nhận phần việc thuộc đợt; không tự lấy task/spec tiếp theo. Rủi ro hoặc hành vi mới chưa duyệt → cập nhật phạm vi trước khi làm phần đó.
@@ -68,6 +69,12 @@
 6. Đánh `[x]` AC có bằng chứng; cập nhật tiến độ và chuyển đợt sang `Chờ kiểm chứng`, báo kết quả rồi dừng ở ranh giới đã ghi. Commit/PR khi được giao hoặc theo quy trình repo.
 
 **Báo cáo đợt:** (1) kết quả quan sát được · (2) **giải thích kỹ thuật dễ hiểu về phần vừa làm** (bản chất cơ chế đã dùng là gì, tại sao chọn, luồng `Đầu vào → Xử lý → Đầu ra` gắn với dữ liệu dự án để người đọc hiểu rõ code AI viết) · (3) **biên bản phản biện độc lập** (ghi rõ chế độ `Chéo model` hay `Phiên sạch cùng model`, liệt kê **mọi** phát hiện thành 2 mục: `Đã tự sửa` và `Không sửa / Cần quyết định` kèm lý do — cấm tự ý giấu phát hiện) · (4) cách demo/lệnh kiểm và bảng bằng chứng chạy test · (5) điều chưa kiểm chứng & ranh giới đã dừng. Đợt mới cần chỉ dẫn người dùng xác định phạm vi; không tự gia hạn từ plan hay mục bàn giao của đợt cũ.
+
+## Ngữ cảnh dài & nén
+
+- **Khi xong đợt, đổi sang việc khác, hoặc sửa cùng một lỗi 2 lần vẫn chưa xanh:** ghi đè mục *Bàn giao phiên mới* trong `docs/progress.md` (lỗi lặp thì ghi cả hướng đã thử và loại), rồi nhắc một dòng: nên `/compact` hoặc mở phiên mới thay vì thử tiếp trên ngữ cảnh cũ.
+- **Khi nén ngữ cảnh:** giữ RUN-ID, file đã sửa, lệnh kiểm và lỗi gần nhất chưa đóng, câu hỏi đang chờ người dùng.
+- **Sau khi nén hoặc sang phiên mới:** đọc lại block đợt hiện tại trong `docs/progress.md` trước khi làm tiếp. Bản tóm tắt hội thoại không phải nguồn sự thật và không cấp thêm quyền: **quyền và phạm vi đợt** luôn theo `progress.md`; nếu **trạng thái file/test** trong bản tóm tắt lệch với `progress.md` (do tự động nén giữa đợt), kiểm chứng lại bằng `git status`/`git diff` và lệnh kiểm rồi cập nhật `progress.md` trước khi sửa tiếp.
 
 ## Definition of Done
 

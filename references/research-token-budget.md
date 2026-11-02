@@ -51,3 +51,34 @@ Lệnh tái hiện: `python -c "import tiktoken,re;e=tiktoken.get_encoding('o200
 - `scripts/validate.ps1` có 4 kiểm hồi quy: CONTRACT §3 của `spec-challenger`, cờ `-Standalone` trong `install.ps1`, `--standalone` trong `install.sh`, và đổi tên `sub-skill.md` khi cài gọn.
 - Cài thật ở chế độ gọn rồi chạy `validate.ps1` và `~/.agents/skillctl.ps1 test` trên bản đã cài: cả hai đều `ALL CHECKS PASSED`, không còn sub-skill cấp 1, có đủ `writing-spec-for-ai/skills/*/sub-skill.md`, không link gãy.
 - Chưa kiểm: hành vi trên model thật (agent có mở đúng sub-skill qua bộ điều phối không). Cách kiểm: mở phiên mới, nói "viết spec cho dự án", xem agent có mở `skills/survey-project/sub-skill.md` không.
+
+## 5. Phiên 2026-11-02 — cổng chỉ dẫn mơ hồ và nén ngữ cảnh
+
+Vấn đề người dùng nêu: prompt chưa rõ thì AI vẫn đoán một cách hiểu rồi chạy cả vòng đọc → sửa → test → phản biện; phiên dài thì bộ nén của công cụ làm rơi trạng thái đợt đang làm.
+
+| # | Khẳng định | Nhãn | Con trỏ + trích nguyên văn |
+|---|---|---|---|
+| S8 | Claude Code đọc lại `CLAUDE.md` gốc sau `/compact` | Đã xác minh | [Claude Code — Memory](https://code.claude.com/docs/en/memory): *"Project-root CLAUDE.md survives compaction: after `/compact`, Claude re-reads it from disk and re-injects it into the session."* |
+| S9 | Chỉ dẫn bộ nén giữ gì bằng một mục trong `CLAUDE.md` | Đã xác minh | [Claude Code — Costs](https://code.claude.com/docs/en/costs): *"# Compact instructions — When you are using compact, please focus on test output and code changes"* |
+| S10 | Hook `SessionStart` matcher `compact` bơm lại ngữ cảnh sau mỗi lần nén; stdout vào ngữ cảnh | Đã xác minh | [Claude Code — Hooks guide](https://code.claude.com/docs/en/hooks-guide): *"Use a `SessionStart` hook with a `compact` matcher to re-inject critical context after every compaction."* · *"Claude Code adds plain text your command writes to stdout to Claude's context."* |
+| S11 | `PreCompact` chỉ chặn được việc nén, không bơm ngữ cảnh | Đã xác minh | [Claude Code — Hooks](https://code.claude.com/docs/en/hooks): *"Exit with code 2 to block compaction"* · *"Claude Code discards a PreCompact hook's `systemMessage` and `continue` fields."* |
+| S12 | Codex: `compact_prompt` không được dùng khi nhà cung cấp nén từ xa (V2) | Đã xác minh (mã nguồn qua Context7, 2026-11-02) | [codex-rs/core/src/tasks/compact.rs](https://github.com/openai/codex/blob/main/codex-rs/core/src/tasks/compact.rs): nhánh `RemoteCompactionSupport::V2` gọi `run_remote_compact_task` mà không đọc `compact_prompt`; chỉ nhánh `Unsupported` đọc |
+| S13 | Hook của Antigravity không có sự kiện nén | Đã xác minh (tài liệu cài cục bộ `agy-customizations/docs/hooks.md`) | Danh sách sự kiện chỉ gồm `SessionStart`, `PreToolUse`, `PostToolUse`, `PreInvocation`, `PostInvocation`, `Stop` |
+| S14 | Cursor có sự kiện hook quanh việc nén | Chưa biết | Chưa mở tài liệu chính thức; không đưa vào mẫu. Cách kiểm: đọc docs hooks của Cursor bản hiện hành |
+
+**Sửa gì (AI đề xuất, dựa trên nguồn trên và [research-controlled-execution.md](research-controlled-execution.md) §2–3A):**
+
+| Vấn đề | Sửa | Căn cứ |
+|---|---|---|
+| Prompt mơ hồ → chạy cả vòng theo cách hiểu đoán | `templates/AGENTS.md` bước 1: chỉ dẫn rõ → làm luôn, không hỏi lại; mơ hồ → tra cứu có mục tiêu, vẫn mơ hồ thì **bản chốt nhanh ≤ 5 dòng** rồi dừng. Chỉ tốn thêm một lượt ngắn khi thật sự mơ hồ | GitHub Docs (§2 của nghiên cứu kia); §3A: lệnh chưa xác định được phần việc thì trình phần việc để người dùng chọn |
+| Bộ nén làm rơi RUN-ID, file đã sửa, lỗi chưa đóng | Bàn giao trong `progress.md` thêm *File đã sửa · Lệnh kiểm + lỗi chưa đóng · Hướng đã loại*; ghi đè theo mốc sự kiện thay cho đếm token | S8–S10 |
+| Tóm tắt sau nén mang "việc kế tiếp" như thể đã được giao hoặc lệch trạng thái do nén giữa đợt | Sau nén đọc lại block đợt: quyền/phạm vi theo `progress.md` (tóm tắt không cấp quyền); trạng thái code/test lệch thì kiểm chứng lại bằng workspace + lệnh kiểm rồi cập nhật `progress.md` | Quyền thực thi theo đợt |
+| Claude Code | Adapter `CLAUDE.md` thêm `# Compact instructions`; `claude-settings.json` thêm hook `SessionStart`/`compact` neo `${CLAUDE_PROJECT_DIR}` in block đợt (phần trước `## Lịch sử`, bỏ lịch sử để đỡ token, không phụ thuộc thư mục hiện hành) | S8, S9, S10 |
+
+**Không làm (có lý do):**
+- Hook đếm token hoặc chèn cảnh báo mỗi lượt (kể cả qua `PreInvocation` của Antigravity): đó là lý do luật quản lý phiên bị bỏ ngày 2026-10-26 ([CHANGELOG](../CHANGELOG.md)) — ước lượng token tiếng Việt sai và quản lý phiên thuộc công cụ.
+- Hook `PreCompact`: không bơm được ngữ cảnh (S11); chặn nén tự động sát trần làm request lỗi.
+- Cấu hình `compact_prompt` / `model_auto_compact_token_limit` của Codex: nằm ở `~/.codex/config.toml` của máy người dùng, và `compact_prompt` không có tác dụng khi nén từ xa (S12). Luật "sau khi nén đọc lại `progress.md`" trong `AGENTS.md` áp cho mọi công cụ.
+- Hook cho Antigravity / Cursor: Antigravity không có sự kiện nén (S13); Cursor chưa xác minh (S14).
+
+**Kiểm chứng:** `scripts/validate.ps1` thêm 4 marker (bản chốt nhanh, đọc lại sau nén, `# Compact instructions`, matcher `compact`) và eval-16, eval-17. Lệnh hook đã chạy thử bằng Git Bash: in đến dòng `## Lịch sử`, thiếu file thì im lặng và thoát 0. Chưa kiểm: hành vi trên model thật; cách kiểm: chạy eval-16/17, hoặc `/compact` trong phiên Claude Code rồi hỏi "đợt hiện tại là gì".

@@ -1,5 +1,5 @@
 {
-  "$comment": "Mẫu .claude/settings.json (Mức 2), file commit chung cho team: chỉ chứa deny + hook. Allow-list lệnh cá nhân để ở .claude/settings.local.json và thêm file đó vào .gitignore. Không dùng Read(./.env.*): deny thắng allow nên sẽ chặn luôn .env.example mà agent phải cập nhật. Hook chạy shell tuỳ ý: review như code, đặt dưới CODEOWNERS. Thay <...> bằng lệnh thật; kiểm cú pháp theo docs Claude Code bản hiện hành.",
+  "$comment": "Mẫu .claude/settings.json (Mức 2), file commit chung cho team: chỉ chứa deny + hook. Allow-list lệnh cá nhân để ở .claude/settings.local.json và thêm file đó vào .gitignore. Không dùng Read(./.env.*): deny thắng allow nên sẽ chặn luôn .env.example mà agent phải cập nhật. Hook chạy shell tuỳ ý: review như code, đặt dưới CODEOWNERS. SessionStart/compact: ngay sau khi nén, in block đợt hiện tại của docs/progress.md (phần trước '## Lịch sử', bỏ lịch sử cho đỡ token) vào ngữ cảnh; đường dẫn neo vào gốc dự án qua ${CLAUDE_PROJECT_DIR} (không phụ thuộc thư mục hiện hành); lệnh dùng sed của shell POSIX (Windows: Git Bash), không có file thì im lặng. Thay <...> bằng lệnh thật; kiểm cú pháp theo docs Claude Code bản hiện hành.",
   "permissions": {
     "deny": [
       "Read(./.env)",
@@ -16,6 +16,14 @@
         "matcher": "Edit|Write",
         "hooks": [
           { "type": "command", "command": "<lệnh lint nhanh cho file vừa sửa>" }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          { "type": "command", "command": "sed -n '1,/^## Lịch sử/p' \"${CLAUDE_PROJECT_DIR}/docs/progress.md\" 2>/dev/null || true" }
         ]
       }
     ]

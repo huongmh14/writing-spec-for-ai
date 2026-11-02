@@ -90,7 +90,7 @@ flowchart TD
 | **Kịch bản người dùng + giai đoạn** | Nhiều đợt giao hàng | US có ưu tiên P1/P2/P3, kiểm độc lập được; REQ ghi giai đoạn (`MUST (GĐ2)`) để agent không làm trước |
 | **Plan theo milestone** | Spec > 2 PR | Bảng PR + nhánh + AC + **phụ thuộc + song song [P]**; lý do thứ tự; checklist kích hoạt theo loại thay đổi (schema/API/bảo mật); dependency duyệt theo lô; "ngữ cảnh tối thiểu" mỗi PR (link mục spec, file, AC) |
 | **Bộ nhớ phiên** | Nhiều phiên, đổi agent | `progress.md` là nơi duy nhất ghi đợt hiện tại, bàn giao phiên mới và lịch sử (≤ 3 câu/dòng); quy tắc ai chuyển spec sang `Done` |
-| **Quản lý context phiên** | Phiên dài, agent lạc hướng | Viết spec xong → phiên mới để code; sửa agent > 2 lần cùng lỗi → xoá context, viết lại prompt; chỉ dẫn compaction (giữ danh sách file đã sửa + lệnh test); khảo sát bằng subagent |
+| **Quản lý context phiên** | Phiên dài, agent lạc hướng | Viết spec xong → phiên mới để code; sửa cùng lỗi 2 lần chưa xanh → ghi hướng đã loại vào bàn giao, phiên mới với hướng viết lại; ghi đè bàn giao theo mốc sự kiện, không đếm token; chỉ dẫn compaction (RUN-ID, file đã sửa, lệnh kiểm + lỗi chưa đóng, câu hỏi chờ); sau nén đọc lại block đợt trong `progress.md` (quyền theo `progress.md`, trạng thái lệch thì kiểm lại bằng workspace/test); khảo sát bằng subagent |
 | **Adapter + luật theo phạm vi** | > 1 công cụ, AGENTS.md > 150 dòng | Adapter chỉ trỏ về AGENTS.md; luật chuyên sâu xuống `AGENTS.md` thư mục con / `.github/instructions/*.instructions.md` (`applyTo`) / `.cursor/rules/*.mdc` (`globs`) |
 | **Mẫu PR có phần điều kiện** | AI mở PR thường xuyên | Phần chỉ điền khi vào nhánh môi trường (tag, migration, rollback), máy kiểm |
 | **Nâng cấp / tương thích** | Có dự án phía dưới | `docs/upgrade/<ver>.md` bổ sung theo từng PR (schema / env / API công khai); `compatibility.md`; CI bắt buộc khi đổi schema |
@@ -105,7 +105,7 @@ flowchart TD
 | Kỹ năng | Nội dung |
 |---|---|
 | **Cưỡng chế bằng máy** | Luật vi phạm ≥ 2 lần → lint/test/CI. Thông báo lỗi = **ID luật + cách sửa** (`REPO-R11: nâng lõi bằng ...`). Logic phụ thuộc môi trường viết thành hàm thuần để unit test |
-| **Hook** | Văn xuôi là khuyến nghị, hook là bảo đảm: chạy lint sau khi sửa file, chặn ghi vào thư mục migration đã phát hành. Hook chạy shell nên phải review |
+| **Hook** | Văn xuôi là khuyến nghị, hook là bảo đảm: chạy lint sau khi sửa file, chặn ghi vào thư mục migration đã phát hành, bơm lại block đợt của `progress.md` ngay sau khi nén (Claude Code `SessionStart`/`compact`). Hook chạy shell nên phải review |
 | **Skill dự án** | Quy trình lặp ≥ 2 lần → `.agents/skills/` theo luật authoring (§4.3) |
 | **Subagent vai trò hẹp** | Persona chỉ đặt trong file agent riêng (`.claude/agents/`, `.github/agents/`), giới hạn tool; không đặt persona ở AGENTS.md gốc |
 | **Gotchas / knowledge base** | Lỗi đã gặp → nguyên nhân → cách tránh, đặt trong skill/guide liên quan; lỗi biết mà chưa sửa phải có issue |

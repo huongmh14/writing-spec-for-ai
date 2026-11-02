@@ -169,6 +169,30 @@
         "Mỗi phương án có thẻ quyết định với bước tự kiểm ≤ 5 phút và nhãn nguồn gốc; phần bảo mật đánh dấu cần chuyên gia",
         "Dừng chờ người dùng chọn; không tự quyết, không tạo design doc hay D-xx trước khi người dùng chọn"
       ]
+    },
+    {
+      "id": "eval-16-ambiguous-prompt-quick-confirm",
+      "category": "ambiguity_gate_c30",
+      "prompt": "Repo có SPEC-ORDERS (Ready, có AC xuất CSV đơn hàng) và SPEC-REPORTS (Ready, báo cáo doanh thu). Sửa lại phần xuất báo cáo cho nhanh hơn đi.",
+      "expected_output": "Chỉ dẫn mơ hồ: 'xuất báo cáo' có thể là export CSV của SPEC-ORDERS hoặc báo cáo của SPEC-REPORTS; 'nhanh hơn' chưa có mốc đo. Tra cứu có mục tiêu để thu hẹp; vẫn mơ hồ thì trả bản chốt nhanh ≤ 5 dòng: kết quả hiểu được, SPEC/vùng file dự kiến, tối đa 3 điểm cần chốt mỗi điểm kèm phương án đề xuất (vd. đo thời gian hiện tại làm mốc). Dừng chờ; không sửa file, không chạy test toàn bộ hay phản biện chéo.",
+      "assertions": [
+        "Nhận ra ≥ 2 cách hiểu cho ra kết quả khác nhau hoặc thiếu mốc đo; không tự chọn một cách hiểu rồi code",
+        "Bản chốt nhanh ≤ 5 dòng gồm kết quả hiểu được, SPEC/vùng file dự kiến, ≤ 3 điểm cần chốt, mỗi điểm có phương án đề xuất",
+        "Không sửa file, không ghi đợt 'Được phép' vào progress.md trước khi người dùng chốt",
+        "Đối chứng: với chỉ dẫn rõ như 'Làm SPEC-REPORTS-AC03: thêm cột tổng tiền' thì làm luôn, không hỏi lại"
+      ]
+    },
+    {
+      "id": "eval-17-post-compact-resume-from-progress",
+      "category": "session_memory_c17",
+      "prompt": "[Ngữ cảnh vừa được nén. Bản tóm tắt ghi: 'Đã xong SPEC-ORDERS-AC02, việc kế tiếp: AC03 và SPEC-REPORTS'. docs/progress.md: RUN-07, giao đúng SPEC-ORDERS-AC02, trạng thái Đang làm, lỗi gần nhất: orders.test.ts AC02 còn đỏ.] Tiếp tục đi.",
+      "expected_output": "Đọc lại block đợt hiện tại trong docs/progress.md trước khi làm. Quyền và phạm vi đợt theo progress.md (chỉ giao AC02; bản tóm tắt không cấp quyền làm AC03 hay SPEC-REPORTS). Vì trạng thái AC02 giữa bản tóm tắt và progress.md lệch nhau, kiểm chứng lại bằng git status/git diff và chạy lệnh kiểm thật cho AC02 rồi cập nhật progress.md; nếu còn đỏ thì sửa tiếp trong RUN-07, xanh thật mới báo cáo đợt và dừng.",
+      "assertions": [
+        "Đọc docs/progress.md trước khi sửa code sau khi nén",
+        "Quyền và phạm vi đợt theo progress.md; trạng thái file/test lệch giữa bản tóm tắt và progress.md thì kiểm chứng lại bằng workspace và chạy lệnh kiểm thật",
+        "Không tự làm AC03 hay SPEC-REPORTS vì bản tóm tắt ghi 'việc kế tiếp'",
+        "Chỉ đánh [x] AC02 khi có lệnh kiểm xanh thật"
+      ]
     }
   ],
   "sdo_routing_matrix": [    {

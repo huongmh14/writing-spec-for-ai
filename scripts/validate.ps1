@@ -56,7 +56,9 @@ foreach ($rel in $jsonFiles) {
                 "eval-11-stale-handoff-and-continue",
                 "eval-12-unverified-ac-prevents-done",
                 "eval-13-staged-doc-authoring-c30",
-                "eval-15-explore-options-user-chooses"
+                "eval-15-explore-options-user-chooses",
+                "eval-16-ambiguous-prompt-quick-confirm",
+                "eval-17-post-compact-resume-from-progress"
             )
             foreach ($evalId in $requiredEvalIds) {
                 if ($evalIds -notcontains $evalId) {
@@ -201,7 +203,13 @@ $templateChecks = @(
     # Token budget (C17): lean install keeps sub-skills nested so only the orchestrator description is preloaded.
     @{ File = "install.ps1"; Pattern = 'param([switch]$Standalone)'; Label = "Lean install default with opt-in -Standalone (C17)" },
     @{ File = "install.sh"; Pattern = '--standalone'; Label = "Lean install default with opt-in --standalone (C17)" },
-    @{ File = "install.ps1"; Pattern = 'sub-skill.md'; Label = "Rename nested SKILL.md to sub-skill.md for recursive scanners (C17)" }
+    @{ File = "install.ps1"; Pattern = 'sub-skill.md'; Label = "Rename nested SKILL.md to sub-skill.md for recursive scanners (C17)" },
+    # Ambiguity gate (C30): unclear instruction -> short confirmation and stop before reading deep or editing.
+    @{ File = "templates/AGENTS.md"; Regex = $true; Pattern = '(?i)b\u1EA3n ch\u1ED1t nhanh'; Label = "Ambiguous-instruction quick confirmation gate (C30)" },
+    # Compaction (C17): state survives in progress.md; the summary grants no new scope.
+    @{ File = "templates/AGENTS.md"; Regex = $true; Pattern = 'Sau khi n\u00E9n'; Label = "Re-read current batch after context compaction (C17)" },
+    @{ File = "templates/adapters/CLAUDE.md"; Pattern = '# Compact instructions'; Label = "Claude Code compaction instructions (C17)" },
+    @{ File = "templates/adapters/claude-settings.json"; Pattern = '"matcher": "compact"'; Label = "Claude Code SessionStart/compact re-injects current batch (C17)" }
 )
 foreach ($tc in $templateChecks) {
     $tPath = Join-Path $root $tc.File

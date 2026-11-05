@@ -1,6 +1,16 @@
 ---
 name: writing-spec-for-ai
 description: Kích hoạt khi bắt đầu dự án mới, khi repo chưa có hoặc có tài liệu AI rời rạc, hoặc khi người dùng nói "viết spec cho dự án", "viết AGENTS.md", "thiết kế docs cho AI", "chuẩn hoá tài liệu cho agent". Bộ điều phối 3 cổng duyệt; mỗi lượt chỉ mở đúng 1 sub-skill của bước hiện tại, cấm mở nhiều sub-skill cùng lúc.
+license: MIT
+trigger_phrases:
+  - "viết spec cho dự án"
+  - "viết AGENTS.md"
+  - "chuẩn hoá tài liệu cho agent"
+  - "bắt đầu dự án mới"
+do_not_use:
+  - "Dự án nhỏ < 50 files → dùng writing-spec-simple thay vì bộ đầy đủ"
+  - "User chỉ đưa ý tưởng chưa rõ → dùng idea-to-spec trước"
+  - "Chỉ fix bug hoặc task nhỏ → systematic-debugging, không viết spec"
 ---
 
 # Writing Spec For AI

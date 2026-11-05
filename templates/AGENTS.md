@@ -22,10 +22,12 @@
 | 1 | `docs/decisions.md` | Quyết định đã chốt |
 | 2 | `docs/specs/` | Yêu cầu (REQ) và nghiệm thu (AC) |
 | 3 | `CONSTRAINTS.md` *(nếu có)* | Sàn chất lượng và ngưỡng kiểm bằng lệnh máy |
-| 4 | `AGENTS.md` | Quy tắc làm việc |
-| 5 | Code hiện có | Hiện trạng, không phải chuẩn |
+| 4 | `docs/conflicts-and-bugs.md` | Sổ tay toàn bộ lỗi, xung đột hợp đồng (enum/API/DB/port) và bài học lịch sử của dự án |
+| 5 | `AGENTS.md` | Quy tắc làm việc |
+| 6 | Code hiện có | Hiện trạng, không phải chuẩn |
 
-- **Khi bắt đầu bất kỳ task nào:** đọc `docs/specs/README.md`, spec liên quan, `docs/glossary.md` và đợt thực thi hiện tại trong `docs/progress.md` (quyền thực thi theo đợt: chỉ làm phần đợt đó ghi).
+- **Khi bắt đầu bất kỳ task nào:** đọc `docs/specs/README.md`, spec liên quan, `docs/glossary.md`, `docs/conflicts-and-bugs.md` (nếu có) và đợt thực thi hiện tại trong `docs/progress.md` (quyền thực thi theo đợt: chỉ làm phần đợt đó ghi).
+- **Khi phát hiện hoặc sửa bất kỳ lỗi (bug/hotfix/revert) hay xung đột hợp đồng (lệch enum, schema, port, API, cấu hình):** bắt buộc ghi bổ sung vào `docs/conflicts-and-bugs.md` kèm commit SHA, nguyên nhân gốc và cách chặn tự động bằng lệnh máy trước khi báo xong.
 - **Khi thêm/sửa biến môi trường:** cập nhật cả `.env.example` và `docs/reference/config.md`.
 - **Khi thêm/sửa mã lỗi trả về:** cập nhật `docs/reference/error-codes.md`.
 - **Khi thiếu dữ kiện ảnh hưởng hành vi/rủi ro trong phạm vi:** nêu điều chưa biết và cách kiểm chứng; dừng phần phụ thuộc, tiếp tục phần độc lập đã được giao (nguồn & giới hạn hiểu biết: không đoán thay dữ kiện).

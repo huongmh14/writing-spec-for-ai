@@ -248,3 +248,10 @@ Trước khi claim "spec hoàn thành", phải check:
 ---
 
 **Tóm lại:** `idea-to-spec` là skill đầu vào - user chỉ cần đưa ý tưởng, AI làm phần còn lại: phân tích, viết spec, và chuẩn bị cho implementation.
+
+## When NOT to Use
+
+- Đã có spec rõ ràng → dùng writing-spec-simple hoặc writing-spec-for-ai
+- Chỉ cần fix bug → dùng systematic-debugging
+- Task nhỏ không cần phân tích → code trực tiếp
+- Project đã có AGENTS.md đầy đủ → không cần idea-to-spec

@@ -32,17 +32,17 @@
 
 ## Dòng thêm vào AGENTS.md
 
-### ✅ Luôn
-- Ghi log sự kiện nghiệp vụ hoặc lỗi: dùng logger có cấu trúc (`logger.info({ event, requestId, entryPoint, ... })`), không dùng `console.log` ghép chuỗi tự do trong code nghiệp vụ.
+### [x] Luôn
+- Ghi log sự kiện nghiệp vụ hoặc lỗi: dùng logger có cấu trúc (`logger.info({ event, requestId, entryPoint,... })`), không dùng `console.log` ghép chuỗi tự do trong code nghiệp vụ.
 - Truyền `requestId` và `entryPoint` qua context/metadata khi gọi hàm bất đồng bộ, đẩy hàng đợi hoặc gọi HTTP sang dịch vụ khác.
 - Chỉ dùng tập giá trị hữu hạn, cố định (`route` mẫu, `status_class`, `provider`) làm nhãn cho metric.
 
-### ⚠️ Hỏi trước
+### (warning) Hỏi trước
 - Thêm nhãn (label) mới vào metric đang có trên production.
 - Thay đổi tên trường chuẩn (`requestId`, `entryPoint`, `event`) trong cấu trúc JSON log.
 - Thêm hoặc xoá cảnh báo (alert) vận hành.
 
-### 🚫 Không bao giờ
+### (blocked) Không bao giờ
 - Đưa `user_id`, `email`, `requestId`, full URL, hoặc chuỗi lỗi tự do vào nhãn (`label`) của Prometheus/OpenTelemetry metric (gây nổ cardinality).
 - Ghi toàn bộ `req.body` hoặc `req.headers` chưa qua bước lọc trường cho phép (allowlist) vào log.
 

@@ -7,7 +7,7 @@
 - Dùng plan mode khi sửa: <các thư mục rủi ro cao>.
 - Kết thúc phiên dài hoặc trước `/compact`: cập nhật điểm dừng và bàn giao ngay trong `docs/progress.md`.
 
-<!-- Claude Code đọc lại CLAUDE.md gốc sau /compact; mục dưới là chỉ dẫn cho bộ nén. Hook SessionStart/compact trong .claude/settings.json bơm lại block đợt của docs/progress.md. -->
+<!-- Claude Code đọc lại CLAUDE.md gốc sau /compact; mục dưới là chỉ dẫn cho bộ nén. Hook SessionStart/compact trong.claude/settings.json bơm lại block đợt của docs/progress.md. -->
 
 # Compact instructions
 

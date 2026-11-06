@@ -71,7 +71,7 @@ Mọi profile áp dụng **Quyền thực thi theo đợt** (`C30`) và **Nguồ
 **Ví dụ:**
 - `cdn` — Fastify + Kysely + PG + Redis (`PK-API, PK-AUTH, PK-DB, PK-OBS, PK-JOB, PK-RELEASE`).
 - `notification-service` — NestJS + Prisma + Redis + RabbitMQ (`PK-API, PK-AUTH, PK-DB, PK-OBS, PK-JOB, PK-RELEASE`).
-- `khaosatvmu` — .NET + React + worker (`PK-API, PK-DB, PK-FE, PK-JOB, PK-RELEASE`).
+- `khaosatvmu` —.NET + React + worker (`PK-API, PK-DB, PK-FE, PK-JOB, PK-RELEASE`).
 - `citad-vmu-resources` — Node + ESLint (`PK-RELEASE`).
 - `BotAutoTask` — Node ESM + Cloudflare Workers/D1 (`PK-API, PK-AUTH, PK-DB, PK-JOB, PK-RELEASE, PK-AGENT`).
 

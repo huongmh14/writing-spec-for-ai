@@ -38,19 +38,19 @@
 
 ## Dòng thêm vào AGENTS.md
 
-### ✅ Luôn
+### [x] Luôn
 - Thêm endpoint mới: định nghĩa `{error, code, statusCode}` cho mọi lỗi.
 - Định nghĩa mã lỗi mới: thêm vào `docs/reference/error-codes.md`.
 - Endpoint trả danh sách: thêm phân trang `{items, total, page, limit}`.
 - Bật CORS: cấu hình origin theo `{allowed-origins}` trong production.
 
-### ⚠️ Hỏi trước
+### (warning) Hỏi trước
 - Đổi định dạng error response.
 - Thay đổi `{max-limit}`.
 - Thêm endpoint health check khác `{health-path}`.
 - Thay đổi `{openapi-path}` (đang dùng làm nguồn thật).
 
-### 🚫 Không bao giờ
+### (blocked) Không bao giờ
 - Trả stack trace hoặc message lỗi nội bộ khi `{debug-flag}=false`.
 - Dùng `*` cho CORS trong production.
 - Endpoint trả danh sách không phân trang.

@@ -4,7 +4,7 @@
 
 | Thuộc tính | Giá trị |
 |---|---|
-| Trạng thái | Đề xuất <!-- Đề xuất → Đã duyệt → Đã áp dụng --> |
+| Trạng thái | Đề xuất <!-- Đề xuất  Đã duyệt  Đã áp dụng --> |
 | Spec bị ảnh hưởng | SPEC-… |
 | Quyết định | D-… |
 
@@ -16,10 +16,10 @@
 - **XXX-R09** MUST — …
 
 ### MODIFIED
-- **XXX-R03** — cũ: … → mới: …
+- **XXX-R03** — cũ: …  mới: …
 
 ### REMOVED
-- **XXX-R05** → deprecated, lý do: …
+- **XXX-R05**  deprecated, lý do: …
 
 ## Thay đổi AC
 

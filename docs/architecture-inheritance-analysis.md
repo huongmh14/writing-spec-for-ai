@@ -56,8 +56,8 @@ writing-spec-for-ai/
 
 | # | Luật | Mô tả | Vị trí |
 |---|------|-------|--------|
-| 1 | 3 cổng duyệt | Đề xuất → Phản biện → Thử docs → Code | SKILL.md line 14 |
-| 2 | Không bịa yêu cầu | Không suy ra được → `[CẦN LÀM RỒ]` + câu hỏi mở | SKILL.md line 15 |
+| 1 | 3 cổng duyệt | Đề xuất  Phản biện  Thử docs  Code | SKILL.md line 14 |
+| 2 | Không bịa yêu cầu | Không suy ra được  `[CẦN LÀM RỒ]` + câu hỏi mở | SKILL.md line 15 |
 | 3 | Một sự thật, một chỗ | Con trỏ có điều kiện (`C24`) | SKILL.md line 16 |
 | 4 | Mức 0 luôn làm; mức 1-2 chỉ khi có tín hiệu | Ghi rõ tín hiệu | SKILL.md line 17 |
 | 5 | Ngắn và không hạ chuẩn | AGENTS.md ≤ 150 dòng, không hạ ngưỡng (`C23`) | SKILL.md line 18 |
@@ -73,59 +73,59 @@ writing-spec-for-ai/
 
 | ID | Luật | Có thể kế thừa cho simple? | Lý do |
 |----|------|---------------------------|-------|
-| C01 | Thứ tự nguồn sự thật | ✅ Có | Quy tắc cơ bản, không phụ thuộc quy mô |
-| C02 | Ba cổng duyệt | ⚠️ Đơn giản hóa | Simple có thể làm 2 cổng (Đề xuất → Thử docs) |
-| C03 | Quyền AI theo trạng thái spec | ✅ Có | Quan trọng để tránh code khi spec chưa sẵn |
-| C04 | Hệ ID + truy vết | ✅ Có | Truy vết quan trọng ngay cả cho dự án nhỏ |
-| C05 | Trạng thái AC | ✅ Có | `[ ]` / `[x]` / `[~]` đơn giản nhưng hiệu quả |
-| C06 | Mục bắt buộc của spec | ⚠️ Đơn giản hóa | Simple có thể giảm số mục |
-| C07 | Quyết định append-only | ✅ Có | Đơn giản, không làm phức tạp |
-| C08 | Thuật ngữ | ✅ Có | Glossary đơn giản |
-| C09 | Đổi spec đã chạy | ❌ Không cần | Dự án nhỏ thường ít đổi spec |
-| C10 | Ngoại lệ hotfix | ⚠️ Có thể bỏ | Dự án nhỏ có thể không cần quy trình hotfix |
-| C11 | Đổi gì sửa file nào | ✅ Có | Quan trọng để biết docs nào cần cập nhật |
-| C12 | Ranh giới Luôn/Hỏi/Không bao giờ | ✅ Có | Ranh giới bảo mật quan trọng cho mọi dự án |
-| C13 | Định nghĩa Xong (DoD) | ✅ Có | Bằng chứng test quan trọng |
-| C14 | Quy ước commit | ✅ Có | Git convention quan trọng |
-| C15 | Ba luật xử lý lỗi | ✅ Có | Xử lý lỗi cơ bản |
-| C16 | Secret & cấu hình | ✅ Có | Bảo mật quan trọng |
-| C17 | Bộ nhớ phiên | ⚠️ Có thể bỏ | Dự án nhỏ có thể không cần progress.md |
-| C18 | Gotcha có ngày kiểm | ✅ Có | Hữu ích nhưng có thể đơn giản hóa |
-| C19 | Kiểm tác dụng lệnh vận hành | ✅ Có | Quan trọng để tránh lệnh giả |
-| C20 | Đổi stack là một thay đổi | ✅ Có | Quan trọng để tránh CI lệch |
-| C21 | Đặt file đúng chỗ công cụ đọc | ✅ Có | Quan trọng để AI đọc được file |
-| C22 | Thử docs trước khi code | ✅ Có | Quan trọng để verify docs |
-| C23 | Không hạ chuẩn âm thầm | ✅ Có | Quan trọng để giữ chất lượng |
-| C24 | Con trỏ có điều kiện | ✅ Có | Quan trọng để giảm binding cost |
-| C25 | Dẫn nguồn chính thống | ✅ Có | Quan trọng để tránh prompt injection |
-| C26 | Phản biện chéo model | ⚠️ Có thể bỏ | Dự án nhỏ có thể không cần phức tạp |
-| C27 | Đánh dấu giới hạn đơn giản hoá | ✅ Có | Quan trọng để không nhầm lỗi |
-| C28 | Trình bày định hướng bằng hình | ✅ Có | Quan trọng để tránh "gật đầu mù" |
-| C29 | Bằng chứng test hiển thị | ✅ Có | Quan trọng để biết AI test cái gì |
-| C30 | Quyền thực thi theo đợt | ✅ Có | Quan trọng để không code tràn lan |
-| C31 | Nguồn & giới hạn hiểu biết | ✅ Có | Quan trọng để không bịa kiến thức |
+| C01 | Thứ tự nguồn sự thật | [x] Có | Quy tắc cơ bản, không phụ thuộc quy mô |
+| C02 | Ba cổng duyệt | (warning) Đơn giản hóa | Simple có thể làm 2 cổng (Đề xuất  Thử docs) |
+| C03 | Quyền AI theo trạng thái spec | [x] Có | Quan trọng để tránh code khi spec chưa sẵn |
+| C04 | Hệ ID + truy vết | [x] Có | Truy vết quan trọng ngay cả cho dự án nhỏ |
+| C05 | Trạng thái AC | [x] Có | `[]` / `[x]` / `[~]` đơn giản nhưng hiệu quả |
+| C06 | Mục bắt buộc của spec | (warning) Đơn giản hóa | Simple có thể giảm số mục |
+| C07 | Quyết định append-only | [x] Có | Đơn giản, không làm phức tạp |
+| C08 | Thuật ngữ | [x] Có | Glossary đơn giản |
+| C09 | Đổi spec đã chạy | [] Không cần | Dự án nhỏ thường ít đổi spec |
+| C10 | Ngoại lệ hotfix | (warning) Có thể bỏ | Dự án nhỏ có thể không cần quy trình hotfix |
+| C11 | Đổi gì sửa file nào | [x] Có | Quan trọng để biết docs nào cần cập nhật |
+| C12 | Ranh giới Luôn/Hỏi/Không bao giờ | [x] Có | Ranh giới bảo mật quan trọng cho mọi dự án |
+| C13 | Định nghĩa Xong (DoD) | [x] Có | Bằng chứng test quan trọng |
+| C14 | Quy ước commit | [x] Có | Git convention quan trọng |
+| C15 | Ba luật xử lý lỗi | [x] Có | Xử lý lỗi cơ bản |
+| C16 | Secret & cấu hình | [x] Có | Bảo mật quan trọng |
+| C17 | Bộ nhớ phiên | (warning) Có thể bỏ | Dự án nhỏ có thể không cần progress.md |
+| C18 | Gotcha có ngày kiểm | [x] Có | Hữu ích nhưng có thể đơn giản hóa |
+| C19 | Kiểm tác dụng lệnh vận hành | [x] Có | Quan trọng để tránh lệnh giả |
+| C20 | Đổi stack là một thay đổi | [x] Có | Quan trọng để tránh CI lệch |
+| C21 | Đặt file đúng chỗ công cụ đọc | [x] Có | Quan trọng để AI đọc được file |
+| C22 | Thử docs trước khi code | [x] Có | Quan trọng để verify docs |
+| C23 | Không hạ chuẩn âm thầm | [x] Có | Quan trọng để giữ chất lượng |
+| C24 | Con trỏ có điều kiện | [x] Có | Quan trọng để giảm binding cost |
+| C25 | Dẫn nguồn chính thống | [x] Có | Quan trọng để tránh prompt injection |
+| C26 | Phản biện chéo model | (warning) Có thể bỏ | Dự án nhỏ có thể không cần phức tạp |
+| C27 | Đánh dấu giới hạn đơn giản hoá | [x] Có | Quan trọng để không nhầm lỗi |
+| C28 | Trình bày định hướng bằng hình | [x] Có | Quan trọng để tránh "gật đầu mù" |
+| C29 | Bằng chứng test hiển thị | [x] Có | Quan trọng để biết AI test cái gì |
+| C30 | Quyền thực thi theo đợt | [x] Có | Quan trọng để không code tràn lan |
+| C31 | Nguồn & giới hạn hiểu biết | [x] Có | Quan trọng để không bịa kiến thức |
 
 ### 1.4 Quy Trình 8 Bước + 3 Cổng
 
 ```
 Bước 1-2: Survey (spec-surveyor)
-  ↓
-Bước 3: Đề xuất docs (propose-doc-design) → CỔNG 1 (chờ duyệt)
-  ↓
+  
+Bước 3: Đề xuất docs (propose-doc-design)  CỔNG 1 (chờ duyệt)
+  
 Bước 4: Làm rõ Frontier (HYPOTHESIS + GUESS)
-  ↓
-Bước 5a: Viết cụm nền (AGENTS.md, glossary, decisions) → Checkpoint 5a
-  ↓
-Bước 5b: Viết spec từng file một (write-spec) → Checkpoint 5b
-  ↓
-Bước 5c: Viết design doc (write-design-doc) → Checkpoint 5c
-  ↓
-Bước 6: Phản biện docs (review-docs + spec-challenger) → CỔNG 2 (chờ duyệt)
-  ↓
-Bước 7: Thử docs (test-docs + doc-tester) → CỔNG 3 (chờ duyệt mới code)
-  ↓
+  
+Bước 5a: Viết cụm nền (AGENTS.md, glossary, decisions)  Checkpoint 5a
+  
+Bước 5b: Viết spec từng file một (write-spec)  Checkpoint 5b
+  
+Bước 5c: Viết design doc (write-design-doc)  Checkpoint 5c
+  
+Bước 6: Phản biện docs (review-docs + spec-challenger)  CỔNG 2 (chờ duyệt)
+  
+Bước 7: Thử docs (test-docs + doc-tester)  CỔNG 3 (chờ duyệt mới code)
+  
 Bước 7.5: Chọn lát cắt, AC, điểm dừng (plan-tasks)
-  ↓
+  
 Bước 8: Code theo docs (change-spec)
 ```
 
@@ -158,7 +158,7 @@ writing-spec-simple/
 Bước 1: Khảo sát dự án (5-10 phút)
   - Dùng explore skill (có sẵn)
   - Hỏi user: project làm gì, tech stack, lệnh build/test
-  - Xác định project size (< 50 files → dùng simple)
+  - Xác định project size (< 50 files  dùng simple)
 
 Bước 2: Đề xuất cấu trúc docs (3-5 phút)
   - Đề xuất: AGENTS.md, glossary (nếu cần), specs (nếu cần)
@@ -182,9 +182,9 @@ Bước 3: Viết docs từng file một (10-30 phút)
 
 **Mandatory (kế thừa 100%):**
 - C01: Thứ tự nguồn sự thật
-- C03: Quyền AI theo trạng thái spec (Draft → Ready → Done)
+- C03: Quyền AI theo trạng thái spec (Draft  Ready  Done)
 - C04: Hệ ID đơn giản (SPEC-001, AC-1)
-- C05: Trạng thái AC (`[ ]` / `[x]` / `[~]`)
+- C05: Trạng thái AC (`[]` / `[x]` / `[~]`)
 - C11: Đổi gì sửa file nào (bảng đơn giản)
 - C12: Ranh giới Luôn/Hỏi/Không bao giờ
 - C13: Định nghĩa Xong (DoD)
@@ -200,25 +200,25 @@ Bước 3: Viết docs từng file một (10-30 phút)
 - C30: Quyền thực thi theo đợt (đơn giản: mỗi lượt 1 file)
 
 **Optional (có thể bỏ hoặc đơn giản hóa):**
-- C02: Ba cổng duyệt → đơn giản thành approval từng bước
-- C06: Mục bắt buộc của spec → giảm số mục
-- C09: Đổi spec đã chạy → bỏ (dự án nhỏ ít đổi)
-- C10: Ngoại lệ hotfix → bỏ
-- C17: Bộ nhớ phiên → bỏ
-- C18: Gotcha có ngày kiểm → bỏ hoặc đơn giản
-- C19: Kiểm tác dụng lệnh vận hành → giữ
-- C20: Đổi stack là một thay đổi → giữ
-- C26: Phản biện chéo model → bỏ
-- C27: Đánh dấu giới hạn đơn giản hoá → giữ
-- C28: Trình bày định hướng bằng hình → đơn giản
-- C31: Nguồn & giới hạn hiểu biết → đơn giản (không cần thẻ giải thích phức tạp)
+- C02: Ba cổng duyệt  đơn giản thành approval từng bước
+- C06: Mục bắt buộc của spec  giảm số mục
+- C09: Đổi spec đã chạy  bỏ (dự án nhỏ ít đổi)
+- C10: Ngoại lệ hotfix  bỏ
+- C17: Bộ nhớ phiên  bỏ
+- C18: Gotcha có ngày kiểm  bỏ hoặc đơn giản
+- C19: Kiểm tác dụng lệnh vận hành  giữ
+- C20: Đổi stack là một thay đổi  giữ
+- C26: Phản biện chéo model  bỏ
+- C27: Đánh dấu giới hạn đơn giản hoá  giữ
+- C28: Trình bày định hướng bằng hình  đơn giản
+- C31: Nguồn & giới hạn hiểu biết  đơn giản (không cần thẻ giải thích phức tạp)
 
 ### 2.4 Templates Có Thể Kế Thừa
 
 **Từ writing-spec-for-ai/templates/:**
 
 ```
-AGENTS.md → AGENTS.simple.md
+AGENTS.md  AGENTS.simple.md
   - Giữ cấu trúc 3 tầng (Luôn/Hỏi/Không)
   - Giữ lệnh (install, dev, build, test)
   - Giữ thứ tự nguồn sự thật
@@ -226,17 +226,17 @@ AGENTS.md → AGENTS.simple.md
   - Bỏ phần nâng cấp/compatibility
   - Bỏ phần conflicts-and-bugs (có thể thêm sau)
 
-docs/specs/_template.md → SPEC.simple.md
+docs/specs/_template.md  SPEC.simple.md
   - Giữ: Mục tiêu, REQ, AC, NFR
   - Bỏ: biên chi tiết, kiểm e2e phức tạp
   - Bỏ: câu hỏi mở (dự án nhỏ ít câu hỏi)
   - Đơn giản hóa: AC có thể không cần GIVEN/WHEN/THEN
 
-docs/decisions.md → decisions.simple.md
+docs/decisions.md  decisions.simple.md
   - Giữ cấu trúc append-only
   - Đơn giản hóa: không cần trạng thái hiệu lực/bị thay thế
 
-glossary.md → glossary.simple.md
+glossary.md  glossary.simple.md
   - Giữ cấu trúc: thuật ngữ / định nghĩa / không gọi là / tên trong code
   - Không cần quá nhiều terms
 ```
@@ -323,11 +323,11 @@ Formal skills (có sẵn):
 
 | Aspect | writing-spec-simple | writing-spec-for-ai | Overlap? | Action |
 |--------|-------------------|---------------------|----------|--------|
-| Mục tiêu | Dự án nhỏ (< 50 files), người mới | Dự án bất kỳ, formal | ❌ Không | Complementary layers |
-| Quy trình | 3 bước đơn giản | 8 bước + 3 cổng formal | ❌ Không | Different complexity |
-| Templates | Đơn giản hóa | Đầy đủ, formal | ⚠️ Một phần | Simple should inherit from full |
-| Laws | 18 laws core đơn giản | 31 laws core + Pack | ⚠️ Một phần | Simple subset of full |
-| Sub-agents | Không có | spec-surveyor, spec-challenger, doc-tester | ❌ Không | Simple doesn't need |
+| Mục tiêu | Dự án nhỏ (< 50 files), người mới | Dự án bất kỳ, formal | [] Không | Complementary layers |
+| Quy trình | 3 bước đơn giản | 8 bước + 3 cổng formal | [] Không | Different complexity |
+| Templates | Đơn giản hóa | Đầy đủ, formal | (warning) Một phần | Simple should inherit from full |
+| Laws | 18 laws core đơn giản | 31 laws core + Pack | (warning) Một phần | Simple subset of full |
+| Sub-agents | Không có | spec-surveyor, spec-challenger, doc-tester | [] Không | Simple doesn't need |
 
 **Kết luận:** writing-spec-simple nên kế thừa templates và core laws từ writing-spec-for-ai, nhưng không overlap trong use case.
 
@@ -353,9 +353,9 @@ Formal skills (có sẵn):
 
 | Aspect | writing-spec-simple | documentation-and-adrs | Overlap? | Action |
 |--------|-------------------|------------------------|----------|--------|
-| AGENTS.md | Viết | Không viết | ❌ Không | Complementary |
-| decisions.md | Viết (template) | Viết ADR (template khác) | ⚠️ Một phần | writing-spec-simple reference ADR template |
-| Specs | Viết | Không viết | ❌ Không | Complementary |
+| AGENTS.md | Viết | Không viết | [] Không | Complementary |
+| decisions.md | Viết (template) | Viết ADR (template khác) | (warning) Một phần | writing-spec-simple reference ADR template |
+| Specs | Viết | Không viết | [] Không | Complementary |
 
 **Kết luận:** writing-spec-simple nên reference documentation-and-adrs cho ADR, nhưng không reimplement.
 
@@ -373,9 +373,9 @@ Formal skills (có sẵn):
 
 | Aspect | starter-guide | cheat-sheet | Overlap? | Action |
 |--------|--------------|------------|----------|--------|
-| Mục tiêu | Hướng dẫn nhanh theo mức độ | When-to-use lookup chi tiết | ⚠️ Một phần | Different granularity |
-| Nội dung | 3 mức skill + flow khuyến nghị | 50+ skills chi tiết | ⚠️ Một phần | starter-guide subset of cheat-sheet |
-| Kích thước | 163 dòng | 572 dòng | ❌ Không | Different depth |
+| Mục tiêu | Hướng dẫn nhanh theo mức độ | When-to-use lookup chi tiết | (warning) Một phần | Different granularity |
+| Nội dung | 3 mức skill + flow khuyến nghị | 50+ skills chi tiết | (warning) Một phần | starter-guide subset of cheat-sheet |
+| Kích thước | 163 dòng | 572 dòng | [] Không | Different depth |
 
 **Kết luận:** starter-guide là entry-level, cheat-sheet là reference. Không overlap đáng kể.
 
@@ -401,8 +401,8 @@ Formal skills (có sẵn):
 
 | Aspect | writing-spec-simple | verification-before-completion | Overlap? | Action |
 |--------|-------------------|--------------------------------|----------|--------|
-| Verify docs | Có (2-3 task mẫu) | Không (verify code) | ❌ Không | Different target |
-| Verify code | Không | Có (lệnh verify) | ❌ Không | Different target |
+| Verify docs | Có (2-3 task mẫu) | Không (verify code) | [] Không | Different target |
+| Verify code | Không | Có (lệnh verify) | [] Không | Different target |
 
 **Kết luận:** Không overlap đáng kể.
 
@@ -470,16 +470,16 @@ Formal skills (có sẵn):
 Signal 3: Dự án mới / chưa có docs cho AI
 
 Detection project size:
-- Check số files: < 50 → writing-spec-simple
-- Check số files: ≥ 50 → writing-spec-for-ai
+- Check số files: < 50  writing-spec-simple
+- Check số files: ≥ 50  writing-spec-for-ai
 
 Lý do template:
 ```
 Đề xuất: writing-spec-simple
 Lý do:
 - Phát hiện signal: dự án mới / chưa có docs
-- Project size: < 50 files → bản simple đủ
-- Project size: ≥ 50 files → bản full formal cần
+- Project size: < 50 files  bản simple đủ
+- Project size: ≥ 50 files  bản full formal cần
 - AI cần docs để làm việc hiệu quả
 
 Kết quả:
@@ -541,7 +541,7 @@ writing-spec-simple kế thừa kiến trúc cốt lõi từ writing-spec-for-ai
 
 **CÓ, kiến trúc đã thiết kế để kế thừa:**
 
-1. **4 tầng kế thừa:** Core (100%) → Tham số (100% khung) → Pack (100% khi bật) → Dự án (0%)
+1. **4 tầng kế thừa:** Core (100%)  Tham số (100% khung)  Pack (100% khi bật)  Dự án (0%)
 2. **Profile S:** Đã có cho dự án nhỏ
 3. **Pack system:** Có thể thêm pack mới cho use case khác
 4. **Sub-skills:** Có thể thêm sub-skill mới vào quy trình

@@ -17,7 +17,7 @@
 
 | ID | REQ |
 |---|---|
-| PK-DB-R01 | Khi thay đổi schema không tương thích ngược (đổi tên cột, đổi kiểu, xoá cột/bảng đang được đọc), hệ thống MUST thực hiện theo chuỗi **Expand–Migrate–Contract** (Mở rộng → Chuyển dữ liệu, kiểm chứng ngay trong bước này → Thu gọn; xem [glossary](../references/glossary.md)), trong đó bước xoá (`Contract`) tách sang PR/release sau khi toàn bộ code đọc/ghi đã chuyển sang cấu trúc mới. |
+| PK-DB-R01 | Khi thay đổi schema không tương thích ngược (đổi tên cột, đổi kiểu, xoá cột/bảng đang được đọc), hệ thống MUST thực hiện theo chuỗi **Expand–Migrate–Contract** (Mở rộng  Chuyển dữ liệu, kiểm chứng ngay trong bước này  Thu gọn; xem [glossary](../references/glossary.md)), trong đó bước xoá (`Contract`) tách sang PR/release sau khi toàn bộ code đọc/ghi đã chuyển sang cấu trúc mới. |
 | PK-DB-R02 | Khi chạy `{migrate-cmd}` hoặc `{seed-cmd}` nhiều lần liên tiếp trên cùng môi trường, hệ thống MUST lũy đẳng (idempotent): không sinh lỗi, không tạo bản ghi trùng lặp, và trả mã thoát `≠ 0` nếu kết nối hoặc câu lệnh SQL thất bại. |
 | PK-DB-R03 | Trong khi một DB transaction đang mở, hệ thống MUST NOT thực hiện lời gọi mạng ra bên ngoài (HTTP API, gửi email/webhook, hàng đợi bên ngoài) và thời gian giữ transaction MUST ≤ `{max-tx-ms}` ms. |
 | PK-DB-R04 | Khi truy vấn danh sách hoặc xử lý hàng loạt trên bảng có thể tăng trưởng theo thời gian, hệ thống MUST giới hạn số bản ghi mỗi lần đọc/ghi (`LIMIT` ≤ `{default-batch-size}`) và tránh truy vấn lặp $N+1$ trong vòng lặp. |
@@ -35,17 +35,17 @@
 
 ## Dòng thêm vào AGENTS.md
 
-### ✅ Luôn
+### [x] Luôn
 - Viết migration mới: kiểm tra tính lũy đẳng và kiểm tra tác dụng thật trên bảng/cột sau khi chạy `{migrate-cmd}`.
 - Thêm truy vấn trong vòng lặp: gom thành batch (`WHERE id IN (...)`) hoặc `JOIN` để tránh lỗi $N+1$.
 - Thêm cột lọc/tìm kiếm thường xuyên: tạo index ngay trong cùng file migration.
 
-### ⚠️ Hỏi trước
+### (warning) Hỏi trước
 - Thêm, sửa, xoá bảng/cột hoặc thay đổi ràng buộc (`UNIQUE`, `NOT NULL`, `FOREIGN KEY`).
 - Sửa hoặc xoá file migration đã được commit vào nhánh chính.
 - Viết migration có thao tác xoá dữ liệu (`DROP COLUMN`, `DROP TABLE`, `DELETE`, `TRUNCATE`).
 
-### 🚫 Không bao giờ
+### (blocked) Không bao giờ
 - Gọi HTTP/webhook/dịch vụ ngoài bên trong khối DB transaction đang mở.
 - Nối chuỗi trực tiếp từ biến đầu vào vào câu lệnh SQL (bắt buộc dùng parameterized query / binding).
 - Để `{migrate-cmd}` trả exit code `0` khi không áp dụng được migration hoặc khi nuốt lỗi kết nối.

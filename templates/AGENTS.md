@@ -38,20 +38,20 @@
 
 ## Ranh giới
 
-✅ **Luôn**
+[x] **Luôn**
 - Viết test cùng code; tên test chứa AC-ID.
 - Chạy lệnh ở mục DoD trước khi báo xong.
 - Đánh dấu `ceiling: <ngưỡng chịu tải + đường nâng cấp>` khi cố ý chọn giải pháp đơn giản có giới hạn đã biết (in-memory lock, quét $O(n^2)$, polling).
 - <thói quen đúng đặc thù dự án, viết ở thể khẳng định>
 
-⚠️ **Hỏi trước nếu chưa được duyệt trong chỉ dẫn/đợt hiện tại**
+(warning) **Hỏi trước nếu chưa được duyệt trong chỉ dẫn/đợt hiện tại**
 - Đổi schema dữ liệu, API công khai, cơ chế xác thực/phân quyền.
 - Đổi mặc định liên quan bảo mật.
 - Thêm dependency (trừ loại đã duyệt trong plan/decision), nâng major framework.
 - Xoá file, dữ liệu, migration đã phát hành.
 - Sửa CI, ruleset, CODEOWNERS, `CONSTRAINTS.md`, file này.
 
-🚫 **Không bao giờ**
+(blocked) **Không bao giờ**
 - Commit secret, `.env`, token; log token, mật khẩu, header Authorization.
 - Commit file quyền cá nhân của agent (`.claude/settings.local.json`, allow-list lệnh, đường dẫn máy, mật khẩu trong lệnh đã duyệt).
 - Thêm cờ bịt miệng trình kiểm tra (`@ts-ignore`, `eslint-disable`, `# noqa`, `istanbul ignore`, `nosemgrep`, `gitleaks:allow`), thêm `.skip` hoặc xoá assertion/hạ ngưỡng để làm test xanh (không hạ chuẩn âm thầm).
@@ -62,15 +62,15 @@
 
 ## Quy trình một task
 
-1. **Phân loại chỉ dẫn trước khi đọc sâu hay sửa file.** *Rõ* (một cách hiểu về kết quả, xác định được SPEC/AC hoặc phạm vi hẹp, không chạm mục ⚠️ chưa duyệt) → làm luôn, không hỏi lại. *Mơ hồ* (≥ 2 cách hiểu cho ra kết quả khác nhau, không xác định được SPEC/AC lẫn phạm vi hẹp, hoặc chạm mục ⚠️ chưa duyệt) → tra cứu có mục tiêu để tự gỡ; vẫn mơ hồ thì chỉ trả **bản chốt nhanh ≤ 5 dòng** (kết quả hiểu được · SPEC/vùng file dự kiến · tối đa 3 điểm cần chốt, mỗi điểm kèm phương án đề xuất) rồi dừng, chưa sửa file.
+1. **Phân loại chỉ dẫn trước khi đọc sâu hay sửa file.** *Rõ* (một cách hiểu về kết quả, xác định được SPEC/AC hoặc phạm vi hẹp, không chạm mục (warning) chưa duyệt)  làm luôn, không hỏi lại. *Mơ hồ* (≥ 2 cách hiểu cho ra kết quả khác nhau, không xác định được SPEC/AC lẫn phạm vi hẹp, hoặc chạm mục (warning) chưa duyệt)  tra cứu có mục tiêu để tự gỡ; vẫn mơ hồ thì chỉ trả **bản chốt nhanh ≤ 5 dòng** (kết quả hiểu được · SPEC/vùng file dự kiến · tối đa 3 điểm cần chốt, mỗi điểm kèm phương án đề xuất) rồi dừng, chưa sửa file.
    Khi đã rõ: xác định spec, REQ/AC (nếu có; việc nhỏ chưa gắn spec thì ghi rõ phạm vi hẹp và cách kiểm chứng) cùng chỉ dẫn thực thi thật của người dùng; ghi một đợt hiện tại ở `docs/progress.md`. `Ready`, plan và danh sách task sẵn sàng không tự cấp quyền code.
-2. **Quyền thực thi theo đợt** — nếu người dùng chưa nêu ranh giới đợt: **khi soạn/cập nhật docs**, mỗi lượt chỉ làm một bước con rồi dừng chờ review (5a: cụm nền `AGENTS.md`/glossary/decisions · 5b: đúng **1 file SPEC** kèm cập nhật `docs/specs/README.md` · 5c: 1 file design); không viết cả cây `docs/` trong một lượt; **khi viết code**, mặc định **1 SPEC + 1 task/AC nhỏ kiểm chứng được**, làm → kiểm → báo cáo → dừng. Yêu cầu rõ làm toàn bộ spec/batch hữu hạn thì ghi đúng các task/AC được giao và hoàn tất trong phạm vi ấy.
+2. **Quyền thực thi theo đợt** — nếu người dùng chưa nêu ranh giới đợt: **khi soạn/cập nhật docs**, mỗi lượt chỉ làm một bước con rồi dừng chờ review (5a: cụm nền `AGENTS.md`/glossary/decisions · 5b: đúng **1 file SPEC** kèm cập nhật `docs/specs/README.md` · 5c: 1 file design); không viết cả cây `docs/` trong một lượt; **khi viết code**, mặc định **1 SPEC + 1 task/AC nhỏ kiểm chứng được**, làm  kiểm  báo cáo  dừng. Yêu cầu rõ làm toàn bộ spec/batch hữu hạn thì ghi đúng các task/AC được giao và hoàn tất trong phạm vi ấy.
 3. Kế hoạch ngắn: hành vi, vùng file, test, điều kiện dừng. Khoảng 5 file là dự kiến; sửa hàm dùng chung và các caller cần thiết trong cùng hành vi được phép, ghi lại tác động.
-4. Test + code chỉ trong đợt được phép. Subagent chỉ nhận phần việc thuộc đợt; không tự lấy task/spec tiếp theo. Rủi ro hoặc hành vi mới chưa duyệt → cập nhật phạm vi trước khi làm phần đó.
-5. **Phản biện độc lập & tự sửa trước khi báo xong:** chạy lệnh ở mục DoD, sau đó giao `git diff` + `SPEC-xx` (không kèm lời biện hộ lúc viết) cho một lượt phản biện độc lập — ưu tiên **Chéo model** bằng CLI của họ model khác (`"" | codex exec --sandbox read-only ...`, `claude`, `gemini` nếu máy có sẵn; đóng `stdin` để không treo) hoặc **Phiên sạch cùng model** (subagent chỉ đọc khi không có CLI khác model) — để bắt lỗi lệch spec, thiếu biên, mock sai hoặc lỗ hổng logic; tự sửa lỗi thật trước khi báo người dùng.
+4. Test + code chỉ trong đợt được phép. Subagent chỉ nhận phần việc thuộc đợt; không tự lấy task/spec tiếp theo. Rủi ro hoặc hành vi mới chưa duyệt  cập nhật phạm vi trước khi làm phần đó.
+5. **Phản biện độc lập & tự sửa trước khi báo xong:** chạy lệnh ở mục DoD, sau đó giao `git diff` + `SPEC-xx` (không kèm lời biện hộ lúc viết) cho một lượt phản biện độc lập — ưu tiên **Chéo model** bằng CLI của họ model khác (`"" | codex exec --sandbox read-only...`, `claude`, `gemini` nếu máy có sẵn; đóng `stdin` để không treo) hoặc **Phiên sạch cùng model** (subagent chỉ đọc khi không có CLI khác model) — để bắt lỗi lệch spec, thiếu biên, mock sai hoặc lỗ hổng logic; tự sửa lỗi thật trước khi báo người dùng.
 6. Đánh `[x]` AC có bằng chứng; cập nhật tiến độ và chuyển đợt sang `Chờ kiểm chứng`, báo kết quả rồi dừng ở ranh giới đã ghi. Commit/PR khi được giao hoặc theo quy trình repo.
 
-**Báo cáo đợt:** (1) kết quả quan sát được · (2) **giải thích kỹ thuật dễ hiểu về phần vừa làm** (bản chất cơ chế đã dùng là gì, tại sao chọn, luồng `Đầu vào → Xử lý → Đầu ra` gắn với dữ liệu dự án để người đọc hiểu rõ code AI viết) · (3) **biên bản phản biện độc lập** (ghi rõ chế độ `Chéo model` hay `Phiên sạch cùng model`, liệt kê **mọi** phát hiện thành 2 mục: `Đã tự sửa` và `Không sửa / Cần quyết định` kèm lý do — cấm tự ý giấu phát hiện) · (4) cách demo/lệnh kiểm và bảng bằng chứng chạy test · (5) điều chưa kiểm chứng & ranh giới đã dừng. Đợt mới cần chỉ dẫn người dùng xác định phạm vi; không tự gia hạn từ plan hay mục bàn giao của đợt cũ.
+**Báo cáo đợt:** (1) kết quả quan sát được · (2) **giải thích kỹ thuật dễ hiểu về phần vừa làm** (bản chất cơ chế đã dùng là gì, tại sao chọn, luồng `Đầu vào  Xử lý  Đầu ra` gắn với dữ liệu dự án để người đọc hiểu rõ code AI viết) · (3) **biên bản phản biện độc lập** (ghi rõ chế độ `Chéo model` hay `Phiên sạch cùng model`, liệt kê **mọi** phát hiện thành 2 mục: `Đã tự sửa` và `Không sửa / Cần quyết định` kèm lý do — cấm tự ý giấu phát hiện) · (4) cách demo/lệnh kiểm và bảng bằng chứng chạy test · (5) điều chưa kiểm chứng & ranh giới đã dừng. Đợt mới cần chỉ dẫn người dùng xác định phạm vi; không tự gia hạn từ plan hay mục bàn giao của đợt cũ.
 
 ## Ngữ cảnh dài & nén
 

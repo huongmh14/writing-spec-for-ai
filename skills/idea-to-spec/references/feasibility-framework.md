@@ -1,31 +1,31 @@
 # Feasibility Framework
 
-Framework đánh giá khả năng hoàn thành ý tưởng.
+Framework for assessing whether an idea can be completed.
 
-## Câu hỏi đánh giá
+## Assessment questions
 
 ### Technical Feasibility
-- [ ] Công nghệ cần thiết đã mature chưa?
-- [ ] Có APIs/libraries cần thiết không?
-- [ ] Performance requirements có realistic không?
-- [ ] Security requirements có achievable không?
+- [] Is the required technology mature?
+- [] Are the needed APIs/libraries available?
+- [] Are performance requirements realistic?
+- [] Are security requirements achievable?
 
 ### Resource Feasibility
-- [ ] Team size cần thiết có available không?
-- [ ] Timeline có realistic không?
-- [ ] Budget có đủ không?
-- [ ] Infrastructure có sẵn không?
+- [] Is the required team size available?
+- [] Is the timeline realistic?
+- [] Is the budget sufficient?
+- [] Is the infrastructure ready?
 
 ### Market Feasibility
-- [ ] Có market demand không?
-- [ ] Competition analysis đã làm chưa?
-- [ ] Value proposition rõ ràng không?
-- [ ] Business model viable không?
+- [] Is there market demand?
+- [] Has competition analysis been done?
+- [] Is the value proposition clear?
+- [] Is the business model viable?
 
 ## Scoring
 
-| Score | Ý nghĩa |
+| Score | Meaning |
 |-------|---------|
-| 8-10 | High feasibility - nên làm |
-| 5-7 | Medium feasibility - cần điều kiện |
-| 1-4 | Low feasibility - không nên làm |
+| 8-10 | High feasibility - should proceed |
+| 5-7 | Medium feasibility - needs conditions |
+| 1-4 | Low feasibility - should not proceed |

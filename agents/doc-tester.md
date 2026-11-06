@@ -21,9 +21,9 @@ For each sample task provided in your prompt (typically: 1 routine feature task,
 1. **Trace Your Navigation Path:** List the exact files you read in order, starting from `AGENTS.md`, and state *why* you opened each file (which context pointer led you there).
 2. **Decision Verdict:** State clearly whether you would:
    - **(A) Proceed within the user's current authorized scope (**Quyền thực thi theo đợt**, `C30`)**,
-   - **(B) Stop and ask for human approval (`⚠️ Ask First` boundary)**, or
+   - **(B) Stop and ask for human approval (`(warning) Ask First` boundary)**, or
    - **(C) Stop and ask clarifying questions (`[CẦN LÀM RÕ]` / missing spec)**, or
-   - **(D) Refuse (`🚫 Never` boundary)**.
+   - **(D) Refuse (`(blocked) Never` boundary)**.
 3. **Concrete Action Plan & Visible Test Plan (**Trình bày định hướng bằng hình** `C28`, **Bằng chứng test hiển thị** `C29`):**
    - Check the real task instruction and current RUN in progress (`C30`); state scope and stop. `Ready`, a "task sẵn sàng" (unblocked task) and HANDOFF do not grant execution. An explicit finite batch permits its full scope; a completed RUN does not authorize the next task.
    - Which `SPEC-xx`, `REQ-xx`, `AC-xx`, and `D-xx` govern this task, and does the spec's visual flow / I-O snapshot (`C28`) make the expected behavior unmistakable?
@@ -33,4 +33,4 @@ For each sample task provided in your prompt (typically: 1 routine feature task,
    - **Questions you had to ask:** Did you have to ask a question whose answer *should* have been in the docs?
    - **Buried or confusing rules:** Was any rule hard to find, contradicted by another file, or missing a clear context pointer in `AGENTS.md`?
    - **Temptation to guess:** Was there any place where you were tempted to invent a requirement, error code, or env var because the spec left a gap?
-   - **Knowledge limits & Technical Explanation Cards (**Nguồn, giải thích kỹ thuật & giới hạn hiểu biết**, `C31`):** Does each claim carry one of the four labels (`Người dùng chốt` / `Đã xác minh` / `AI đề xuất` / `Chưa biết`) with its pointer? Are technical mechanisms/decisions explained visibly via a "Thẻ giải thích & quyết định kỹ thuật" (not hidden in HTML comments) covering plain-language essence + example, what breaks without it, `Đầu vào → Xử lý → Đầu ra` flow, and a runnable `Tự kiểm ≤ 5 phút` step? Do not make the user guess or mark mocked/unrun checks as full proof; `[~]` blocks `Done`.
+   - **Knowledge limits & Technical Explanation Cards (**Nguồn, giải thích kỹ thuật & giới hạn hiểu biết**, `C31`):** Does each claim carry one of the four labels (`Người dùng chốt` / `Đã xác minh` / `AI đề xuất` / `Chưa biết`) with its pointer? Are technical mechanisms/decisions explained visibly via a "Thẻ giải thích & quyết định kỹ thuật" (not hidden in HTML comments) covering plain-language essence + example, what breaks without it, `Đầu vào  Xử lý  Đầu ra` flow, and a runnable `Tự kiểm ≤ 5 phút` step? Do not make the user guess or mark mocked/unrun checks as full proof; `[~]` blocks `Done`.

@@ -17,7 +17,7 @@ Một chỗ duy nhất cho tên dễ đổi.
 
 ## Đề xuất (chưa chốt)
 
-Làm xong hoặc chốt → chuyển thành D-xx và xoá dòng ở đây. Đề xuất chưa có bằng chứng không trở thành quyết định chỉ vì AI khác đồng ý; chỉ hỏi người dùng về hệ quả họ quyết được. Nhãn: `AI đề xuất` (lý do 1 dòng + hậu quả nếu sai) hoặc `Chưa biết` (cách xác minh + ai + phần bị chặn).
+Làm xong hoặc chốt  chuyển thành D-xx và xoá dòng ở đây. Đề xuất chưa có bằng chứng không trở thành quyết định chỉ vì AI khác đồng ý; chỉ hỏi người dùng về hệ quả họ quyết được. Nhãn: `AI đề xuất` (lý do 1 dòng + hậu quả nếu sai) hoặc `Chưa biết` (cách xác minh + ai + phần bị chặn).
 
 | ID | Vấn đề / điều chưa biết | Đề xuất & nhãn nguồn gốc | Cách xác minh / người phụ trách | Phần bị chặn |
 |---|---|---|---|---|

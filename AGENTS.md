@@ -18,7 +18,7 @@ Repo này chứa skill `writing-spec-for-ai` (bộ điều phối) cùng các sk
 
 - Mỗi lượt chỉ mở **1 file `SKILL.md`** của bước đang làm; cấm đọc trước bước sau.
 - Frontmatter YAML (`description`, `trigger_phrases`, `do_not_use`) là tầng luôn nạp — giữ < 100 token.
-- `SKILL.md` giữ < 500 dòng; nội dung dài → `references/`; mẫu tái dùng → `templates/`; tác vụ có đáp án đúng → `scripts/`.
+- `SKILL.md` giữ < 500 dòng; nội dung dài  `references/`; mẫu tái dùng  `templates/`; tác vụ có đáp án đúng  `scripts/`.
 - Skills hot (~39) tự nạp; skills cold tra bằng `skillctl search <keyword>`, bật bằng `skillctl add`, gỡ bằng `skillctl remove`. Không đưa skill vào hot tier chỉ để dùng một lần.
 - Routing: `auto-guide` là bộ định tuyến duy nhất; `starter-guide`/`cheat-sheet` chỉ là tài liệu tham khảo, không tự trigger cho tác vụ code thường.
 
@@ -31,5 +31,5 @@ bash scripts/skill-health-check.sh   # validate license, When-NOT-to-use, cấu 
 ## Quy ước
 
 - Một sự thật một chỗ: file khác trỏ bằng link/ID, không copy nội dung.
-- Không bịa requirement; mơ hồ → `[CẦN LÀM RÕ]`.
+- Không bịa requirement; mơ hồ  `[CẦN LÀM RÕ]`.
 - File `templates/` không chứa mã luật `Cxx`; file gốc dùng ID luật.

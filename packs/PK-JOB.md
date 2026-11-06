@@ -32,16 +32,16 @@
 
 ## Dòng thêm vào AGENTS.md
 
-### ✅ Luôn
+### [x] Luôn
 - Viết handler cho job/queue/cron mới: thiết kế khoá lũy đẳng (`idempotencyKey`) trước khi viết logic xử lý.
 - Phân loại lỗi trong worker: tách bạch lỗi tạm thời (được retry) và lỗi dữ liệu/logic vĩnh viễn (chuyển thẳng sang DLQ/failed).
 - Đặt `AbortSignal.timeout({job-timeout-ms})` cho mọi lời gọi I/O bên trong worker.
 
-### ⚠️ Hỏi trước
+### (warning) Hỏi trước
 - Thay đổi cấu trúc payload của message trong hàng đợi (cần tương thích ngược với các message cũ đang nằm chờ trong queue).
 - Thay đổi `{max-attempts}`, `{lock-ttl-ms}`, hoặc cơ chế chiếm giữ lease.
 
-### 🚫 Không bao giờ
+### (blocked) Không bao giờ
 - Để vòng lặp `while (true)` hoặc lời gọi mạng trong worker chạy không có timeout.
 - Nuốt lỗi trong job consumer (ack message thành công khi thực tế xử lý thất bại mà không ghi vào DLQ/bảng lỗi).
 - Đổi kiểu hoặc xoá trường trong job payload ngay lập tức khi vẫn còn message phiên bản cũ chưa tiêu thụ hết.

@@ -10,7 +10,7 @@
 ### 1.1 Quá Formal - 3 Cổng Review Mất Thời Gian
 
 **Vấn đề:**
-- 8 bước + 3 cổng duyệt: Đề xuất (Cổng 1) → Phản biện (Cổng 2) → Thử docs (Cổng 3) → Code
+- 8 bước + 3 cổng duyệt: Đề xuất (Cổng 1)  Phản biện (Cổng 2)  Thử docs (Cổng 3)  Code
 - Mỗi cổng phải chờ user duyệt
 - Demo nhanh cần kết quả ngay, không có thời gian chờ
 
@@ -18,13 +18,13 @@
 ```
 Demo project nhỏ 30 phút:
 - Bước 1-2: Khảo sát (5-10 phút)
-- Bước 3: Đề xuất docs (5 phút) → CHỜ DUYỆT CỔNG 1
+- Bước 3: Đề xuất docs (5 phút)  CHỜ DUYỆT CỔNG 1
 - Bước 4: Làm rõ (3-5 phút)
-- Bước 5a: Viết cụm nền (10 phút) → CHỜ REVIEW 5a
-- Bước 5b: Viết spec (15 phút) → CHỜ REVIEW 5b
-- Bước 5c: Viết design (10 phút) → CHỜ REVIEW 5c
-- Bước 6: Phản biện (10 phút) → CHỜ DUYỆT CỔNG 2
-- Bước 7: Thử docs (10 phút) → CHỜ DUYỆT CỔNG 3
+- Bước 5a: Viết cụm nền (10 phút)  CHỜ REVIEW 5a
+- Bước 5b: Viết spec (15 phút)  CHỜ REVIEW 5b
+- Bước 5c: Viết design (10 phút)  CHỜ REVIEW 5c
+- Bước 6: Phản biện (10 phút)  CHỜ DUYỆT CỔNG 2
+- Bước 7: Thử docs (10 phút)  CHỜ DUYỆT CỔNG 3
 - Bước 8: Code (30+ phút)
 
 Tổng: 2+ giờ, quá lâu cho demo 30 phút
@@ -40,14 +40,14 @@ Tổng: 2+ giờ, quá lâu cho demo 30 phút
 **Ví dụ:**
 ```
 Để viết 1 spec:
-1. Mở survey-project → khảo sát
-2. Mở propose-doc-design → đề xuất
-3. Mở write-spec → viết spec
-4. Mở review-docs → phản biện
-5. Mở test-docs → thử docs
+1. Mở survey-project  khảo sát
+2. Mở propose-doc-design  đề xuất
+3. Mở write-spec  viết spec
+4. Mở review-docs  phản biện
+5. Mở test-docs  thử docs
 
 Mỗi sub-skill có SKILL.md riêng, cần đọc trước khi dùng
-→ Quá nhiều file, quá nhiều context
+ Quá nhiều file, quá nhiều context
 ```
 
 ### 1.3 Quá Nhiều Terminology - Khó Hiểu Cho Người Mới
@@ -59,8 +59,8 @@ Mỗi sub-skill có SKILL.md riêng, cần đọc trước khi dùng
 
 **Ví dụ:**
 ```
-"Profile S: mọi con trỏ docs/specs/ → docs/spec.md/README, docs/progress.md → block đợt trong AGENTS.md"
-→ Người mới không hiểu Profile S là gì
+"Profile S: mọi con trỏ docs/specs/  docs/spec.md/README, docs/progress.md  block đợt trong AGENTS.md"
+ Người mới không hiểu Profile S là gì
 ```
 
 ### 1.4 Không Có Auto-Detection - User Phải Tự Invoke
@@ -106,7 +106,7 @@ AGENTS.md template: ~150 dòng, cần điền:
 **Vấn đề:**
 - SPEC template có nhiều mục: Mục tiêu, phạm vi, REQ EARS, NFR, biên, AC, kiểm e2e, câu hỏi mở
 - Demo cần spec đơn giản, chỉ cần REQ + AC cơ bản
-- Điền quá nhiều → mất thời gian
+- Điền quá nhiều  mất thời gian
 
 **Ví dụ:**
 ```
@@ -131,7 +131,7 @@ Demo cần:
 **Vấn đề:**
 - AI phải nhớ 41 luật
 - Demo cần đơn giản, chỉ cần 5-10 luật quan trọng nhất
-- Quá nhiều luật → AI dễ vi phạm hoặc ignore
+- Quá nhiều luật  AI dễ vi phạm hoặc ignore
 
 **Ví dụ:**
 ```
@@ -142,14 +142,14 @@ Luật quan trọng cho demo:
 - C12: Ranh giới 3 tầng
 - C13: Định nghĩa Xong (DoD)
 
-41 luật → AI khó nhớ hết
+41 luật  AI khó nhớ hết
 ```
 
 ### 1.8 Quy Trình 8 Bước - Quá Dài Cho Demo
 
 **Vấn đề:**
-- 8 bước: Khảo sát → Đề xuất → Làm rõ → Viết cụm nền → Viết spec → Viết design → Phản biện → Thử docs → Code
-- Demo cần 2-3 bước: Khảo sát → Viết docs đơn giản → Code
+- 8 bước: Khảo sát  Đề xuất  Làm rõ  Viết cụm nền  Viết spec  Viết design  Phản biện  Thử docs  Code
+- Demo cần 2-3 bước: Khảo sát  Viết docs đơn giản  Code
 
 **Ví dụ:**
 ```
@@ -158,7 +158,7 @@ Demo 30 phút:
 - Viết docs đơn giản: 10 phút
 - Code: 15 phút
 
-8 bước → quá dài
+8 bước  quá dài
 ```
 
 ---
@@ -170,7 +170,7 @@ Demo 30 phút:
 **Cải thiện:**
 - auto-guide có thể detect "demo nhanh" và đề xuất writing-spec-simple thay vì writing-spec-for-ai
 - Auto-guide có thể detect project size và chọn đúng layer
-- Auto-guide có thể orchestrate workflow: explore → writing-spec-simple → writing-plans → code
+- Auto-guide có thể orchestrate workflow: explore  writing-spec-simple  writing-plans  code
 
 **Ví dụ:**
 ```
@@ -181,11 +181,11 @@ Phát hiện: demo nhanh, project nhỏ
 Project size: 30 files
 
 === Đề Xuất Của Tôi ===
-Skill: explore → writing-spec-simple → writing-plans → code
+Skill: explore  writing-spec-simple  writing-plans  code
 
 Lý do:
-- Demo nhanh → cần đơn giản, không formal
-- Project < 50 files → bản simple đủ
+- Demo nhanh  cần đơn giản, không formal
+- Project < 50 files  bản simple đủ
 - Không cần 3 cổng review
 
 Kết quả:
@@ -201,7 +201,7 @@ Bạn có đồng ý không?
 **Cải thiện:**
 - Thêm "Demo Mode" hoặc "Quick Start" cho demo nhanh
 - Templates đơn giản hóa hơn: chỉ cần AGENTS.md + SPEC đơn giản
-- Quy trình 2-3 bước: Khảo sát → Viết docs → Code
+- Quy trình 2-3 bước: Khảo sát  Viết docs  Code
 - Không cần 3 cổng review, chỉ cần user approval 1 lần
 
 **Ví dụ:**
@@ -226,7 +226,7 @@ Bước 3: Code (15 phút)
 
 **Cải thiện:**
 - Thêm "Demo Workflow" section cho demo nhanh
-- Flow: "Tôi muốn demo nhanh" → auto-guide → writing-spec-simple → code
+- Flow: "Tôi muốn demo nhanh"  auto-guide  writing-spec-simple  code
 - Quick reference cho demo
 
 **Ví dụ:**
@@ -235,11 +235,11 @@ Bước 3: Code (15 phút)
 
 Khi user nói "demo nhanh" hoặc "demo project":
 
-1. auto-guide detect → đề xuất writing-spec-simple
-2. writing-spec-simple → viết AGENTS.md + SPEC đơn giản
-3. writing-plans → viết plan nhanh
-4. code → implement
-5. verification-before-completion → verify
+1. auto-guide detect  đề xuất writing-spec-simple
+2. writing-spec-simple  viết AGENTS.md + SPEC đơn giản
+3. writing-plans  viết plan nhanh
+4. code  implement
+5. verification-before-completion  verify
 
 Tổng thời gian: 30-45 phút
 ```
@@ -293,12 +293,12 @@ demo-mode/
 **Priority 1: Thêm Demo Mode vào writing-spec-simple**
 1. Thêm section "Demo Mode" vào SKILL.md
 2. Tạo templates đơn giản: AGENTS.demo.md (30 dòng), SPEC.demo.md (20 dòng)
-3. Quy trình 3 bước: Khảo sát → Viết docs → Code
+3. Quy trình 3 bước: Khảo sát  Viết docs  Code
 4. Không cần 3 cổng review, chỉ cần user approval 1 lần
 
 **Priority 2: Update auto-guide detection rules**
 1. Thêm signal: "demo", "demo nhanh", "quick demo"
-2. Khi detect demo → đề xuất writing-spec-simple (demo mode)
+2. Khi detect demo  đề xuất writing-spec-simple (demo mode)
 3. Auto-guide có thể detect project size và chọn đúng layer
 
 **Priority 3: Update starter-guide**
@@ -348,12 +348,12 @@ Project size: 25 files
 User level: beginner
 
 === Đề Xuất Của Tôi ===
-Skill: explore → writing-spec-simple (demo mode) → writing-plans → code
+Skill: explore  writing-spec-simple (demo mode)  writing-plans  code
 
 Lý do:
-- Demo nhanh → cần đơn giản, không formal
-- Project < 50 files → bản simple đủ
-- Demo mode → 3 bước thay vì 8 bước
+- Demo nhanh  cần đơn giản, không formal
+- Project < 50 files  bản simple đủ
+- Demo mode  3 bước thay vì 8 bước
 
 Kết quả:
 - AGENTS.demo.md: 30 dòng (5 phút)
@@ -414,4 +414,4 @@ Bước 3: Code (15 phút)
 2. **Trung hạn:** Tạo skill demo-mode riêng, enhance cheat-sheet
 3. **Dài hạn:** Smart routing, demo templates library
 
-**Kết quả:** Demo nhanh từ 2+ giờ → 30-45 phút, đơn giản và hiệu quả.
+**Kết quả:** Demo nhanh từ 2+ giờ  30-45 phút, đơn giản và hiệu quả.

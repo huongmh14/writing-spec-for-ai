@@ -1,131 +1,135 @@
 ---
 name: cheat-sheet
-description: Cheat sheet when-to-use cho từng skill kèm ví dụ thực tế
+description: When-to-use cheat sheet for each skill with real examples
 license: MIT
+trigger_phrases:
+  - "when to use a skill", "skill lookup", "when to use"
+do_not_use:
+  - "When you need auto-guidance", "When the skill is already decided"
 ---
 
-# Cheat Sheet - Khi Nào Dùng Skill Nào
+# Cheat Sheet - When to Use Which Skill
 
 ## Quick Lookup
 
-**Bấm Ctrl+F tìm từ khóa tình huống của bạn:**
-- bug, lỗi, fail → systematic-debugging
-- mới vào, chưa hiểu, explore → explore
-- review, PR, branch → code-review
-- plan, requirements, spec → writing-plans
-- refactor, tái cấu trúc → safe-refactor
-- test-first, TDD → tdd
-- dự án mới, AGENTS.md → writing-spec-simple hoặc writing-spec-for-ai
-- verify, check, done → verification-before-completion
+**Ctrl+F your situation keyword:**
+- bug, error, fail  systematic-debugging
+- new here, don't understand, explore  explore
+- review, PR, branch  code-review
+- plan, requirements, spec  writing-plans
+- refactor, restructure  safe-refactor
+- test-first, TDD  tdd
+- new project, AGENTS.md  writing-spec-simple or writing-spec-for-ai
+- verify, check, done  verification-before-completion
 
 ---
 
-## Core Skills (Cần Thường Dùng)
+## Core Skills (Frequent Use)
 
 ### explore
-**Khi nào dùng:**
-- Lần đầu vào codebase, không biết file nào chứa logic cần tìm
-- Cần hiểu flow của một feature (vd: authentication, payment)
-- Grep không đủ, cần semantic search
+**When to use:**
+- First time in a codebase, don't know which file holds the logic
+- Need to understand a feature's flow (e.g. authentication, payment)
+- Grep isn't enough, need semantic search
 
-**Ví dụ:**
-- "Làm sao authentication hoạt động trong project này?"
-- "Điểm entry của API này ở đâu?"
-- "Data flow từ API xuống database đi qua đâu?"
+**Examples:**
+- "How does authentication work in this project?"
+- "Where is this API's entry point?"
+- "Where does data flow from API down to the database?"
 
-**KHÔNG dùng khi:**
-- Đã biết chính xác file cần đọc → đọc trực tiếp
-- Chỉ cần grep tên hàm/variable → dùng grep
+**Do NOT use when:**
+- You know the exact file to read  read it directly
+- You just need to grep a function/variable name  use grep
 
 ---
 
 ### systematic-debugging
-**Khi nào dùng:**
+**When to use:**
 - Test failure
-- Bug ở production
+- Production bug
 - Unexpected behavior
 - Build failure
 - Performance problem
 
-**Ví dụ:**
-- "Test `test_login` fail, tìm lỗi giúp tôi"
-- "API này trả 500, không biết tại sao"
-- "Deploy thất bại, check giúp tôi"
+**Examples:**
+- "Test `test_login` fails, find the bug"
+- "This API returns 500, no idea why"
+- "Deploy failed, check it for me"
 
-**QUAN TRỌNG:**
-- KHÔNG fix trước khi hiểu root cause
-- Luôn hoàn thành Phase 1 (Root Cause Investigation) trước khi đề xuất fix
+**IMPORTANT:**
+- NEVER fix before understanding the root cause
+- Always finish Phase 1 (Root Cause Investigation) before proposing a fix
 
 ---
 
 ### code-review
-**Khi nào dùng:**
-- Review PR/branch trước khi merge
+**When to use:**
+- Review a PR/branch before merge
 - Review work-in-progress changes
 - Review "since X" (commit/branch/tag)
 
-**Ví dụ:**
-- "Review branch feature-login cho tôi"
-- "Review changes từ commit abc123 đến HEAD"
-- "Check PR #123 có đúng spec không"
+**Examples:**
+- "Review the feature-login branch for me"
+- "Review changes from commit abc123 to HEAD"
+- "Check whether PR #123 matches the spec"
 
-**Kết quả:**
-- Standards axis: có tuân thủ coding standards của repo không?
-- Spec axis: có implement đúng issue/spec không?
+**Output:**
+- Standards axis: does it follow the repo's coding standards?
+- Spec axis: does it implement the issue/spec correctly?
 
 ---
 
 ### verification-before-completion
-**Khi nào dùng:**
-- Sắp xong task, cần verify trước khi commit
-- Bạn yêu cầu "check xem đã xong chưa"
-- Trước khi tạo PR
+**When to use:**
+- About to finish a task, need verification before commit
+- User asks "check if it's done"
+- Before creating a PR
 
-**Ví dụ:**
-- "Verify code đã đúng chưa"
-- "Check xem mọi test pass chưa"
-- "Confirm implement đã đúng spec"
+**Examples:**
+- "Verify the code is correct"
+- "Check whether all tests pass"
+- "Confirm the implementation matches the spec"
 
-**Yêu cầu:**
-- Chạy verification commands
-- Show bằng chứng (test output, build status)
-- KHÔNG claim xong nếu chưa verify
+**Requirements:**
+- Run verification commands
+- Show evidence (test output, build status)
+- NEVER claim done without verifying
 
 ---
 
-## Process Skills (Khi Cần Quy Trình)
+## Process Skills (When a Process Is Needed)
 
 ### writing-plans
-**Khi nào dùng:**
-- Có spec/requirements cần implement
-- Task lớn, cần chia nhỏ
-- Muốn plan rõ ràng trước khi code
+**When to use:**
+- Have a spec/requirements to implement
+- Large task needing to be split
+- Want a clear plan before coding
 
-**Ví dụ:**
-- "Viết plan implement API user management"
-- "Chia nhỏ task cho feature search và filter"
-- "Plan implement cache layer"
+**Examples:**
+- "Write a plan to implement the user-management API"
+- "Split tasks for the search and filter feature"
+- "Plan the cache-layer implementation"
 
-**Kết quả:**
-- File plan ở `docs/superpowers/plans/YYYY-MM-DD-<feature>.md`
-- Mỗi task có: Files, Interfaces, Steps với checkbox
-- Review Focus: các edge cases cần test
+**Output:**
+- Plan file at `docs/superpowers/plans/YYYY-MM-DD-<feature>.md`
+- Each task has: Files, Interfaces, Steps with checkboxes
+- Review Focus: edge cases to test
 
-**KHÔNG dùng khi:**
-- Task nhỏ (1-2 file, logic đơn giản) → code trực tiếp
+**Do NOT use when:**
+- Small task (1-2 files, simple logic)  code directly
 
 ---
 
 ### tdd
-**Khi nào dùng:**
-- User yêu cầu "TDD" hoặc "test-first"
-- Muốn viết test trước code
-- Cần test suite cho feature mới
+**When to use:**
+- User asks for "TDD" or "test-first"
+- Want tests before code
+- Need a test suite for a new feature
 
-**Ví dụ:**
-- "TDD feature authentication"
-- "Viết test cho API payment trước khi implement"
-- "Red-green-refactor để fix bug này"
+**Examples:**
+- "TDD the authentication feature"
+- "Write tests for the payment API before implementing"
+- "Red-green-refactor to fix this bug"
 
 **Flow:**
 1. Write failing test (RED)
@@ -135,87 +139,87 @@ license: MIT
 ---
 
 ### writing-spec-simple
-**Khi nào dùng:**
-- Dự án mới < 50 files
-- User mới bắt đầu, chưa quen docs
-- AI tự động đề xuất khi lần đầu vào project
+**When to use:**
+- New project < 50 files
+- New user, not used to docs yet
+- AI auto-proposes it on first project entry
 
-**Ví dụ:**
-- "Viết AGENTS.md cho dự án này"
-- "Chuẩn hoá docs cho AI agent"
-- "Dự án này chưa có spec, viết giúp tôi"
+**Examples:**
+- "Write AGENTS.md for this project"
+- "Standardize docs for the AI agent"
+- "This project has no spec, write one for me"
 
-**Kết quả:**
-- `AGENTS.md` đơn giản với tech stack, commands, conventions
-- `glossary.md` nếu cần
-- Specs đơn giản cho từng feature
+**Output:**
+- Simple `AGENTS.md` with tech stack, commands, conventions
+- `glossary.md` if needed
+- Simple specs per feature
 
-**KHÔNG dùng khi:**
-- Dự án ≥ 50 files → dùng writing-spec-for-ai
-- Đã có AGENTS.md hợp lý
+**Do NOT use when:**
+- Project >= 50 files  use writing-spec-for-ai
+- A reasonable AGENTS.md already exists
 
 ---
 
 ### writing-spec-for-ai
-**Khi nào dùng:**
-- Dự án lớn ≥ 50 files
-- Team nhiều người/agent làm việc song song
-- Cần formal process với 3 cổng review
-- User nói "viết AGENTS.md", "chuẩn hoá docs cho agent"
+**When to use:**
+- Large project >= 50 files
+- Multiple people/agents working in parallel
+- Need formal process with 3 review gates
+- User says "write AGENTS.md", "standardize docs for agent"
 
-**Ví dụ:**
-- "Viết AGENTS.md cho dự án enterprise này"
-- "Chuẩn hoá tài liệu để AI agent làm việc hiệu quả"
-- "Dự án này chưa có spec, viết giúp tôi"
+**Examples:**
+- "Write AGENTS.md for this enterprise project"
+- "Standardize docs so AI agents work effectively"
+- "This project has no spec, write one for me"
 
-**Kết quả:**
-- `AGENTS.md` đầy đủ với ranh giới, DoD, quy trình
-- `CONSTRAINTS.md` nếu cần
-- `glossary.md`, `decisions.md`, `specs/` đầy đủ
-- 3 cổng review: đề xuất → phản biện → thử docs
+**Output:**
+- Full `AGENTS.md` with boundaries, DoD, process
+- `CONSTRAINTS.md` if needed
+- `glossary.md`, `decisions.md`, full `specs/`
+- 3 review gates: proposal  challenge  doc test
 
-**KHÔNG dùng khi:**
-- Dự án nhỏ < 50 files → dùng writing-spec-simple
+**Do NOT use when:**
+- Small project < 50 files  use writing-spec-simple
 
 ---
 
 ## When NOT to Use (cheat-sheet)
 
-- Khi bạn cần auto-guidance → dùng `auto-guide` thay vì cheat-sheet
-- Khi đã xác định skill cụ thể → mở skill trực tiếp
-- Khi cần implementation details → cheat-sheet chỉ là lookup table
+- When you need auto-guidance  use `auto-guide` instead of cheat-sheet
+- When the skill is already decided  open that skill directly
+- When you need implementation details  cheat-sheet is only a lookup table
 
 ---
 
 ## Quick Decision Tree
 
 ```
-Tình huống của bạn?
- Lần đầu vào project?
-→   explore → (nếu chưa docs) writing-spec-simple hoặc writing-spec-for-ai
- Có bug?
-→   systematic-debugging → fix → verification-before-completion
- Cần implement feature?
-→   Task nhỏ? → code → verification-before-completion
-→   Task lớn? → writing-plans → execute → verification-before-completion
- Cần review?
-→   code-review
- Cần refactor?
-→   safe-refactor
- Cần test?
-→   Test-first? → tdd
-→   E2E? → playwright
- Cần research?
-→   research / code-research / feature-research
- Cần UI/UX?
-→   impeccable / ui-ux-pro-max
+Your situation?
+ First time in project?
+   explore  (if no docs) writing-spec-simple or writing-spec-for-ai
+ Have a bug?
+   systematic-debugging  fix  verification-before-completion
+ Need to implement a feature?
+   Small task?  code  verification-before-completion
+   Large task?  writing-plans  execute  verification-before-completion
+ Need a review?
+   code-review
+ Need a refactor?
+   safe-refactor
+ Need tests?
+   Test-first?  tdd
+   E2E?  playwright
+ Need research?
+   research / code-research / feature-research
+ Need UI/UX?
+   impeccable / ui-ux-pro-max
 ```
 
 ---
 
-**Nhớ:** Nếu không biết skill nào phù hợp, nói với AI:
+**Remember:** If you don't know which skill fits, tell the AI:
 ```
-"Tôi đang <tình huống>, nên dùng skill nào?"
+"I'm <situation>, which skill should I use?"
 ```
 
-AI sẽ tự động đề xuất qua `auto-guide`.
+The AI will auto-propose via `auto-guide`.

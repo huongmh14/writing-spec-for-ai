@@ -2,7 +2,7 @@
 
 | Thuộc tính | Giá trị |
 |---|---|
-| Trạng thái | Draft <!-- Draft → Ready → In progress → Done; hoặc As-built (đặc tả hiện trạng code có sẵn) --> |
+| Trạng thái | Draft <!-- Draft  Ready  In progress  Done; hoặc As-built (đặc tả hiện trạng code có sẵn) --> |
 | Giai đoạn | 1 |
 | Phụ thuộc | SPEC-… |
 | Quyết định liên quan | D-… |
@@ -11,12 +11,12 @@
 ## Bản đọc ngắn để duyệt hành vi
 
 - **Sau thay đổi, ai làm được gì:** <một kết quả quan sát được>.
-- **Ví dụ để tự kiểm:** <đầu vào/thao tác → kết quả mong đợi, trỏ AC-ID>. Ưu tiên ví dụ do người dùng đưa: nếu AI viết cả kỳ vọng lẫn test, test xanh chỉ chứng minh code khớp kỳ vọng của AI.
+- **Ví dụ để tự kiểm:** <đầu vào/thao tác  kết quả mong đợi, trỏ AC-ID>. Ưu tiên ví dụ do người dùng đưa: nếu AI viết cả kỳ vọng lẫn test, test xanh chỉ chứng minh code khớp kỳ vọng của AI.
 - **Chưa làm trong lần đầu:** <các hành vi lân cận bị loại>.
 - **Điều chưa biết & hệ quả:** <điều chưa chứng minh, ảnh hưởng, ai/cách kiểm; hoặc Không có>.
 - **Phần người dùng chốt:** <hành vi, phạm vi, đánh đổi>; chi tiết kỹ thuật xem nguồn bên dưới.
 - **Giải thích kiến thức & quyết định kỹ thuật:** <xem thẻ giải thích ở §9; giải thích rõ bản chất theo dữ liệu thật của dự án để người đọc hiểu và có dòng "Tự kiểm" chạy trong ≤ 5 phút>.
-- **Biên bản phản biện độc lập trước khi trình:** <Chế độ đã chạy: `Chéo model (<model viết> → <CLI model phản biện>)` hoặc `Phiên sạch cùng model (spec-challenger — lý do chưa chạy khác model)` · Đã tự sửa: `...` · Không sửa / Cần người dùng quyết: `...` (cấm giấu phát hiện)>.
+- **Biên bản phản biện độc lập trước khi trình:** <Chế độ đã chạy: `Chéo model (<model viết>  <CLI model phản biện>)` hoặc `Phiên sạch cùng model (spec-challenger — lý do chưa chạy khác model)` · Đã tự sửa: `...` · Không sửa / Cần người dùng quyết: `...` (cấm giấu phát hiện)>.
 - **Quyền chạy:** `Ready` chưa cấp quyền code; đợt được giao nằm ở `../progress.md`.
 
 ## 1. Mục tiêu
@@ -48,8 +48,8 @@ sequenceDiagram
 ```text
 +-------------------------------------------------------------------+
 | [Tiêu đề màn hình / Lệnh CLI / Endpoint POST /api/v1/...]         |
-| Input:  { ... }                                                   |
-| Output: { ... } (Trạng thái UI / DB thay đổi gì)                  |
+| Input:  {... }                                                   |
+| Output: {... } (Trạng thái UI / DB thay đổi gì)                  |
 +-------------------------------------------------------------------+
 ```
 
@@ -87,13 +87,13 @@ sequenceDiagram
 
 ## 6. Trường hợp biên
 
-- <câu hỏi biên> → XXX-AC0n | ngoài phạm vi
+- <câu hỏi biên>  XXX-AC0n | ngoài phạm vi
 
 ## 7. Điều kiện nghiệm thu & bảng kiểm thử
 
 | Trạng thái | ý nghĩa |
 |---|---|
-| `[ ]` | chưa đạt |
+| `[]` | chưa đạt |
 | `[x]` | test xanh và có bằng chứng lệnh/kết quả; có CI thì trong PR làm AC đó (bảng bằng chứng chạy test) |
 | `[~]` | chưa kiểm chứng — ghi lý do, người/cách đóng; chặn `Done` |
 
@@ -101,8 +101,8 @@ sequenceDiagram
 
 | Mã AC | Kịch bản (`Cho / Khi / Thì`) | Đầu vào cụ thể | Kỳ vọng quan sát được (đầu ra & tác dụng phụ) | Tầng & độ thật (`0 Mock` hay mock thành phần nào) | Trạng thái |
 |---|---|---|---|---|---|
-| **XXX-AC01** | Nhánh chính: <…> | `<payload / tham số / thao tác>` | `<HTTP 200 + body / bản ghi DB / trạng thái DOM>` | `integration` — **0 Mock** (DB thật) | `[ ]` |
-| **XXX-AC02** | Nhánh lỗi / biên: <…> | `<input lỗi / vượt ngưỡng>` | `<HTTP 4xx + errorCode / không ghi DB>` | `unit` / `integration` — **Mock:** `<nêu rõ hoặc 0 Mock>` | `[ ]` |
+| **XXX-AC01** | Nhánh chính: <…> | `<payload / tham số / thao tác>` | `<HTTP 200 + body / bản ghi DB / trạng thái DOM>` | `integration` — **0 Mock** (DB thật) | `[]` |
+| **XXX-AC02** | Nhánh lỗi / biên: <…> | `<input lỗi / vượt ngưỡng>` | `<HTTP 4xx + errorCode / không ghi DB>` | `unit` / `integration` — **Mock:** `<nêu rõ hoặc 0 Mock>` | `[]` |
 
 ## 8. Kiểm tra end-to-end
 
@@ -119,16 +119,16 @@ sequenceDiagram
 **Khái niệm / Quyết định 1:** `<Tên cơ chế / ràng buộc / quyết định kỹ thuật trong spec này>` · Nhãn: `<Người dùng chốt | Đã xác minh | AI đề xuất | Chưa biết>`
 - **Bản chất là gì (nói dễ hiểu + ví dụ thực tế của dự án):** <Giải thích bằng lời thường kèm 1 ví dụ dùng đúng tên bảng/API/màn hình của dự án đang làm; cấm chỉ nêu tên thuật ngữ tiếng Anh hoặc chép ví dụ mẫu>
 - **Tại sao bắt buộc cần ở đây (nếu không có thì lỗi gì xảy ra?):** <Kịch bản hỏng quan sát được trên dữ liệu/người dùng của dự án nếu bỏ qua cơ chế này>
-- **Chạy thế nào trong dự án này (Đầu vào → Xử lý → Đầu ra):** <2–3 bước ngắn mô tả dữ liệu đi vào, biến đổi gì, trả ra gì>
+- **Chạy thế nào trong dự án này (Đầu vào  Xử lý  Đầu ra):** <2–3 bước ngắn mô tả dữ liệu đi vào, biến đổi gì, trả ra gì>
 - **Tự kiểm trong ≤ 5 phút:** <Lệnh hoặc thao tác + kết quả mong đợi, trỏ `AC-ID` để người dùng tự kiểm chứng>
-- **Nguồn đối chiếu & Giới hạn không tự kiểm được:** <Con trỏ mở được + trích nguyên văn; vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân → ghi "cần chuyên gia: <vai trò>"; hoặc "Không có">
+- **Nguồn đối chiếu & Giới hạn không tự kiểm được:** <Con trỏ mở được + trích nguyên văn; vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân  ghi "cần chuyên gia: <vai trò>"; hoặc "Không có">
 
 ## 10. Hướng dẫn vận hành <!-- tuỳ chọn; dành cho người vận hành, không phải REQ -->
 
 ## 11. Làm rõ
 
 <!-- ### Phiên YYYY-MM-DD
-- H: … → Đ: … (ghi vào R0n / D-xx) -->
+- H: …  Đ: … (ghi vào R0n / D-xx) -->
 
 ## 12. Câu hỏi mở
 

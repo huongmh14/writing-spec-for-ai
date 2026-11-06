@@ -231,7 +231,7 @@ Acceptance Scenarios:
 **Structure:**
 - Clear separation of "what" (requirements) from "how" (design)
 - Progressive disclosure - essential info first, details on demand
-- Hierarchical organization - metadata → body → resources
+- Hierarchical organization - metadata  body  resources
 - Standardized sections (problem, goals, requirements, acceptance criteria)
 
 **Clarity:**
@@ -453,7 +453,7 @@ license: MIT
 ### 5.1 Most Important Principles
 
 1. **Progressive Disclosure is Critical**
-   - 3-level loading model (metadata → body → resources)
+   - 3-level loading model (metadata  body  resources)
    - Keep hot-loading minimal (~100 tokens for metadata)
    - Move detailed content to on-demand references
 

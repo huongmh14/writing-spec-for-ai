@@ -1,115 +1,117 @@
 ---
 name: starter-guide
-description: Hướng dẫn nhanh cho người mới bắt đầu với bộ skill - nhóm theo mức độ và tình huống sử dụng. AI tự động đề xuất skill phù hợp.
+description: Quick guide for beginners to the skill collection - grouped by level and usage situation. The AI automatically proposes the right skill.
 license: MIT
+trigger_phrases:
+  - "skill guide", "which skill fits", "getting started with skills"
+do_not_use:
+  - "When you already know the specific skill", "When you need implementation details"
 ---
 
-# Starter Guide - Hướng Dẫn Nhanh Cho Người Mới
+# Starter Guide - Quick Guide for Beginners
 
-# Starter Guide - Hướng Dẫn Nhanh Cho Người Mới
+**For:** People new to using AI agents for coding, or who want a fast overview of how skills combine as a project grows.
 
-**Dành cho:** Người mới bắt đầu sử dụng AI agents để làm việc với code hoặc muốn nắm nhanh cách phối hợp các skill khi dự án lớn dần.
-
-**Quan trọng nhất:** Bạn **KHÔNG** cần thuộc lòng tên skill. Skill `auto-guide` sẽ tự động phát hiện tình huống và đề xuất chuỗi skill phù hợp kèm lý do. Bạn chỉ cần mô tả bài toán của mình.
-
----
-
-## 1. AI Tự Động Điều Hướng (`auto-guide`) - Bạn Chỉ Cần Nói
-
-| Bạn nói với AI | AI tự động đề xuất | Lý do |
-|---|---|---|
-| *"Fix lỗi này"* / *"Test bị fail"* | `systematic-debugging` → `verification-before-completion` | Tìm nguyên nhân gốc (root cause) trước khi sửa, sau đó chạy test xác nhận |
-| *"Lần đầu vào project này"* (< 50 files) | `explore` → `writing-spec-simple` | Hiểu kiến trúc codebase + tạo `AGENTS.md` gọn nhẹ cho AI |
-| *"Lần đầu vào project lớn"* (>= 50 files) | `explore` → `writing-spec-for-ai` | Khảo sát + chuẩn hoá docs đầy đủ theo Profile M/L |
-| *"Implement tính năng X"* (nhiều bước) | `writing-plans` → code → `verification-before-completion` | Chia nhỏ task từ spec/requirements trước khi viết code |
-| *"Review nhánh / PR này"* | `code-review` | Kiểm tra song song 2 trục: **Standards** (chuẩn code) và **Spec** (đúng yêu cầu) |
-| *"Refactor đoạn code này"* | `safe-refactor` | Tái cấu trúc nhưng giữ nguyên hành vi, có test chặn trước/sau |
-| *"Viết test trước rồi mới code"* | `tdd` | Quy trình RED → GREEN → REFACTOR |
-| *"Đã xong, kiểm tra giúp tôi"* | `verification-before-completion` | Chạy lệnh kiểm chứng thực tế trước khi báo hoàn thành |
+**Most important:** You do **NOT** need to memorize skill names. The `auto-guide` skill detects the situation and proposes a fitting skill chain with reasons. You only need to describe your problem.
 
 ---
 
-## 2. Ba Mức Độ Skill Cốt Lõi
+## 1. AI Auto-Routing (`auto-guide`) - You Just Speak
 
-### Mức Cơ Bản (Beginner) - Dùng hàng ngày
-| Skill | Khi nào dùng | Ví dụ câu nói |
+| You say to the AI | AI automatically proposes | Why |
 |---|---|---|
-| `explore` | Lần đầu xem code, chưa biết file nào chứa logic cần tìm | *"Luồng đăng nhập hoạt động thế nào trong repo này?"* |
-| `systematic-debugging` | Gặp bug, lỗi runtime, hoặc test đỏ | *"Test `test_checkout` bị fail, tìm nguyên nhân giúp tôi"* |
-| `code-review` | Review PR/branch trước khi merge | *"Review branch `feat/login` đối chiếu với spec"* |
-| `verification-before-completion` | Sắp xong task, cần bằng chứng test/build trước khi commit | *"Kiểm tra xem mọi tiêu chí AC đã pass chưa"* |
-
-### Mức Trung Bình (Intermediate) - Khi cần quy trình chuẩn
-| Skill | Khi nào dùng | Ví dụ câu nói |
-|---|---|---|
-| `writing-spec-simple` | Dự án mới hoặc nhỏ (`< 50` files) chưa có `AGENTS.md` / spec | *"Viết AGENTS.md và spec cơ bản cho dự án này"* |
-| `writing-plans` | Có spec/requirements, cần chia nhỏ task trước khi code | *"Lập kế hoạch implement API quản lý đơn hàng"* |
-| `tdd` | Muốn viết test trước khi viết code | *"Dùng TDD cho tính năng tính phí vận chuyển"* |
-| `git-workflow-and-versioning` | Tách working tree lộn xộn thành các commit nguyên tử, xử lý conflict | *"Tách các thay đổi hiện tại thành các commit theo đúng chuẩn"* |
-
-### Mức Nâng Cao (Advanced) - Khi dự án mở rộng (Team / Production)
-| Skill | Khi nào dùng | Ví dụ câu nói |
-|---|---|---|
-| `writing-spec-for-ai` | Dự án vừa và lớn (`>= 50` files, team `>= 3` người), cần 3 cổng duyệt + Packs | *"Chuẩn hoá bộ tài liệu AI theo Profile M cho hệ thống này"* |
-| `documentation-and-adrs` | Ghi nhận quyết định kiến trúc (ADR) hoặc thay đổi API công khai | *"Ghi ADR cho quyết định chọn PostgreSQL thay vì MongoDB"* |
-| `safe-refactor` | Tách module/class lớn mà không làm đổi hành vi hiện tại | *"Tách `PaymentService` ra khỏi `OrderController` an toàn"* |
-| `dispatching-parallel-agents` | Chạy song song từ `2+` task độc lập không đụng chung state | *"Triển khai song song 2 module thông báo và báo cáo"* |
-| `incremental-implementation` | Rollout thay đổi kiến trúc lớn qua nhiều pha kèm feature flag | *"Lên lộ trình chuyển đổi hệ thống xác thực từng giai đoạn"* |
-| `security-audit` | Kiểm toán bảo mật toàn diện cho API, phân quyền, dữ liệu | *"Audit bảo mật cho luồng thanh toán và webhook"* |
+| *"Fix this bug"* / *"Test is failing"* | `systematic-debugging`  `verification-before-completion` | Find root cause before fixing, then run tests to confirm |
+| *"First time in this project"* (< 50 files) | `explore`  `writing-spec-simple` | Understand codebase architecture + create a light `AGENTS.md` for AI |
+| *"First time in a large project"* (>= 50 files) | `explore`  `writing-spec-for-ai` | Survey + full docs standardization per Profile M/L |
+| *"Implement feature X"* (multi-step) | `writing-plans`  code  `verification-before-completion` | Split tasks from spec/requirements before coding |
+| *"Review this branch / PR"* | `code-review` | Parallel check on 2 axes: **Standards** (code style) and **Spec** (matches requirements) |
+| *"Refactor this code"* | `safe-refactor` | Restructure while preserving behavior, with before/after tests |
+| *"Write tests first, then code"* | `tdd` | RED  GREEN  REFACTOR flow |
+| *"Done, please verify"* | `verification-before-completion` | Run real verification commands before claiming completion |
 
 ---
 
-## 3. Lộ Trình Mở Rộng (Scaling Path) & Các Mẫu Kết Hợp Skill
+## 2. Three Skill Levels
 
-### 3.1 Kết Hợp Skills Khi Dự Án Lớn Dần
+### Basic (Beginner) - Daily Use
+| Skill | When to use | Example phrase |
+|---|---|---|
+| `explore` | First time viewing code, don't know which file holds the logic | *"How does the login flow work in this repo?"* |
+| `systematic-debugging` | Hit a bug, runtime error, or red test | *"Test `test_checkout` fails, find the cause"* |
+| `code-review` | Review PR/branch before merge | *"Review branch `feat/login` against the spec"* |
+| `verification-before-completion` | Finishing a task, need test/build evidence before commit | *"Check whether all AC criteria pass"* |
+
+### Intermediate - When You Need a Standard Process
+| Skill | When to use | Example phrase |
+|---|---|---|
+| `writing-spec-simple` | New or small project (`< 50` files) without `AGENTS.md` / specs | *"Write AGENTS.md and basic specs for this project"* |
+| `writing-plans` | Have spec/requirements, need to split tasks before coding | *"Plan the order-management API implementation"* |
+| `tdd` | Want tests before code | *"Use TDD for the shipping-fee feature"* |
+| `git-workflow-and-versioning` | Split a messy working tree into atomic commits, resolve conflicts | *"Split current changes into proper commits"* |
+
+### Advanced - When the Project Scales (Team / Production)
+| Skill | When to use | Example phrase |
+|---|---|---|
+| `writing-spec-for-ai` | Medium/large projects (`>= 50` files, team `>= 3`), needs 3 review gates + Packs | *"Standardize the AI docs per Profile M for this system"* |
+| `documentation-and-adrs` | Record architecture decisions (ADR) or public API changes | *"Write an ADR for choosing PostgreSQL over MongoDB"* |
+| `safe-refactor` | Split large modules/classes without changing behavior | *"Safely extract `PaymentService` from `OrderController`"* |
+| `dispatching-parallel-agents` | Run `2+` independent tasks in parallel with no shared state | *"Implement the notification and report modules in parallel"* |
+| `incremental-implementation` | Roll out a large architectural change across phases with feature flags | *"Plan the phased auth-system migration"* |
+| `security-audit` | Full security audit for APIs, permissions, data | *"Security-audit the payment flow and webhooks"* |
+
+---
+
+## 3. Scaling Path & Skill Combination Patterns
+
+### 3.1 Combining Skills as the Project Grows
 ```text
-Phase 1: < 50 files, 1–2 người
-├── auto-guide → explore → writing-spec-simple → writing-plans → code → verification-before-completion
-└── Quy trình nhẹ nhàng 3 bước, không cần 3 cổng formal
+Phase 1: < 50 files, 1-2 people
+├── auto-guide  explore  writing-spec-simple  writing-plans  code  verification-before-completion
+└── Light 3-step process, no formal 3 gates
 
-Phase 2: 50–200 files, 3–5 người
-├── auto-guide → writing-spec-for-ai (Profile M) → writing-plans → code → code-review → verification-before-completion
-├── Thêm: documentation-and-adrs (cho ADR) + safe-refactor (cho refactor an toàn)
-└── Bắt buộc: docs/progress.md (bộ nhớ phiên C17) + docs/conflicts-and-bugs.md (sổ tay lỗi C18)
+Phase 2: 50-200 files, 3-5 people
+├── auto-guide  writing-spec-for-ai (Profile M)  writing-plans  code  code-review  verification-before-completion
+├── Add: documentation-and-adrs (for ADRs) + safe-refactor (for safe refactors)
+└── Required: docs/progress.md (session memory C17) + docs/conflicts-and-bugs.md (bug ledger C18)
 
-Phase 3: 200+ files, 5+ người
-├── auto-guide → writing-spec-for-ai (Profile L + Packs: PK-API, PK-DB, PK-AUTH, PK-OBS, PK-SEC)
-├── Thêm: using-git-worktrees + dispatching-parallel-agents (làm song song cô lập)
-├── Thêm: incremental-implementation (rollout lớn) + security-audit (kiểm toán bảo mật)
-└── Bắt buộc: 3 cổng duyệt formal (C02) + Phản biện chéo model (C26)
+Phase 3: 200+ files, 5+ people
+├── auto-guide  writing-spec-for-ai (Profile L + Packs: PK-API, PK-DB, PK-AUTH, PK-OBS, PK-SEC)
+├── Add: using-git-worktrees + dispatching-parallel-agents (isolated parallel work)
+├── Add: incremental-implementation (large rollout) + security-audit (security audit)
+└── Required: formal 3 review gates (C02) + cross-model review (C26)
 ```
 
-### 3.2 Bốn Mẫu Kết Hợp Phổ Biến (Integration Patterns)
-1. **Sequential Chain (Luồng tuần tự):**
-   `explore` → `writing-spec-simple` → `writing-plans` → `code` → `verification-before-completion`
-2. **Parallel Dispatch (Thực thi song song):**
-   `writing-plans` → `using-git-worktrees` → `dispatching-parallel-agents` → `code-review` → `verification-before-completion`
-3. **Feedback & Bug-Ledger Loop (Vòng lặp sửa lỗi):**
-   `code/test fail` → `systematic-debugging` → `fix` → ghi `docs/conflicts-and-bugs.md` (`C18`) → `verification-before-completion`
-4. **Upgrade Path (Nâng cấp không mất dữ liệu):**
-   `writing-spec-simple` → giữ nguyên `AGENTS.md` + `SPEC-*.md` → thêm `docs/specs/README.md`, `progress.md` (`C17`), `conflicts-and-bugs.md` (`C18`) → bật đủ 31 luật của `writing-spec-for-ai`.
+### 3.2 Four Common Integration Patterns
+1. **Sequential Chain:**
+   `explore`  `writing-spec-simple`  `writing-plans`  `code`  `verification-before-completion`
+2. **Parallel Dispatch:**
+   `writing-plans`  `using-git-worktrees`  `dispatching-parallel-agents`  `code-review`  `verification-before-completion`
+3. **Feedback & Bug-Ledger Loop:**
+   `code/test fails`  `systematic-debugging`  `fix`  log to `docs/conflicts-and-bugs.md` (`C18`)  `verification-before-completion`
+4. **Upgrade Path (no data loss):**
+   `writing-spec-simple`  keep `AGENTS.md` + `SPEC-*.md`  add `docs/specs/README.md`, `progress.md` (`C17`), `conflicts-and-bugs.md` (`C18`)  enable all 31 laws of `writing-spec-for-ai`.
 
 ---
 
-## 4. Năm Quy Tắc Vàng & Quick Test Đánh Giá Spec
+## 4. Five Golden Rules & Quick Spec Evaluation Test
 
-### 5 Quy Tắc Vàng
-1. **KHÔNG** sửa bug trước khi tìm ra nguyên nhân gốc (`systematic-debugging`).
-2. **KHÔNG** tự đoán khi yêu cầu mơ hồ — AI phải dừng lại hỏi (`C30`).
-3. **LUÔN** chạy lệnh kiểm chứng và xuất bảng bằng chứng trước khi báo xong (`verification-before-completion`, `C29`).
-4. **LUÔN** ghi lại bug/xung đột hợp đồng vào `docs/conflicts-and-bugs.md` (`C18`) để không lặp lại lỗi cũ.
-5. **LUÔN** cập nhật Spec khi thay đổi hành vi code (`C11`).
+### Five Golden Rules
+1. **NEVER** fix a bug before finding the root cause (`systematic-debugging`).
+2. **NEVER** guess when requirements are ambiguous — the AI must stop and ask (`C30`).
+3. **ALWAYS** run verification commands and show evidence before claiming done (`verification-before-completion`, `C29`).
+4. **ALWAYS** record bugs/contract conflicts in `docs/conflicts-and-bugs.md` (`C18`) to avoid repeating them.
+5. **ALWAYS** update the Spec when code behavior changes (`C11`).
 
-### Quick Test 5 Câu (Biết Đang Đi Đúng Hướng)
-1. AI có tự dừng lại hỏi khi spec mơ hồ thay vì tự bịa code không?
-2. Code và test sinh ra có bám sát các `AC-x` trong Spec không?
-3. Spec và `docs/conflicts-and-bugs.md` có được cập nhật khi code thay đổi không?
-4. Team có duyệt Spec / Plan trước khi code không?
-5. Bắt đầu phiên làm việc mới / onboarding người mới có nhanh hơn không?
+### Quick 5-Question Test (Are You on the Right Track?)
+1. Does the AI stop and ask when the spec is ambiguous instead of making things up?
+2. Do the generated code and tests stick to the `AC-x` items in the Spec?
+3. Are the Spec and `docs/conflicts-and-bugs.md` updated when code changes?
+4. Does the team review Spec / Plan before coding?
+5. Is starting a new session / onboarding a new person faster?
 
-> Nếu **`>= 4/5` câu trả lời là "Có"** → Dự án đang đi đúng hướng! Xem bảng **Monthly Health Check** chi tiết tại `writing-spec-simple/references/scaling-and-evaluation.md`.
+> If **`>= 4/5` answers are "Yes"**  the project is on the right track! See the detailed **Monthly Health Check** table in `writing-spec-simple/references/scaling-and-evaluation.md`.
 
 ## When NOT to Use
 
-- Khi bạn đã biết chính xác tên skill cần gọi và muốn mở thẳng skill chuyên sâu đó
-- Khi cần tra cứu danh sách đầy đủ hơn 50 skills theo từ khóa → mở `cheat-sheet`
+- When you already know the exact skill name and want to open that specific skill directly
+- When you need to look up the full list of 50+ skills by keyword  open `cheat-sheet`

@@ -30,7 +30,7 @@ Your job is to inspect the target repository thoroughly and return a **compact, 
 5. **CI vs. Stack Alignment (**Đổi stack là một thay đổi**, `C20`):**
    - Compare `.github/workflows/*` or `.gitlab-ci.yml` commands and file paths against current manifests. Flag stale stacks or missing test steps in CI.
 6. **Secret & Agent Config Hygiene (**Secret & cấu hình**, `C16`):**
-   - Check `.env.example` naming, `.gitignore` coverage for `.env*`, and `git ls-files .claude .cursor .vscode .zcode` for accidentally committed local agent settings or credentials.
+   - Check `.env.example` naming, `.gitignore` coverage for `.env*`, and `git ls-files.claude.cursor.vscode.zcode` for accidentally committed local agent settings or credentials.
 7. **Operational Scripts (**Kiểm tác dụng lệnh vận hành**, `C19`) & Risk Zones:**
    - Inspect `migrate`, `seed`, `sync`, `deploy` scripts to check if they silently swallow errors and exit `0`.
    - Locate high-risk directories: auth/tokens, permissions/RBAC, DB migrations, billing/payments, PII, AI command execution (`policy.js`).

@@ -264,7 +264,7 @@
 
    Bước 2: AI sẽ đề xuất:
    ```
-   "Tôi đề xuất explore → writing-spec-simple vì...
+   "Tôi đề xuất explore  writing-spec-simple vì...
    Bạn có đồng ý không?"
    ```
 
@@ -291,7 +291,7 @@
 
 #### Strengths
 - **Extremely rigorous:** 10 hard laws with red flags
-- **Formal 3-gate process:** Propose → Review → Test → Code
+- **Formal 3-gate process:** Propose  Review  Test  Code
 - **Excellent progressive disclosure:** Has references/, skills/, templates/ structure
 - **Context economy:** Explicit "đọc đúng lúc" rules
 - **Human-in-the-loop:** Multiple approval checkpoints
@@ -385,11 +385,11 @@
 ### Skill Body (< 500 lines / 5,000 tokens)
 
 **Current State:** **Mixed**
-- starter-guide: 163 lines ✓
-- writing-spec-simple: 384 lines ✓
-- README-FOR-BEGINNERS: 281 lines ✓
-- cheat-sheet: 572 lines ✗ (14% over)
-- auto-guide: 614 lines ✗ (23% over)
+- starter-guide: 163 lines 
+- writing-spec-simple: 384 lines 
+- README-FOR-BEGINNERS: 281 lines 
+- cheat-sheet: 572 lines  (14% over)
+- auto-guide: 614 lines  (23% over)
 
 **Recommendation:** Reduce cheat-sheet and auto-guide to < 500 lines via progressive disclosure.
 
@@ -405,7 +405,7 @@
 ### Clear "When to Use" and "When NOT to Use"
 
 **Current State:** **Partial**
-- writing-spec-simple: Has "Khi nào AI KHÔNG đề xuất" ✓
+- writing-spec-simple: Has "Khi nào AI KHÔNG đề xuất" 
 - auto-guide: Has "Khi nào kích hoạt" but no explicit "NOT use"
 - starter-guide: Implicit, no explicit section
 - cheat-sheet: Implicit in examples, no explicit section

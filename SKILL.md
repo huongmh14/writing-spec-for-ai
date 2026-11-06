@@ -8,9 +8,9 @@ trigger_phrases:
   - "chuẩn hoá tài liệu cho agent"
   - "bắt đầu dự án mới"
 do_not_use:
-  - "Dự án nhỏ < 50 files → dùng writing-spec-simple thay vì bộ đầy đủ"
-  - "User chỉ đưa ý tưởng chưa rõ → dùng idea-to-spec trước"
-  - "Chỉ fix bug hoặc task nhỏ → systematic-debugging, không viết spec"
+  - "Dự án nhỏ < 50 files  dùng writing-spec-simple thay vì bộ đầy đủ"
+  - "User chỉ đưa ý tưởng chưa rõ  dùng idea-to-spec trước"
+  - "Chỉ fix bug hoặc task nhỏ  systematic-debugging, không viết spec"
 ---
 
 # Writing Spec For AI
@@ -21,16 +21,16 @@ Skill này là **bộ điều phối**. **Đọc đúng lúc (tiết kiệm ng�
 
 ## Luật cứng
 
-1. **Mặc định ba cổng:** đề xuất (Cổng 1) → phản biện docs (Cổng 2) → thử docs (Cổng 3) → code. Chỉ dẫn rõ của người dùng có thể điều chỉnh quy trình/phạm vi; không biến giả định thành bằng chứng và không hỏi lại quyền đã cấp.
-2. **Không bịa yêu cầu.** Không suy ra được từ repo hoặc lời người dùng → `[CẦN LÀM RÕ: …]` + câu hỏi mở.
-3. **Một sự thật, một chỗ.** Nơi khác chỉ trỏ tới bằng link/ID; câu trỏ đặt điều kiện ở đầu, vd. *"Khi sửa API → đọc …"* (**con trỏ có điều kiện**, `C24`).
+1. **Mặc định ba cổng:** đề xuất (Cổng 1)  phản biện docs (Cổng 2)  thử docs (Cổng 3)  code. Chỉ dẫn rõ của người dùng có thể điều chỉnh quy trình/phạm vi; không biến giả định thành bằng chứng và không hỏi lại quyền đã cấp.
+2. **Không bịa yêu cầu.** Không suy ra được từ repo hoặc lời người dùng  `[CẦN LÀM RÕ: …]` + câu hỏi mở.
+3. **Một sự thật, một chỗ.** Nơi khác chỉ trỏ tới bằng link/ID; câu trỏ đặt điều kiện ở đầu, vd. *"Khi sửa API  đọc …"* (**con trỏ có điều kiện**, `C24`).
 4. **Mức 0 luôn làm; mức 1–2 và Pack chỉ khi có tín hiệu**, ghi rõ tín hiệu.
 5. **Ngắn và không hạ chuẩn:** `AGENTS.md` khoảng ≤ 150 dòng (quy ước của bộ kit, không phải số có nguồn); không tự tắt trình kiểm tra hay hạ ngưỡng để qua bài kiểm (**không hạ chuẩn âm thầm**, `C23`).
 6. **Viết để người không chuyên duyệt được:** ngôn ngữ theo người dùng; ID, lệnh, tên file giữ nguyên. **Nghĩa trước, mã sau:** lần đầu nhắc một luật trong mỗi file thì viết tên ngắn rồi mới đến mã; file trong `templates/` không chứa mã luật `Cxx`.
 7. **Quyền thực thi theo đợt (`C30`):** `Ready` và duyệt Cổng 1 không phải quyền viết tràn lan. **Viết docs (Bước 5):** mỗi lượt chỉ làm **một bước con** rồi dừng chờ review: 5a cụm nền, 5b **đúng 1 file `SPEC-xx`** (+ `specs/README.md`), 5c 1 file design. **Viết code (Bước 8):** mặc định 1 spec, 1 task/AC nhỏ; ghi điểm dừng trong `docs/progress.md`, báo bằng chứng rồi dừng.
-8. **Nguồn, giải thích kỹ thuật và giới hạn hiểu biết (`C31`):** người dùng chốt hành vi/phạm vi; AI kiểm chứng kỹ thuật bằng repo, nguồn chính thức và thử nghiệm. Mỗi khẳng định quan trọng mang 1 trong 4 nhãn `Người dùng chốt / Đã xác minh / AI đề xuất / Chưa biết`; `Đã xác minh` phải kèm con trỏ mở được (`path:line`, URL + trích nguyên văn, hoặc lệnh + kết quả). Mọi khái niệm/cơ chế hoặc quyết định kỹ thuật chuyên sâu AI đưa vào phải đi kèm **Thẻ giải thích & quyết định kỹ thuật** hiển thị tường minh (*Bản chất là gì + ví dụ · Tại sao cần / không có thì lỗi gì · Chạy thế nào · Tự kiểm ≤ 5 phút · Nguồn & giới hạn*) để người dùng hiểu rõ kiến thức AI viết và nghiệm thu qua bước `Tự kiểm`; vùng bảo mật/thanh toán/pháp lý → ghi "cần chuyên gia". Không tự chấm độ tin cậy %, không bịa NFR; không dùng lời khen/đồng ý của AI thứ hai làm bằng chứng đúng (`C31`), nhưng **bắt buộc dùng phiên sạch / model thứ hai (vd. `codex` read-only hoặc `spec-challenger`) để bắt lỗi chéo và tự sửa trước khi trình người dùng (`C26`)**.
-9. **Profile S:** mọi con trỏ `docs/specs/` → `docs/spec.md`/README, `docs/progress.md` → block đợt trong `AGENTS.md`; file glossary/decisions/plan chỉ đọc khi có. Áp dụng ánh xạ này ở mọi sub-skill/adapter; không sinh thêm file để thoả con trỏ.
-10. **Góc nhìn thay danh xưng:** đầu mỗi bước ghi `Góc nhìn: <≤ 3 mục> — vì <tín hiệu thật>` theo [references/lenses.md](references/lenses.md); không dùng "bạn là senior…" thay checklist; người dùng thêm/bỏ được. Quyết định có ≥ 2 phương án khó đảo ngược → [skills/explore-options](skills/explore-options/SKILL.md): người dùng chọn, AI không tự quyết.
+8. **Nguồn, giải thích kỹ thuật và giới hạn hiểu biết (`C31`):** người dùng chốt hành vi/phạm vi; AI kiểm chứng kỹ thuật bằng repo, nguồn chính thức và thử nghiệm. Mỗi khẳng định quan trọng mang 1 trong 4 nhãn `Người dùng chốt / Đã xác minh / AI đề xuất / Chưa biết`; `Đã xác minh` phải kèm con trỏ mở được (`path:line`, URL + trích nguyên văn, hoặc lệnh + kết quả). Mọi khái niệm/cơ chế hoặc quyết định kỹ thuật chuyên sâu AI đưa vào phải đi kèm **Thẻ giải thích & quyết định kỹ thuật** hiển thị tường minh (*Bản chất là gì + ví dụ · Tại sao cần / không có thì lỗi gì · Chạy thế nào · Tự kiểm ≤ 5 phút · Nguồn & giới hạn*) để người dùng hiểu rõ kiến thức AI viết và nghiệm thu qua bước `Tự kiểm`; vùng bảo mật/thanh toán/pháp lý  ghi "cần chuyên gia". Không tự chấm độ tin cậy %, không bịa NFR; không dùng lời khen/đồng ý của AI thứ hai làm bằng chứng đúng (`C31`), nhưng **bắt buộc dùng phiên sạch / model thứ hai (vd. `codex` read-only hoặc `spec-challenger`) để bắt lỗi chéo và tự sửa trước khi trình người dùng (`C26`)**.
+9. **Profile S:** mọi con trỏ `docs/specs/`  `docs/spec.md`/README, `docs/progress.md`  block đợt trong `AGENTS.md`; file glossary/decisions/plan chỉ đọc khi có. Áp dụng ánh xạ này ở mọi sub-skill/adapter; không sinh thêm file để thoả con trỏ.
+10. **Góc nhìn thay danh xưng:** đầu mỗi bước ghi `Góc nhìn: <≤ 3 mục> — vì <tín hiệu thật>` theo [references/lenses.md](references/lenses.md); không dùng "bạn là senior…" thay checklist; người dùng thêm/bỏ được. Quyết định có ≥ 2 phương án khó đảo ngược  [skills/explore-options](skills/explore-options/SKILL.md): người dùng chọn, AI không tự quyết.
 
 ## Chống ngụy biện (Red Flags — Dừng ngay nếu đang nghĩ)
 
@@ -38,10 +38,10 @@ Skill này là **bộ điều phối**. **Đọc đúng lúc (tiết kiệm ng�
 |---|---|
 | *"Dự án nhỏ / đang gấp, viết luôn `AGENTS.md` khỏi cần đề xuất Cổng 1"* | **Dừng.** Dự án nhỏ dùng Profile `S` (đề xuất gọn ~15 dòng), vẫn bắt buộc chốt Cổng 1 trước khi tạo file trong repo. |
 | *"Chỉ thiếu vài chi tiết nhỏ, tự đoán luôn cho nhanh"* | **Dừng.** Đánh dấu `[CẦN LÀM RÕ]` hoặc hỏi theo `HYPOTHESIS + GUESS` ở Bước 4; tuyệt đối không bịa REQ/AC. |
-| *"Tự đọc lại thấy ổn rồi, trình luôn cho người dùng khỏi cần phản biện chéo (`spec-challenger` / `codex`) hay `doc-tester`"* | **Dừng.** Một model vừa viết vừa tự chấm luôn dính thiên kiến xác nhận và điểm mù cùng model (**phản biện trong phiên sạch & chéo model**, `C26`). Trước khi trình spec/design/code cho người dùng, phải chạy vòng lặp `Viết → Phản biện độc lập bắt lỗi (CLI model thứ hai như codex read-only hoặc subagent phiên sạch chỉ nhận ARTIFACT + CONTRACT) → Tự sửa lỗi thật` rồi mới trình kèm biên bản tự sửa. |
-| *"AI viết nghe hợp lý cứ ghi `Đã xác minh`, hoặc chỉ ném thuật ngữ kỹ thuật + 1 câu ngắn vì người dùng chỉ bấm Tự kiểm"* | **Dừng.** Không mở được nguồn + câu trích khớp → chỉ được gắn `AI đề xuất` / `Chưa biết` (`C31`). Không ẩn thẻ giải thích trong comment `<!-- ... -->`; phải giải thích rõ *Bản chất là gì + ví dụ · Tại sao cần (bỏ qua thì lỗi gì) · Chạy thế nào · Tự kiểm ≤ 5 phút · Nguồn* để người dùng hiểu thấu kiến thức AI viết. |
-| *"Trình bày định hướng bằng đoạn chữ dài / chỉ báo 'All tests passed' là đủ"* | **Dừng.** Chữ dài khiến người đọc gật đầu mà không thật sự hiểu (**trình bày định hướng bằng hình**, `C28`: Scope Radar 🟢/🟡/🔴, sơ đồ Mermaid, ví dụ vào/ra). Báo test xanh mà giấu đầu vào/đầu ra/mock là không kiểm được (**bằng chứng test hiển thị**, `C29`: in bảng bằng chứng chạy test). |
-| *"Đã qua Cổng 1 rồi, viết luôn một mạch toàn bộ `AGENTS.md`, `glossary`, `decisions` và tất cả các file `SPEC-xx` cho nhanh"* | **Dừng.** Vi phạm `C30`: mỗi lượt ở Bước 5 chỉ làm **một bước con** (5a → dừng chờ review → 5b từng spec một → dừng chờ review → 5c). |
+| *"Tự đọc lại thấy ổn rồi, trình luôn cho người dùng khỏi cần phản biện chéo (`spec-challenger` / `codex`) hay `doc-tester`"* | **Dừng.** Một model vừa viết vừa tự chấm luôn dính thiên kiến xác nhận và điểm mù cùng model (**phản biện trong phiên sạch & chéo model**, `C26`). Trước khi trình spec/design/code cho người dùng, phải chạy vòng lặp `Viết  Phản biện độc lập bắt lỗi (CLI model thứ hai như codex read-only hoặc subagent phiên sạch chỉ nhận ARTIFACT + CONTRACT)  Tự sửa lỗi thật` rồi mới trình kèm biên bản tự sửa. |
+| *"AI viết nghe hợp lý cứ ghi `Đã xác minh`, hoặc chỉ ném thuật ngữ kỹ thuật + 1 câu ngắn vì người dùng chỉ bấm Tự kiểm"* | **Dừng.** Không mở được nguồn + câu trích khớp  chỉ được gắn `AI đề xuất` / `Chưa biết` (`C31`). Không ẩn thẻ giải thích trong comment `<!--... -->`; phải giải thích rõ *Bản chất là gì + ví dụ · Tại sao cần (bỏ qua thì lỗi gì) · Chạy thế nào · Tự kiểm ≤ 5 phút · Nguồn* để người dùng hiểu thấu kiến thức AI viết. |
+| *"Trình bày định hướng bằng đoạn chữ dài / chỉ báo 'All tests passed' là đủ"* | **Dừng.** Chữ dài khiến người đọc gật đầu mà không thật sự hiểu (**trình bày định hướng bằng hình**, `C28`: Scope Radar (green)/(yellow)/(red), sơ đồ Mermaid, ví dụ vào/ra). Báo test xanh mà giấu đầu vào/đầu ra/mock là không kiểm được (**bằng chứng test hiển thị**, `C29`: in bảng bằng chứng chạy test). |
+| *"Đã qua Cổng 1 rồi, viết luôn một mạch toàn bộ `AGENTS.md`, `glossary`, `decisions` và tất cả các file `SPEC-xx` cho nhanh"* | **Dừng.** Vi phạm `C30`: mỗi lượt ở Bước 5 chỉ làm **một bước con** (5a  dừng chờ review  5b từng spec một  dừng chờ review  5c). |
 | *"Đọc luôn một lượt nhiều sub-skill + `principles.md` + `base-kit.md` cho chắc / hoặc khỏi mở sub-skill bước hiện tại"* | **Dừng.** Mỗi lượt **chỉ mở đúng 1 `skills/<bước-hiện-tại>/SKILL.md`**; cấm đọc trước sub-skill bước sau hoặc nạp nguyên các file `references/` nặng làm tràn cửa sổ ngữ cảnh (`C17`). |
 
 ## Quy trình — bước nào mở sub-skill / subagent đó
@@ -50,7 +50,7 @@ Skill này là **bộ điều phối**. **Đọc đúng lúc (tiết kiệm ng�
 |---|---|---|---|
 | 1–2 | Khảo sát dự án, thu bằng chứng, xác định mức 0/1/2, Profile & Pack | [skills/survey-project](skills/survey-project/SKILL.md) · subagent [`spec-surveyor`](agents/spec-surveyor.md) | |
 | 3 | Đề xuất thiết kế docs + Capability Map (chưa tạo file repo) | [skills/propose-doc-design](skills/propose-doc-design/SKILL.md) | **Cổng 1 — chờ duyệt** |
-| 4 | Làm rõ các câu hỏi chỉ người dùng quyết được (Frontier) bằng giả thuyết + đáp án đoán sẵn (`HYPOTHESIS/GUESS`); đáp án → `D-xx` hoặc spec | (nội quy trong `propose-doc-design` §3) | |
+| 4 | Làm rõ các câu hỏi chỉ người dùng quyết được (Frontier) bằng giả thuyết + đáp án đoán sẵn (`HYPOTHESIS/GUESS`); đáp án  `D-xx` hoặc spec | (nội quy trong `propose-doc-design` §3) | |
 | 5a | Viết cụm nền tảng: `AGENTS.md` (+ `CONSTRAINTS.md`), `glossary`, `decisions` | [templates/](templates/) + `principles.md` §4.2 | **Checkpoint 5a — chờ review cụm file này** |
 | 5b | Viết `specs/README.md` + **đúng 1 file `SPEC-xx` sắp làm** (từng spec một) | [skills/write-spec](skills/write-spec/SKILL.md) | **Checkpoint 5b — chờ review từng spec** |
 | 5c | Viết **1 file design doc** khi có tín hiệu (thuật ngữ thiết kế: [glossary](references/glossary.md)) | [skills/write-design-doc](skills/write-design-doc/SKILL.md) | **Checkpoint 5c — chờ review design** |
@@ -63,12 +63,12 @@ Luật xuyên các bước:
 
 - Bước 4: nêu giả thuyết (`HYPOTHESIS`) + bằng chứng và khoảng trống; tối đa 3 câu hỏi về kết quả/đánh đổi mà chỉ người dùng quyết được (**Frontier**), kèm đề xuất. Chi tiết kỹ thuật có thể uỷ quyền thì AI tự nghiên cứu trong phạm vi đã giao (`C31`).
 - Bước 5: chép mẫu từ `templates/`, điền giá trị thật, xoá phần không áp dụng; không để placeholder trong file giao; lệnh trong `AGENTS.md` / `CONSTRAINTS.md` phải chạy được. Spec mới `Draft`; brownfield `As-built` kèm bằng chứng; chỉ người dùng chuyển `Ready`.
-- Bước 8: phát hiện docs sai/thiếu khi code → dừng, đề xuất sửa docs trước; spec đã `Done` thì qua [skills/change-spec](skills/change-spec/SKILL.md).
+- Bước 8: phát hiện docs sai/thiếu khi code  dừng, đề xuất sửa docs trước; spec đã `Done` thì qua [skills/change-spec](skills/change-spec/SKILL.md).
 
 ## Sau khi code chạy (bảo trì)
 
-- Luật vi phạm ≥ 2 lần → đưa vào `CONSTRAINTS.md` / lint / test / hook, thông báo lỗi kèm ID luật + cách sửa; rút văn xuôi.
-- Quy trình lặp ≥ 2 lần hoặc cần kiểm chứng runtime tự động → dùng [skills/generate-verify-harness](skills/generate-verify-harness/SKILL.md) hoặc [templates/project-skill](templates/project-skill/SKILL.md).
-- Lỗi khó đã gặp, xung đột hợp đồng (enum/API/DB/port), hotfix hoặc revert → bắt buộc ghi vào `docs/conflicts-and-bugs.md` kèm commit SHA, nguyên nhân gốc, cách chặn bằng máy và ngày kiểm lần cuối (**sổ tay lỗi & xung đột có ngày kiểm**, `C18`); chưa sửa thì có issue.
+- Luật vi phạm ≥ 2 lần  đưa vào `CONSTRAINTS.md` / lint / test / hook, thông báo lỗi kèm ID luật + cách sửa; rút văn xuôi.
+- Quy trình lặp ≥ 2 lần hoặc cần kiểm chứng runtime tự động  dùng [skills/generate-verify-harness](skills/generate-verify-harness/SKILL.md) hoặc [templates/project-skill](templates/project-skill/SKILL.md).
+- Lỗi khó đã gặp, xung đột hợp đồng (enum/API/DB/port), hotfix hoặc revert  bắt buộc ghi vào `docs/conflicts-and-bugs.md` kèm commit SHA, nguyên nhân gốc, cách chặn bằng máy và ngày kiểm lần cuối (**sổ tay lỗi & xung đột có ngày kiểm**, `C18`); chưa sửa thì có issue.
 - Phiên làm việc dài: trước khi nén ngữ cảnh hoặc mở phiên mới, ghi quyết định vào `decisions.md`, điểm dừng và bàn giao vào `progress.md` (**bộ nhớ phiên**, `C17`; một file duy nhất, không tách `HANDOFF.md`). Việc đo độ dài ngữ cảnh do công cụ AI tự làm, không thuộc bộ kit.
-- Làm xong P-xx → chuyển D-xx hoặc xoá. Spec chỉ `Done` khi mọi AC còn hiệu lực của spec `[x]` có bằng chứng, không chỉ AC của đợt; `[~]` chưa kiểm chứng.
+- Làm xong P-xx  chuyển D-xx hoặc xoá. Spec chỉ `Done` khi mọi AC còn hiệu lực của spec `[x]` có bằng chứng, không chỉ AC của đợt; `[~]` chưa kiểm chứng.

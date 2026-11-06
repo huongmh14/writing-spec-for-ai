@@ -1,24 +1,24 @@
-# Nhật ký quyết định
+# Decision Log
 
-Quyết định đã chốt; không làm trái. Muốn đổi: **thêm dòng mới** ghi "Thay thế D-xx" và cập nhật cột Trạng thái của dòng cũ; không sửa nội dung dòng cũ. Quyết định đổi giá trị trong REQ thì cùng PR sửa REQ đó. Quyết định có ≥ 2 phương án đáng kể: viết `adr/D-xx-<slug>.md`, bảng chỉ link.
+Confirmed decisions; never act against them. To change: **add a new row** noting "Replaces D-xx" and update the old row's Status column; never edit the old row's content. Decisions that change REQ values get the REQ fixed in the same PR. Decisions with >= 2 significant options: write `adr/D-xx-<slug>.md`, the table only links.
 
-| ID | Ngày | Quyết định | Lý do tóm tắt | Nguồn / bằng chứng | Spec | Trạng thái |
+| ID | Date | Decision | Reason summary | Source / evidence | Spec | Status |
 |---|---|---|---|---|---|---|
-| D-01 | YYYY-MM-DD | | | <Người dùng chốt — ngày/câu nói · Đã xác minh — `path:line` / URL + trích + ngày đọc / lệnh + kết quả> | SPEC-… | Hiệu lực <!-- hoặc: Bị thay bởi D-xx --> |
+| D-01 | YYYY-MM-DD | | | <User decided — date/quote · Verified — `path:line` / URL + quote + read date / command + result> | SPEC-… | Active <!-- or: Replaced by D-xx --> |
 
-## Định danh hiện hành
+## Current Identifiers
 
-Một chỗ duy nhất cho tên dễ đổi.
+Single place for renameable names.
 
-| Định danh | Giá trị | Theo |
+| Identifier | Value | Per |
 |---|---|---|
 | Repo | | D-… |
 | Registry | | D-… |
 
-## Đề xuất (chưa chốt)
+## Proposals (not yet decided)
 
-Làm xong hoặc chốt → chuyển thành D-xx và xoá dòng ở đây. Đề xuất chưa có bằng chứng không trở thành quyết định chỉ vì AI khác đồng ý; chỉ hỏi người dùng về hệ quả họ quyết được. Nhãn: `AI đề xuất` (lý do 1 dòng + hậu quả nếu sai) hoặc `Chưa biết` (cách xác minh + ai + phần bị chặn).
+When done or decided  convert to D-xx and delete the row here. Proposals without evidence don't become decisions just because another AI agrees; only ask the user about consequences they can decide. Labels: `AI proposed` (1-line reason + consequence if wrong) or `Unknown` (how to verify + who + blocked part).
 
-| ID | Vấn đề / điều chưa biết | Đề xuất & nhãn nguồn gốc | Cách xác minh / người phụ trách | Phần bị chặn |
+| ID | Issue / unknown | Proposal & origin label | How to verify / owner | Blocked part |
 |---|---|---|---|---|
 | P-01 | | | | |

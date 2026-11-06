@@ -17,8 +17,8 @@ Mỗi dòng bắt buộc có lệnh kiểm tra thực tế ở cột `Lệnh ki�
 
 | Chiều chất lượng | Ngưỡng bắt buộc | Lệnh kiểm (`Checked by`) | Chạy ở giai đoạn | Lý do chọn ngưỡng |
 |---|---|---|---|---|
-| Kiểu (Types) | 0 lỗi kiểu | `<tsc --noEmit / mypy .>` | Mọi lần sửa (`check:fast`) | Chặn lỗi sai hợp đồng giữa các module ngay lúc viết |
-| Lint | 0 lỗi lint | `<eslint . / biome check / ruff check>` | Mọi lần sửa (`check:fast`) | Giữ quy ước code đồng nhất |
+| Kiểu (Types) | 0 lỗi kiểu | `<tsc --noEmit / mypy.>` | Mọi lần sửa (`check:fast`) | Chặn lỗi sai hợp đồng giữa các module ngay lúc viết |
+| Lint | 0 lỗi lint | `<eslint. / biome check / ruff check>` | Mọi lần sửa (`check:fast`) | Giữ quy ước code đồng nhất |
 | Secrets | 0 phát hiện lộ khoá | `<gitleaks detect --redact --no-banner>` | Trước commit / CI (`check:fast`) | Chặn lộ thông tin xác thực vào git và log |
 | Coverage (code mới) | Dòng thay đổi ≥ `<80%>` | `<vitest run --coverage / pytest --cov>` | Cuối task & CI (`check:task`) | Đảm bảo mọi nhánh mới đều có test bảo vệ |
 | Bảo mật phụ thuộc | 0 lỗ hổng mức High/Critical | `<npm audit --audit-level=high / osv-scanner>` | CI (`check:full`) | Chặn CVE nghiêm trọng từ thư viện bên thứ ba |

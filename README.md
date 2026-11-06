@@ -26,7 +26,7 @@ Turn any new or existing codebase into an evidence-backed, 3-gate specification 
 
 </div>
 
-**Unreleased design update (2026-10-25):** `Ready` approves requirements; execution follows the user's actual bounded assignment. Default to one spec and one verifiable task, run an independent/cross-model critique (`Writer → Codex / spec-challenger → Self-Fix`, `C26`), report evidence with a plain-language technical explanation, and stop. Honor explicitly assigned finite batches without repeated approval. Users review behavior and trade-offs; agents must source or verify technical claims and disclose unknowns (`C30–C31`). Each important claim carries one of four provenance labels — `Người dùng chốt` (user-decided), `Đã xác minh` (verified: one openable pointer + verbatim quote), `AI đề xuất` (AI-proposed), `Chưa biết` (unknown). Technical mechanisms and decisions come with a visible **Technical Explanation & Decision Card** (*Plain-language essence + example · Why needed / what breaks without it · Input → Process → Output flow · ≤ 5-minute runnable self-check · Source & expert boundary*) so users genuinely understand the technical concepts while verifying correctness through the observable self-check; security/payment/legal/personal-data areas are flagged "needs an expert". Kit terms and domain-pack mechanisms are explained in [references/glossary.md](references/glossary.md).
+**Unreleased design update (2026-10-25):** `Ready` approves requirements; execution follows the user's actual bounded assignment. Default to one spec and one verifiable task, run an independent/cross-model critique (`Writer  Codex / spec-challenger  Self-Fix`, `C26`), report evidence with a plain-language technical explanation, and stop. Honor explicitly assigned finite batches without repeated approval. Users review behavior and trade-offs; agents must source or verify technical claims and disclose unknowns (`C30–C31`). Each important claim carries one of four provenance labels — `Người dùng chốt` (user-decided), `Đã xác minh` (verified: one openable pointer + verbatim quote), `AI đề xuất` (AI-proposed), `Chưa biết` (unknown). Technical mechanisms and decisions come with a visible **Technical Explanation & Decision Card** (*Plain-language essence + example · Why needed / what breaks without it · Input  Process  Output flow · ≤ 5-minute runnable self-check · Source & expert boundary*) so users genuinely understand the technical concepts while verifying correctness through the observable self-check; security/payment/legal/personal-data areas are flagged "needs an expert". Kit terms and domain-pack mechanisms are explained in [references/glossary.md](references/glossary.md).
 
 Read the [research and primary sources](references/research-controlled-execution.md), [before/after walkthrough](references/controlled-spec-demo.md), and [updated spec template](templates/docs/specs/_template.md). Markdown guides behavior; tool permissions and sandboxes provide enforcement.
 
@@ -36,14 +36,14 @@ Read the [research and primary sources](references/research-controlled-execution
 
 Most AI-assisted projects fail in one of two ways: either the agent jumps straight into writing code based on unverified assumptions, or humans write a 1,500-line `AGENTS.md` that rots within two weeks and burns context window tokens on every turn.
 
-`writing-spec-for-ai` gives your AI coding agent a disciplined engineering workflow: **Survey → Propose → Clarify → Write Specs → Adversarial Self-Review → Clean-Room Dry-Run → Tracer-Bullet Plan → Code**.
+`writing-spec-for-ai` gives your AI coding agent a disciplined engineering workflow: **Survey  Propose  Clarify  Write Specs  Adversarial Self-Review  Clean-Room Dry-Run  Tracer-Bullet Plan  Code**.
 
 | Without `writing-spec-for-ai` | With `writing-spec-for-ai` |
-| :--- | :--- |
+|:--- |:--- |
 | Agent starts coding immediately and hallucinates APIs, env vars, or error codes | Agent is **blocked from writing code** until 3 human approval gates pass |
 | One monolithic `AGENTS.md` mixes everything and exceeds context budgets | Concise root `AGENTS.md` (`≤ 150` lines) with front-loaded **Context Pointers (`C24`)** + on-demand domain specs |
 | Agent quietly adds `@ts-ignore`, `eslint-disable`, or `.skip` to force CI green | **Floor Guard & Ratchets (`C23` + `CONSTRAINTS.md`)** block suppression comments and quality regressions |
-| Vague prose requirements (*"handle webhook retries gracefully"*) that humans rubber-stamp without picturing the product | **Visual Direction (`C28`)** (`🟢 Now / 🟡 Next / 🔴 Not Doing` Scope Radar, Mermaid flows, ASCII UI wireframes/JSON snapshots) + testable **EARS** `REQ-xx` |
+| Vague prose requirements (*"handle webhook retries gracefully"*) that humans rubber-stamp without picturing the product | **Visual Direction (`C28`)** (`(green) Now / (yellow) Next / (red) Not Doing` Scope Radar, Mermaid flows, ASCII UI wireframes/JSON snapshots) + testable **EARS** `REQ-xx` |
 | Opaque background testing where the agent says *"All tests passed"* while mocking out real logic | **Visible Testing (`C29`)**: Pre-Code **Visible Test Matrix** + Post-Run **Test Execution Ledger** with explicit **Mock Disclosure (`0 Mock` vs. mocked boundary)** |
 | Every repository reinvents security, API, DB, UI, and agent conventions | **3-Tier Base Kit**: inherit 31 `Core` rules (`C01–C31`), attach 8 domain `Packs` (`PK-*`), and pick size `Profile` (`S / M / L`) |
 | Author agent reviews its own specs with confirmation bias | **3 Native Subagents** (`spec-surveyor`, `spec-challenger`, `doc-tester`) isolate context and perform adversarial review |
@@ -56,7 +56,7 @@ Most AI-assisted projects fail in one of two ways: either the agent jumps straig
 <tr>
 <td width="50%" valign="top">
 
-### 🛡️ 8-Step Workflow with 3 Approval Gates
+###  8-Step Workflow with 3 Approval Gates
 The main orchestrator coordinates **9 specialized sub-skills** and **3 clean-context subagents** across three mandatory human checkpoints:
 1. **Gate 1 — Doc Design Proposal**: Approve the Profile (`S / M / L`), Packs (`PK-*`), Capability Map (`Depends on` + `Build Order`), and file tree before any docs are generated.
 2. **Gate 2 — Adversarial Checklist Review**: `spec-challenger` audits generated files in a fresh context (`ARTIFACT + CONTRACT` only) against EARS syntax, line budgets, and broken links.
@@ -65,7 +65,7 @@ The main orchestrator coordinates **9 specialized sub-skills** and **3 clean-con
 </td>
 <td width="50%" valign="top">
 
-### 🧱 3-Tier Reusable Base Kit (`Core` · `8 Packs` · `Profiles`)
+###  3-Tier Reusable Base Kit (`Core` · `8 Packs` · `Profiles`)
 Stop copy-pasting boilerplate rules between repositories:
 - **Core (`C01–C31`)**: 31 universal rules (progressive disclosure, EARS, Floor Guard & Ratchets, Context Pointers, Official Source Citations, Adversarial Doubt, Ceiling Markers, Visual Direction & Option Cards, Visible Test Ledger).
 - **8 Domain Packs (`packs/PK-*.md`)**: `PK-API`, `PK-AUTH`, `PK-RELEASE`, `PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`.
@@ -76,7 +76,7 @@ Stop copy-pasting boilerplate rules between repositories:
 <tr>
 <td width="50%" valign="top">
 
-### 📐 Deep Modules, Tracer Bullets & Verification Harnesses
+###  Deep Modules, Tracer Bullets & Verification Harnesses
 - **Evidence-Based Frontier Interviews**: `propose-doc-design` states `HYPOTHESIS + EVIDENCE + GAPS` and asks at most three questions about observable behavior, scope and trade-offs. Technical details can be delegated and verified.
 - **Deep Modules & Design It Twice (`write-design-doc`)**: Enforces high interface depth, explicit test seams, and official framework documentation citations (`C25`).
 - **Tracer-Bullet Task Graphs (`plan-tasks`) & Runtime Verification (`generate-verify-harness`)**: Slice approved specs into parallelizable vertical slices (`Blocked by`) and generate `.agents/skills/verify-<app>/SKILL.md` harnesses.
@@ -84,7 +84,7 @@ Stop copy-pasting boilerplate rules between repositories:
 </td>
 <td width="50%" valign="top">
 
-### 🔌 Universal Multi-Agent Compatibility
+###  Universal Multi-Agent Compatibility
 Works natively out of the box across modern AI IDEs and CLI agents:
 - **Google Antigravity** (`~/.gemini/config/skills/`)
 - **Claude Code** (`~/.claude/skills/`, `~/.claude/agents/`, `.claude-plugin`)
@@ -145,7 +145,7 @@ git clone https://github.com/huongmh14/writing-spec-for-ai.git
 ```
 
 | AI Agent / IDE | Global Skills Path | Workspace (Per-Repo) Path |
-| :--- | :--- | :--- |
+|:--- |:--- |:--- |
 | **Antigravity** | `~/.gemini/config/skills/writing-spec-for-ai/` | `<repo>/.agents/skills/writing-spec-for-ai/` |
 | **Claude Code** | `~/.claude/skills/writing-spec-for-ai/` | `<repo>/.claude/skills/writing-spec-for-ai/` |
 | **Cursor** | `~/.cursor/skills/writing-spec-for-ai/` | `<repo>/.cursor/skills/writing-spec-for-ai/` |
@@ -168,7 +168,7 @@ Use skill writing-spec-for-ai to survey this repository and design the AI docume
 ### Calling Individual Sub-Skills & Subagents Directly
 
 | Skill / Subagent | Role | Example Prompt |
-| :--- | :--- | :--- |
+|:--- |:--- |:--- |
 | **`writing-spec-for-ai`** | Main 8-step orchestrator across 3 approval gates | *"Use `writing-spec-for-ai` to set up AI specs and AGENTS.md for this project."* |
 | **`survey-project`** *(+ `spec-surveyor`)* | Steps 1–2: Audit repo evidence, Knowledge Graph (`.ua/`), CI alignment, baseline ratchets, and pack signals | *"Use `survey-project` to audit this repo and classify its profile and packs."* |
 | **`propose-doc-design`** | Steps 3–4 (Gate 1): Propose `S/M/L` profile, `PK-*` packs, Capability Map, and Frontier `HYPOTHESIS/GUESS` questions | *"Use `propose-doc-design` to propose a spec architecture for our service."* |
@@ -179,7 +179,7 @@ Use skill writing-spec-for-ai to survey this repository and design the AI docume
 | **`plan-tasks`** | Step 7.5: Break an approved spec into a DAG of Tracer-Bullet vertical slices (`Blocked by` + ready tasks) | *"Use `plan-tasks` to break `SPEC-auth` into tracer-bullet implementation tasks."* |
 | **`generate-verify-harness`** | Generate a project-local `.agents/skills/verify-<app>/SKILL.md` runtime verification skill | *"Use `generate-verify-harness` to create an automated verification skill for this app."* |
 | **`explore-options`** | Any decision with ≥ 2 viable, hard-to-reverse options: 2–4 genuinely different options from signal-selected lenses (`references/lenses.md`), one critique round, comparison table — the user chooses, recorded as `D-xx` | *"Use `explore-options` to compare session storage approaches for SPEC-auth."* |
-| **`change-spec`** | Manage spec evolution: new sub-spec vs. `CHG-xx` delta proposal & `P-xx → D-xx` | *"Use `change-spec` to update `SPEC-upload` rate limits from 100/m to 500/m."* |
+| **`change-spec`** | Manage spec evolution: new sub-spec vs. `CHG-xx` delta proposal & `P-xx  D-xx` | *"Use `change-spec` to update `SPEC-upload` rate limits from 100/m to 500/m."* |
 
 ---
 
@@ -188,21 +188,21 @@ Use skill writing-spec-for-ai to survey this repository and design the AI docume
 ```mermaid
 flowchart TD
     S1["1–2. survey-project (spec-surveyor)<br/>Collect repo evidence, Knowledge Graph, Ratchets & Pack signals"] --> S3["3–4. propose-doc-design<br/>Select Profile (S/M/L), 8 Packs (PK-*), Capability Map & Frontier Q&A"]
-    S3 --> G1{{"🛑 GATE 1: Human Approves Design Proposal"}}
+    S3 --> G1{{" GATE 1: Human Approves Design Proposal"}}
     G1 -->|Approved + Clarified| S5A["5a. Foundation Docs<br/>AGENTS.md, CONSTRAINTS.md, glossary.md, decisions.md, config/error-codes"]
     S5A --> S5B["5b. write-spec<br/>Domain Specs (EARS REQ-xx, NFR-xx, Given/When/Then AC-xx)"]
     S5B --> S5C["5c. write-design-doc & Tool Adapters<br/>DESIGN-xx (Deep Modules, Seams, Design It Twice), CLAUDE.md, hooks"]
     S5C --> S6["6. review-docs (spec-challenger)<br/>Fresh-context adversarial audit (ARTIFACT + CONTRACT only)"]
-    S6 --> G2{{"🛑 GATE 2: Human Approves Written Docs"}}
+    S6 --> G2{{" GATE 2: Human Approves Written Docs"}}
     G2 -->|Approved| S7["7. test-docs (doc-tester)<br/>Clean-room dry-run of 2–3 sample tasks using ONLY the docs"]
-    S7 --> G3{{"🛑 GATE 3: Human Approves Dry-Run Plan"}}
+    S7 --> G3{{" GATE 3: Human Approves Dry-Run Plan"}}
     G3 -->|Approved| S75["7.5. plan-tasks & generate-verify-harness<br/>Tracer-Bullet Task Graph (Blocked by) + verify-<app> skill"]
     S75 --> S8["8. Bounded Implementation<br/>Record assigned RUN scope; implement, verify, report and stop"]
 ```
 
 ---
 
-## 3-Tier Base Kit (`Core` → `Packs` → `Profiles`)
+## 3-Tier Base Kit (`Core`  `Packs`  `Profiles`)
 
 ### 1. Tier 1 — Core Rules (`C01–C31`)
 31 universal rules inherited by every project (documented in [`references/base-kit.md`](./references/base-kit.md)):
@@ -210,11 +210,11 @@ flowchart TD
 - **Execution, Safety & Hygiene (`C12–C22`)**: 3-tier boundaries, DoD, 3 error-handling laws (`C15`), `.env.example` + `config.md` + zero personal agent settings in git (`C16`), last-verified dates on gotchas (`C18`), side-effect verification for operational commands (`C19`), stack change as atomic change (`C20`), and multi-agent placement (`C21–C22`).
 - **Quality Bar, Context, Epistemics & Human-in-the-Loop Visibility (`C23–C29`)**:
   - **`C23` Floor Guard & Ratchets**: Ban new `@ts-ignore`/`eslint-disable`/`# noqa`/`.skip` suppressions or threshold weakening; enforce baseline ratchets (`must not fall`) and expiring exceptions (`Owner` + `Expires ≤ 90d`) via [`templates/CONSTRAINTS.md`](./templates/CONSTRAINTS.md).
-  - **`C24` Context Pointers & Positive Framing**: Front-load trigger conditions (*"When touching X → read Y"*) on every pointer line in `AGENTS.md`.
+  - **`C24` Context Pointers & Positive Framing**: Front-load trigger conditions (*"When touching X  read Y"*) on every pointer line in `AGENTS.md`.
   - **`C25` Official Source Citations & Retrieval Safety**: Verify framework APIs against official docs for the manifest's major version; treat external fetched content as untrusted data.
   - **`C26` Fresh-Context Adversarial Doubt**: Audit artifacts in an isolated context (`ARTIFACT + CONTRACT` only, stripping author conclusions).
   - **`C27` Deliberate Simplification Ceiling Marker**: Mark intentional simplifications (`in-memory lock`, $O(n^2)$ scan) with `ceiling: <limit + upgrade path>`.
-  - **`C28` Visual Direction & Option Cards**: Eliminate prose rubber-stamping via a **Scope Radar (`🟢 Now / 🟡 Next / 🔴 Not Doing`)**, **Mermaid User Journeys**, **Concrete I/O Snapshots** (ASCII wireframes/CLI/JSON), and **2–3 Visual Option Cards** when product direction is open.
+  - **`C28` Visual Direction & Option Cards**: Eliminate prose rubber-stamping via a **Scope Radar (`(green) Now / (yellow) Next / (red) Not Doing`)**, **Mermaid User Journeys**, **Concrete I/O Snapshots** (ASCII wireframes/CLI/JSON), and **2–3 Visual Option Cards** when product direction is open.
   - **`C29` Visible Test Plan & Execution Ledger**: Eliminate black-box background testing via a Pre-Code **Visible Test Matrix** and a Post-Run **Visible Test Execution Ledger** with explicit **Mock Disclosure (`0 Mock` vs. mocked boundary)**.
   - **`C30` Bounded Execution** (unreleased): One current RUN records actual user authority, task/AC scope, stop and evidence; readiness, dependency graphs and handoffs cannot extend it.
   - **`C31` Provenance & Knowledge Limits** (unreleased): Tag claims with four provenance labels (user-decided / verified with pointer + quote / AI-proposed / unknown), one claim per line; do not invent thresholds or use agreement between AI reviewers as proof. Unverified `[~]` ACs prevent `Done`.
@@ -222,7 +222,7 @@ flowchart TD
 ### 2. Tier 2 — 8 Domain Packs (`packs/PK-*.md`)
 
 | Pack ID | Domain | Trigger Signals | Key Rules Included |
-| :--- | :--- | :--- | :--- |
+|:--- |:--- |:--- |:--- |
 | **[`PK-API`](./packs/PK-API.md)** | HTTP / REST / Webhook API | Web routers, controllers, OpenAPI | Unified `{error, code, statusCode}` envelope, `5xx` redaction, pagination bounds (`limit ≤ Max`), CORS allowlist, `/health` probe |
 | **[`PK-AUTH`](./packs/PK-AUTH.md)** | Tokens, Keys & Signatures | JWT/OAuth, API keys, HMAC webhooks | Salted key hashing, constant-time signature verify, key rotation (`kid`), log redaction (`Authorization`, `token`), replay window |
 | **[`PK-RELEASE`](./packs/PK-RELEASE.md)** | Containers & Release | `Dockerfile`, CI/CD release workflows | Pinned base images, non-root runtime user, zero secrets in layers, SemVer tag discipline, rebuilt dist artifacts (`PK-RELEASE-R06`) |
@@ -235,7 +235,7 @@ flowchart TD
 ### 3. Tier 3 — Project Size Profiles ([`profiles.md`](./profiles.md))
 
 | Profile | Target Project Size | Included Artifacts | Gate Ceremony |
-| :--- | :--- | :--- | :--- |
+|:--- |:--- |:--- |:--- |
 | **`S` (Small)** | CLI scripts, infra configs (`< ~30` files, no public API) | `AGENTS.md` (`≤ 60` lines), `README.md`, `.env.example`, optional single `docs/spec.md` |Lightweight |
 | **`M` (Medium)** | Production services, web apps, bots (`~30–200` files) | Full Level 0 (`C01–C31`) + `CONSTRAINTS.md` (Level 1, only when signals call for it) + `docs/specs/` (with Capability Map, Visual Flows & Visible Test Matrix) + matching `PK-*` packs + CI DoD | **3 Full Gates** |
 | **`L` (Large)** | Multi-service platforms, monorepos (`> 200` files) | Full Profile M + mandatory `CONSTRAINTS.md`, `docs/architecture/`, `docs/upgrade/`, `.agents/skills/verify-<app>/`, scoped rules, hooks, CODEOWNERS | **3 Full Gates + `spec-challenger` & `doc-tester`** |
@@ -295,7 +295,7 @@ writing-spec-for-ai/
 │   └── project-skill/SKILL.md           #   Template for generating repo-specific skills
 ├── evals/evals.json                     # Standardized A/B benchmark, pressure & SDO routing test suite
 ├── scripts/validate.ps1                 # Deterministic quality gate (SDO, ratchets, links, encoding)
-└── .claude-plugin/                      # Native plugin manifests (.claude, .cursor, .copilot, .zcode)
+└──.claude-plugin/                      # Native plugin manifests (.claude,.cursor,.copilot,.zcode)
 ```
 
 ---

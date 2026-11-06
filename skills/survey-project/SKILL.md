@@ -8,7 +8,7 @@ description: Dùng ở Bước 1–2 hoặc khi người dùng gọi riêng vi�
 Đầu vào: repo dự án (và tài liệu nguồn bên ngoài nếu có: PRD, docx, ticket).
 Đầu ra: bảng hiện trạng **mỗi dòng có đường dẫn bằng chứng** + kết luận greenfield/brownfield + Profile (`S/M/L`), mức (`0/1/2` — Mức 0 bắt buộc, Mức 1–2 thêm khi có tín hiệu; xem [glossary](../../references/glossary.md)) và danh sách Pack (`PK-*`) đề xuất. Kết quả này điền thẳng vào mục 1–2 của `propose-doc-design`.
 
-Chỉ đọc, không sửa file nào của dự án. Repo lớn (`> 50` file hoặc không đọc hết trong ~10 phút) → uỷ quyền cho subagent chỉ đọc [`spec-surveyor`](../../agents/spec-surveyor.md), chỉ nhận lại bảng kết luận kèm đường dẫn `path:line` để giữ sạch context của phiên chính.
+Chỉ đọc, không sửa file nào của dự án. Repo lớn (`> 50` file hoặc không đọc hết trong ~10 phút)  uỷ quyền cho subagent chỉ đọc [`spec-surveyor`](../../agents/spec-surveyor.md), chỉ nhận lại bảng kết luận kèm đường dẫn `path:line` để giữ sạch context của phiên chính.
 
 ## 1. Thu thập — mỗi mục phải có bằng chứng đường dẫn
 
@@ -23,10 +23,10 @@ Chỉ đọc, không sửa file nào của dự án. Repo lớn (`> 50` file ho�
 | Cưỡng chế & **Sàn chất lượng** (**Không hạ chuẩn âm thầm**, `C23`) | Đọc CI, `eslint`/`biome`/`ruff` config, hooks (husky/pre-commit), đếm nhanh các cờ `@ts-ignore`/`eslint-disable`/`.skip` và coverage hiện tại | Cái gì đã có máy chặn, số đo baseline hôm nay để đưa vào `CONSTRAINTS.md` |
 | **CI khớp stack** (**Đổi stack là một thay đổi**, `C20`) | So lệnh/đường dẫn trong CI với manifest và file có thật (`git ls-files`) | CI build file không tồn tại, chạy stack cũ, hoặc không chạy test (chỉ build) |
 | **Nhiều "nguồn sự thật"** (**Thứ tự nguồn sự thật**, `C01`) | grep `Single Source of Truth`, `nguồn sự thật`, `SSOT` trong docs; so cùng một sự thật (format key, env, cây thư mục) giữa các file | Các cặp file tranh nhau hoặc mô tả khác nhau |
-| **Secret & cấu hình** (`C16`) | Tên file env mẫu (`.env.example`?); `.env` có bị ignore không; `git ls-files .claude .cursor .vscode .zcode` | File quyền cá nhân của agent bị commit (allow-list, đường dẫn máy, mật khẩu) |
+| **Secret & cấu hình** (`C16`) | Tên file env mẫu (`.env.example`?); `.env` có bị ignore không; `git ls-files.claude.cursor.vscode.zcode` | File quyền cá nhân của agent bị commit (allow-list, đường dẫn máy, mật khẩu) |
 | **Lệnh vận hành** (**Kiểm tác dụng lệnh vận hành**, `C19`) | Chạy thử an toàn (`migrate`, `sync`, `seed`) trên môi trường local hoặc đọc code của lệnh | Lệnh không làm gì mà vẫn exit 0 |
 | Quy ước git thực tế | `git log --oneline -30` | Dạng commit thật, tên nhánh thật (khớp hay lệch quy định viết) |
-| Vùng rủi ro & **Tín hiệu bật Pack** | Đối chiếu tín hiệu trong repo trước (HTTP API → `PK-API`, Auth/Token/Webhook → `PK-AUTH`, Docker/Release → `PK-RELEASE`, DB/Migration → `PK-DB`, Logging/Metrics → `PK-OBS`, Frontend UI/E2E → `PK-FE`, Worker/Cron/Queue → `PK-JOB`, AI Agent/MCP → `PK-AGENT`); **chỉ mở đọc file trong [`packs/`](../../packs/) của Pack thực sự có tín hiệu** (cấm mở cả 8 file) | Danh sách thư mục/file rủi ro + Pack nào có tín hiệu bật kèm câu hỏi khảo sát bổ sung ở cuối file `packs/PK-*.md` đã bật |
+| Vùng rủi ro & **Tín hiệu bật Pack** | Đối chiếu tín hiệu trong repo trước (HTTP API  `PK-API`, Auth/Token/Webhook  `PK-AUTH`, Docker/Release  `PK-RELEASE`, DB/Migration  `PK-DB`, Logging/Metrics  `PK-OBS`, Frontend UI/E2E  `PK-FE`, Worker/Cron/Queue  `PK-JOB`, AI Agent/MCP  `PK-AGENT`); **chỉ mở đọc file trong [`packs/`](../../packs/) của Pack thực sự có tín hiệu** (cấm mở cả 8 file) | Danh sách thư mục/file rủi ro + Pack nào có tín hiệu bật kèm câu hỏi khảo sát bổ sung ở cuối file `packs/PK-*.md` đã bật |
 | Hạ tầng bên ngoài | CI config (runner, hạn mức), registry, secrets dùng trong workflow, team/org GitHub | Điều kiện có thể chặn AC: gói Free, hết hạn mức, team chưa tồn tại |
 | Brownfield? | Có code chạy + có test + không có spec? | "Brownfield — cần spec As-built (mô tả code đã có)" hoặc "Greenfield" |
 
@@ -40,14 +40,14 @@ Chỉ đọc, không sửa file nào của dự án. Repo lớn (`> 50` file ho�
 ## 3. Bẫy thường gặp
 
 - Chỉ đọc README rồi khẳng định lệnh chạy được — phải đối chiếu manifest/CI.
-- Quên hạ tầng bên ngoài → AC treo lơ lửng lúc triển khai.
+- Quên hạ tầng bên ngoài  AC treo lơ lửng lúc triển khai.
 - Kết luận "thiếu docs" trong khi file docs bị `.gitignore`.
-- Không phân biệt "chưa có spec" (greenfield) với "có code chưa có spec" (brownfield → As-built, mỗi REQ cần bằng chứng).
+- Không phân biệt "chưa có spec" (greenfield) với "có code chưa có spec" (brownfield  As-built, mỗi REQ cần bằng chứng).
 - Dự án vừa đổi stack: README đã mới nhưng CI, WORKFLOW, CONVENTIONS còn stack cũ.
 
 ## Kiểm tra trước khi xong
 
-- [ ] Mọi dòng kết luận có đường dẫn bằng chứng.
-- [ ] Có kèm lệnh chạy 1 test (hoặc ghi rõ "chưa có").
-- [ ] Có kết luận greenfield/brownfield, Profile (`S/M/L`), và danh sách Pack (`PK-*`) kèm tín hiệu.
-- [ ] Mỗi thành phần mức 1–2 có tín hiệu; repo mới ghi "chưa có tín hiệu".
+- [] Mọi dòng kết luận có đường dẫn bằng chứng.
+- [] Có kèm lệnh chạy 1 test (hoặc ghi rõ "chưa có").
+- [] Có kết luận greenfield/brownfield, Profile (`S/M/L`), và danh sách Pack (`PK-*`) kèm tín hiệu.
+- [] Mỗi thành phần mức 1–2 có tín hiệu; repo mới ghi "chưa có tín hiệu".

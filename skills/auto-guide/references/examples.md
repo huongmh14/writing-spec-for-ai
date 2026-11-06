@@ -1,144 +1,144 @@
 # Auto Guide - Detailed Examples
 
-Chi tiết ví dụ response format cho auto-guide.
+Detailed examples of auto-guide response formats.
 
-## Ví dụ 1: User nói "fix lỗi này"
+## Example 1: User says "fix this bug"
 
 ```
-User: "fix lỗi này"
-AI: "Tôi cần xem error/help để hiểu rõ hơn. Bạn có error message không?"
+User: "fix this bug"
+AI: "I need to see the error/trace to understand better. Do you have an error message?"
 
 User: [paste error]
 AI:
-=== Tình Huống Của Bạn ===
-Phát hiện: test failure - "AssertionError: expected 200 but got 500"
-Chưa có: root cause investigation
+=== Your Situation ===
+Detected: test failure - "AssertionError: expected 200 but got 500"
+Missing: root cause investigation
 
-=== Đề Xuất Của Tôi ===
+=== My Proposal ===
 Skill: systematic-debugging
 
-Lý do:
-- Signal: test failure → bug
-- Chưa hiểu root cause → chưa nên fix
-- VI PHẠM luật: không fix trước khi hiểu nguyên nhân
+Reasons:
+- Signal: test failure  bug
+- Root cause unknown  don't fix yet
+- VIOLATES rule: never fix before understanding the cause
 
-Kết quả mong đợi:
-- Tìm root cause tại đâu trả 500
-- Fix đúng chỗ
-- Test để verify fix đúng
+Expected result:
+- Find where the 500 comes from (root cause)
+- Fix the right place
+- Test to verify the fix
 
-=== Bước Tiếp Theo ===
-Tôi sẽ:
-1. Đọc error message
-2. Reproduce bug
-3. Trace code flow để tìm root cause
-4. Đề xuất fix
-5. Verify với test
+=== Next Steps ===
+I will:
+1. Read the error message
+2. Reproduce the bug
+3. Trace the code flow to find root cause
+4. Propose a fix
+5. Verify with a test
 
-Bạn có đồng ý không?
+Do you agree?
 ```
 
 ---
 
-## Ví dụ 2: User nói "implement user authentication"
+## Example 2: User says "implement user authentication"
 
 ```
 User: "implement user authentication"
 
 AI:
-=== Tình Huống Của Bạn ===
-Phát hiện: feature request - user authentication
-Task size: lớn (multi-component: login, register, session)
+=== Your Situation ===
+Detected: feature request - user authentication
+Task size: large (multi-component: login, register, session)
 
-=== Đề Xuất Của Tôi ===
+=== My Proposal ===
 Skill: writing-plans
 
-Lý do:
-- Signal: implement feature mới
-- Task size: lớn → cần chia nhỏ
-- Cần plan rõ ràng từng task
+Reasons:
+- Signal: implementing a new feature
+- Task size: large  needs splitting
+- Needs a clear plan per task
 
-Kết quả mong đợi:
-- Plan với các task: register, login, session, password reset
-- Mỗi task có steps + checkbox
-- Dễ track progress
+Expected result:
+- Plan with tasks: register, login, session, password reset
+- Each task has steps + checkboxes
+- Easy progress tracking
 
-=== Bước Tiếp Theo ===
-Tôi sẽ:
-1. Xem tech stack hiện tại
-2. Chia nhỏ thành các task
-3. Viết plan tại docs/superpowers/plans/
-4. Review plan với bạn
+=== Next Steps ===
+I will:
+1. Check the current tech stack
+2. Split into tasks
+3. Write the plan at docs/superpowers/plans/
+4. Review the plan with you
 
-Bạn có đồng ý không? Hoặc bạn muốn code trực tiếp vì task đơn giản?
+Do you agree? Or do you want to code directly because the task is simple?
 ```
 
 ---
 
-## Ví dụ 3: User nói "lần đầu vào project này"
+## Example 3: User says "first time in this project"
 
 ```
-User: "lần đầu vào project này"
+User: "first time in this project"
 
 AI:
-=== Tình Huống Của Bạn ===
-Phát hiện: lần đầu vào project
-Chưa có: AGENTS.md (AI docs)
+=== Your Situation ===
+Detected: first time in project
+Missing: AGENTS.md (AI docs)
 Project size: 30 files
 
-=== Đề Xuất Của Tôi ===
-Skill: explore → writing-spec-simple
+=== My Proposal ===
+Skill: explore  writing-spec-simple
 
-Lý do:
-- Signal: lần đầu → cần hiểu codebase
-- Không có AGENTS.md → nên chuẩn hoá docs
-- Project < 50 files → bản simple đủ
+Reasons:
+- Signal: first time  need to understand codebase
+- No AGENTS.md  should standardize docs
+- Project < 50 files  simple version is enough
 
-Kết quả mong đợi:
-- explore: hiểu architecture, structure
-- writing-spec-simple: AGENTS.md với tech stack, commands
-- AI có context → làm việc hiệu quả hơn
+Expected result:
+- explore: understand architecture, structure
+- writing-spec-simple: AGENTS.md with tech stack, commands
+- AI has context  works more effectively
 
-=== Bước Tiếp Theo ===
-Tôi sẽ:
-1. explore codebase (5-10 phút)
-2. Đề xuất cấu trúc docs (3-5 phút)
-3. Viết AGENTS.md (10-15 phút)
-4. Review với bạn
+=== Next Steps ===
+I will:
+1. explore the codebase (5-10 min)
+2. Propose docs structure (3-5 min)
+3. Write AGENTS.md (10-15 min)
+4. Review with you
 
-Bạn có đồng ý không? Hoặc chỉ explore thôi không cần docs?
+Do you agree? Or just explore without docs?
 ```
 
 ---
 
-## Ví dụ 4: User nói "demo nhanh project này"
+## Example 4: User says "quick demo of this project"
 
 ```
-User: "demo nhanh project này"
+User: "quick demo of this project"
 
 AI:
-=== Tình Huống Của Bạn ===
-Phát hiện: demo/prototype mode
-Cần: docs nhanh, không formal
+=== Your Situation ===
+Detected: demo/prototype mode
+Need: fast docs, not formal
 
-=== Đề Xuất Của Tôi ===
+=== My Proposal ===
 Skill: writing-spec-simple (demo mode)
 
-Lý do:
-- Signal: demo/nhanh/prototype
-- Cần docs nhanh, không formal process
-- Chỉ cần AGENTS.md đơn giản
+Reasons:
+- Signal: demo/fast/prototype
+- Need fast docs, no formal process
+- Only a simple AGENTS.md
 
-Kết quả mong đợi:
-- AGENTS.md với tech stack + lệnh trong 2-3 phút
-- Không cần specs, glossary, decisions
-- Sẵn sàng demo ngay
+Expected result:
+- AGENTS.md with tech stack + commands in 2-3 min
+- No specs, glossary, or decisions needed
+- Ready to demo immediately
 
-=== Bước Tiếp Theo ===
-Tôi sẽ:
-1. Hỏi tech stack và lệnh build/test
-2. Tạo AGENTS.demo.md (2-3 phút)
-3. Review với bạn
+=== Next Steps ===
+I will:
+1. Ask for tech stack and build/test commands
+2. Create AGENTS.demo.md (2-3 min)
+3. Review with you
 
-Bạn có đồng ý không?
+Do you agree?
 ```

@@ -1,131 +1,131 @@
 ---
 name: idea-to-spec
-description: Phân tích ý tưởng, đánh giá feasibility, scale, maintainability, viết spec, và review code sau implement. Dành cho user chỉ đưa ý tưởng, AI làm phần còn lại.
+description: Analyze an idea, assess feasibility, scale, and maintainability, write a spec, and review code after implementation. For users who only bring an idea — the AI does the rest.
 license: MIT
 trigger_phrases:
-  - "tôi có ý tưởng"
-  - "phân tích dự án này"
-  - "viết spec cho idea này"
-  - "đánh giá khả năng làm dự án này"
-  - "từ ý tưởng đến spec"
+  - "I have an idea"
+  - "analyze this project"
+  - "write a spec for this idea"
+  - "evaluate whether this project is feasible"
+  - "from idea to spec"
 do_not_use:
-  - "Khi đã có spec rõ ràng"
-  - "Khi chỉ cần fix bug"
-  - "Khi task nhỏ không cần phân tích"
-  - "Khi project đã có AGENTS.md đầy đủ"
+  - "When a clear spec already exists"
+  - "When only fixing a bug"
+  - "When the task is small and needs no analysis"
+  - "When the project already has a complete AGENTS.md"
 ---
 
-# Idea to Spec - Từ Ý Tưởng Đến Spec
+# Idea to Spec - From Idea to Spec
 
-**Mục tiêu:** User chỉ đưa ý tưởng → AI phân tích toàn diện → viết spec → review code sau implement.
+**Goal:** The user only provides an idea  the AI does full analysis  writes the spec  reviews code after implementation.
 
-**Khi nào dùng:**
-- User có ý tưởng mới, chưa biết khả năng thực hiện
-- User muốn đánh giá feasibility trước khi đầu tư
-- User cần spec từ ý tưởng thô
-- User muốn AI phân tích scale, maintainability
+**When to use:**
+- User has a new idea and doesn't know if it's feasible
+- User wants a feasibility assessment before investing
+- User needs a spec from a raw idea
+- User wants the AI to analyze scale and maintainability
 
-**Khi nào KHÔNG dùng:**
-- Đã có spec rõ ràng → dùng `writing-spec-simple` hoặc `writing-spec-for-ai`
-- Chỉ cần fix bug → dùng `systematic-debugging`
-- Task nhỏ không cần phân tích → code trực tiếp
-
----
-
-## Procedure (Look → Check)
-
-### Step 1: LOOK - Thu Thập Thông Tin
-
-**Mục tiêu:** Hiểu ý tưởng và context
-
-- [ ] Đọc ý tưởng user đưa
-- [ ] Hỏi clarifying questions (tối đa 3 câu):
-  - "Ý tưởng này giải quyết vấn đề gì?"
-  - "Ai là user mục tiêu?"
-  - "Có deadline hoặc ràng buộc không?"
-- [ ] Check project context (nếu có):
-  - Đã có AGENTS.md chưa?
-  - Project size bao nhiêu files?
-  - Tech stack hiện tại là gì?
-
-**Output:** Hiểu rõ ý tưởng + context
+**When NOT to use:**
+- A clear spec already exists  use `writing-spec-simple` or `writing-spec-for-ai`
+- Only fixing a bug  use `systematic-debugging`
+- Small task needing no analysis  code directly
 
 ---
 
-### Step 2: ANALYZE - Đánh Giá Khả Năng
+## Procedure (Look  Check)
 
-**Mục tiêu:** Phân tích toàn diện trước khi viết spec
+### Step 1: LOOK - Gather Information
+
+**Goal:** Understand the idea and context
+
+- [] Read the user's idea
+- [] Ask clarifying questions (max 3):
+  - "What problem does this idea solve?"
+  - "Who is the target user?"
+  - "Any deadline or constraints?"
+- [] Check project context (if any):
+  - Does AGENTS.md exist?
+  - How many files is the project?
+  - What is the current tech stack?
+
+**Output:** Clear understanding of the idea + context
+
+---
+
+### Step 2: ANALYZE - Assess Feasibility
+
+**Goal:** Full analysis before writing the spec
 
 #### 2.1 Feasibility Analysis
 
-**Câu hỏi cần trả lời:**
-- Ý tưởng này có khả thi về mặt kỹ thuật không?
-- Có dependencies phức tạp không?
-- Có cần third-party services không?
-- Có rủi ro kỹ thuật lớn không?
+**Questions to answer:**
+- Is this idea technically feasible?
+- Are there complex dependencies?
+- Does it need third-party services?
+- Are there major technical risks?
 
-**Output:** `docs/idea-analysis.md` - Phần Feasibility
+**Output:** `docs/idea-analysis.md` - Feasibility section
 
 #### 2.2 Scale Prediction
 
-**Câu hỏi cần trả lời:**
-- Khi thành công, scale sẽ như thế nào?
-- Dự đoán users, data, traffic?
-- Kiến trúc có scale được không?
-- Có bottlenecks tiềm ẩn không?
+**Questions to answer:**
+- If successful, what scale will it reach?
+- Estimate users, data, traffic?
+- Can the architecture scale?
+- Any hidden bottlenecks?
 
-**Output:** `docs/idea-analysis.md` - Phần Scale
+**Output:** `docs/idea-analysis.md` - Scale section
 
 #### 2.3 Maintainability Assessment
 
-**Câu hỏi cần trả lời:**
-- Code có dễ maintain không?
-- Technical debt risk là gì?
-- Team size cần thiết?
+**Questions to answer:**
+- Is the code easy to maintain?
+- What is the technical debt risk?
+- What team size is needed?
 - Documentation requirements?
 
-**Output:** `docs/idea-analysis.md` - Phần Maintainability
+**Output:** `docs/idea-analysis.md` - Maintainability section
 
 #### 2.4 Dependencies & Risks
 
-**Câu hỏi cần trả lời:**
-- Dependencies bên ngoài là gì?
-- Third-party services cần dùng?
-- Rủi ro business/legal?
-- Rủi ro kỹ thuật?
+**Questions to answer:**
+- What are the external dependencies?
+- Which third-party services are needed?
+- Business/legal risks?
+- Technical risks?
 
-**Output:** `docs/idea-analysis.md` - Phần Dependencies & Risks
+**Output:** `docs/idea-analysis.md` - Dependencies & Risks section
 
 ---
 
-### Step 3: WRITE - Viết Spec
+### Step 3: WRITE - Write the Spec
 
-**Mục tiêu:** Tạo spec dựa trên phân tích
+**Goal:** Create a spec based on the analysis
 
-#### 3.1 Tạo Idea Analysis Document
+#### 3.1 Create Idea Analysis Document
 
 **File:** `docs/idea-analysis.md`
 
 ```markdown
-# Idea Analysis - [Tên ý tưởng]
+# Idea Analysis - [Idea name]
 
 ## Feasibility
-- **Khả năng kỹ thuật:** [Cao/Trung bình/Thấp]
+- **Technical feasibility:** [High/Medium/Low]
 - **Dependencies:** [List dependencies]
-- **Rủi ro kỹ thuật:** [List risks]
-- **Kết luận:** [Có khả thi không?]
+- **Technical risks:** [List risks]
+- **Conclusion:** [Is it feasible?]
 
 ## Scale Prediction
-- **Dự đoán users:** [Số users dự kiến]
-- **Dự đoán data:** [Data volume]
-- **Dự đoán traffic:** [Requests/day]
-- **Kiến trúc scale:** [Có scale được không?]
+- **Estimated users:** [Expected user count]
+- **Estimated data:** [Data volume]
+- **Estimated traffic:** [Requests/day]
+- **Scale architecture:** [Can it scale?]
 
 ## Maintainability
-- **Độ khó maintain:** [Dễ/Trung bình/Khó]
+- **Maintenance difficulty:** [Easy/Medium/Hard]
 - **Technical debt risk:** [Low/Medium/High]
-- **Team size cần:** [Số người]
-- **Documentation needs:** [Yêu cầu docs]
+- **Team size needed:** [Number of people]
+- **Documentation needs:** [Doc requirements]
 
 ## Dependencies & Risks
 - **External dependencies:** [List]
@@ -134,17 +134,17 @@ do_not_use:
 - **Technical risks:** [List]
 ```
 
-#### 3.2 Tạo Spec Document
+#### 3.2 Create Spec Document
 
 **File:** `docs/specs/SPEC-001-[feature-name].md`
 
-**Chọn template dựa trên project size:**
-- < 50 files → `writing-spec-simple/templates/SPEC.simple.md`
-- ≥ 50 files → `writing-spec-for-ai/templates/docs/specs/_template.md`
+**Pick template by project size:**
+- < 50 files  `writing-spec-simple/templates/SPEC.simple.md`
+- >= 50 files  `writing-spec-for-ai/templates/docs/specs/_template.md`
 
-**Spec phải bao gồm:**
-- Requirements (REQ) với feasibility notes
-- Architecture dự đoán scale
+**Spec must include:**
+- Requirements (REQ) with feasibility notes
+- Scale-predicted architecture
 - Maintainability guidelines
 - Review checklist
 
@@ -152,106 +152,106 @@ do_not_use:
 
 ### Step 4: CHECK - Verify & Review
 
-**Mục tiêu:** Đảm bảo spec đầy đủ và chính xác
+**Goal:** Ensure the spec is complete and accurate
 
-- [ ] Spec có đủ REQ + AC?
-- [ ] Feasibility analysis có rõ ràng?
-- [ ] Scale prediction có realistic?
-- [ ] Maintainability guidelines có đủ?
-- [ ] Dependencies & risks có được document?
-- [ ] User đã approve spec?
+- [] Does the spec have enough REQ + AC?
+- [] Is the feasibility analysis clear?
+- [] Is the scale prediction realistic?
+- [] Are maintainability guidelines sufficient?
+- [] Are dependencies & risks documented?
+- [] Has the user approved the spec?
 
-**Nếu user chưa approve:**
-- Hỏi clarifying questions
-- Cập nhật spec dựa trên feedback
-- Repeat Step 3-4 cho đến khi approve
-
----
-
-## Checks (5 tiêu chí Có/Không)
-
-Trước khi claim "spec hoàn thành", phải check:
-
-- [ ] **Check 1:** Có phân tích feasibility rõ ràng?
-- [ ] **Check 2:** Có dự đoán scale cụ thể?
-- [ ] **Check 3:** Có đánh giá maintainability?
-- [ ] **Check 4:** Có spec với REQ + AC?
-- [ ] **Check 5:** User đã approve?
-
-**Nếu bất kỳ check nào = No → chưa hoàn thành, tiếp tục improve.**
+**If the user hasn't approved:**
+- Ask clarifying questions
+- Update the spec based on feedback
+- Repeat Step 3-4 until approved
 
 ---
 
-## Guard (Rào Chắn An Toàn)
+## Checks (5 Yes/No criteria)
 
-### ✅ Được Tự Làm
-- Phân tích ý tưởng
-- Viết spec
-- Đánh giá feasibility, scale, maintainability
-- Review code sau implement
-- Hỏi clarifying questions
+Before claiming "spec complete", must check:
 
-### ⚠️ Hỏi Trước
-- Đổi scope lớn
-- Thêm dependencies mới
-- Thay đổi kiến trúc quan trọng
-- Commit code khi chưa có spec approve
+- [] **Check 1:** Is there a clear feasibility analysis?
+- [] **Check 2:** Is there a concrete scale prediction?
+- [] **Check 3:** Is there a maintainability assessment?
+- [] **Check 4:** Is there a spec with REQ + AC?
+- [] **Check 5:** Has the user approved?
 
-### 🚫 Không Bao Giờ
-- Bịa feasibility analysis
-- Hứa scale không thực tế
-- Bỏ qua rủi ro
-- Code khi spec chưa approve
+**If any check = No  not complete, keep improving.**
+
+---
+
+## Guard (Safety Rails)
+
+### [x] Allowed to Do Autonomously
+- Analyze the idea
+- Write the spec
+- Assess feasibility, scale, maintainability
+- Review code after implementation
+- Ask clarifying questions
+
+### (warning) Ask First
+- Large scope changes
+- Adding new dependencies
+- Major architecture changes
+- Committing code before spec approval
+
+### (blocked) Never
+- Fabricate feasibility analysis
+- Promise unrealistic scale
+- Ignore risks
+- Code before spec approval
 - Commit secrets, tokens
 
 ---
 
 ## Resources
 
-- `references/feasibility-framework.md` - Framework đánh giá feasibility
-- `references/scale-prediction.md` - Cách dự đoán scale
-- `references/maintainability-checklist.md` - Checklist maintainability
+- `references/feasibility-framework.md` - Feasibility assessment framework
+- `references/scale-prediction.md` - How to predict scale
+- `references/maintainability-checklist.md` - Maintainability checklist
 
 ---
 
 ## Scripts
 
-- `scripts/analyze-idea.sh` - Script phân tích ý tưởng tự động
-- `scripts/generate-spec.sh` - Script tạo spec từ template
+- `scripts/analyze-idea.sh` - Automated idea analysis script
+- `scripts/generate-spec.sh` - Spec generation script from template
 
 ---
 
-## Learn (Học Hỏi)
+## Learn (Continuous Improvement)
 
-**Sau mỗi lần user sửa idea hoặc feedback:**
+**After each user correction or feedback:**
 
-1. Ghi lại bài học vào `references/lessons-learned.md`
-2. Thêm check mới vào skill nếu cần
-3. Cập nhật procedure nếu cần
+1. Record the lesson in `references/lessons-learned.md`
+2. Add a new check to the skill if needed
+3. Update the procedure if needed
 
-**Ví dụ:**
-- User nói "ý tưởng này không khả thi vì X" → thêm vào feasibility framework
-- User nói "scale prediction sai vì Y" → cập nhật scale prediction method
+**Examples:**
+- User says "this idea isn't feasible because X"  add to feasibility framework
+- User says "scale prediction was wrong because Y"  update scale prediction method
 
 ---
 
-## Integration Với Skills Khác
+## Integration With Other Skills
 
-| Bước | Skill | Mô tả |
-|------|-------|-------|
-| 1. Phân tích ý tưởng | `idea-to-spec` | Feasibility, scale, maintainability |
-| 2. Viết spec | `writing-spec-simple` hoặc `writing-spec-for-ai` | Tùy project size |
-| 3. Plan implementation | `writing-plans` | Chia nhỏ task |
-| 4. Code | `tdd` hoặc direct | Implement |
+| Step | Skill | Description |
+|------|-------|-------------|
+| 1. Analyze idea | `idea-to-spec` | Feasibility, scale, maintainability |
+| 2. Write spec | `writing-spec-simple` or `writing-spec-for-ai` | Depends on project size |
+| 3. Plan implementation | `writing-plans` | Split tasks |
+| 4. Code | `tdd` or direct | Implement |
 | 5. Review | `code-review` | Check spec + standards |
 
 ---
 
-**Tóm lại:** `idea-to-spec` là skill đầu vào - user chỉ cần đưa ý tưởng, AI làm phần còn lại: phân tích, viết spec, và chuẩn bị cho implementation.
+**Summary:** `idea-to-spec` is the entry skill - the user only brings an idea, the AI does the rest: analyze, write spec, and prepare for implementation.
 
 ## When NOT to Use
 
-- Đã có spec rõ ràng → dùng writing-spec-simple hoặc writing-spec-for-ai
-- Chỉ cần fix bug → dùng systematic-debugging
-- Task nhỏ không cần phân tích → code trực tiếp
-- Project đã có AGENTS.md đầy đủ → không cần idea-to-spec
+- A clear spec already exists  use writing-spec-simple or writing-spec-for-ai
+- Only fixing a bug  use systematic-debugging
+- Small task needing no analysis  code directly
+- Project already has a complete AGENTS.md  idea-to-spec not needed

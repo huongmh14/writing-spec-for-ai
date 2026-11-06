@@ -10,7 +10,7 @@ description: Dùng ở Bước 7.5 (sau Cổng 3) hoặc khi người dùng yêu
 
 Profile S dùng `docs/spec.md`/README và block đợt trong `AGENTS.md`; không cần plan/progress riêng, vẫn ghi hành vi/AC/kiểm chứng/điểm dừng.
 
-**Quyền thực thi (**Quyền thực thi theo đợt**, `C30`):** `Ready` và plan chỉ chốt yêu cầu/công việc dự kiến. Đợt hiện tại ở `docs/progress.md` phải ghi chỉ dẫn thật của người dùng, SPEC/task/AC, vùng file, phần loại trừ và điểm dừng. Mặc định chưa nêu ranh giới: **1 SPEC + 1 task**, làm → kiểm → báo cáo → dừng. Yêu cầu rõ batch/toàn spec hữu hạn thì ghi và làm đủ phạm vi ấy; không hỏi lại từng task. Chỉ dẫn hiện hành của người dùng được ưu tiên; AI không tự cấp quyền khi sửa block.
+**Quyền thực thi (**Quyền thực thi theo đợt**, `C30`):** `Ready` và plan chỉ chốt yêu cầu/công việc dự kiến. Đợt hiện tại ở `docs/progress.md` phải ghi chỉ dẫn thật của người dùng, SPEC/task/AC, vùng file, phần loại trừ và điểm dừng. Mặc định chưa nêu ranh giới: **1 SPEC + 1 task**, làm  kiểm  báo cáo  dừng. Yêu cầu rõ batch/toàn spec hữu hạn thì ghi và làm đủ phạm vi ấy; không hỏi lại từng task. Chỉ dẫn hiện hành của người dùng được ưu tiên; AI không tự cấp quyền khi sửa block.
 
 > Gốc ý tưởng (skill tham khảo nội bộ, không phải bằng chứng): `to-tickets`, `implement-spec`, `planning-and-task-breakdown`, `migration`, `blast-radius`. Khái niệm mượn: Tracer Bullet (Hunt & Thomas, *The Pragmatic Programmer*); Expand–Migrate–Contract (Parallel Change — Danilo Sato, martinfowler.com/bliki/ParallelChange.html). Nghĩa ngắn: [glossary](../../references/glossary.md).
 
@@ -18,11 +18,11 @@ Profile S dùng `docs/spec.md`/README và block đợt trong `AGENTS.md`; không
 
 Không chia task theo tầng ngang (*"Task 1: làm hết DB, Task 2: làm hết API, Task 3: làm hết UI"* — chỉ đến task cuối mới biết ghép vào bị lệch). Mọi task thông thường phải là một **Tracer Bullet**:
 
-- **Đi xuyên đủ các tầng** (schema → logic/API → UI/CLI → test nghiệm thu `AC-ID`) cho một hành vi hẹp nhưng **chạy được trọn vẹn từ đầu tới cuối**.
+- **Đi xuyên đủ các tầng** (schema  logic/API  UI/CLI  test nghiệm thu `AC-ID`) cho một hành vi hẹp nhưng **chạy được trọn vẹn từ đầu tới cuối**.
 - **Kích thước vừa một phiên sạch:** khoảng `5` file là dự kiến; task có thể hoàn tất và kiểm chứng trong một phiên. Sửa hàm chung/caller cần thiết trong cùng hành vi được phép; báo tác động, không tự thêm hành vi.
 - **Ưu tiên dọn đường trước (Prefactoring):** *làm cho thay đổi trở nên dễ, rồi mới làm thay đổi dễ đó* — nếu cần tách hàm/module để lát cắt chính dễ lắp, đặt task prefactoring lên đầu.
 
-## 2. Ngoại lệ: thay đổi lan rộng nhiều file → Expand–Migrate–Contract
+## 2. Ngoại lệ: thay đổi lan rộng nhiều file  Expand–Migrate–Contract
 
 Khi một thay đổi cơ học (đổi tên cột, đổi chữ ký hàm/type dùng chung ở hàng chục nơi) làm vỡ hàng loạt file cùng lúc khiến lát cắt dọc không thể xanh:
 
@@ -49,10 +49,10 @@ Mỗi task không chỉ ghi lệnh chạy test mà phải khai báo rõ **Ma tr�
 - **Kế hoạch & Bằng chứng Kiểm thử Minh bạch (`C29`):**
   | AC-ID | Kịch bản | Input dự kiến | Output & Tác dụng phụ kỳ vọng | Tầng & Độ thật (`0 Mock` / `Mock gì`) | Trạng thái chạy |
   |---|---|---|---|---|---|
-  | `<TÊN>-AC01` | <nhánh chính> | `<payload/tham số>` | `<HTTP 200 / DB row / DOM>` | `integration` (`0 Mock`) | `[ ]` |
+  | `<TÊN>-AC01` | <nhánh chính> | `<payload/tham số>` | `<HTTP 200 / DB row / DOM>` | `integration` (`0 Mock`) | `[]` |
 - **Lệnh kiểm chứng (Verify):** `<lệnh chạy đúng test chứa AC-ID>`
 - **Điểm dừng:** `<hành vi demo được / AC hoàn tất; không tự chuyển task>`
-- **Trạng thái:** `[ ]`
+- **Trạng thái:** `[]`
 ```
 
 ## 5. Trình plan và xác định đợt được giao
@@ -65,8 +65,8 @@ Trình bảng `Mã | Hành vi nhìn thấy | Blocked by | AC-ID | Cách demo`. N
 
 ## Kiểm tra trước khi xong
 
-- [ ] Mọi `REQ` và `AC` trong phạm vi của Spec đều thuộc về ít nhất một task.
-- [ ] Mỗi task là một lát cắt dọc kiểm chứng được (hoặc một bước trong chuỗi Expand–Migrate–Contract).
-- [ ] Mỗi task có `Blocked by` tường minh và có lệnh Verify gắn với `AC-ID`.
-- [ ] Không có vòng lặp phụ thuộc trong đồ thị task.
-- [ ] Plan link tới một đợt hiện tại trong `docs/progress.md`; không tự duyệt batch/task sẵn sàng hoặc suy quyền từ HANDOFF cũ.
+- [] Mọi `REQ` và `AC` trong phạm vi của Spec đều thuộc về ít nhất một task.
+- [] Mỗi task là một lát cắt dọc kiểm chứng được (hoặc một bước trong chuỗi Expand–Migrate–Contract).
+- [] Mỗi task có `Blocked by` tường minh và có lệnh Verify gắn với `AC-ID`.
+- [] Không có vòng lặp phụ thuộc trong đồ thị task.
+- [] Plan link tới một đợt hiện tại trong `docs/progress.md`; không tự duyệt batch/task sẵn sàng hoặc suy quyền từ HANDOFF cũ.

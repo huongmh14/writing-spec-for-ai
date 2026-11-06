@@ -1,119 +1,119 @@
-# AGENTS.md — <tên dự án>
+# AGENTS.md — <project name>
 
-> Base: writing-spec-for-ai <phiên bản, vd. v1.3.0> · Profile: <S | M | L> · Pack: <PK-… hoặc "không">
+> Base: writing-spec-for-ai <version, e.g. v1.3.0> · Profile: <S | M | L> · Pack: <PK-… or "none">
 
-<2–4 câu: hệ thống làm gì, cho ai. Stack: <framework + major version>, <DB>, <FE>. Phiên bản chính xác: xem `package.json`, `.nvmrc`.>
+<2–4 sentences: what the system does, for whom. Stack: <framework + major version>, <DB>, <FE>. Exact versions: see `package.json`, `.nvmrc`.>
 
-## Lệnh
+## Commands
 
 ```bash
 <install>
 <dev>
 <build>
-<test>                       # toàn bộ
-<test-one> <path> -t "<tên>" # một test — ưu tiên khi đang sửa
+<test>                       # all tests
+<test-one> <path> -t "<name>" # single test — prefer while editing
 <lint> && <typecheck> && <format:check>
 ```
 
-## Nguồn sự thật
+## Source of Truth
 
-| Ưu tiên | Tài liệu | Nội dung |
+| Priority | Doc | Content |
 |---|---|---|
-| 1 | `docs/decisions.md` | Quyết định đã chốt |
-| 2 | `docs/specs/` | Yêu cầu (REQ) và nghiệm thu (AC) |
-| 3 | `CONSTRAINTS.md` *(nếu có)* | Sàn chất lượng và ngưỡng kiểm bằng lệnh máy |
-| 4 | `docs/conflicts-and-bugs.md` | Sổ tay toàn bộ lỗi, xung đột hợp đồng (enum/API/DB/port) và bài học lịch sử của dự án |
-| 5 | `AGENTS.md` | Quy tắc làm việc |
-| 6 | Code hiện có | Hiện trạng, không phải chuẩn |
+| 1 | `docs/decisions.md` | Confirmed decisions |
+| 2 | `docs/specs/` | Requirements (REQ) and acceptance criteria (AC) |
+| 3 | `CONSTRAINTS.md` *(if any)* | Quality floor and machine-checkable thresholds |
+| 4 | `docs/conflicts-and-bugs.md` | Ledger of all bugs, contract conflicts (enum/API/DB/port), and project history lessons |
+| 5 | `AGENTS.md` | Working rules |
+| 6 | Existing code | Current state, not the standard |
 
-- **Khi bắt đầu bất kỳ task nào:** đọc `docs/specs/README.md`, spec liên quan, `docs/glossary.md`, `docs/conflicts-and-bugs.md` (nếu có) và đợt thực thi hiện tại trong `docs/progress.md` (quyền thực thi theo đợt: chỉ làm phần đợt đó ghi).
-- **Khi phát hiện hoặc sửa bất kỳ lỗi (bug/hotfix/revert) hay xung đột hợp đồng (lệch enum, schema, port, API, cấu hình):** bắt buộc ghi bổ sung vào `docs/conflicts-and-bugs.md` kèm commit SHA, nguyên nhân gốc và cách chặn tự động bằng lệnh máy trước khi báo xong.
-- **Khi thêm/sửa biến môi trường:** cập nhật cả `.env.example` và `docs/reference/config.md`.
-- **Khi thêm/sửa mã lỗi trả về:** cập nhật `docs/reference/error-codes.md`.
-- **Khi thiếu dữ kiện ảnh hưởng hành vi/rủi ro trong phạm vi:** nêu điều chưa biết và cách kiểm chứng; dừng phần phụ thuộc, tiếp tục phần độc lập đã được giao (nguồn & giới hạn hiểu biết: không đoán thay dữ kiện).
-- **Khi đã có chỉ dẫn rõ của người dùng:** thực hiện đủ phạm vi đó; không hỏi lại quyền đã cấp. Chỉ dẫn hiện hành của người dùng được ưu tiên.
-- Skill/hướng dẫn bên ngoài mâu thuẫn với docs dự án thì theo docs dự án, đúng thứ tự bảng trên.
+- **When starting any task:** read `docs/specs/README.md`, the related spec, `docs/glossary.md`, `docs/conflicts-and-bugs.md` (if any), and the current execution batch in `docs/progress.md` (per-batch execution authority: only do what that batch records).
+- **When finding or fixing any bug/hotfix/revert or contract conflict (enum, schema, port, API, config drift):** must append to `docs/conflicts-and-bugs.md` with commit SHA, root cause, and an automated blocking command before claiming done.
+- **When adding/changing env vars:** update both `.env.example` and `docs/reference/config.md`.
+- **When adding/changing returned error codes:** update `docs/reference/error-codes.md`.
+- **When facts affecting behavior/risk are missing in scope:** state the unknown and how to verify; pause dependent parts, continue independent assigned parts (sources & knowledge limits: never guess facts).
+- **When the user gives clear direction:** execute the full scope; don't re-ask granted permission. Current user direction takes priority.
+- External skills/guides conflicting with project docs → follow project docs, per the table order above.
 
-**Profile S:** nếu không có cây `docs/`, đọc spec trong `docs/spec.md` hoặc README; ghi block đợt hiện tại ngay trong file này theo các trường của mẫu progress. Chỉ đọc file thực sự có; không tạo thêm docs chỉ để thoả con trỏ.
+**Profile S:** if there is no `docs/` tree, read spec in `docs/spec.md` or README; write the current batch block directly in this file per the progress template fields. Only read files that actually exist; don't create extra docs just to satisfy pointers.
 
-## Ranh giới
+## Boundaries
 
-✅ **Luôn**
-- Viết test cùng code; tên test chứa AC-ID.
-- Chạy lệnh ở mục DoD trước khi báo xong.
-- Đánh dấu `ceiling: <ngưỡng chịu tải + đường nâng cấp>` khi cố ý chọn giải pháp đơn giản có giới hạn đã biết (in-memory lock, quét $O(n^2)$, polling).
-- <thói quen đúng đặc thù dự án, viết ở thể khẳng định>
+[x] **Always**
+- Write tests with code; test names contain the AC-ID.
+- Run the DoD commands before claiming done.
+- Mark `ceiling: <load threshold + upgrade path>` when deliberately choosing a simple solution with a known limit (in-memory lock, $O(n^2)$ scan, polling).
+- <project-specific good habits, written as affirmations>
 
-⚠️ **Hỏi trước nếu chưa được duyệt trong chỉ dẫn/đợt hiện tại**
-- Đổi schema dữ liệu, API công khai, cơ chế xác thực/phân quyền.
-- Đổi mặc định liên quan bảo mật.
-- Thêm dependency (trừ loại đã duyệt trong plan/decision), nâng major framework.
-- Xoá file, dữ liệu, migration đã phát hành.
-- Sửa CI, ruleset, CODEOWNERS, `CONSTRAINTS.md`, file này.
+(warning) **Ask first if not yet approved in current direction/batch**
+- Change data schema, public API, auth/permission mechanism.
+- Change security-related defaults.
+- Add dependencies (except types approved in plan/decision), upgrade framework major.
+- Delete files, data, released migrations.
+- Edit CI, rulesets, CODEOWNERS, `CONSTRAINTS.md`, this file.
 
-🚫 **Không bao giờ**
-- Commit secret, `.env`, token; log token, mật khẩu, header Authorization.
-- Commit file quyền cá nhân của agent (`.claude/settings.local.json`, allow-list lệnh, đường dẫn máy, mật khẩu trong lệnh đã duyệt).
-- Thêm cờ bịt miệng trình kiểm tra (`@ts-ignore`, `eslint-disable`, `# noqa`, `istanbul ignore`, `nosemgrep`, `gitleaks:allow`), thêm `.skip` hoặc xoá assertion/hạ ngưỡng để làm test xanh (không hạ chuẩn âm thầm).
-- Nối chuỗi SQL từ input.
-- Push trực tiếp/force push nhánh bảo vệ, `--no-verify`, tự merge hoặc tự approve PR.
+(blocked) **Never**
+- Commit secrets, `.env`, tokens; log tokens, passwords, Authorization headers.
+- Commit personal agent files (`.claude/settings.local.json`, command allow-lists, machine paths, passwords in approved commands).
+- Add check-silencing flags (`@ts-ignore`, `eslint-disable`, `# noqa`, `istanbul ignore`, `nosemgrep`, `gitleaks:allow`), add `.skip`, or delete assertions/lower thresholds to force green tests (no silent lowering of standards).
+- String-concatenate SQL from input.
+- Push directly/force-push protected branches, `--no-verify`, self-merge or self-approve PRs.
 
-<Luật chuyên sâu theo vùng đặt ở `<thư-mục>/AGENTS.md` hoặc rule theo glob, không đặt ở đây.>
+<Domain-specific deep rules go in `<dir>/AGENTS.md` or glob-scoped rules, not here.>
 
-## Quy trình một task
+## One-Task Process
 
-1. **Phân loại chỉ dẫn trước khi đọc sâu hay sửa file.** *Rõ* (một cách hiểu về kết quả, xác định được SPEC/AC hoặc phạm vi hẹp, không chạm mục ⚠️ chưa duyệt) → làm luôn, không hỏi lại. *Mơ hồ* (≥ 2 cách hiểu cho ra kết quả khác nhau, không xác định được SPEC/AC lẫn phạm vi hẹp, hoặc chạm mục ⚠️ chưa duyệt) → tra cứu có mục tiêu để tự gỡ; vẫn mơ hồ thì chỉ trả **bản chốt nhanh ≤ 5 dòng** (kết quả hiểu được · SPEC/vùng file dự kiến · tối đa 3 điểm cần chốt, mỗi điểm kèm phương án đề xuất) rồi dừng, chưa sửa file.
-   Khi đã rõ: xác định spec, REQ/AC (nếu có; việc nhỏ chưa gắn spec thì ghi rõ phạm vi hẹp và cách kiểm chứng) cùng chỉ dẫn thực thi thật của người dùng; ghi một đợt hiện tại ở `docs/progress.md`. `Ready`, plan và danh sách task sẵn sàng không tự cấp quyền code.
-2. **Quyền thực thi theo đợt** — nếu người dùng chưa nêu ranh giới đợt: **khi soạn/cập nhật docs**, mỗi lượt chỉ làm một bước con rồi dừng chờ review (5a: cụm nền `AGENTS.md`/glossary/decisions · 5b: đúng **1 file SPEC** kèm cập nhật `docs/specs/README.md` · 5c: 1 file design); không viết cả cây `docs/` trong một lượt; **khi viết code**, mặc định **1 SPEC + 1 task/AC nhỏ kiểm chứng được**, làm → kiểm → báo cáo → dừng. Yêu cầu rõ làm toàn bộ spec/batch hữu hạn thì ghi đúng các task/AC được giao và hoàn tất trong phạm vi ấy.
-3. Kế hoạch ngắn: hành vi, vùng file, test, điều kiện dừng. Khoảng 5 file là dự kiến; sửa hàm dùng chung và các caller cần thiết trong cùng hành vi được phép, ghi lại tác động.
-4. Test + code chỉ trong đợt được phép. Subagent chỉ nhận phần việc thuộc đợt; không tự lấy task/spec tiếp theo. Rủi ro hoặc hành vi mới chưa duyệt → cập nhật phạm vi trước khi làm phần đó.
-5. **Phản biện độc lập & tự sửa trước khi báo xong:** chạy lệnh ở mục DoD, sau đó giao `git diff` + `SPEC-xx` (không kèm lời biện hộ lúc viết) cho một lượt phản biện độc lập — ưu tiên **Chéo model** bằng CLI của họ model khác (`"" | codex exec --sandbox read-only ...`, `claude`, `gemini` nếu máy có sẵn; đóng `stdin` để không treo) hoặc **Phiên sạch cùng model** (subagent chỉ đọc khi không có CLI khác model) — để bắt lỗi lệch spec, thiếu biên, mock sai hoặc lỗ hổng logic; tự sửa lỗi thật trước khi báo người dùng.
-6. Đánh `[x]` AC có bằng chứng; cập nhật tiến độ và chuyển đợt sang `Chờ kiểm chứng`, báo kết quả rồi dừng ở ranh giới đã ghi. Commit/PR khi được giao hoặc theo quy trình repo.
+1. **Classify direction before deep reading or editing.** *Clear* (one understanding of the outcome, SPEC/AC or narrow scope identifiable, doesn't touch unapproved (warning) items)  proceed without re-asking. *Vague* (>= 2 interpretations yielding different outcomes, SPEC/AC and narrow scope unidentifiable, or touches unapproved (warning) items)  do targeted lookup to self-resolve; if still vague, return only a **quick lock ≤ 5 lines** (understood outcome · expected SPEC/file area · max 3 points to confirm, each with a proposed option) then stop, no file edits.
+   Once clear: identify the spec, REQ/AC (if any; small work without spec gets explicit narrow scope and verification method) plus the user's real execution direction; record one current batch in `docs/progress.md`. `Ready`, plans, and ready task lists do not auto-grant code authority.
+2. **Per-batch execution authority** — if the user hasn't stated batch boundaries: **when drafting/updating docs**, do one sub-step per turn then stop for review (5a: foundation cluster `AGENTS.md`/glossary/decisions · 5b: exactly **1 SPEC file** plus `docs/specs/README.md` update · 5c: 1 design file); don't write the whole `docs/` tree in one turn; **when coding**, default to **1 SPEC + 1 small verifiable task/AC**, do  check  report  stop. Explicit requests to do a whole spec/finite batch get exactly the assigned tasks/ACs completed within that scope.
+3. Short plan: behavior, file area, tests, stop conditions. ~5 files is the expectation; fixing shared functions and necessary callers within the same behavior is allowed, record the impact.
+4. Tests + code only within the permitted batch. Subagents only get work belonging to the batch; don't self-pick the next task/spec. New risks or unapproved behavior  update scope before doing that part.
+5. **Independent challenge & self-fix before claiming done:** run the DoD commands, then hand `git diff` + `SPEC-xx` (without self-justification) to one independent review pass — prefer **cross-model** via another model's CLI (`codex exec --sandbox read-only...`, `claude`, `gemini` if available; close `stdin` to avoid hangs) or **clean same-model session** (subagent read-only when no other-model CLI exists) — to catch spec drift, missing edges, wrong mocks, or logic holes; fix real issues before reporting to the user.
+6. Mark `[x]` ACs with evidence; update progress and move batch to `Awaiting verification`, report results, then stop at the recorded boundary. Commit/PR when assigned or per repo process.
 
-**Báo cáo đợt:** (1) kết quả quan sát được · (2) **giải thích kỹ thuật dễ hiểu về phần vừa làm** (bản chất cơ chế đã dùng là gì, tại sao chọn, luồng `Đầu vào → Xử lý → Đầu ra` gắn với dữ liệu dự án để người đọc hiểu rõ code AI viết) · (3) **biên bản phản biện độc lập** (ghi rõ chế độ `Chéo model` hay `Phiên sạch cùng model`, liệt kê **mọi** phát hiện thành 2 mục: `Đã tự sửa` và `Không sửa / Cần quyết định` kèm lý do — cấm tự ý giấu phát hiện) · (4) cách demo/lệnh kiểm và bảng bằng chứng chạy test · (5) điều chưa kiểm chứng & ranh giới đã dừng. Đợt mới cần chỉ dẫn người dùng xác định phạm vi; không tự gia hạn từ plan hay mục bàn giao của đợt cũ.
+**Batch report:** (1) observable result · (2) **plain-language technical explanation of what was just done** (what mechanism was used, why chosen, `Input  Processing  Output` flow tied to real project data so readers understand the AI-written code) · (3) **independent challenge report** (state the mode `Cross-model` or `Clean same-model`, list **every** finding under 2 headings: `Self-fixed` and `Not fixed / Needs decision` with reasons — hiding findings is forbidden) · (4) how to demo/verify commands and the test evidence table · (5) unverified items & the boundary stopped at. A new batch needs user direction defining scope; don't self-extend from the old batch's plan or handoff.
 
-## Ngữ cảnh dài & nén
+## Long Context & Compaction
 
-- **Khi xong đợt, đổi sang việc khác, hoặc sửa cùng một lỗi 2 lần vẫn chưa xanh:** ghi đè mục *Bàn giao phiên mới* trong `docs/progress.md` (lỗi lặp thì ghi cả hướng đã thử và loại), rồi nhắc một dòng: nên `/compact` hoặc mở phiên mới thay vì thử tiếp trên ngữ cảnh cũ.
-- **Khi nén ngữ cảnh:** giữ RUN-ID, file đã sửa, lệnh kiểm và lỗi gần nhất chưa đóng, câu hỏi đang chờ người dùng.
-- **Sau khi nén hoặc sang phiên mới:** đọc lại block đợt hiện tại trong `docs/progress.md` trước khi làm tiếp. Bản tóm tắt hội thoại không phải nguồn sự thật và không cấp thêm quyền: **quyền và phạm vi đợt** luôn theo `progress.md`; nếu **trạng thái file/test** trong bản tóm tắt lệch với `progress.md` (do tự động nén giữa đợt), kiểm chứng lại bằng `git status`/`git diff` và lệnh kiểm rồi cập nhật `progress.md` trước khi sửa tiếp.
+- **When a batch ends, switching tasks, or the same error fails twice:** overwrite the *New-session handoff* section in `docs/progress.md` (for recurring errors record tried approaches and ruled-out ones), then remind in one line: prefer `/compact` or a new session instead of retrying on stale context.
+- **When compacting context:** keep RUN-ID, edited files, verification commands, the latest unclosed error, and pending user questions.
+- **After compaction or a new session:** re-read the current batch block in `docs/progress.md` before continuing. Conversation summaries are not source of truth and grant no extra authority: **batch authority and scope** always follow `progress.md`; if **file/test status** in the summary conflicts with `progress.md` (auto-compaction mid-batch), re-verify with `git status`/`git diff` and check commands, update `progress.md`, then continue.
 
 ## Definition of Done
 
-- `<lint> && <typecheck> && <test> && <build>` xanh (và đạt sàn `CONSTRAINTS.md` nếu có).
-- Mọi AC báo hoàn tất có test qua và bằng chứng; `[~]` là chưa kiểm chứng, ghi lý do + cách đóng.
-- Bằng chứng ghi lệnh và kết quả thực tế hoặc link log; chưa chạy thì ghi chưa chạy, không chép đầu ra kỳ vọng thành kết quả. Đối chiếu kỳ vọng với ví dụ/contract đã chốt (nguồn & giới hạn hiểu biết). Nếu AI viết cả kỳ vọng lẫn test, test xanh chỉ chứng minh code khớp kỳ vọng của AI — ưu tiên ví dụ do người dùng đưa.
-- **In Bảng bằng chứng chạy test (Visible Test Execution Ledger):** khi báo xong task hoặc mở PR, bắt buộc in bảng `AC-ID | Kịch bản đã chạy | Input đã bơm | Output & Tác dụng phụ thực tế | Độ thật (0 Mock hay Mock gì) | Kết quả` để người review thấy rõ test đã kiểm cái gì (cấm chỉ báo *"All tests passed"*).
-- Spec/decisions/progress cập nhật; chỉ chuyển spec `Done` khi mọi AC của spec `[x]`. Còn `[~]` thì giữ `In progress`, trừ khi người dùng đổi phạm vi qua `change-spec`.
+- `<lint> && <typecheck> && <test> && <build>` all green (and meets `CONSTRAINTS.md` floor if any).
+- Every AC claimed complete has a passing test with evidence; `[~]` means unverified — record reason + how to close.
+- Evidence records the command and actual result or a log link; if not run, say not run — never paste expected output as a result. Compare expectations against confirmed examples/contracts (sources & knowledge limits). If the AI wrote both expectation and test, green only proves code matches the AI's expectation — prefer user-provided examples.
+- **Print the test evidence table (Visible Test Execution Ledger):** when reporting a finished task or opening a PR, must print `AC-ID | Scenario run | Input fed | Actual Output & side effects | Fidelity (0 Mock or which mocks) | Result` so reviewers see exactly what was tested (never just *"All tests passed"*).
+- Spec/decisions/progress updated; only move spec to `Done` when every AC of that spec is `[x]`. While `[~]` remains, keep `In progress` unless the user changes scope via `change-spec`.
 
-## Quy ước code
+## Code Conventions
 
-Làm giống `<đường dẫn file mẫu chuẩn>`. Ví dụ:
+Match `<path to canonical example file>`. Example:
 
 ```<lang>
-<snippet 5–15 dòng thể hiện: đặt tên, xử lý lỗi, cấu trúc chuẩn>
+<5–15 line snippet showing: naming, error handling, standard structure>
 ```
 
-Xử lý lỗi:
-- Bắt lỗi thì ném lại (giữ lỗi gốc làm `cause`) hoặc log kèm ngữ cảnh; không nuốt im lặng.
-- Message lỗi nội bộ (5xx, stack, SQL) không trả cho client/người dùng cuối.
-- Việc best-effort (xoá cache, thống kê, gửi thông báo) được bỏ qua lỗi nhưng phải log.
+Error handling:
+- On catch, rethrow (keep original error as `cause`) or log with context; never swallow silently.
+- Internal error messages (5xx, stack, SQL) never go to client/end users.
+- Best-effort work (cache eviction, stats, notifications) may skip on error but must log.
 
 ## Git
 
-- Commit: `<type>(<scope>): <mô tả> [SPEC-XXX]`.
-- Nhánh: `<type>/<mã>-<mô-tả>`, tách từ `<nhánh tích hợp>`; PR vào `<nhánh tích hợp>`.
+- Commit: `<type>(<scope>): <description> [SPEC-XXX]`.
+- Branch: `<type>/<id>-<description>`, cut from `<integration branch>`; PR into `<integration branch>`.
 
-## Bản đồ repo
+## Repo Map
 
 ```
-<cây 1–2 cấp, mỗi dòng một vai trò>
+<1–2 level tree, one role per line>
 ```
 
-## Ghi đè base
+## Base Overrides
 
-<!-- Xoá mục này nếu không ghi đè gì. Siết luật: tự do. Nới hoặc bỏ luật của base: phải có D-xx. -->
+<!-- Delete this section if nothing is overridden. Tightening rules: free. Loosening or removing base rules: requires a D-xx. -->
 
-| Luật base | Ghi đè | Quyết định |
+| Base rule | Override | Decision |
 |---|---|---|
-| `<tên luật base, vd. "Quyền thực thi theo đợt" / PK-…-Rnn>` | <nới / bỏ: nội dung> | D-xx |
+| `<base rule name, e.g. "Per-batch execution authority" / PK-…-Rnn>` | <loosen / remove: content> | D-xx |

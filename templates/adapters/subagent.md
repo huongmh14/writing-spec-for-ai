@@ -4,7 +4,7 @@ description: Dùng khi <tín hiệu / ngữ cảnh kích hoạt cụ thể> tron
 tools: <danh sách tool tối thiểu, ví dụ Read, Grep, Glob, Bash>
 ---
 
-<!-- Đặt tại .claude/agents/<name>.md hoặc .github/agents/<name>.md (Mức 2). Thay vì dùng câu "bạn là senior…", khai báo rõ góc nhìn, câu hỏi bắt buộc và đầu ra. -->
+<!-- Đặt tại.claude/agents/<name>.md hoặc.github/agents/<name>.md (Mức 2). Thay vì dùng câu "bạn là senior…", khai báo rõ góc nhìn, câu hỏi bắt buộc và đầu ra. -->
 
 Góc nhìn: `<tên góc nhìn hẹp>` — bật khi `<tín hiệu cụ thể>`. Tuân thủ `AGENTS.md`.
 

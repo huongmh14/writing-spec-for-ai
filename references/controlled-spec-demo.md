@@ -15,7 +15,7 @@
 **SPEC-NOTES — thêm một ghi chú. Trạng thái minh hoạ: Ready.**
 
 - **Kết quả:** nhập nội dung và bấm Lưu, ghi chú xuất hiện trong danh sách.
-- **Thử:** nhập `Mua sữa` → thấy đúng một dòng `Mua sữa`; nhập toàn dấu cách → thấy lỗi, danh sách không tăng.
+- **Thử:** nhập `Mua sữa`  thấy đúng một dòng `Mua sữa`; nhập toàn dấu cách  thấy lỗi, danh sách không tăng.
 - **Chưa làm:** sửa/xoá, tìm kiếm, tài khoản, đồng bộ, chia sẻ.
 - **Điều chưa biết:** tải lớn chưa đo, chưa cam kết p95; lưu giữa hai phiên cần chốt riêng, không tự suy ra từ chữ Lưu.
 - **Bạn chốt:** hành vi và hai ví dụ trên. AI chọn cách cài đặt sẵn có và chứng minh kết quả; bạn không phải chọn thuật toán.
@@ -27,8 +27,8 @@
 
 | AC | Cho / Khi / Thì | Cách kiểm | Trạng thái |
 |---|---|---|---|
-| NOTES-AC01 | Danh sách rỗng / lưu `Mua sữa` / có đúng một dòng `Mua sữa` | Thao tác UI, kiểm danh sách | `[ ]` — chưa chạy |
-| NOTES-AC02 | Có một dòng / lưu `   ` / thấy lỗi, vẫn một dòng | Thao tác UI, kiểm số dòng trước/sau | `[ ]` — chưa chạy |
+| NOTES-AC01 | Danh sách rỗng / lưu `Mua sữa` / có đúng một dòng `Mua sữa` | Thao tác UI, kiểm danh sách | `[]` — chưa chạy |
+| NOTES-AC02 | Có một dòng / lưu `   ` / thấy lỗi, vẫn một dòng | Thao tác UI, kiểm số dòng trước/sau | `[]` — chưa chạy |
 
 **P-01 — `Chưa biết`:** khả năng chịu tải. Cách xác minh: người dùng chốt tải dự kiến, AI đo trên môi trường nêu rõ. Chặn tuyên bố hiệu năng; không chặn hai hành vi độc lập trên.
 

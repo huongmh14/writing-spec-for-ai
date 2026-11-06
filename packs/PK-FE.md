@@ -34,16 +34,16 @@
 
 ## Dòng thêm vào AGENTS.md
 
-### ✅ Luôn
+### [x] Luôn
 - Tạo màn hình/bảng dữ liệu mới: cài đặt đủ 4 trạng thái (`loading`, `empty`, `error`, `data`).
 - Dùng biến màu sắc, khoảng cách, font từ `{tokens-path}` hoặc hệ thống class chuẩn của dự án.
 - Viết test E2E bằng `{e2e-runner}`: dùng `getByRole` / `getByLabel` / `data-testid` và assertion tự chờ (auto-retrying assertions).
 
-### ⚠️ Hỏi trước
+### (warning) Hỏi trước
 - Thêm thư viện UI component, thư viện icon, hoặc thư viện quản lý state mới.
 - Thay đổi bộ biến gốc trong `{tokens-path}` hoặc thay đổi bố cục khung (layout shell) toàn cục.
 
-### 🚫 Không bao giờ
+### (blocked) Không bao giờ
 - Để nút submit form có thể bị bấm lặp gửi nhiều request trùng khi request trước chưa xong.
 - Dùng `page.waitForTimeout(ms)` / `sleep` cứng trong bài test E2E.
 - Dùng thẻ `<div>` hoặc `<span>` gắn `onClick` thay cho `<button>` / `<a>` mà không có `role`, `tabIndex`, và xử lý phím `Enter`/`Space`.

@@ -36,7 +36,7 @@
 
 ## Dòng thêm vào AGENTS.md
 
-### ✅ Luôn
+### [x] Luôn
 - Thêm biến môi trường: thêm vào `.env.example` và validate khởi động.
 - Build image: từ tag semver, tag image = phiên bản.
 - Dockerfile: multi-stage build, user non-root.
@@ -45,14 +45,14 @@
 - PR môi trường: ghi kế hoạch rollback.
 - Artifact commit: CI kiểm khớp nguồn.
 
-### ⚠️ Hỏi trước
+### (warning) Hỏi trước
 - Đổi `{release-branch}` hoặc pattern tag.
 - Bỏ validate env lúc khởi động.
 - Dùng tag `latest` cho image.
 - Chạy container bằng user root.
 - Phát hành mà không có changelog.
 
-### 🚫 Không bao giờ
+### (blocked) Không bao giờ
 - Bỏ `.env.example` hoặc thiếu biến.
 - Build image từ nhánh không phải tag.
 - Dùng tag `latest` cho production.

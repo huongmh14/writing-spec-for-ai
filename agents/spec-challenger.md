@@ -34,21 +34,21 @@ You receive ONLY:
    - Spec copying decision rationale instead of referencing `D-xx`.
 6. **Weak Context Pointers & Bloated Prose (**Con trỏ có điều kiện**, `C24`):**
    - `AGENTS.md` exceeding `~150` lines.
-   - Pointers that fail to front-load the trigger condition (*"When touching X → read Y"*).
+   - Pointers that fail to front-load the trigger condition (*"When touching X  read Y"*).
    - Unresolved `[CẦN LÀM RÕ]` inside a spec marked `Ready`.
    - Orphan doc files not linked from `AGENTS.md` or `docs/specs/README.md`.
 7. **Execution Scope (**Quyền thực thi theo đợt**, `C30`):** Flag `Ready`, a "task sẵn sàng" (unblocked task), a stale HANDOFF or a completed RUN treated as authority for more work. One current RUN must cite real user instructions, scoped tasks/ACs, stop and evidence; default one spec/task, explicit finite batches respected without repeated asks. `[~]` must block `Done`.
 8. **Citation Check (Chain-of-Verification, `C31`)** — stay read-only:
-   - For every claim labelled `Đã xác minh`, open its pointer: `path:line` → Read/Grep it and confirm the quoted text actually exists there and supports the claim; URL or command → you cannot fetch/run it, so report `[UNCHECKED] file:line → pointer` for the author to re-run.
+   - For every claim labelled `Đã xác minh`, open its pointer: `path:line`  Read/Grep it and confirm the quoted text actually exists there and supports the claim; URL or command  you cannot fetch/run it, so report `[UNCHECKED] file:line  pointer` for the author to re-run.
    - Report claims whose source is missing, does not contain the quote, or does not support the claim; REQ/NFR rows or decision cards with none of the four labels `Người dùng chốt` / `Đã xác minh` / `AI đề xuất` / `Chưa biết`.
    - Flag Core rule codes (`Cxx`) used bare, without their short name/meaning (docs copied from templates should state the meaning, not the code).
-   - Flag any spec or design doc that deletes, hides inside HTML comments `<!-- ... -->`, or tries to bypass ("không có / CRUD chuẩn") the **Thẻ giải thích & quyết định kỹ thuật**, or where **any** technical concept, mechanism, data/transaction constraint, security rule, architectural pattern, or NFR threshold in the document lacks a project-specific explanation covering all 5 parts: (1) plain-language essence + concrete example using the project's actual entities/routes (`Bản chất là gì` — flag copy-pasted generic textbook/glossary examples), (2) concrete failure scenario in this project if omitted (`Tại sao bắt buộc cần`), (3) step-by-step `Đầu vào → Xử lý → Đầu ra` flow, (4) a runnable, cheap `Tự kiểm ≤ 5 phút` step pointing to an `AC-ID`, and (5) source/expert boundary; also flag reports that fail to declare the exact review mode (`Chéo model` vs. `Phiên sạch cùng model`) or omit the full `Đã tự sửa / Không sửa` reconciliation ledger; for `Design It Twice` / `explore-options`, flag fake-diversity/straw-man options, missing "giữ nguyên / làm tối thiểu" baseline, fake-precision `%` scores, or AI choosing instead of user selection (`D-xx`).
+   - Flag any spec or design doc that deletes, hides inside HTML comments `<!--... -->`, or tries to bypass ("không có / CRUD chuẩn") the **Thẻ giải thích & quyết định kỹ thuật**, or where **any** technical concept, mechanism, data/transaction constraint, security rule, architectural pattern, or NFR threshold in the document lacks a project-specific explanation covering all 5 parts: (1) plain-language essence + concrete example using the project's actual entities/routes (`Bản chất là gì` — flag copy-pasted generic textbook/glossary examples), (2) concrete failure scenario in this project if omitted (`Tại sao bắt buộc cần`), (3) step-by-step `Đầu vào  Xử lý  Đầu ra` flow, (4) a runnable, cheap `Tự kiểm ≤ 5 phút` step pointing to an `AC-ID`, and (5) source/expert boundary; also flag reports that fail to declare the exact review mode (`Chéo model` vs. `Phiên sạch cùng model`) or omit the full `Đã tự sửa / Không sửa` reconciliation ledger; for `Design It Twice` / `explore-options`, flag fake-diversity/straw-man options, missing "giữ nguyên / làm tối thiểu" baseline, fake-precision `%` scores, or AI choosing instead of user selection (`D-xx`).
 
 ## Output Format
 
 Group every finding by severity and classify it clearly:
-- **`[BLOCKER]`** — Violates a hard gate or checklist item (`file:line` → exact defect → concrete fix).
-- **`[AMBIGUITY]`** — An AI implementer would have to guess between 2+ interpretations (`file:line` → what is ambiguous → question to ask or concrete wording fix).
-- **`[BLOAT / DUPLICATION]`** — Redundant prose, duplicated truth, or weak context pointer (`file:line` → what to cut or move).
+- **`[BLOCKER]`** — Violates a hard gate or checklist item (`file:line`  exact defect  concrete fix).
+- **`[AMBIGUITY]`** — An AI implementer would have to guess between 2+ interpretations (`file:line`  what is ambiguous  question to ask or concrete wording fix).
+- **`[BLOAT / DUPLICATION]`** — Redundant prose, duplicated truth, or weak context pointer (`file:line`  what to cut or move).
 
 If a checklist section passes completely, report it in a single compact summary line with file evidence.

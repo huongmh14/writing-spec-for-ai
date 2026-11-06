@@ -53,7 +53,7 @@ Mục tiêu: người dùng **chọn được** giữa các phương án mà kh�
 Mỗi phương án kèm một Thẻ giải thích & quyết định kỹ thuật:
 - Bản chất là gì (nói dễ hiểu + ví dụ thực tế): <không dùng thuật ngữ mù mờ>
 - Tại sao cần / Nếu sai thì sao: <hậu quả quan sát được + chi phí quay lại>
-- Chạy thế nào (Đầu vào → Xử lý → Đầu ra): <2–3 bước ngắn>
+- Chạy thế nào (Đầu vào  Xử lý  Đầu ra): <2–3 bước ngắn>
 - Tự kiểm ≤ 5 phút: <lệnh / link / thao tác người dùng tự làm được>
 - Nguồn: <path:line | URL + trích nguyên văn> · Nhãn: Người dùng chốt / Đã xác minh / AI đề xuất / Chưa biết
 - Không tự kiểm được: <phần cần chuyên gia, nếu có>
@@ -77,7 +77,7 @@ Chỉ đánh giá định tính (tốt / vừa / kém); không chấm điểm s�
 
 ## Checklist
 
-- [ ] Có phương án giữ nguyên / tối thiểu; 2–4 phương án, mỗi cặp khác nhau ở ít nhất một đánh đổi cốt lõi.
-- [ ] Đã ghi dòng `Góc nhìn: … — vì …`; góc nhìn Phản biện đã chạy đúng 1 vòng.
-- [ ] Mỗi phương án có Thẻ quyết định, kèm dòng Tự kiểm ≤ 5 phút và nhãn nguồn gốc.
-- [ ] Người dùng chọn; quyết định được ghi vào `D-xx` theo khung MADR.
+- [] Có phương án giữ nguyên / tối thiểu; 2–4 phương án, mỗi cặp khác nhau ở ít nhất một đánh đổi cốt lõi.
+- [] Đã ghi dòng `Góc nhìn: … — vì …`; góc nhìn Phản biện đã chạy đúng 1 vòng.
+- [] Mỗi phương án có Thẻ quyết định, kèm dòng Tự kiểm ≤ 5 phút và nhãn nguồn gốc.
+- [] Người dùng chọn; quyết định được ghi vào `D-xx` theo khung MADR.

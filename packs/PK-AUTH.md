@@ -40,7 +40,7 @@
 
 ## Dòng thêm vào AGENTS.md
 
-### ✅ Luôn
+### [x] Luôn
 - Lưu secret/khoá: hash có salt, chỉ trả gốc một lần.
 - So sánh secret: dùng constant-time compare.
 - Tạo token: thêm claim `{token-typ-claim}`.
@@ -49,13 +49,13 @@
 - Khởi động: validate env cấu hình auth; thiếu thì fail-closed.
 - Log: KHÔNG log token, password, secret, header `Authorization`.
 
-### ⚠️ Hỏi trước
+### (warning) Hỏi trước
 - Đổi thuật toán hash `{hash-algo}`.
 - Đổi `{refresh-ttl}` hoặc `{hmac-ttl}`.
 - Bỏ validation cấu hình auth lúc khởi động (nghịch lý fail-closed).
 - Thêm loại token mới (cần update claim `{token-typ-claim}`).
 
-### 🚫 Không bao giờ
+### (blocked) Không bao giờ
 - Lưu secret/khoá/password dạng plaintext.
 - So sánh secret bằng phép so sánh bình thường (`===`, `==`).
 - Log token, password, secret, header `Authorization`.
@@ -78,7 +78,7 @@
 |---|---|---|---|
 | Log rò rỉ token/password trong production | Log request/response có header/body nhạy cảm | Log filter; blacklist header `Authorization` | 2026-10-20 |
 | Timing attack phát hiện user tồn tại | So sánh password bằng `===` hoặc `==` | Dùng constant-time compare (bcrypt.compare, crypto.timingSafeEqual) | 2026-10-20 |
-| Refresh token bị reuse, không thu hồi được | Token không quay vòng, dùng mãi một token | Implement rotation: mỗi lần dùng → tạo mới, vô hiệu cũ | 2026-10-20 |
+| Refresh token bị reuse, không thu hồi được | Token không quay vòng, dùng mãi một token | Implement rotation: mỗi lần dùng  tạo mới, vô hiệu cũ | 2026-10-20 |
 | Webhook bị replay attack | Signature không có `exp` hoặc không kiểm | Thêm `exp` vào payload signed, kiểm trước khi verify | 2026-10-20 |
 | Chạy với cấu hình auth thiếu/hỏng | Không validate env lúc khởi động, default null | Validate tất cả biến env cần thiết; thiếu thì fail-fast | 2026-10-20 |
 | Token sai loại vẫn được chấp nhận | Endpoint không kiểm claim `{token-typ-claim}` | Mọi endpoint protected MUST kiểm `typ` | 2026-10-20 |

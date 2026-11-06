@@ -7,7 +7,7 @@
 
 ## 1. Top Skills Repositories Phổ Biến
 
-### 1.1 obra/superpowers (311k stars) ⭐ #1
+### 1.1 obra/superpowers (311k stars)  #1
 
 **Cách tiếp cận:** Complete software development methodology + composable skills
 
@@ -22,11 +22,11 @@ superpowers/
 ```
 
 **Workflow:**
-1. brainstorming → drawing understanding back
-2. using-git-worktrees → isolated workspace + clean baseline
-3. writing-plans → bite-sized tasks (2-5 min each)
-4. subagent-driven-development → execute plan
-5. verification-before-completion → verify before claim done
+1. brainstorming  drawing understanding back
+2. using-git-worktrees  isolated workspace + clean baseline
+3. writing-plans  bite-sized tasks (2-5 min each)
+4. subagent-driven-development  execute plan
+5. verification-before-completion  verify before claim done
 
 **Key insights:**
 - **Methodology-first:** Không chỉ skill, mà là SDLC methodology
@@ -48,7 +48,7 @@ superpowers/
 
 ---
 
-### 1.2 mattpocock/skills (310k stars) ⭐ #2
+### 1.2 mattpocock/skills (310k stars)  #2
 
 **Cách tiếp cận:** Small, composable skills for real engineering
 
@@ -58,7 +58,7 @@ mattpocock/skills/
 ├── domain-modeling/        # Domain-driven design
 ├── codebase-design/        # Architecture decisions
 ├── automated-code-review/   # Review vs standards + specs
-└── ... (many small skills)
+└──... (many small skills)
 ```
 
 **Key insights:**
@@ -77,7 +77,7 @@ mattpocock/skills/
 
 ---
 
-### 1.3 multica-ai/andrej-karpathy-skills (228k stars) ⭐ #3
+### 1.3 multica-ai/andrej-karpathy-skills (228k stars)  #3
 
 **Cách tiếp cận:** Single CLAUDE.md file with behavioral guidance
 
@@ -102,7 +102,7 @@ andrej-karpathy-skills/
 
 ---
 
-### 1.4 anthropics/skills (187k stars) ⭐ #4
+### 1.4 anthropics/skills (187k stars)  #4
 
 **Cách tiếp cận:** Official Anthropic skills + skill-creator
 
@@ -113,7 +113,7 @@ anthropics/skills/
 │   ├── skill-creator/     # Meta-skill để tạo skill khác
 │   ├── docx/             # Document creation (source-available)
 │   ├── pdf/              # PDF editing (source-available)
-│   └── ... (many domain skills)
+│   └──... (many domain skills)
 └── agentskills.io         # Standard spec
 ```
 
@@ -133,7 +133,7 @@ anthropics/skills/
 
 ---
 
-### 1.5 affaan-m/ECC (295k stars) ⭐ #5
+### 1.5 affaan-m/ECC (295k stars)  #5
 
 **Cách tiếp cận:** Performance optimization for AI agents
 
@@ -204,7 +204,7 @@ skill-framework/
 **Cách tiếp cận:** End-to-end framework để build skills
 
 **Features:**
-- **Discover:** Guided interview → structured skill spec
+- **Discover:** Guided interview  structured skill spec
 - **Scaffold:** Generate compliant directory from spec
 - **Distill:** Transform source material into framework chunks
 - **Audit:** Check existing skills against syntax specs
@@ -212,7 +212,7 @@ skill-framework/
 **Key insights:**
 - **Meta-skill:** Skill để build other skills
 - **Standardized syntax:** Skills cần consistent syntax
-- **Guided workflow:** Interview → spec → scaffold → audit
+- **Guided workflow:** Interview  spec  scaffold  audit
 - **Compliance audit:** Check skills against standards
 
 **Điểm tương đồng:**
@@ -270,24 +270,24 @@ skill-framework/
 
 | Pattern | Bộ skill hiện tại | Gap |
 |---------|------------------|-----|
-| **Workflow orchestration** | ❌ Không có | Skills không gọi nhau auto |
-| **Subagent dispatch** | ❌ Không có | Không có parallel execution |
-| **Domain classification** | ❌ Không có | Skills không được classify |
-| **Meta-skill** | ⚠️ Có writing-skills nhưng yếu | Không có guided interview |
-| **Lint/validation** | ❌ Không có | Không có syntax validation |
-| **Multi-runtime deploy** | ⚠️ Có portable bundle nhưng manual | Không có compile engine |
-| **Performance optimization** | ❌ Không có | Không có performance focus |
-| **Security integration** | ❌ Không có | Không có security rules |
-| **Memory management** | ❌ Không có | Không có memory system |
+| **Workflow orchestration** | [] Không có | Skills không gọi nhau auto |
+| **Subagent dispatch** | [] Không có | Không có parallel execution |
+| **Domain classification** | [] Không có | Skills không được classify |
+| **Meta-skill** | (warning) Có writing-skills nhưng yếu | Không có guided interview |
+| **Lint/validation** | [] Không có | Không có syntax validation |
+| **Multi-runtime deploy** | (warning) Có portable bundle nhưng manual | Không có compile engine |
+| **Performance optimization** | [] Không có | Không có performance focus |
+| **Security integration** | [] Không có | Không có security rules |
+| **Memory management** | [] Không có | Không có memory system |
 
 ### 3.3 Strengths Của Bộ Skill Hiện Tại
 
 | Strength | Comparable repo | Mô tả |
 |----------|----------------|-------|
-| **Auto-guidance** | ❌ Unique | auto-guide AI tự động đề xuất skill |
-| **Beginner experience** | ❌ Unique | Focus vào beginner, không repo nào làm |
-| **Dual-layer (simple/full)** | ❌ Unique | writing-spec-simple + writing-spec-for-ai |
-| **Vietnamese localization** | ❌ Unique | Docs tiếng Việt cho người dùng VN |
+| **Auto-guidance** | [] Unique | auto-guide AI tự động đề xuất skill |
+| **Beginner experience** | [] Unique | Focus vào beginner, không repo nào làm |
+| **Dual-layer (simple/full)** | [] Unique | writing-spec-simple + writing-spec-for-ai |
+| **Vietnamese localization** | [] Unique | Docs tiếng Việt cho người dùng VN |
 | **Formal spec methodology** | obra/superpowers | writing-spec-for-ai có 3 cổng formal |
 | **Progressive disclosure** | anthropics/skills, writing-spec-for-ai | references/ structure |
 | **Templates** | skillsmith | writing-spec-for-ai có templates |
@@ -332,12 +332,12 @@ skill-framework/
 **Priority 4: Auto-guide orchestration**
 1. Enhance auto-guide để không chỉ đề xuất skill, mà còn orchestrate workflow:
    ```
-   auto-guide → detect situation → propose skill sequence → execute → transition to next skill
+   auto-guide  detect situation  propose skill sequence  execute  transition to next skill
    ```
 2. Add transition logic giữa skills:
-   - explore → writing-spec-simple (khi lần đầu vào project)
-   - writing-spec-simple → writing-plans (khi có specs)
-   - writing-plans → verification-before-completion (khi code xong)
+   - explore  writing-spec-simple (khi lần đầu vào project)
+   - writing-spec-simple  writing-plans (khi có specs)
+   - writing-plans  verification-before-completion (khi code xong)
 3. Add checkpoint giữa transitions (user approval)
 
 **Priority 5: Subagent dispatch**
@@ -412,45 +412,45 @@ skill-framework/
 ## 5. Implementation Roadmap
 
 ### Phase 1: Foundation (Week 1-2)
-- [ ] Complete Priority 1 (progressive disclosure, templates, laws)
-- [ ] Add license field to all skills
-- [ ] Add "When NOT to use" sections
-- [ ] Create simple lint script
-- [ ] Classify skills by domain
-- [ ] Update README-FOR-BEGINNERS
+- [] Complete Priority 1 (progressive disclosure, templates, laws)
+- [] Add license field to all skills
+- [] Add "When NOT to use" sections
+- [] Create simple lint script
+- [] Classify skills by domain
+- [] Update README-FOR-BEGINNERS
 - **Commit current changes** + create PR
 
 ### Phase 2: Orchestration (Week 3-4)
-- [ ] Enhance auto-guide orchestration
-- [ ] Add transition logic between skills
-- [ ] Add checkpoint system
-- [ ] Enhance dispatching-parallel-agents
-- [ ] Test full workflow: explore → writing-spec-simple → writing-plans → code → verify
+- [] Enhance auto-guide orchestration
+- [] Add transition logic between skills
+- [] Add checkpoint system
+- [] Enhance dispatching-parallel-agents
+- [] Test full workflow: explore  writing-spec-simple  writing-plans  code  verify
 - **Create PR for orchestration**
 
 ### Phase 3: Meta-skill (Week 5-6)
-- [ ] Enhance writing-skills to full meta-skill
-- [ ] Add guided interview workflow
-- [ ] Add scaffold generation
-- [ ] Add audit/checklist
-- [ ] Test meta-skill: create new skill from scratch
+- [] Enhance writing-skills to full meta-skill
+- [] Add guided interview workflow
+- [] Add scaffold generation
+- [] Add audit/checklist
+- [] Test meta-skill: create new skill from scratch
 - **Create PR for meta-skill**
 
 ### Phase 4: Advanced (Week 7-12)
-- [ ] Add performance optimization rules
-- [ ] Add security integration
-- [ ] Add memory management
-- [ ] Add multi-runtime deploy
-- [ ] Add research-first approach
+- [] Add performance optimization rules
+- [] Add security integration
+- [] Add memory management
+- [] Add multi-runtime deploy
+- [] Add research-first approach
 - **Each feature as separate PR**
 
 ### Phase 5: Community (Week 13+)
-- [ ] Open source to GitHub
-- [ ] Add contribution guidelines
-- [ ] Add issue templates
-- [ ] Add PR review checklist
-- [ ] Add skill usage tracking
-- [ ] Add eval framework
+- [] Open source to GitHub
+- [] Add contribution guidelines
+- [] Add issue templates
+- [] Add PR review checklist
+- [] Add skill usage tracking
+- [] Add eval framework
 
 ---
 
@@ -460,13 +460,13 @@ skill-framework/
 
 | Feature | Unique to this collection | Comparable repo |
 |---------|--------------------------|----------------|
-| **Auto-guidance** | ✅ Yes | ❌ No repo has this |
-| **Beginner-first** | ✅ Yes | ❌ No repo focuses on beginners |
-| **Dual-layer spec** | ✅ Yes | ❌ No repo has simple/full split |
-| **Vietnamese docs** | ✅ Yes | ❌ No repo has Vietnamese |
-| **3-gate formal spec** | ⚠️ obra/superpowers has similar | obra/superpowers |
-| **Progressive disclosure** | ⚠️ anthropics/skills has similar | anthropics/skills |
-| **Templates** | ⚠️ skillsmith has similar | skillsmith |
+| **Auto-guidance** | [x] Yes | [] No repo has this |
+| **Beginner-first** | [x] Yes | [] No repo focuses on beginners |
+| **Dual-layer spec** | [x] Yes | [] No repo has simple/full split |
+| **Vietnamese docs** | [x] Yes | [] No repo has Vietnamese |
+| **3-gate formal spec** | (warning) obra/superpowers has similar | obra/superpowers |
+| **Progressive disclosure** | (warning) anthropics/skills has similar | anthropics/skills |
+| **Templates** | (warning) skillsmith has similar | skillsmith |
 
 **Conclusion:** Bộ skill hiện tại có **unique value proposition** ở:
 1. Auto-guidance (AI tự động đề xuất skill)
@@ -600,4 +600,4 @@ skill-framework/
 
 **Unique value proposition:** Auto-guidance + beginner-first + Vietnamese - giữ và enhance.
 
-**Next step:** Complete Priority 1 (progressive disclosure, templates, laws) → commit → bắt đầu Phase 2.
+**Next step:** Complete Priority 1 (progressive disclosure, templates, laws)  commit  bắt đầu Phase 2.

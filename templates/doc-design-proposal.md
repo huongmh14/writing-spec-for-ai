@@ -5,7 +5,7 @@
 ## Bản đọc ngắn
 
 - **Kết quả đầu tiên:** <ai làm gì, thấy kết quả nào>.
-- **Ví dụ nghiệm thu:** <thao tác → kết quả; trỏ AC dự kiến>.
+- **Ví dụ nghiệm thu:** <thao tác  kết quả; trỏ AC dự kiến>.
 - **Giới hạn lần đầu:** <một spec/lát cắt; phần sau giữ ở bản đồ, chưa viết chi tiết>.
 - **Điều chưa biết:** <ảnh hưởng, cách xác minh, người phụ trách>.
 - **Bạn duyệt:** <hành vi/phạm vi/đánh đổi>; AI chịu trách nhiệm kiểm chứng kỹ thuật; mọi khái niệm hoặc quyết định kỹ thuật AI đưa vào sẽ kèm **Thẻ giải thích kỹ thuật** (giải thích rõ bản chất + lý do + luồng chạy để bạn hiểu, kèm dòng "Tự kiểm trong ≤ 5 phút"). Duyệt bản đồ chưa cấp quyền chạy các spec.
@@ -60,19 +60,19 @@ docs/changes/                     # mức 1, brownfield
 ## 4. Nội dung dự kiến của AGENTS.md & CONSTRAINTS.md
 
 - **Lệnh (gồm lệnh chạy 1 test):**
-- **Con trỏ có điều kiện ("Khi chạm X → đọc Y"):**
-- ✅ **Luôn (đánh dấu `ceiling:` khi cố ý chọn giải pháp đơn giản có giới hạn):**
-- ⚠️ **Hỏi trước:**
-- 🚫 **Không bao giờ (không hạ chuẩn âm thầm):**
+- **Con trỏ có điều kiện ("Khi chạm X  đọc Y"):**
+- [x] **Luôn (đánh dấu `ceiling:` khi cố ý chọn giải pháp đơn giản có giới hạn):**
+- (warning) **Hỏi trước:**
+- (blocked) **Không bao giờ (không hạ chuẩn âm thầm):**
 - **DoD & Sàn `CONSTRAINTS.md`:**
 - **File mẫu để bắt chước:**
-- **Luật chuyển xuống phạm vi:** <thư mục → luật>
+- **Luật chuyển xuống phạm vi:** <thư mục  luật>
 
 ## 5. Định hướng bằng hình, bản đồ năng lực & spec dự kiến
 
-### 5.1 Scope Radar (bảng phạm vi: 🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm)
+### 5.1 Scope Radar (bảng phạm vi: (green) Làm ngay / (yellow) Đợt kế / (red) Không làm)
 
-| 🟢 Làm ngay (MVP — GĐ 1) | 🟡 Đợt kế tiếp (Phase 2) | 🔴 Không làm (Out of Scope) |
+| (green) Làm ngay (MVP — GĐ 1) | (yellow) Đợt kế tiếp (Phase 2) | (red) Không làm (Out of Scope) |
 |---|---|---|
 | - <Hành vi cốt lõi 1> | - <Mở rộng sang GĐ 2> | - <Thứ loại bỏ rõ ràng để AI không làm thừa> |
 
@@ -93,7 +93,7 @@ flowchart LR
 |---|---|---|---|---|---|
 | SPEC-ARCH | Kiến trúc & nguyên tắc | | — | Draft / As-built | |
 
-- **Thứ tự xây dựng (`Build Order`):** `SPEC-ARCH → ...`
+- **Thứ tự xây dựng (`Build Order`):** `SPEC-ARCH...`
 - **Spec viết chi tiết đầu tiên:** <ID + hành vi nhỏ có thể kiểm>; các spec sau chỉ có tên, mục tiêu, phụ thuộc. Không có số REQ tối thiểu.
 - **REQ kế thừa từ Pack (`PK-*`):**
 
@@ -112,7 +112,7 @@ flowchart LR
 | Task mẫu | Kiểm điều gì |
 |---|---|
 | 1. Thường gặp: <…> | Context pointer dẫn tới đúng spec và lệnh chạy 1 test |
-| 2. Chạm ranh giới: <…> | Dừng hỏi ở mục ⚠️ Hỏi trước / từ chối mục 🚫 |
+| 2. Chạm ranh giới: <…> | Dừng hỏi ở mục (warning) Hỏi trước / từ chối mục (blocked) |
 | 3. Mơ hồ cố ý: <…> | Dừng nêu `[CẦN LÀM RÕ]` kèm phương án, không tự bịa |
 
 ## 9. Cố ý không làm
@@ -128,5 +128,5 @@ flowchart LR
 <!-- Chỉ hỏi tối đa 3 câu người dùng quyết được trên Frontier: hành vi/phạm vi/chi phí. Chi tiết kỹ thuật dễ đảo ngược có thể uỷ quyền; phần chưa có chuyên môn thì cần kiểm chứng, không bắt người dùng đoán. -->
 
 1. **[CẦN LÀM RÕ]** <Câu hỏi 1>
-   - ➡️ **Đề xuất (`GUESS`):** <Phương án khuyến nghị + lý do>
+   -  **Đề xuất (`GUESS`):** <Phương án khuyến nghị + lý do>
    - **Hệ quả nếu chọn khác:** <…>

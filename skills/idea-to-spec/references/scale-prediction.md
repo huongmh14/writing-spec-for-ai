@@ -1,13 +1,13 @@
 # Scale Prediction Guide
 
-Cách dự đoán scale khi ý tưởng thành công.
+How to predict scale when an idea succeeds.
 
-## Metrics cần dự đoán
+## Metrics to predict
 
 ### Users
 - **MVP:** Expected users in first 3 months
 - **Growth:** Monthly growth rate
-- **Target:** 1 year target users
+- **Target:** 1-year target users
 
 ### Data
 - **Per user:** Data size per user

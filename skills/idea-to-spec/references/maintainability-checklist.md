@@ -1,27 +1,27 @@
 # Maintainability Checklist
 
-Checklist đánh giá độ khó bảo trì.
+Checklist for assessing maintenance difficulty.
 
 ## Code Quality
-- [ ] Code có dễ đọc không?
-- [ ] Có documentation đủ không?
-- [ ] Có tests coverage không?
-- [ ] Có linting/formatting không?
+- [] Is the code easy to read?
+- [] Is documentation sufficient?
+- [] Is there test coverage?
+- [] Is there linting/formatting?
 
 ## Architecture
-- [ ] Architecture có rõ ràng không?
-- [ ] Có separation of concerns không?
-- [ ] Có dependency injection không?
-- [ ] Có error handling tốt không?
+- [] Is the architecture clear?
+- [] Is there separation of concerns?
+- [] Is there dependency injection?
+- [] Is error handling good?
 
 ## Team
-- [ ] Team size có phù hợp không?
-- [ ] Knowledge transfer có dễ không?
-- [ ] Onboarding có nhanh không?
-- [ ] Documentation có đầy đủ không?
+- [] Is the team size appropriate?
+- [] Is knowledge transfer easy?
+- [] Is onboarding fast?
+- [] Is documentation complete?
 
 ## Technical Debt
-- [ ] Có tech debt hiện tại không?
-- [ ] Có plan trả tech debt không?
-- [ ] Có refactoring strategy không?
-- [ ] Có monitoring/alerting không?
+- [] Is there current tech debt?
+- [] Is there a plan to pay it down?
+- [] Is there a refactoring strategy?
+- [] Is there monitoring/alerting?

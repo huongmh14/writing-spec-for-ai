@@ -1,6 +1,6 @@
 ---
 name: generate-verify-harness
-description: Dùng ở Bước 7.5–8 hoặc khi người dùng yêu cầu rõ "tạo skill verify", "tạo bộ kiểm chứng tự động cho app". Chỉ mở khi cần sinh .agents/skills/verify-<app>/SKILL.md (Launch, Doctor, Drive, Evidence, Cleanup); không mở ở các bước viết spec.
+description: Dùng ở Bước 7.5–8 hoặc khi người dùng yêu cầu rõ "tạo skill verify", "tạo bộ kiểm chứng tự động cho app". Chỉ mở khi cần sinh.agents/skills/verify-<app>/SKILL.md (Launch, Doctor, Drive, Evidence, Cleanup); không mở ở các bước viết spec.
 ---
 
 # Generate verify harness — sinh Skill Kiểm chứng Thực tế cho Dự án
@@ -45,10 +45,10 @@ Tạo danh mục 3–5 luồng cốt lõi tương ứng với các `SPEC-<TÊN>`
 
 ## 4. Chạy thử thực tế trước khi bàn giao
 
-Bắt buộc tự thực thi đúng hướng dẫn vừa viết 1 vòng từ đầu tới cuối cho ít nhất 1 luồng: **Launch → Doctor → Drive → Capture Evidence → Cleanup**, rồi xác nhận file bằng chứng vẫn còn nguyên sau bước Cleanup. Nếu bước nào vấp, sửa ngay vào skill rồi chạy lại.
+Bắt buộc tự thực thi đúng hướng dẫn vừa viết 1 vòng từ đầu tới cuối cho ít nhất 1 luồng: **Launch  Doctor  Drive  Capture Evidence  Cleanup**, rồi xác nhận file bằng chứng vẫn còn nguyên sau bước Cleanup. Nếu bước nào vấp, sửa ngay vào skill rồi chạy lại.
 
 ## Kiểm tra trước khi xong
 
-- [ ] `.agents/skills/verify-<tên-app>/SKILL.md` có YAML frontmatter (`name`, `description`) hợp lệ và không còn placeholder.
-- [ ] Có đủ 5 mục: `Launch`, `Doctor`, `Drive`, `Evidence`, `Cleanup`.
-- [ ] Đã chạy thử thật ít nhất 1 luồng end-to-end và thu được bằng chứng sống sót sau bước `Cleanup`.
+- [] `.agents/skills/verify-<tên-app>/SKILL.md` có YAML frontmatter (`name`, `description`) hợp lệ và không còn placeholder.
+- [] Có đủ 5 mục: `Launch`, `Doctor`, `Drive`, `Evidence`, `Cleanup`.
+- [] Đã chạy thử thật ít nhất 1 luồng end-to-end và thu được bằng chứng sống sót sau bước `Cleanup`.

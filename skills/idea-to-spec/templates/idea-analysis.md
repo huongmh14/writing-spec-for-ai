@@ -1,6 +1,6 @@
 # Idea Analysis Template
 
-Template cho phân tích ý tưởng trước khi viết spec.
+Template for analyzing an idea before writing the spec.
 
 ## Original Idea
 [User's idea description]
@@ -8,24 +8,24 @@ Template cho phân tích ý tưởng trước khi viết spec.
 ## Feasibility Assessment
 
 ### Technical Feasibility
-- [ ] Technology maturity: [High/Medium/Low]
-- [ ] Required APIs/libraries: [List]
-- [ ] Performance requirements: [Realistic?]
-- [ ] Security requirements: [Achievable?]
+- [] Technology maturity: [High/Medium/Low]
+- [] Required APIs/libraries: [List]
+- [] Performance requirements: [Realistic?]
+- [] Security requirements: [Achievable?]
 - **Score:** [1-10]
 
 ### Resource Feasibility
-- [ ] Team size available: [Number]
-- [ ] Timeline realistic: [Yes/No]
-- [ ] Budget sufficient: [Yes/No]
-- [ ] Infrastructure ready: [Yes/No]
+- [] Team size available: [Number]
+- [] Timeline realistic: [Yes/No]
+- [] Budget sufficient: [Yes/No]
+- [] Infrastructure ready: [Yes/No]
 - **Score:** [1-10]
 
 ### Market Feasibility
-- [ ] Market demand: [Yes/No]
-- [ ] Competition analyzed: [Yes/No]
-- [ ] Value proposition clear: [Yes/No]
-- [ ] Business model viable: [Yes/No]
+- [] Market demand: [Yes/No]
+- [] Competition analyzed: [Yes/No]
+- [] Value proposition clear: [Yes/No]
+- [] Business model viable: [Yes/No]
 - **Score:** [1-10]
 
 ### Overall Feasibility
@@ -51,19 +51,19 @@ Template cho phân tích ý tưởng trước khi viết spec.
 - **Peak estimate:** [Number]
 
 ### Architecture Implications
-- [ ] Current architecture sufficient?
-- [ ] Need microservices?
-- [ ] Need caching layer?
-- [ ] Need CDN?
-- [ ] Need database sharding?
+- [] Current architecture sufficient?
+- [] Need microservices?
+- [] Need caching layer?
+- [] Need CDN?
+- [] Need database sharding?
 
 ## Maintainability Assessment
 
 ### Code Quality Requirements
-- [ ] Test coverage target: [%]
-- [ ] Documentation level: [Basic/Standard/Comprehensive]
-- [ ] Code review requirement: [Yes/No]
-- [ ] Linting/formatting: [Yes/No]
+- [] Test coverage target: [%]
+- [] Documentation level: [Basic/Standard/Comprehensive]
+- [] Code review requirement: [Yes/No]
+- [] Linting/formatting: [Yes/No]
 
 ### Team Requirements
 - **Team size:** [Number]
@@ -80,21 +80,21 @@ Template cho phân tích ý tưởng trước khi viết spec.
 ## Dependencies & Risks
 
 ### External Dependencies
-- [ ] Third-party APIs: [List]
-- [ ] External services: [List]
-- [ ] Data sources: [List]
+- [] Third-party APIs: [List]
+- [] External services: [List]
+- [] Data sources: [List]
 - **Risk level:** [Low/Medium/High]
 
 ### Business Risks
-- [ ] Market risk: [Description]
-- [ ] Competition risk: [Description]
-- [ ] Regulatory risk: [Description]
+- [] Market risk: [Description]
+- [] Competition risk: [Description]
+- [] Regulatory risk: [Description]
 - **Overall risk:** [Low/Medium/High]
 
 ### Technical Risks
-- [ ] Performance risk: [Description]
-- [ ] Security risk: [Description]
-- [ ] Scalability risk: [Description]
+- [] Performance risk: [Description]
+- [] Security risk: [Description]
+- [] Scalability risk: [Description]
 - **Overall risk:** [Low/Medium/High]
 
 ## Recommendation

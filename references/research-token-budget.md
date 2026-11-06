@@ -10,7 +10,7 @@
 | S1 | Mô tả của **mọi** skill được nạp sẵn ở mỗi phiên; thân `SKILL.md` chỉ nạp khi dùng | Đã xác minh | [Claude Docs — Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices): *"At startup, only the metadata (name and description) from all Skills is pre-loaded. Claude reads SKILL.md only when the Skill becomes relevant, and reads additional files only as needed."* |
 | S2 | Metadata của skill chiếm chung ngữ cảnh | Đã xác minh | S1: *"The context window is a public good. Your Skill shares the context window with everything else Claude needs, including: The system prompt Conversation history Other Skills' metadata Your actual request"* |
 | S3 | Trần độ dài `SKILL.md`; tham chiếu chỉ sâu 1 cấp | Đã xác minh | S1: *"Keep the SKILL.md body under 500 lines for optimal performance."* · *"Keep references one level deep from SKILL.md."* |
-| S4 | Antigravity chỉ quét skill sâu 1 cấp → skill lồng trong `writing-spec-for-ai/skills/` không bị nạp metadata | Đã xác minh (tài liệu cài cục bộ của Antigravity, `agy-customizations/docs/json_configs.md`) | *"Each entry directory is scanned **one level deep**."* |
+| S4 | Antigravity chỉ quét skill sâu 1 cấp  skill lồng trong `writing-spec-for-ai/skills/` không bị nạp metadata | Đã xác minh (tài liệu cài cục bộ của Antigravity, `agy-customizations/docs/json_configs.md`) | *"Each entry directory is scanned **one level deep**."* |
 | S4b | **Codex và OpenCode quét đệ quy mọi file tên `SKILL.md`** | Đã xác minh bằng log cục bộ & `skillctl.ps1 test` | Codex `~/.codex/sessions/…2026-10-27T06-05-14…jsonl` liệt kê `r0/writing-spec-for-ai/skills/*/SKILL.md` (tổng 1.205 token cho 11 mục). OpenCode `opencode.log` quét sâu tới `writing-spec-for-ai\skills\*\SKILL.md`. `skillctl.ps1 test` kiểm chỉ có đúng 5 file `SKILL.md` lồng của `playwright`. Đổi tên file lồng thành `sub-skill.md` khi cài gọn giúp `skillctl.ps1 test` pass và ẩn cả 10 sub-skill khỏi bộ quét đệ quy |
 | S5 | Ngữ cảnh dài làm giảm độ chính xác, nên giữ tập token nhỏ nhất có tín hiệu cao | Đã xác minh | [Anthropic — Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents): *"as the number of tokens in the context window increases, the model's ability to accurately recall information from that context decreases."* · *"finding the smallest possible set of high-signal tokens that maximize the likelihood of some desired outcome."* |
 | S6 | Nạp đúng lúc qua đường dẫn thay cho nạp trước | Đã xác minh | S5: *"agents built with the "just in time" approach maintain lightweight identifiers (file paths, stored queries, web links, etc.)"* |
@@ -34,10 +34,10 @@ Lệnh tái hiện: `python -c "import tiktoken,re;e=tiktoken.get_encoding('o200
 
 | Vấn đề | Sửa | Tiết kiệm (Đo) | Căn cứ |
 |---|---|---|---|
-| Trình cài chép 10 sub-skill ra cấp 1 (hoặc giữ tên `SKILL.md` khi cài lồng) nên cả 11 mô tả bị nạp ở mọi phiên | Mặc định cài **gọn**: sub-skill nằm lồng tại `writing-spec-for-ai/skills/<tên>/sub-skill.md` (cùng cơ chế với `SKILL.template.md`), cập nhật link trong bản cài; đồng bộ thêm `~/.codex/agents/*.toml`. Cờ `-Standalone` / `--standalone` giữ cách cũ | 914 → 97 token mô tả (−89%); trên Codex 1.205 → 112 token/lượt | S1, S2, S4, S4b |
+| Trình cài chép 10 sub-skill ra cấp 1 (hoặc giữ tên `SKILL.md` khi cài lồng) nên cả 11 mô tả bị nạp ở mọi phiên | Mặc định cài **gọn**: sub-skill nằm lồng tại `writing-spec-for-ai/skills/<tên>/sub-skill.md` (cùng cơ chế với `SKILL.template.md`), cập nhật link trong bản cài; đồng bộ thêm `~/.codex/agents/*.toml`. Cờ `-Standalone` / `--standalone` giữ cách cũ | 914  97 token mô tả (−89%); trên Codex 1.205  112 token/lượt | S1, S2, S4, S4b |
 | Bản cài phẳng cũ: link `../../SKILL.md` của `test-docs` và `write-design-doc` trỏ ra ngoài | Chế độ standalone đổi thành `../writing-spec-for-ai/SKILL.md` | Bớt lượt tìm file | S3 |
-| `spec-challenger` đọc nguyên `base-kit.md` | CONTRACT chỉ lấy bảng Core §3 | 8 233 → ~3 353 token mỗi lần review (−59%) | S5, S6 |
-| Ước lượng token trong `validate.ps1` lệch | Đổi hệ số 3,8 → 3,0 | Số báo sát số đo hơn | §2 |
+| `spec-challenger` đọc nguyên `base-kit.md` | CONTRACT chỉ lấy bảng Core §3 | 8 233  ~3 353 token mỗi lần review (−59%) | S5, S6 |
+| Ước lượng token trong `validate.ps1` lệch | Đổi hệ số 3,8  3,0 | Số báo sát số đo hơn | §2 |
 
 **Không làm (có lý do):**
 - Rút gọn `SKILL.md` / `write-spec`: chúng đã dưới trần 500 dòng (S3) và đã có ratchet. Cắt thêm thì lợi nhỏ, dễ mất luật.
@@ -54,7 +54,7 @@ Lệnh tái hiện: `python -c "import tiktoken,re;e=tiktoken.get_encoding('o200
 
 ## 5. Phiên 2026-11-02 — cổng chỉ dẫn mơ hồ và nén ngữ cảnh
 
-Vấn đề người dùng nêu: prompt chưa rõ thì AI vẫn đoán một cách hiểu rồi chạy cả vòng đọc → sửa → test → phản biện; phiên dài thì bộ nén của công cụ làm rơi trạng thái đợt đang làm.
+Vấn đề người dùng nêu: prompt chưa rõ thì AI vẫn đoán một cách hiểu rồi chạy cả vòng đọc  sửa  test  phản biện; phiên dài thì bộ nén của công cụ làm rơi trạng thái đợt đang làm.
 
 | # | Khẳng định | Nhãn | Con trỏ + trích nguyên văn |
 |---|---|---|---|
@@ -70,7 +70,7 @@ Vấn đề người dùng nêu: prompt chưa rõ thì AI vẫn đoán một cá
 
 | Vấn đề | Sửa | Căn cứ |
 |---|---|---|
-| Prompt mơ hồ → chạy cả vòng theo cách hiểu đoán | `templates/AGENTS.md` bước 1: chỉ dẫn rõ → làm luôn, không hỏi lại; mơ hồ → tra cứu có mục tiêu, vẫn mơ hồ thì **bản chốt nhanh ≤ 5 dòng** rồi dừng. Chỉ tốn thêm một lượt ngắn khi thật sự mơ hồ | GitHub Docs (§2 của nghiên cứu kia); §3A: lệnh chưa xác định được phần việc thì trình phần việc để người dùng chọn |
+| Prompt mơ hồ  chạy cả vòng theo cách hiểu đoán | `templates/AGENTS.md` bước 1: chỉ dẫn rõ  làm luôn, không hỏi lại; mơ hồ  tra cứu có mục tiêu, vẫn mơ hồ thì **bản chốt nhanh ≤ 5 dòng** rồi dừng. Chỉ tốn thêm một lượt ngắn khi thật sự mơ hồ | GitHub Docs (§2 của nghiên cứu kia); §3A: lệnh chưa xác định được phần việc thì trình phần việc để người dùng chọn |
 | Bộ nén làm rơi RUN-ID, file đã sửa, lỗi chưa đóng | Bàn giao trong `progress.md` thêm *File đã sửa · Lệnh kiểm + lỗi chưa đóng · Hướng đã loại*; ghi đè theo mốc sự kiện thay cho đếm token | S8–S10 |
 | Tóm tắt sau nén mang "việc kế tiếp" như thể đã được giao hoặc lệch trạng thái do nén giữa đợt | Sau nén đọc lại block đợt: quyền/phạm vi theo `progress.md` (tóm tắt không cấp quyền); trạng thái code/test lệch thì kiểm chứng lại bằng workspace + lệnh kiểm rồi cập nhật `progress.md` | Quyền thực thi theo đợt |
 | Claude Code | Adapter `CLAUDE.md` thêm `# Compact instructions`; `claude-settings.json` thêm hook `SessionStart`/`compact` neo `${CLAUDE_PROJECT_DIR}` in block đợt (phần trước `## Lịch sử`, bỏ lịch sử để đỡ token, không phụ thuộc thư mục hiện hành) | S8, S9, S10 |

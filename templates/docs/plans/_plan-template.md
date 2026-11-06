@@ -6,13 +6,13 @@ Cập nhật: YYYY-MM-DD. Spec: SPEC-… (Ready). Thiết kế: <link>. Quyết 
 
 ## 1. Đồ thị task & lát cắt dọc
 
-<!-- Lát cắt dọc (Tracer Bullet — Hunt & Thomas, *The Pragmatic Programmer*): mỗi task đi xuyên đủ các tầng để ra một hành vi demo được, dự kiến khoảng 5 file. Sửa hàm chung/caller cần thiết trong cùng hành vi được phép; ghi tác động. Thay đổi diện rộng dùng Expand → Migrate → Contract (Mở rộng → Chuyển dữ liệu, gồm bước kiểm chứng → Thu gọn). "Task sẵn sàng" = task không còn bị chặn; chỉ thể hiện phụ thuộc, không là quyền chạy song song. -->
+<!-- Lát cắt dọc (Tracer Bullet — Hunt & Thomas, *The Pragmatic Programmer*): mỗi task đi xuyên đủ các tầng để ra một hành vi demo được, dự kiến khoảng 5 file. Sửa hàm chung/caller cần thiết trong cùng hành vi được phép; ghi tác động. Thay đổi diện rộng dùng Expand  Migrate  Contract (Mở rộng  Chuyển dữ liệu, gồm bước kiểm chứng  Thu gọn). "Task sẵn sàng" = task không còn bị chặn; chỉ thể hiện phụ thuộc, không là quyền chạy song song. -->
 
 | Mã Task | Tên hành vi đầu-cuối (hoặc bước Expand/Migrate/Contract) | REQ / AC nghiệm thu | `Blocked by` | Song song (task sẵn sàng) | Nhánh / PR | Trạng thái |
 |---|---|---|---|---|---|---|
-| `T-01` | | XXX-R01, XXX-AC01..AC02 | `None` | [P] với `T-02` | `feat/SPEC-XXX-<phần>` | `[ ]` |
-| `T-02` | | XXX-R02, XXX-AC03 | `None` | [P] với `T-01` | `feat/SPEC-XXX-<phần>` | `[ ]` |
-| `T-03` | | XXX-R03, XXX-AC04 | `T-01, T-02` | — | `feat/SPEC-XXX-<phần>` | `[ ]` |
+| `T-01` | | XXX-R01, XXX-AC01..AC02 | `None` | [P] với `T-02` | `feat/SPEC-XXX-<phần>` | `[]` |
+| `T-02` | | XXX-R02, XXX-AC03 | `None` | [P] với `T-01` | `feat/SPEC-XXX-<phần>` | `[]` |
+| `T-03` | | XXX-R03, XXX-AC04 | `T-01, T-02` | — | `feat/SPEC-XXX-<phần>` | `[]` |
 
 ## 2. Thứ tự và lý do
 
@@ -38,7 +38,7 @@ Cập nhật: YYYY-MM-DD. Spec: SPEC-… (Ready). Thiết kế: <link>. Quyết 
 - **Bảng kiểm thử (bằng chứng test hiển thị):**
   | AC-ID | Kịch bản | Input dự kiến | Output & tác dụng phụ kỳ vọng | Tầng & độ thật (`0 Mock` / mock gì) | Trạng thái chạy |
   |---|---|---|---|---|---|
-  | `XXX-AC01` | <nhánh chính> | `<input cụ thể>` | `<HTTP / DB / DOM>` | `integration` (`0 Mock`) | `[ ]` |
+  | `XXX-AC01` | <nhánh chính> | `<input cụ thể>` | `<HTTP / DB / DOM>` | `integration` (`0 Mock`) | `[]` |
 - **Lệnh kiểm chứng:** `<lệnh chạy đúng 1 test chứa AC-ID>`
 - **Điểm dừng:** `<hành vi/AC có thể demo; không tự chuyển task>`
 - **Rủi ro / Rollback:**

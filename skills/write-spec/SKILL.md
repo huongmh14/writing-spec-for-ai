@@ -23,8 +23,8 @@ Profile S không có cây docs: dùng `docs/spec.md` hoặc README và block đ�
 ## 1. Trực quan hoá luồng & trích yêu cầu từ nguồn (**Trình bày định hướng bằng hình**, `C28`)
 
 - **Vẽ luồng & Snapshot I/O trước khi viết REQ (`C28` — mục 3 của spec):** Vẽ 1 sơ đồ Mermaid (User Journey / State Flow) + 1 **Snapshot I/O cụ thể** (ASCII wireframe màn hình, mẫu lệnh CLI, hoặc JSON request/response thực tế) để lập trình viên nhìn thấy ngay hình hài tính năng thay vì đọc chay bảng REQ.
-- **Nguồn là tài liệu/phỏng vấn (greenfield, Draft):** Gạch động từ hành động → REQ ứng viên; điều kiện xấu ("không được", "chỉ khi", "tối đa") → REQ mẫu Lỗi; mục tiêu số → NFR; chỗ không suy ra được → `[CẦN LÀM RÕ: …]` ngay trong dòng REQ, không tự bịa.
-- **Nguồn là code (brownfield, As-built — spec mô tả code đã có):** Mỗi hành vi quan sát được từ ngoài (response, hiệu ứng dữ liệu, trạng thái UI) một REQ kèm bằng chứng `file:hàm` hoặc test; hành vi đáng ngờ (không test, nghi bug) → đưa vào **câu hỏi mở**, không chuẩn hoá.
+- **Nguồn là tài liệu/phỏng vấn (greenfield, Draft):** Gạch động từ hành động  REQ ứng viên; điều kiện xấu ("không được", "chỉ khi", "tối đa")  REQ mẫu Lỗi; mục tiêu số  NFR; chỗ không suy ra được  `[CẦN LÀM RÕ: …]` ngay trong dòng REQ, không tự bịa.
+- **Nguồn là code (brownfield, As-built — spec mô tả code đã có):** Mỗi hành vi quan sát được từ ngoài (response, hiệu ứng dữ liệu, trạng thái UI) một REQ kèm bằng chứng `file:hàm` hoặc test; hành vi đáng ngờ (không test, nghi bug)  đưa vào **câu hỏi mở**, không chuẩn hoá.
 
 ## 2. Viết REQ — mẫu EARS (mẫu câu Luôn / Khi / Trong khi / Nếu của Alistair Mavin)
 
@@ -35,13 +35,13 @@ Mỗi REQ: 1 câu, có ID, có mức (MUST/SHOULD/MAY), kèm giai đoạn nếu 
 | Hành vi luôn đúng | `Hệ thống MUST <…>` | RBAC-R01: User không ACTIVE có quyền hiệu lực rỗng |
 | Phản ứng sự kiện | `Khi <sự kiện>, hệ thống MUST <…>` | RBAC-R21: Thay đổi thu hẹp vai trò mẫu áp dụng ngay khi sync, tăng `permVersion`, ghi AuditLog |
 | Điều kiện trạng thái | `Trong khi <trạng thái>, hệ thống MUST <…>` | RBAC-R01 |
-| Nhánh lỗi | `Nếu <điều kiện xấu>, thì hệ thống MUST <kết quả cụ thể: mã HTTP/mã lỗi>` | RBAC-R16: Thiếu quyền ⇒ 403 `AUTH_FORBIDDEN` |
+| Nhánh lỗi | `Nếu <điều kiện xấu>, thì hệ thống MUST <kết quả cụ thể: mã HTTP/mã lỗi>` | RBAC-R16: Thiếu quyền  403 `AUTH_FORBIDDEN` |
 | Tính năng tắt/mở | `Khi bật <tính năng>, hệ thống MUST <…>` | RBAC-R30: scope ORG_TREE khi đơn vị có con |
 
 Quy tắc chặt:
-- **Số phải có cơ sở (**Nguồn & giới hạn hiểu biết**, `C31`):** ngưỡng cần nguồn yêu cầu, số đo có điều kiện, hoặc đề xuất ghi rõ chưa chốt. Không biến ví dụ `p95 < 5 ms`/`10 lần/phút` thành cam kết. Chưa biết → câu hỏi mở + cách xác minh, không điền số cho đủ mẫu.
+- **Số phải có cơ sở (**Nguồn & giới hạn hiểu biết**, `C31`):** ngưỡng cần nguồn yêu cầu, số đo có điều kiện, hoặc đề xuất ghi rõ chưa chốt. Không biến ví dụ `p95 < 5 ms`/`10 lần/phút` thành cam kết. Chưa biết  câu hỏi mở + cách xác minh, không điền số cho đủ mẫu.
 - **Cột nguồn của mỗi REQ/NFR ghi đúng 1 trong 4 nhãn** ([glossary](../../references/glossary.md)): `Người dùng chốt` (ngày/câu nói hoặc mục Làm rõ) · `Đã xác minh` (đúng 1 con trỏ mở được: `path:line` | URL + trích nguyên văn + ngày đọc | lệnh + kết quả thật) · `AI đề xuất` (lý do 1 dòng + hậu quả nếu sai) · `Chưa biết` (cách xác minh + ai + phần bị chặn). Một khẳng định một dòng, không tự chấm %. Code chứng minh hiện trạng, không chứng minh nhu cầu; docs chính thức chứng minh API, không chứng minh NFR sản phẩm.
-- **Mọi khái niệm chuyên môn, cơ chế hoặc quyết định kỹ thuật AI đưa vào → Thẻ giải thích & quyết định kỹ thuật hiển thị tường minh** (mẫu ở `templates/docs/specs/_template.md` §9; cấm để ẩn trong comment `<!-- ... -->` rồi xoá mất): *Bản chất là gì (nói dễ hiểu + ví dụ thực tế) · Tại sao bắt buộc cần ở đây (nếu không có thì lỗi gì xảy ra) · Chạy thế nào trong dự án này (Đầu vào → Xử lý → Đầu ra) · Tự kiểm trong ≤ 5 phút (trỏ AC-ID) · Nguồn đối chiếu & Giới hạn không tự kiểm được*. Giải thích đủ rõ để người dùng **hiểu thật sự kiến thức AI viết**, đồng thời nghiệm thu bằng kết quả chạy thật ở dòng Tự kiểm (không duyệt mù theo văn xuôi); vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân ghi "cần chuyên gia: <vai trò>".
+- **Mọi khái niệm chuyên môn, cơ chế hoặc quyết định kỹ thuật AI đưa vào  Thẻ giải thích & quyết định kỹ thuật hiển thị tường minh** (mẫu ở `templates/docs/specs/_template.md` §9; cấm để ẩn trong comment `<!--... -->` rồi xoá mất): *Bản chất là gì (nói dễ hiểu + ví dụ thực tế) · Tại sao bắt buộc cần ở đây (nếu không có thì lỗi gì xảy ra) · Chạy thế nào trong dự án này (Đầu vào  Xử lý  Đầu ra) · Tự kiểm trong ≤ 5 phút (trỏ AC-ID) · Nguồn đối chiếu & Giới hạn không tự kiểm được*. Giải thích đủ rõ để người dùng **hiểu thật sự kiến thức AI viết**, đồng thời nghiệm thu bằng kết quả chạy thật ở dòng Tự kiểm (không duyệt mù theo văn xuôi); vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân ghi "cần chuyên gia: <vai trò>".
 - Tên mã lỗi, tên trường, tên hàm viết đúng như sẽ xuất hiện trong code/contract. Không viết cách cài đặt (thuộc design), không chia việc (thuộc plan).
 - Một REQ một hành vi; REQ ghép 3 hệ quả (vd. R21) chỉ khi các hệ quả luôn xảy ra cùng nhau và cùng được kiểm.
 
@@ -62,7 +62,7 @@ Quy tắc chặt:
 
 ## 4. Trường hợp biên — sinh từ checklist
 
-Với mỗi REQ dữ liệu, hỏi theo danh sách: rỗng · đúng 1 · đầy · vượt ngưỡng · âm/sai định dạng · quyền hết hạn giữa thao tác · hai người sửa đồng thời · dữ liệu đã bị xoá mềm · ngôn ngữ/kích thước cực đại · dịch vụ phụ tắt (Redis/SMTP). Mỗi biên → một AC, hoặc ghi vào "Ngoài phạm vi". Không để biên nào không có số phận.
+Với mỗi REQ dữ liệu, hỏi theo danh sách: rỗng · đúng 1 · đầy · vượt ngưỡng · âm/sai định dạng · quyền hết hạn giữa thao tác · hai người sửa đồng thời · dữ liệu đã bị xoá mềm · ngôn ngữ/kích thước cực đại · dịch vụ phụ tắt (Redis/SMTP). Mỗi biên  một AC, hoặc ghi vào "Ngoài phạm vi". Không để biên nào không có số phận.
 
 ## 5. Viết AC & Ma trận Kiểm thử Minh bạch (**Bằng chứng test hiển thị**, `C29` — Cho / Khi / Thì)
 
@@ -70,31 +70,31 @@ Công thức: **Cho** <trạng thái ban đầu với dữ liệu cụ thể>, *
 
 - Mỗi REQ ≥ 1 AC; phải có ≥ 1 AC cho nhánh lỗi của khu vực. Tên hàm test chứa `AC-ID` (xem `examples.md` §2, §9).
 - **Ma trận Kiểm thử Minh bạch (`C29`, mục 7 của spec)** để người dùng duyệt trước kịch bản test AI sẽ chạy: `AC-ID | Kịch bản | Đầu vào cụ thể | Kỳ vọng quan sát được (Output & tác dụng phụ DB/DOM) | Tầng & độ thật (0 Mock hay Mock thành phần nào)`.
-- AI viết cả kỳ vọng lẫn test → test xanh chỉ chứng minh code khớp kỳ vọng của AI, không chứng minh kỳ vọng đúng; người dùng phải duyệt cột Kỳ vọng.
-- AC phụ thuộc hạ tầng thật (registry, email) → `[~]` + lý do + người/cách đóng; chưa phải pass và chặn `Done`. Mock chỉ chứng minh ranh giới đã test, không chứng minh dịch vụ thật.
+- AI viết cả kỳ vọng lẫn test  test xanh chỉ chứng minh code khớp kỳ vọng của AI, không chứng minh kỳ vọng đúng; người dùng phải duyệt cột Kỳ vọng.
+- AC phụ thuộc hạ tầng thật (registry, email)  `[~]` + lý do + người/cách đóng; chưa phải pass và chặn `Done`. Mock chỉ chứng minh ranh giới đã test, không chứng minh dịch vụ thật.
 - AC cho lệnh vận hành (`migrate`, `sync`, `seed`, `deploy`) phải kiểm **tác dụng** (bảng tồn tại, số bản ghi, file sinh ra — **Kiểm tác dụng lệnh vận hành**, `C19`), không chỉ exit code 0; kèm AC lỗi (`exit ≠ 0`).
 
 ## 6. Đóng gói
 
-- **Kiểm end-to-end** (mục 8): 1–3 lệnh/kịch bản agent tự chạy để xác nhận cả spec — chọn luồng xuyên BE→DB→FE, không lặp lại từng AC.
-- **Câu hỏi mở** (mục 12): gom mọi `[CẦN LÀM RÕ]` còn lại; ghi "Không có" nếu rỗng. Mâu thuẫn với spec khác → ghi ở **cả hai** spec.
-- **Làm rõ** (mục 11): mỗi đáp án nhận được ghi `### Phiên YYYY-MM-DD — H: … → Đ: … (vào R0n / D-xx)`.
+- **Kiểm end-to-end** (mục 8): 1–3 lệnh/kịch bản agent tự chạy để xác nhận cả spec — chọn luồng xuyên BEDBFE, không lặp lại từng AC.
+- **Câu hỏi mở** (mục 12): gom mọi `[CẦN LÀM RÕ]` còn lại; ghi "Không có" nếu rỗng. Mâu thuẫn với spec khác  ghi ở **cả hai** spec.
+- **Làm rõ** (mục 11): mỗi đáp án nhận được ghi `### Phiên YYYY-MM-DD — H: …  Đ: … (vào R0n / D-xx)`.
 - Trạng thái: `Draft` (greenfield) / `As-built` (brownfield). Chỉ người dùng chuyển `Ready`.
 - Unknown chặn REQ/AC đã cam kết phải được kiểm trước `Ready`; AI khác đồng ý không thay bằng chứng. Có thể tách nhánh chưa chốt thành spec con Draft để spec độc lập được duyệt Ready; phần đã cam kết chỉ tách/hoãn qua change-spec được duyệt. Phần ngoài cam kết giữ backlog, không tự thêm vào spec sắp làm.
 
 ## 7. Gotchas
 
-- Spec chép lý do quyết định → xoá, chỉ để `D-xx`.
-- AC viết "hệ thống hoạt động đúng" → thay bằng mã lỗi/dữ liệu cụ thể.
-- Nhiều spec đủ 20 REQ mà NFR bỏ trống → NFR là mục hay bị bỏ nhất; điền trước nếu dễ quên.
-- Spec Ready bị nối thêm 10 REQ → dừng, dùng `change-spec`.
-- Thuật ngữ đổi tên giữa chừng → đồng bộ glossary + toàn spec trong cùng lần sửa.
+- Spec chép lý do quyết định  xoá, chỉ để `D-xx`.
+- AC viết "hệ thống hoạt động đúng"  thay bằng mã lỗi/dữ liệu cụ thể.
+- Nhiều spec đủ 20 REQ mà NFR bỏ trống  NFR là mục hay bị bỏ nhất; điền trước nếu dễ quên.
+- Spec Ready bị nối thêm 10 REQ  dừng, dùng `change-spec`.
+- Thuật ngữ đổi tên giữa chừng  đồng bộ glossary + toàn spec trong cùng lần sửa.
 
 ## Kiểm tra trước khi trình
 
-- [ ] Có sơ đồ luồng Mermaid và **Snapshot I/O cụ thể** (ASCII wireframe / CLI / JSON mẫu) theo `C28`.
-- [ ] Mỗi REQ: 1 câu, có ID + mức, theo 1 mẫu EARS, không tính từ mơ hồ.
-- [ ] NFR đủ 8 dòng; mỗi REQ/NFR có 1 trong 4 nhãn nguồn (`C31`), không có số tự bịa; `N/A` không che điều chưa biết; mọi cơ chế/quyết định kỹ thuật có **Thẻ giải thích & quyết định kỹ thuật** hiển thị tường minh (giải thích bản chất + tại sao cần + luồng chạy + dòng Tự kiểm rẻ) và đã qua 1 lượt phản biện độc lập/chéo (`C26`) trước khi trình.
-- [ ] Mỗi REQ ≥ 1 AC; có AC lỗi; có AC biên; có **Ma trận Kiểm thử Minh bạch** (`C29`) nêu rõ Input, Output kỳ vọng và độ thật (`0 Mock` hay `Mock gì`).
-- [ ] "Ngoài phạm vi" không rỗng; có kiểm end-to-end; câu hỏi mở có mặt (hoặc "Không có").
-- [ ] Không còn `[CẦN LÀM RÕ]` nếu người dùng đã chuyển `Ready`; As-built có bằng chứng file/test.
+- [] Có sơ đồ luồng Mermaid và **Snapshot I/O cụ thể** (ASCII wireframe / CLI / JSON mẫu) theo `C28`.
+- [] Mỗi REQ: 1 câu, có ID + mức, theo 1 mẫu EARS, không tính từ mơ hồ.
+- [] NFR đủ 8 dòng; mỗi REQ/NFR có 1 trong 4 nhãn nguồn (`C31`), không có số tự bịa; `N/A` không che điều chưa biết; mọi cơ chế/quyết định kỹ thuật có **Thẻ giải thích & quyết định kỹ thuật** hiển thị tường minh (giải thích bản chất + tại sao cần + luồng chạy + dòng Tự kiểm rẻ) và đã qua 1 lượt phản biện độc lập/chéo (`C26`) trước khi trình.
+- [] Mỗi REQ ≥ 1 AC; có AC lỗi; có AC biên; có **Ma trận Kiểm thử Minh bạch** (`C29`) nêu rõ Input, Output kỳ vọng và độ thật (`0 Mock` hay `Mock gì`).
+- [] "Ngoài phạm vi" không rỗng; có kiểm end-to-end; câu hỏi mở có mặt (hoặc "Không có").
+- [] Không còn `[CẦN LÀM RÕ]` nếu người dùng đã chuyển `Ready`; As-built có bằng chứng file/test.

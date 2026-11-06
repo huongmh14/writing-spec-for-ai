@@ -4,7 +4,7 @@
   <a href="./README.md">English</a> · <strong>Tiếng Việt</strong>
 </p>
 
-**Bản sửa đang thử (2026-10-25):** mặc định mỗi đợt AI chỉ làm **1 spec + 1 task có thể kiểm**, chạy **phản biện độc lập / phản biện chéo (`Writer → Codex / spec-challenger → Tự sửa`)**, báo bằng chứng kèm giải thích kỹ thuật rồi dừng. `Ready` xác nhận yêu cầu, chưa phải quyền chạy toàn bộ. Bạn duyệt hành vi/phạm vi qua ví dụ; AI phải tìm nguồn và kiểm kỹ thuật, ghi rõ điều chưa biết. Mỗi khẳng định quan trọng gắn 1 trong 4 nhãn: `Người dùng chốt` · `Đã xác minh` (con trỏ mở được + trích nguyên văn) · `AI đề xuất` · `Chưa biết`. Mọi khái niệm chuyên môn hoặc quyết định kỹ thuật AI đưa vào đi kèm **Thẻ giải thích & quyết định kỹ thuật** hiển thị tường minh (giải thích rõ *Bản chất là gì + ví dụ · Tại sao bắt buộc cần / bỏ qua thì lỗi gì · Chạy thế nào* để bạn hiểu thấu kiến thức AI viết, và nghiệm thu qua bước *Tự kiểm ≤ 5 phút*); vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân ghi "cần chuyên gia". Thuật ngữ & giải thích chi tiết các cơ chế kỹ thuật: [references/glossary.md](references/glossary.md).
+**Bản sửa đang thử (2026-10-25):** mặc định mỗi đợt AI chỉ làm **1 spec + 1 task có thể kiểm**, chạy **phản biện độc lập / phản biện chéo (`Writer  Codex / spec-challenger  Tự sửa`)**, báo bằng chứng kèm giải thích kỹ thuật rồi dừng. `Ready` xác nhận yêu cầu, chưa phải quyền chạy toàn bộ. Bạn duyệt hành vi/phạm vi qua ví dụ; AI phải tìm nguồn và kiểm kỹ thuật, ghi rõ điều chưa biết. Mỗi khẳng định quan trọng gắn 1 trong 4 nhãn: `Người dùng chốt` · `Đã xác minh` (con trỏ mở được + trích nguyên văn) · `AI đề xuất` · `Chưa biết`. Mọi khái niệm chuyên môn hoặc quyết định kỹ thuật AI đưa vào đi kèm **Thẻ giải thích & quyết định kỹ thuật** hiển thị tường minh (giải thích rõ *Bản chất là gì + ví dụ · Tại sao bắt buộc cần / bỏ qua thì lỗi gì · Chạy thế nào* để bạn hiểu thấu kiến thức AI viết, và nghiệm thu qua bước *Tự kiểm ≤ 5 phút*); vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân ghi "cần chuyên gia". Thuật ngữ & giải thích chi tiết các cơ chế kỹ thuật: [references/glossary.md](references/glossary.md).
 
 Đọc [nghiên cứu và nguồn sơ cấp](references/research-controlled-execution.md), [bản thử trước/sau và 6 tình huống kiểm](references/controlled-spec-demo.md), [mẫu spec đã sửa](templates/docs/specs/_template.md). Luật **Quyền thực thi theo đợt** (`C30`) và **Nguồn & giới hạn hiểu biết** (`C31`) ở [base-kit](references/base-kit.md); thay đổi chưa phát hành ở [CHANGELOG](CHANGELOG.md).
 
@@ -19,10 +19,10 @@ Giao rõ toàn spec/batch hữu hạn thì AI làm hết phạm vi đó, không 
 Bộ skill & plugin `writing-spec-for-ai` giúp AI viết bộ tài liệu điều khiển agent theo trình tự, và **bạn duyệt ở 3 cổng trước khi có dòng code nào**:
 
 1. AI khảo sát repo (`spec-surveyor`).
-2. AI trình đề xuất: bảng phạm vi 🟢 làm ngay / 🟡 đợt sau / 🔴 không làm, các phương án vẽ trực quan kèm đánh đổi, và tối đa 3 câu hỏi chỉ bạn quyết được. → **Cổng 1**
+2. AI trình đề xuất: bảng phạm vi (green) làm ngay / (yellow) đợt sau / (red) không làm, các phương án vẽ trực quan kèm đánh đổi, và tối đa 3 câu hỏi chỉ bạn quyết được.  **Cổng 1**
 3. AI viết docs, mỗi lượt một phần rồi dừng cho bạn xem: `AGENTS.md`, `CONSTRAINTS.md`, từng `SPEC-xx` (có ví dụ đầu vào/đầu ra cụ thể và bảng kiểm thử), design doc.
-4. Một AI khác ở phiên sạch phản biện bộ docs (`spec-challenger`). → **Cổng 2**
-5. Thử docs bằng 2–3 task mẫu (Profile S: 2; M/L: 3) ở phiên sạch (`doc-tester`). → **Cổng 3**
+4. Một AI khác ở phiên sạch phản biện bộ docs (`spec-challenger`).  **Cổng 2**
+5. Thử docs bằng 2–3 task mẫu (Profile S: 2; M/L: 3) ở phiên sạch (`doc-tester`).  **Cổng 3**
 6. Chia việc thành lát cắt nhỏ (`plan-tasks`), sinh skill tự kiểm (`generate-verify-harness`), rồi mới code. Mỗi lần báo xong đều có bảng bằng chứng chạy test, ghi rõ có dùng mock hay không.
 
 ## Cấu trúc (`v1.3.0`)
@@ -36,12 +36,12 @@ skills/                                  # 9 Sub-skill chuyên biệt theo từn
   propose-doc-design/SKILL.md            #   3–4. Đề xuất thiết kế + Capability Map + Frontier Q&A (Cổng 1)
   write-spec/SKILL.md                    #   5b.  Viết 1 spec: EARS, NFR 8 dòng, biên, AC Cho/Khi/Thì
   write-design-doc/SKILL.md              #   5c.  Thiết kế Deep Modules, Seams, Design It Twice, C25, C27
-  change-spec/SKILL.md                   #        Spec con vs CHG-xx; vòng đời P-xx → D-xx
+  change-spec/SKILL.md                   #        Spec con vs CHG-xx; vòng đời P-xx  D-xx
   review-docs/SKILL.md                   #   6.   Phản biện đối kháng & chấm checklist (Cổng 2)
   test-docs/SKILL.md                     #   7.   Thử docs bằng task mẫu trong phiên sạch (Cổng 3)
   plan-tasks/SKILL.md                    #   7.5. Chẻ Spec thành đồ thị Tracer-Bullet Slices (Blocked by)
   generate-verify-harness/SKILL.md       #        Sinh skill kiểm chứng runtime (.agents/skills/verify-<app>/)
-  explore-options/SKILL.md               #        Khám phá 2–4 phương án đa góc nhìn, người dùng chọn → D-xx
+  explore-options/SKILL.md               #        Khám phá 2–4 phương án đa góc nhìn, người dùng chọn  D-xx
 agents/                                  # 3 Subagents chạy trong context cô lập
   spec-surveyor.md                       #   Khảo sát repo chỉ đọc (read-only), trả về bảng path:line nén gọn
   spec-challenger.md                     #   Phản biện đối kháng ở Cổng 2 (chỉ nhận ARTIFACT + CONTRACT)

@@ -35,17 +35,17 @@
 
 ## Dòng thêm vào AGENTS.md
 
-### ✅ Luôn
+### [x] Luôn
 - Giao việc cho subagent: truyền **context pointers** (đường dẫn file spec, dòng liên quan, commit hash) thay vì chép nguyên lịch sử hội thoại dài vào prompt.
 - Chạy subagent phản biện/review trong context mới hoàn toàn (chỉ truyền `ARTIFACT` + `CONTRACT`, không truyền kết luận mớm trước).
 - Đảm bảo mọi thao tác điều khiển mục tiêu (goal/task/session) đều gắn kèm mã định danh tường minh (`goal_id` / `session_id`).
 
-### ⚠️ Hỏi trước
+### (warning) Hỏi trước
 - Sửa đổi `{hard-refuse-policy}` hoặc danh sách lệnh/đường dẫn được phép thực thi.
 - Thay đổi thứ tự ưu tiên model hoặc cơ chế chuyển đổi dự phòng (failover).
 - Bổ sung công cụ (MCP tool / shell capability) có quyền ghi file hoặc gọi mạng ra ngoài.
 
-### 🚫 Không bao giờ
+### (blocked) Không bao giờ
 - Bật `{allow-paid-fallback}` hoặc gọi API phát sinh chi phí khi chưa được người dùng cho phép tường minh.
 - Đọc, sao chép hoặc ghi vào transcript các file khoá cá nhân của công cụ (`~/.codex/auth.json`, `~/.claude/.credentials.json`, `.env`).
 - Nội suy trực tiếp đầu ra văn bản của model hoặc nội dung artifact vào chuỗi lệnh shell (`sh -c "..."`) mà không qua bước truyền tham số mảng hoặc đọc từ file tạm qua `stdin`.

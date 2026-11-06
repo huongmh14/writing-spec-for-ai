@@ -6,7 +6,7 @@ description: Dùng ở Bước 6 (Cổng 2) sau khi đã viết xong file docs/s
 # Review docs — phản biện đối kháng & tự kiểm trước khi trình duyệt (Cổng 2)
 
 Đầu vào: danh sách file vừa viết/sửa (`ARTIFACT`) + đường dẫn `references/review-checklist.md`, các `packs/PK-*.md` đang bật (`CONTRACT` — truyền đường dẫn cho subagent `spec-challenger` đọc trong phiên sạch, phiên chính không tự nạp toàn bộ `references/base-kit.md` vào ngữ cảnh, `C17`).
-Đầu ra: báo cáo gửi người dùng gồm (1) danh sách file, (2) kết quả chấm từng mục, (3) phân loại phát hiện phản biện & mọi mục `[ ]` kèm đề xuất sửa, (4) câu hỏi mở còn lại. **Mục `[ ]` không được giấu** — đó là thông tin người duyệt cần nhất.
+Đầu ra: báo cáo gửi người dùng gồm (1) danh sách file, (2) kết quả chấm từng mục, (3) phân loại phát hiện phản biện & mọi mục `[]` kèm đề xuất sửa, (4) câu hỏi mở còn lại. **Mục `[]` không được giấu** — đó là thông tin người duyệt cần nhất.
 
 > Gốc ý tưởng (skill tham khảo nội bộ, không phải bằng chứng): `doubt-driven-development` (luật Core **Phản biện trong phiên sạch**, `C26`), `pstack/interrogate`, `open-code-review-delegate`.
 
@@ -18,12 +18,12 @@ Người vừa viết tài liệu luôn mang thiên kiến xác nhận (confirma
    - Giao việc cho subagent chỉ đọc [`spec-challenger`](../../agents/spec-challenger.md) (hoặc chạy một lượt kiểm tra tách biệt hoàn toàn với lý lẽ lúc viết).
    - Chỉ cung cấp đường dẫn các file vừa viết (`ARTIFACT`) và [`references/review-checklist.md`](../../references/review-checklist.md) + các Pack đang bật (`CONTRACT`). Không kèm lời giải thích *"tôi viết thế này vì..."*.
 2. **Chạy phản biện độc lập — phân biệt rõ `Chéo model (Cross-Model)` và `Phiên sạch cùng model (Same-Model Clean-Session)`:**
-   - Cùng một họ model vừa viết vừa tự đọc lại dễ chia sẻ chung điểm mù. Nếu môi trường có sẵn CLI của **họ model khác** với model đang viết (vd. đang viết bằng Antigravity/Claude thì gọi `"" | codex exec --sandbox read-only ...`, hoặc ngược lại; luôn đóng `stdin` bằng `"" |` để CLI không treo chờ nhập), **chủ động chạy luôn lượt phản biện chéo model** chỉ truyền `ARTIFACT + CONTRACT`. Nếu máy không có CLI của họ model khác thì chạy subagent [`spec-challenger`](../../agents/spec-challenger.md) trong phiên sạch và phải ghi trung thực trong báo cáo là `Phiên sạch cùng model (kèm lý do chưa chạy khác model)` — cấm khai gian là đã phản biện chéo model.
+   - Cùng một họ model vừa viết vừa tự đọc lại dễ chia sẻ chung điểm mù. Nếu môi trường có sẵn CLI của **họ model khác** với model đang viết (vd. đang viết bằng Antigravity/Claude thì gọi `"" | codex exec --sandbox read-only...`, hoặc ngược lại; luôn đóng `stdin` bằng `"" |` để CLI không treo chờ nhập), **chủ động chạy luôn lượt phản biện chéo model** chỉ truyền `ARTIFACT + CONTRACT`. Nếu máy không có CLI của họ model khác thì chạy subagent [`spec-challenger`](../../agents/spec-challenger.md) trong phiên sạch và phải ghi trung thực trong báo cáo là `Phiên sạch cùng model (kèm lý do chưa chạy khác model)` — cấm khai gian là đã phản biện chéo model.
    - **Cấm tự ý ỉm phát hiện của bộ phản biện:** Tác giả không được tự đánh dấu "báo động giả" rồi xoá im lặng. Mọi phát hiện từ lượt phản biện phải được liệt kê đầy đủ trong báo cáo người dùng dưới 2 nhóm: `Đã tự sửa (Fixed)` và `Không sửa / Cần người dùng quyết (Not Fixed / Needs Decision)` kèm lý do cụ thể. Phân biệt rõ với `C31`: hai AI cùng khen/đồng ý **không phải là bằng chứng đúng**, nhưng lỗi do model thứ hai / phiên sạch chỉ ra là tín hiệu bắt buộc phải đối chiếu công khai.
 3. **Đối chiếu & Phân loại phát hiện (`RECONCILE`):**
    Đọc lại văn bản thật đối chiếu với từng phát hiện của `spec-challenger` và phân loại theo thứ tự ưu tiên:
    - **Loại 1 — Lỗi thật, sửa được ngay:** sửa thẳng vào file docs trước khi trình người dùng (xem bảng mục 2).
-   - **Loại 2 — Cần quyết định:** hành vi/phạm vi/đánh đổi → hỏi người dùng bằng ví dụ; thiếu kiến thức kỹ thuật → AI nghiên cứu/thử nghiệm trong quyền đã giao hoặc đề nghị người có chuyên môn (**Nguồn & giới hạn hiểu biết**, `C31`), không bắt người dùng xác nhận điều chưa chứng minh.
+   - **Loại 2 — Cần quyết định:** hành vi/phạm vi/đánh đổi  hỏi người dùng bằng ví dụ; thiếu kiến thức kỹ thuật  AI nghiên cứu/thử nghiệm trong quyền đã giao hoặc đề nghị người có chuyên môn (**Nguồn & giới hạn hiểu biết**, `C31`), không bắt người dùng xác nhận điều chưa chứng minh.
    - **Loại 3 — Đánh đổi có chủ đích:** ghi rõ lý do hoặc gắn `ceiling:` (**Đánh dấu giới hạn đơn giản hoá**, `C27`) / `D-xx` để người dùng thấy.
    - **Loại 4 — Báo động giả do thiếu ngữ cảnh:** nếu người đọc mới hiểu nhầm vì câu chữ trong docs chưa rõ, hãy làm sắc nét câu chữ đó để người sau không hiểu nhầm tương tự.
 
@@ -35,17 +35,17 @@ Chạy đủ 6 nhóm theo thứ tự; mỗi mục phải có **bằng chứng tr
 |---|---|
 | Spec chỉ có chữ và bảng REQ, thiếu hình dung trực quan (**Trình bày định hướng bằng hình**, `C28`) | Thêm sơ đồ luồng Mermaid + ít nhất 1 **Snapshot I/O cụ thể** (ASCII wireframe / CLI / JSON mẫu) |
 | AC chỉ ghi chữ chung chung, thiếu Ma trận Kiểm thử Minh bạch (**Bằng chứng test hiển thị**, `C29`) | Bổ sung Ma trận Kiểm thử Minh bạch nêu rõ `Input cụ thể / Output & Tác dụng phụ / Tầng & Độ thật (0 Mock hay Mock gì)` |
-| Spec/Design dùng thuật ngữ hoặc cơ chế kỹ thuật chuyên sâu nhưng xoá mất / để ẩn trong comment phần **Giải thích kiến thức & quyết định kỹ thuật** (`C31`) | Mở comment, viết tường minh Thẻ giải thích kỹ thuật: *Bản chất là gì (kèm ví dụ) · Tại sao cần (không có thì lỗi gì) · Chạy thế nào (Đầu vào → Xử lý → Đầu ra) · Tự kiểm ≤ 5 phút · Nguồn* + thêm thuật ngữ vào `docs/glossary.md` |
-| REQ mơ hồ, chứa số không có nguồn, hoặc nhãn `Đã xác minh` mà con trỏ không chứa câu trích | Tìm cơ sở yêu cầu/số đo; chưa có → `Chưa biết` + cách xác minh, không tự điền ngưỡng (`C31`) |
+| Spec/Design dùng thuật ngữ hoặc cơ chế kỹ thuật chuyên sâu nhưng xoá mất / để ẩn trong comment phần **Giải thích kiến thức & quyết định kỹ thuật** (`C31`) | Mở comment, viết tường minh Thẻ giải thích kỹ thuật: *Bản chất là gì (kèm ví dụ) · Tại sao cần (không có thì lỗi gì) · Chạy thế nào (Đầu vào  Xử lý  Đầu ra) · Tự kiểm ≤ 5 phút · Nguồn* + thêm thuật ngữ vào `docs/glossary.md` |
+| REQ mơ hồ, chứa số không có nguồn, hoặc nhãn `Đã xác minh` mà con trỏ không chứa câu trích | Tìm cơ sở yêu cầu/số đo; chưa có  `Chưa biết` + cách xác minh, không tự điền ngưỡng (`C31`) |
 | AC kết thúc bằng "hoạt động đúng" / lệnh vận hành chỉ kiểm exit 0 | Thay bằng mã HTTP, mã lỗi, dữ liệu DB/file sinh ra (**Kiểm tác dụng lệnh vận hành**, `C19`) |
 | "Ngoài phạm vi" rỗng | Thêm ít nhất 1 thứ lân cận bị loại (phần GĐ sau, dịch vụ ngoài, màn không làm) |
 | Spec `Ready` còn `[CẦN LÀM RÕ]` | Chuyển về `Draft` hoặc hỏi người dùng giải quyết trước khi trình |
 | Sự thật xuất hiện ở 2 file | Chọn 1 nguồn thật (spec/contract/`config.md`/`error-codes.md`), chỗ còn lại chỉ đặt context pointer |
-| Dòng trỏ file trong `AGENTS.md` chỉ ghi tên file chung chung | Viết lại theo mẫu **Con trỏ có điều kiện** (`C24`): *"Khi chạm <nhánh X> → đọc `<file Y>`"* |
+| Dòng trỏ file trong `AGENTS.md` chỉ ghi tên file chung chung | Viết lại theo mẫu **Con trỏ có điều kiện** (`C24`): *"Khi chạm <nhánh X>  đọc `<file Y>`"* |
 | REQ kế thừa từ `PK-*` còn `{tham-số}` | Tìm giá trị có cơ sở; chưa có thì P-xx và giữ Draft, không đoán cho đủ mẫu |
 | `Ready`/task sẵn sàng/HANDOFF bị coi là quyền code | Đối chiếu lệnh người dùng và đợt hiện tại; xác định điểm dừng (**Quyền thực thi theo đợt**, `C30`) |
 | Có AC `[~]` nhưng spec `Done` | Trả về trạng thái chưa hoàn tất; nêu ai/cách kiểm chứng, không tính là pass |
-| Lệnh trong `AGENTS.md` / `CONSTRAINTS.md` chưa chạy thử | Chạy thử nếu an toàn; không an toàn → ghi rõ "chưa chạy + lý do" trong báo cáo |
+| Lệnh trong `AGENTS.md` / `CONSTRAINTS.md` chưa chạy thử | Chạy thử nếu an toàn; không an toàn  ghi rõ "chưa chạy + lý do" trong báo cáo |
 
 ## 3. Format báo cáo Cổng 2
 
@@ -62,23 +62,23 @@ File đã viết/sửa: <danh sách>
 | 3b. CI, cấu hình, CONSTRAINTS, gotcha | … | … | |
 | 4–6. Vị trí, chất lượng chung, Mức 1–2 | … | … | |
 
-Chế độ phản biện đã chạy: <Chéo model: `<model viết> → <CLI model phản biện>` | Phiên sạch cùng model: `spec-challenger` — lý do chưa chạy khác model>
+Chế độ phản biện đã chạy: <Chéo model: `<model viết>  <CLI model phản biện>` | Phiên sạch cùng model: `spec-challenger` — lý do chưa chạy khác model>
 
 Đã tự sửa sau phản biện (Fixed):
-- <file:dòng> — <lỗi phát hiện> → <đã sửa thế nào>
+- <file:dòng> — <lỗi phát hiện>  <đã sửa thế nào>
 
 Phát hiện giữ nguyên / cần người dùng quyết định (Not Fixed — cấm ẩn phát hiện):
-- <file:dòng> — <phát hiện của bộ phản biện> → <lý do giữ nguyên hoặc câu hỏi cần người dùng chốt>
+- <file:dòng> — <phát hiện của bộ phản biện>  <lý do giữ nguyên hoặc câu hỏi cần người dùng chốt>
 
 Câu hỏi còn lại: <danh sách hoặc "Không có">
 ```
 
-→ Gửi báo cáo, dừng, chờ duyệt (Cổng 2). Không tự chuyển sang Bước 7.
+ Gửi báo cáo, dừng, chờ duyệt (Cổng 2). Không tự chuyển sang Bước 7.
 
 ## Kiểm tra trước khi xong
 
-- [ ] Đã chạy kiểm tra đối kháng với context tách biệt (`C26`).
-- [ ] Mọi mục `[ ]` đều xuất hiện tường minh trong báo cáo.
-- [ ] Mọi kết luận có bằng chứng đường dẫn trong file.
-- [ ] Không file mới nào bị bỏ quên (không được trỏ tới, nằm ngoài git).
-- [ ] Đã kiểm `C30–C31`; AI phản biện không thay nguồn sơ cấp/test/chuyên gia, báo cáo kiểm docs không chứng minh sản phẩm đã đúng.
+- [] Đã chạy kiểm tra đối kháng với context tách biệt (`C26`).
+- [] Mọi mục `[]` đều xuất hiện tường minh trong báo cáo.
+- [] Mọi kết luận có bằng chứng đường dẫn trong file.
+- [] Không file mới nào bị bỏ quên (không được trỏ tới, nằm ngoài git).
+- [] Đã kiểm `C30–C31`; AI phản biện không thay nguồn sơ cấp/test/chuyên gia, báo cáo kiểm docs không chứng minh sản phẩm đã đúng.

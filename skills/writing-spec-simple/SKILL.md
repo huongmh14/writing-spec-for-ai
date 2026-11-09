@@ -1,6 +1,6 @@
 ---
 name: writing-spec-simple
-description: Simplified version of writing-spec-for-ai - for beginners or small projects (< 50 files) that want fast AI-agent docs standardization. The AI auto-proposes it when the right signals appear.
+description: Use when a project with fewer than 50 files needs lightweight AGENTS.md and feature specs, and lacks valid AI documentation.
 license: MIT
 trigger_phrases:
   - "write AGENTS.md", "standardize docs", "docs for AI", "new project"
@@ -33,29 +33,8 @@ do_not_use:
 | **Rule 2: Size tiering** | Count code files in repo (skip `node_modules`, `.git`, `dist`, `build`) | `< 50` files  `writing-spec-simple`<br>`>= 50` files  `writing-spec-for-ai` |
 | **Rule 3: Direct request** | User says *"write AGENTS.md"*, *"standardize docs"*, *"create spec for new project"* | Run Step 1 of `writing-spec-simple` immediately |
 
-### AI Proposal Response Template
+When proposing this workflow, read the [proposal format](references/proposal-template.md).
 
-```text
-=== Your Situation ===
-Detected: Project has no AGENTS.md / standard AI docs
-Size: <N> files (< 50 files  fits the lightweight version)
-
-=== My Proposal ===
-Skill: writing-spec-simple
-Reason:
-- Standardize AGENTS.md and basic Specs in 15-30 min so AI doesn't guess when coding.
-- Inherits structure from writing-spec-for-ai, so the project can upgrade later without data loss.
-
-=== Next Steps ===
-I will run 3 steps (stop for your approval after each):
-1. Quick project survey (5 min)
-2. Propose the docs file list (3 min)
-3. Write each file from templates/ (10-20 min)
-
-Shall I start Step 1? (Or skip if you want to work right away)
-```
-
----
 
 ## 2. Simple 3-Step Process
 
@@ -104,37 +83,8 @@ See all 19 inherited laws in [`references/base-simple.md`](references/base-simpl
 
 ---
 
-## 4. Scaling Path & Upgrade to the Full Version
+For scaling, lossless upgrade steps and weekly checks, read [scaling and evaluation](references/scaling-and-evaluation.md).
 
-See details in [`references/scaling-and-evaluation.md`](references/scaling-and-evaluation.md).
-
-### 4.1 Three Growth Phases by Project Size
-- **Phase 1 (`< 50` files, 1-2 people):** `auto-guide`  `explore`  `writing-spec-simple`  `writing-plans`  code  `verification-before-completion` (light process, no formal 3 gates).
-- **Phase 2 (`50-200` files, 3-5 people):** Upgrade to `writing-spec-for-ai` (**Profile M**) + `documentation-and-adrs` + `safe-refactor` + required `docs/progress.md` (`C17`) and `docs/conflicts-and-bugs.md` (`C18`).
-- **Phase 3 (`200+` files, 5+ people):** Upgrade to `writing-spec-for-ai` (**Profile L + Packs**: `PK-API`, `PK-DB`, `PK-AUTH`, `PK-OBS`, `PK-SEC`) + `using-git-worktrees` + `dispatching-parallel-agents` + `incremental-implementation` + `security-audit`.
-
-### 4.2 Lossless Upgrade Path (`writing-spec-simple`  `writing-spec-for-ai`)
-When the project exceeds `50` files or has `3+` members, upgrade in 4 steps:
-1. **Keep 100% of existing files:** `AGENTS.md`, `docs/decisions.md`, `docs/specs/SPEC-*.md` stay because they already share the standard template structure.
-2. **Add coordination files:** Create `docs/specs/README.md` (Spec/AC status table), `docs/progress.md` (`C17`), and `docs/conflicts-and-bugs.md` (`C18`).
-3. **Enable all 31 laws (`base-kit.md`):** Activate the 3 review gates (`C02`), cross-model/clean-session review (`C26`), and technical explanation cards (`C31`).
-4. **Automated verification:** Run `scripts/validate.ps1` to confirm all IDs and structures are valid.
-
----
-
-## 5. Quick 5-Question Test: Are You on the Right Track?
-
-Quick weekly self-check (full **Monthly Health Check with 7 metrics** in [`references/scaling-and-evaluation.md`](references/scaling-and-evaluation.md)):
-
-1. When hitting ambiguity, does the AI stop and ask instead of fabricating code? (`Yes` = Good)
-2. Do generated code and tests stick to the `AC-x` items in the Spec? (`Yes` = Good)
-3. When code behavior changes or hotfixes happen, are the Spec and `docs/conflicts-and-bugs.md` updated alongside? (`Yes` = Good)
-4. Do you/the team approve Spec & Plan before letting the AI write code at scale? (`Yes` = Good)
-5. Is starting a new AI session (or onboarding a new person) noticeably faster thanks to `AGENTS.md`? (`Yes` = Good)
-
-> **Result:** **`>= 4/5` "Yes"** means you're on the right track; if **`<= 3/5`**, open [`references/scaling-and-evaluation.md`](references/scaling-and-evaluation.md) section 3.2 to fix it.
-
----
 
 ## Skill Directory Structure
 

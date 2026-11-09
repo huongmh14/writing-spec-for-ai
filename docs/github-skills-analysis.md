@@ -241,7 +241,7 @@ skill-framework/
 - **Team share:** Git-based collaboration
 
 **Điểm tương đồng:**
-- Bộ skill hiện tại có portable bundle (d:\agent-toolkit-bundle)
+- Bộ skill hiện tại có portable bundle (<bundle-root>/agent-toolkit-bundle)
 
 **Điểm khác biệt:**
 - claude-skill-factory focus trên bulk generation

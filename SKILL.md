@@ -1,6 +1,6 @@
 ---
 name: writing-spec-for-ai
-description: Kích hoạt khi bắt đầu dự án mới, khi repo chưa có hoặc có tài liệu AI rời rạc, hoặc khi người dùng nói "viết spec cho dự án", "viết AGENTS.md", "thiết kế docs cho AI", "chuẩn hoá tài liệu cho agent". Bộ điều phối 3 cổng duyệt; mỗi lượt chỉ mở đúng 1 sub-skill của bước hiện tại, cấm mở nhiều sub-skill cùng lúc.
+description: Use when starting a project that lacks AI documentation, or when the user requests project specs, AGENTS.md, or standardization of scattered agent docs.
 license: MIT
 trigger_phrases:
   - "viết spec cho dự án"
@@ -32,17 +32,7 @@ Skill này là **bộ điều phối**. **Đọc đúng lúc (tiết kiệm ng�
 9. **Profile S:** mọi con trỏ `docs/specs/`  `docs/spec.md`/README, `docs/progress.md`  block đợt trong `AGENTS.md`; file glossary/decisions/plan chỉ đọc khi có. Áp dụng ánh xạ này ở mọi sub-skill/adapter; không sinh thêm file để thoả con trỏ.
 10. **Góc nhìn thay danh xưng:** đầu mỗi bước ghi `Góc nhìn: <≤ 3 mục> — vì <tín hiệu thật>` theo [references/lenses.md](references/lenses.md); không dùng "bạn là senior…" thay checklist; người dùng thêm/bỏ được. Quyết định có ≥ 2 phương án khó đảo ngược  [skills/explore-options](skills/explore-options/SKILL.md): người dùng chọn, AI không tự quyết.
 
-## Chống ngụy biện (Red Flags — Dừng ngay nếu đang nghĩ)
-
-| Ngụy biện dưới áp lực thời gian / uy quyền | Hành động bắt buộc |
-|---|---|
-| *"Dự án nhỏ / đang gấp, viết luôn `AGENTS.md` khỏi cần đề xuất Cổng 1"* | **Dừng.** Dự án nhỏ dùng Profile `S` (đề xuất gọn ~15 dòng), vẫn bắt buộc chốt Cổng 1 trước khi tạo file trong repo. |
-| *"Chỉ thiếu vài chi tiết nhỏ, tự đoán luôn cho nhanh"* | **Dừng.** Đánh dấu `[CẦN LÀM RÕ]` hoặc hỏi theo `HYPOTHESIS + GUESS` ở Bước 4; tuyệt đối không bịa REQ/AC. |
-| *"Tự đọc lại thấy ổn rồi, trình luôn cho người dùng khỏi cần phản biện chéo (`spec-challenger` / `codex`) hay `doc-tester`"* | **Dừng.** Một model vừa viết vừa tự chấm luôn dính thiên kiến xác nhận và điểm mù cùng model (**phản biện trong phiên sạch & chéo model**, `C26`). Trước khi trình spec/design/code cho người dùng, phải chạy vòng lặp `Viết  Phản biện độc lập bắt lỗi (CLI model thứ hai như codex read-only hoặc subagent phiên sạch chỉ nhận ARTIFACT + CONTRACT)  Tự sửa lỗi thật` rồi mới trình kèm biên bản tự sửa. |
-| *"AI viết nghe hợp lý cứ ghi `Đã xác minh`, hoặc chỉ ném thuật ngữ kỹ thuật + 1 câu ngắn vì người dùng chỉ bấm Tự kiểm"* | **Dừng.** Không mở được nguồn + câu trích khớp  chỉ được gắn `AI đề xuất` / `Chưa biết` (`C31`). Không ẩn thẻ giải thích trong comment `<!--... -->`; phải giải thích rõ *Bản chất là gì + ví dụ · Tại sao cần (bỏ qua thì lỗi gì) · Chạy thế nào · Tự kiểm ≤ 5 phút · Nguồn* để người dùng hiểu thấu kiến thức AI viết. |
-| *"Trình bày định hướng bằng đoạn chữ dài / chỉ báo 'All tests passed' là đủ"* | **Dừng.** Chữ dài khiến người đọc gật đầu mà không thật sự hiểu (**trình bày định hướng bằng hình**, `C28`: Scope Radar (green)/(yellow)/(red), sơ đồ Mermaid, ví dụ vào/ra). Báo test xanh mà giấu đầu vào/đầu ra/mock là không kiểm được (**bằng chứng test hiển thị**, `C29`: in bảng bằng chứng chạy test). |
-| *"Đã qua Cổng 1 rồi, viết luôn một mạch toàn bộ `AGENTS.md`, `glossary`, `decisions` và tất cả các file `SPEC-xx` cho nhanh"* | **Dừng.** Vi phạm `C30`: mỗi lượt ở Bước 5 chỉ làm **một bước con** (5a  dừng chờ review  5b từng spec một  dừng chờ review  5c). |
-| *"Đọc luôn một lượt nhiều sub-skill + `principles.md` + `base-kit.md` cho chắc / hoặc khỏi mở sub-skill bước hiện tại"* | **Dừng.** Mỗi lượt **chỉ mở đúng 1 `skills/<bước-hiện-tại>/SKILL.md`**; cấm đọc trước sub-skill bước sau hoặc nạp nguyên các file `references/` nặng làm tràn cửa sổ ngữ cảnh (`C17`). |
+Before each gate, MUST read [red flags and mandatory responses](references/anti-rationalization.md).
 
 ## Quy trình — bước nào mở sub-skill / subagent đó
 

@@ -147,7 +147,7 @@ foreach ($rel in ($skillFiles + $agentFiles)) {
     if ($descLen -gt 450) {
         $failures += "[SDO] Description in $rel is $descLen chars (max 450 chars)"
     }
-    if ($desc -notmatch '^(K\u00EDch ho\u1EA1t khi|D\u00F9ng khi|D\u00F9ng \u1EDF|Use when|Use at)\b') {
+    if ($desc -notmatch '^(K\u00EDch ho\u1EA1t khi|D\u00F9ng khi|D\u00F9ng \u1EDF|Use when|Use at|Used at|Activates when)\b') {
         $failures += "[SDO] Description in $rel must front-load trigger condition ('Kich hoat khi...', 'Dung o...', 'Use when...'): $desc"
     }
     if (($rel -like "skills/*" -or $rel -like "../*") -and $desc -match 'khi b\u1EAFt \u0111\u1EA7u d\u1EF1 \u00E1n m\u1EDBi|chu\u1EA9n b\u1ECB vi\u1EBFt spec|thi\u1EBFt k\u1EBF t\u00E0i li\u1EC7u cho AI') {
@@ -179,7 +179,7 @@ $templateChecks = @(
     @{ File = "templates/docs/plans/_plan-template.md"; Pattern = "Blocked by"; Label = "Tracer-Bullet Task Graph 'Blocked by' column" },
     @{ File = "templates/AGENTS.md"; Pattern = "Visible Test Execution Ledger"; Label = "DoD Visible Test Execution Ledger requirement (C29)" },
     @{ File = "templates/adapters/pull_request_template.md"; Pattern = "Visible Test Execution Ledger"; Label = "PR Visible Test Execution Ledger table (C29)" },
-    @{ File = "SKILL.md"; Regex = $true; Pattern = 'ch\u1EC9 m\u1EDF \u0111\u00FAng 1 sub-skill'; Label = "Just-in-time single sub-skill read budget (C17)" },
+    @{ File = "SKILL.md"; Regex = $true; Pattern = '(?:ch\u1EC9 m\u1EDF \u0111\u00FAng 1 sub-skill|each turn opens \*\*only the one sub-skill of the current step\*\*)'; Label = "Just-in-time single sub-skill read budget (C17)" },
     @{ File = "SKILL.md"; Pattern = "C30"; Label = "Bounded execution rule (C30)" },
     @{ File = "SKILL.md"; Pattern = "C31"; Label = "Provenance and knowledge limits rule (C31)" },
     @{ File = "references/base-kit.md"; Pattern = "| C30 |"; Label = "Core bounded execution contract (C30)" },

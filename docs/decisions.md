@@ -16,4 +16,16 @@ A conversation restart must not imply a replacement environment or fresh verific
 
 Date: 2026-11-09. Status: Confirmed scope.
 
-The user requested an English design/spec and Git commit. This batch writes documentation only. Runtime implementation, skill installation/synchronization and external publication require their own scope; see [current progress](progress.md).
+The initial English spec was committed as `e977b0a`, without runtime implementation or remote publication. The subsequent user request authorizes correcting and optimizing the spec and its repository gates. Local skill synchronization follows the repository's explicit AGENTS.md instruction; runtime implementation remains outside this maintenance batch. See [current progress](progress.md).
+
+## D-04 - Preserve logical environment identity across configuration changes
+
+Date: 2026-11-09. Status: Proposed runtime design.
+
+Configuration and revision identify a version of an environment, not a new logical service slot. Reconcile the existing slot under the same lock before replacement; lock waits consume the operation deadline. Redact secrets before persisting logs or evidence. Contracts: [execution spec, sections 4-7](specs/SPEC-AGENT-EXECUTION.md#4-identity-ownership-and-local-records).
+
+## D-05 - Keep loading limits and move detail behind explicit pointers
+
+Date: 2026-11-09. Status: Applied repository maintenance.
+
+Retain the 65-line entry and 110-line beginner-skill limits. Move reference detail into local assets, keep mandatory procedure pointers hot, and preserve those assets in standalone PowerShell installations. Accept precise English and Vietnamese trigger conditions without accepting generic descriptions. Regression check: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-validation.ps1`.

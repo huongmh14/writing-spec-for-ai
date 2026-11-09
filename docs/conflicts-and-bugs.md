@@ -1,37 +1,52 @@
 # Conflicts and bugs
 
-This records encountered conflicts and verified defects, not hypothetical failures. User-reported runtime symptoms are attributed in the [execution spec](specs/SPEC-AGENT-EXECUTION.md#1-outcome-and-provenance); this batch did not reproduce them.
+User-reported runtime symptoms remain unverified here; see [spec provenance](specs/SPEC-AGENT-EXECUTION.md#1-outcome-and-provenance). Baselines below identify observed states; the maintenance fix SHA is discoverable with `git log -1 -- docs/conflicts-and-bugs.md` after committing.
 
-## DOC-001 — Retry count versus total-attempt count
+## DOC-001 - Retry count versus total attempts: fixed
 
-- Observed: 2026-11-09 during the read-only contract survey.
-- Documentation baseline: `da048bf`; fix commit: none, the source pack is unchanged in this batch.
-- Evidence: [job pack](../packs/PK-JOB.md), parameter definition and retry acceptance example use retries/total attempts inconsistently.
-- Root cause: one term counts additional retries while another counts every attempt, including the initial call.
-- Blast radius: blindly inheriting the pack could add an extra execution or stop one attempt early.
-- Containment: the new execution spec explicitly defines total attempts, including the first, and does not inherit application-job retry counts.
-- Mechanical check: `rg -n 'retries|attempt|retry|thử|lần' packs/PK-JOB.md`; inspect its parameter and acceptance wording together before changing or inheriting it.
-- Resolution boundary: document the encountered ambiguity now; correcting the existing pack is outside this spec-only batch. No runtime fix is claimed.
+- Baseline: `da048bf`, observed 2026-11-09; contained in spec commit `e977b0a`, source pack corrected in this maintenance batch.
+- Root cause / blast radius: the job pack mixed additional retries with total executions, allowing an extra attempt or an early stop.
+- Fix: [PK-JOB](../packs/PK-JOB.md) defines maximum attempts as initial execution plus retries; retries are at most `max-attempts - 1`.
+- Mechanical check: inspect parameter, R02, R03 and AC02 together with `rg -n 'attempt|retry|retries' packs/PK-JOB.md`; the example still permits exactly three total attempts. No runtime job test is claimed.
 
-## DOC-002 — Repository documentation gate fails outside this batch
+## DOC-002 - Repository documentation gate: fixed
 
-- Observed: 2026-11-09; baseline `da048bf` plus nine pre-existing modified skill files. Fix commit: none in this batch.
-- Evidence: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/validate.ps1` exited 1: 24 issues across existing entry/skill descriptions, line-count ratchets, an entry marker and machine-specific paths. None names the five new documents. Full output: local temporary artifact `agent-execution-spec-validation.log`.
-- Root cause: existing files do not meet the current validator's wording, size and path rules; attribution to a particular earlier commit was not investigated.
-- Blast radius: the whole-repository documentation gate remains failing; a passing check of new documents cannot establish a repository-wide pass.
-- Containment / mechanical check: preserve unrelated edits; run the command above for the whole gate and separately check this batch's relative links, text hygiene, requirement/AC uniqueness, unchecked runtime status and staged whitespace. Report both outcomes.
+- Baseline: `e977b0a` plus nine pre-existing modified skill files, observed 2026-11-09; 24 gate failures.
+- Root causes: English trigger/C17 equivalents rejected, oversized entry points and personal absolute paths. Blast radius: whole-repository gate failure and excess prompt loading.
+- Fix: precise bilingual patterns, conditional reference extraction under unchanged limits, portable paths. Existing translations preserved.
+- Mechanical check: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/validate.ps1`; regression: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-validation.ps1`. Both pass; the regression includes negative cases.
 
-## ENV-001 — Bash health check cannot start
+## ENV-001 - Default Windows Bash shim: workaround verified
 
-- Observed: 2026-11-09 on documentation baseline `da048bf`; fix commit: none.
-- Evidence / mechanical check: `bash scripts/skill-health-check.sh` exited 1 before script execution with `Bash/Service/CreateInstance/E_ACCESSDENIED`. Local temporary artifact: `agent-execution-spec-health.log`.
-- Root cause boundary: the Windows Bash service rejected startup; the underlying host cause is unverified. The script also targets installed skills, rather than evaluating this spec's runtime behavior.
-- Blast radius / containment: the required Bash check is unexecuted; use the available PowerShell document checks, disclose this limitation and leave host configuration unchanged.
+- Baseline: `da048bf`, observed 2026-11-09; `bash` resolved to WindowsApps and failed before execution with `Bash/Service/CreateInstance/E_ACCESSDENIED`.
+- Host root cause remains unverified. The health script also used personal installed paths, causing ten failures when native Bash actually ran.
+- Fix / containment: derive paths from the script location; use installed Git Bash without altering host configuration.
+- Mechanical check: `& 'C:/Program Files/Git/bin/bash.exe' -c 'cd scripts && bash skill-health-check.sh'` passes all ten checks. Sandbox process restrictions require elevated tool execution on this host; no runtime acceptance follows.
 
-## DOC-003 — Draft execution contract allowed unsafe reuse and cleanup races
+## DOC-003 - Unsafe reuse and cleanup races: draft corrected
 
-- Observed: 2026-11-09 in same-model clean-session review; baseline `da048bf`, corrected in this documentation commit before runtime implementation.
-- Root causes: generated-output exclusions could hide consumed inputs; disposable-service borrowing could outlive its owner; cleanup failure lacked a precise durable barrier before releasing startup ownership.
-- Blast radius: a future implementation could accept stale tests, interrupt a borrower or create a conflicting replacement. No such runtime defect was reproduced in this batch.
-- Correction: fingerprint consumed artifacts/provenance; prohibit disposable borrowing and protect active persistent borrowers; persist unresolved barriers and reconcile under the startup lock.
-- Mechanical acceptance checks: planned [AC09 and AC17](specs/SPEC-AGENT-EXECUTION.md#8-acceptance-criteria-and-visible-test-matrix). These remain unexecuted; the independent document review checks contract completeness only.
+- Baseline: `da048bf`; corrected before spec commit `e977b0a` after independent same-model review.
+- Root causes / blast radius: excluded consumed generated artifacts, disposable borrowing and non-durable cleanup barriers could permit stale evidence or conflicting replacement.
+- Fix: fingerprint consumed artifacts/provenance, prohibit disposable borrowing, protect active persistent borrowers and reconcile durable barriers under the startup lock.
+- Mechanical acceptance: planned [AC09 and AC17](specs/SPEC-AGENT-EXECUTION.md#8-acceptance-criteria-and-visible-test-matrix), still unexecuted. Document review establishes contract completeness only.
+
+## DOC-004 - Configuration identity and secret persistence: draft corrected
+
+- Baseline: `e977b0a`, observed 2026-11-09 during maintenance review.
+- Root causes / blast radius: changing configuration could imply a fresh logical identity and bypass old-instance reconciliation; full logs/arguments could persist secrets; lock waits could evade operation deadlines.
+- Fix: stable environment slot, separate configuration version, shared reconciliation lock, inclusive deadlines and redaction before persistence. Incomplete evidence cannot authorize reuse.
+- Mechanical acceptance: planned [AC03, AC05 and AC14](specs/SPEC-AGENT-EXECUTION.md#8-acceptance-criteria-and-visible-test-matrix), unexecuted.
+
+## INSTALL-001 - Standalone local assets omitted: fixed
+
+- Baseline: `e977b0a`; exposed by reference extraction in this maintenance batch before publication.
+- Root cause / blast radius: PowerShell standalone copied shared assets and SKILL.md but omitted local references/templates/scripts, breaking mandatory procedure links.
+- Fix: overlay each sub-skill's local assets after shared assets. Removed guidance advertising nonexistent PK-UI, PK-E2E and PK-SEC packs.
+- Mechanical check: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-validation.ps1` invokes the production standalone block in a disposable fixture and compares all local asset hashes. Passes for all 15 skills.
+
+## INSTALL-002 - Bash installer has an older skill inventory: open
+
+- Baseline: `e977b0a`, observed 2026-11-09. Fix commit: none.
+- Root cause / blast radius: install.sh enumerates ten core skills while PowerShell discovers fifteen. Bash standalone omits the five beginner skills; Bash lean leaves their nested SKILL.md entries discoverable. It also lacks the standalone local-asset overlay.
+- Containment: use PowerShell lean installation for this synchronization. Bash installation parity remains a separate fix; health-check success does not validate that installer.
+- Mechanical check: compare `rg -n 'SUBSKILLS|SUB_DEST|cp -r' install.sh` with `Get-ChildItem skills -Directory` and the PowerShell standalone regression fixture before porting the correction.

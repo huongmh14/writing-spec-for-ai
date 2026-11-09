@@ -22,7 +22,7 @@ Phase 2: 50-200 files, 3-5 people (Growth / Small team)
 
 Phase 3: 200+ files, 5+ people (Large system / High-scale production)
 ├── Main flow: auto-guide  writing-spec-for-ai (Profile L + Packs)
-├── Enable domain Packs: PK-API, PK-DB, PK-AUTH, PK-OBS, PK-UI, PK-E2E, PK-SEC
+├── Enable domain Packs: PK-API, PK-DB, PK-AUTH, PK-OBS
 ├── Add: using-git-worktrees + dispatching-parallel-agents (isolated parallel runs)
 ├── Add: incremental-implementation (large rollout with feature flag / canary / rollback)
 ├── Add: security-audit (security audit before release)
@@ -163,7 +163,7 @@ Evaluate **once a month** (or after each release milestone):
 
 ### Quarterly (30 minutes)
 - [] **Evaluate scale-up:** Has the project exceeded `50` files or `3+` people? Time to upgrade from `writing-spec-simple` to `writing-spec-for-ai` (Profile M/L) per **Pattern 4**?
-- [] **Evaluate domain packs:** Need to enable more specialized packs (`PK-API`, `PK-DB`, `PK-AUTH`, `PK-OBS`, `PK-UI`, `PK-E2E`, `PK-SEC`)?
+- [] **Evaluate domain packs:** Need to enable more specialized packs (`PK-API`, `PK-DB`, `PK-AUTH`, `PK-OBS`)?
 - [] **Project memory hygiene (`C17`):** Archive old `docs/progress.md` history to `docs/progress-archive/` to keep `progress.md <= 5 KB`.
 
 ---

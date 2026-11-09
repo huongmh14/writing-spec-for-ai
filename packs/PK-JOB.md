@@ -8,7 +8,7 @@
 | Tham số | Mặc định | Mô tả |
 |---|---|---|
 | `{job-timeout-ms}` | `60000` | Thời gian tối đa cho phép một lần thực thi job chạy trước khi bị huỷ (ms) |
-| `{max-attempts}` | `3` | Số lần thử lại tối đa khi gặp lỗi tạm thời (transient error) |
+| `{max-attempts}` | `3` | Tổng số lần thực thi tối đa, gồm lần đầu và các lần thử lại khi gặp lỗi tạm thời (transient error) |
 | `{lock-ttl-ms}` | `120000` | Thời gian sống (TTL) của khoá chống chạy chồng lấn (lease/distributed lock) |
 | `{shutdown-grace-ms}` | `15000` | Thời gian chờ tối đa để worker hoàn tất job đang dở khi nhận tín hiệu dừng (`SIGTERM`) |
 
@@ -17,7 +17,7 @@
 | ID | REQ |
 |---|---|
 | PK-JOB-R01 | Khi cùng một thông điệp (message) hoặc tác vụ định kỳ được thực thi lại nhiều hơn một lần (do at-least-once delivery hoặc retry), hệ thống MUST đảm bảo tính lũy đẳng (idempotent) dựa trên khoá định danh nghiệp vụ (`idempotencyKey` / `jobId` + trạng thái đích), không tạo tác dụng phụ trùng lặp (gửi 2 lần cùng một thông báo, trừ tiền 2 lần, chèn đúp bản ghi). |
-| PK-JOB-R02 | Mỗi lần thực thi job MUST bị giới hạn bởi `{job-timeout-ms}` ms; nếu gặp lỗi tạm thời (mạng, rate-limit `429`, dịch vụ đích `503`), hệ thống MUST thử lại tối đa `{max-attempts}` lần theo chiến lược lùi mũ có nhiễu (exponential backoff with jitter), và MUST NOT retry các lỗi vĩnh viễn (dữ liệu đầu vào sai định dạng, lỗi xác thực `401`/`403`). |
+| PK-JOB-R02 | Mỗi lần thực thi job MUST bị giới hạn bởi `{job-timeout-ms}` ms; tổng số lần thực thi MUST NOT vượt `{max-attempts}`, gồm lần đầu và tối đa `{max-attempts} - 1` lần thử lại. Nếu gặp lỗi tạm thời (mạng, rate-limit `429`, dịch vụ đích `503`), các lần thử lại MUST dùng chiến lược lùi mũ có nhiễu (exponential backoff with jitter); MUST NOT retry các lỗi vĩnh viễn (dữ liệu đầu vào sai định dạng, lỗi xác thực `401`/`403`). |
 | PK-JOB-R03 | Nếu một job vẫn thất bại sau `{max-attempts}` lần thử hoặc gặp lỗi vĩnh viễn, hệ thống MUST chuyển job đó sang vùng cách ly (Dead-Letter Queue hoặc trạng thái `FAILED`/`DEAD` trong DB kèm nguyên nhân lỗi cuối cùng và số lần đã thử) để không làm tắc nghẽn các job tiếp theo. |
 | PK-JOB-R04 | Với các tác vụ chạy theo lịch định kỳ (cron/scheduler) hoặc quét bảng dữ liệu dùng chung, hệ thống MUST sử dụng cơ chế khoá/lease có thời hạn (`{lock-ttl-ms}` ms, kiểm tra và cập nhật nguyên tử — CAS/atomic lock) để ngăn hai tiến trình hoặc hai chu kỳ liên tiếp xử lý trùng cùng một mục. |
 | PK-JOB-R05 | Khi tiến trình worker nhận tín hiệu dừng (`SIGTERM` hoặc `SIGINT`), hệ thống MUST ngừng nhận job mới ngay lập tức, chờ tối đa `{shutdown-grace-ms}` ms để các job đang chạy hoàn tất hoặc nhả lease về trạng thái an toàn trước khi thoát. |

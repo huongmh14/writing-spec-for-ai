@@ -2,6 +2,9 @@
 # Skill Health Check Script
 # Chạy định kỳ để đánh giá spec-writing skills
 
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)" || exit 1
+skills_root="$script_dir/../skills"
+
 echo "=== Skill Health Check ==="
 echo ""
 
@@ -9,7 +12,7 @@ echo ""
 echo "1. Checking license field in skills..."
 missing_license=0
 for skill in auto-guide starter-guide cheat-sheet writing-spec-simple; do
-  if ! grep -q "license:" "C:\Users\huong\.agents\skills\$skill\SKILL.md" 2>/dev/null; then
+  if ! grep -q "license:" "$skills_root/$skill/SKILL.md" 2>/dev/null; then
     echo "  ❌ $skill: missing license field"
     missing_license=$((missing_license + 1))
   else
@@ -22,7 +25,7 @@ echo ""
 echo "2. Checking 'When NOT to use' sections..."
 missing_when_not=0
 for skill in auto-guide starter-guide cheat-sheet writing-spec-simple; do
-  if ! grep -qi "when not to use\|không dùng khi\|when to avoid" "C:\Users\huong\.agents\skills\$skill\SKILL.md" 2>/dev/null; then
+  if ! grep -qi "when not to use\|không dùng khi\|when to avoid" "$skills_root/$skill/SKILL.md" 2>/dev/null; then
     echo "  ❌ $skill: missing 'When NOT to use' section"
     missing_when_not=$((missing_when_not + 1))
   else
@@ -35,7 +38,7 @@ echo ""
 echo "3. Checking progressive disclosure structure..."
 missing_references=0
 for skill in writing-spec-simple; do
-  if [ ! -d "C:\Users\huong\.agents\skills\$skill\references" ]; then
+  if [ ! -d "$skills_root/$skill/references" ]; then
     echo "  ❌ $skill: missing references/ folder"
     missing_references=$((missing_references + 1))
   else
@@ -48,7 +51,7 @@ echo ""
 echo "4. Checking templates/ folder..."
 missing_templates=0
 for skill in writing-spec-simple; do
-  if [ ! -d "C:\Users\huong\.agents\skills\$skill\templates" ]; then
+  if [ ! -d "$skills_root/$skill/templates" ]; then
     echo "  ❌ $skill: missing templates/ folder"
     missing_templates=$((missing_templates + 1))
   else

@@ -2,28 +2,26 @@
 
 ## Current batch
 
-- RUN-ID: SPEC-AGENT-EXECUTION-20261109.
-- User authorization: write an English design/spec for the discussed agent execution problems, validate it and commit it locally to Git.
-- Deliverables: [execution spec](specs/SPEC-AGENT-EXECUTION.md), [spec index](specs/README.md), [decisions](decisions.md), this handoff and [conflicts/bugs](conflicts-and-bugs.md).
-- Boundary: documentation only; no runtime implementation, skill installation, Docker/process operation or remote push.
-- Preserve the nine pre-existing modified entry/sub-skill files; stage only this batch's documents.
+- RUN-ID: SPEC-AGENT-EXECUTION-FIX-20261109.
+- Authorization: correct remaining errors and optimize the English spec following the initial documentation commit `e977b0a`.
+- Deliverables: [execution spec](specs/SPEC-AGENT-EXECUTION.md), smaller skill entry points, portable checks, standalone asset preservation, regression check and updated decision/bug records.
+- Preserve the pre-existing English translations of the root entry and eight core sub-skills; do not overwrite or include unrelated translations in this maintenance commit.
+- Runtime implementation, Docker operation and remote push remain outside this batch. The 17 runtime acceptance scenarios remain unchecked.
 
 ## Verified status
 
-- [x] Inspected repository conventions and existing related contracts with a clean read-only survey.
-- [x] Drafted English requirements, design, ownership/deadline contracts, evidence invalidation and 17 planned acceptance scenarios.
-- [x] Independent read-only review: same-model clean-session; not cross-model. Recheck confirmed the eight initial fixes and identified one flow-lock inconsistency, corrected below.
-- [~] Whole-repository PowerShell validation exited 1 with 24 issues outside this batch. Bash health check could not start (`E_ACCESSDENIED`). Details and mechanical commands: [DOC-002 / ENV-001](conflicts-and-bugs.md).
-- [x] Scoped checks passed for all five documents: relative links, UTF-8/text hygiene, no machine paths, 10 unique requirements, 17 unique unchecked ACs and progress below 5 KiB. `git diff --cached --check` passed; staged names contain only the five deliverables.
-- [~] Runtime acceptance is unexecuted: no runtime implementation was requested or added.
-- [x] Documentation batch ready for the authorized local commit; identify the resulting commit with `git log -1 --oneline`. No runtime or remote-publication claim follows from this status.
+- [x] Tightened stable environment identity, reconciliation, lock-wait deadlines, secret redaction and native-cache-first adoption.
+- [x] Fixed 24 documentation gate failures without increasing line limits or removing trigger/C17 requirements.
+- [x] Root entry fits 65 lines; all five beginner entries fit 110 lines. Extracted guidance is conditionally linked; mandatory procedure pointers remain explicit.
+- [x] Regression check passes: translated triggers accepted; generic descriptions, missing C17 and excessive length rejected. Actual standalone copy block preserves all 15 skills' local assets by hash in an isolated workspace fixture.
+- [x] Native Git Bash health check passes all 10 checks, including invocation from another working directory. The default WindowsApps Bash shim remains a host limitation.
+- [x] Same-model clean-session review found and verified the fix for missing standalone assets. No remaining actionable findings; this is not cross-model review or runtime evidence.
+- [x] Working-tree gate and staged-snapshot regression pass. Selective staging excludes the eight core translations and retains the root translation as an unstaged change. Whitespace check passes.
+- [x] PowerShell lean installation synchronized all shared agent roots and agent definitions: one discoverable skill, 15 nested sub-skills. Required portable-bundle sync completed: 261 skills (37 hot, 224 cold), 25 plugins and 20 subagents.
+- [x] Maintenance changes are ready for the authorized local commit; obtain its SHA with `git log -1 --oneline`. No remote push is authorized or performed.
 
-## Review reconciliation
+## Remaining limits and handoff
 
-Fixed (all eight initial findings): added flow/I-O/scope radar; replaced prose ACs with concrete matrix and explicit mock disclosure; covered consumed generated artifacts; prohibited disposable borrowing and protected active persistent borrowers; made cleanup barriers durable; added measurable NFR assessment/E2E scenario; added self-check steps with explicit implementation blockers for unknown commands/OS controls/calibration; added spec index. Recheck finding fixed: moved lock acquisition before the flow's state decision, covering borrower registration. Safety gaps are recorded as DOC-003.
+The runtime design is still Draft. A future implementation batch discovers the target repository's native runner, fixture commands, revision proof, OS controls and calibrated budgets before implementing or claiming acceptance. Missing evidence causes execution rather than speculative reuse. Bash installer parity is recorded in [INSTALL-002](conflicts-and-bugs.md); use the tested PowerShell lean installation on this host.
 
-Not fixed: none of the draft findings. Existing job-pack retry ambiguity (DOC-001), unrelated repository validation failures (DOC-002), and host Bash availability (ENV-001) remain outside this documentation scope. External URLs were not fetched by the reviewer; the primary agent consulted the official source pages during the preceding research. Runtime checks have not been executed.
-
-## Stop point and next-session handoff
-
-The English design and document review are complete; the only publication step is the authorized local commit of these five files. After this documentation commit, stop: a future implementation batch first discovers the target repository's runner, OS, fixture commands, Docker/revision proof and calibrated budgets. All runtime acceptance statuses remain unchecked until executed. Preserve the unrelated skill edits and the recorded repository/environment check limitations.
+No new runner, daemon, cache engine or dependencies were added. Local skill synchronization is required by AGENTS.md; it does not establish runtime acceptance. Consult [decisions](decisions.md) and [bug history](conflicts-and-bugs.md) before continuing.

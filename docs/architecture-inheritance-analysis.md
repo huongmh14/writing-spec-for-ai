@@ -599,6 +599,6 @@ writing-spec-simple kế thừa kiến trúc cốt lõi từ writing-spec-for-ai
 - writing-spec-for-ai/agents/
 - writing-spec-for-ai/skills/
 - writing-spec-for-ai/profiles.md
-- Explore skill (C:\Users\huong\.agents\skills\explore\SKILL.md)
-- writing-plans skill (C:\Users\huong\.agents\skills\writing-plans\SKILL.md)
-- documentation-and-adrs skill (C:\Users\huong\.agents\skills\documentation-and-adrs\SKILL.md)
+- Explore skill (~/.agents/skills/explore/SKILL.md)
+- writing-plans skill (~/.agents/skills/writing-plans/SKILL.md)
+- documentation-and-adrs skill (~/.agents/skills/documentation-and-adrs/SKILL.md)

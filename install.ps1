@@ -5,8 +5,8 @@
 #   powershell -ExecutionPolicy Bypass -File .\install.ps1
 # Default (lean): sub-skills ship nested in writing-spec-for-ai/skills/<name>/sub-skill.md so even
 # recursive skill scanners (Codex, OpenCode) only preload the single orchestrator SKILL.md.
-# -Standalone: also install the 10 sub-skills at top level for direct /write-spec etc.
-# (~0.8k extra metadata tokens in EVERY session, measured with tiktoken o200k_base).
+# -Standalone: also install all sub-skills at top level for direct /write-spec etc.
+# This preloads extra skill metadata in every session.
 #   & ([scriptblock]::Create((irm https://raw.githubusercontent.com/huongmh14/writing-spec-for-ai/main/install.ps1))) -Standalone
 param([switch]$Standalone)
 
@@ -134,6 +134,14 @@ foreach ($Target in $(if ($Standalone) { $Targets } else { @() })) {
             $SharedPath = Join-Path $SourceDir $Shared
             if (Test-Path $SharedPath) {
                 Copy-Item -Path $SharedPath -Destination $SubDest -Recurse -Force
+            }
+        }
+        foreach ($Asset in @("references", "templates", "scripts")) {
+            $LocalAsset = Join-Path $Sub.FullName $Asset
+            if (Test-Path -LiteralPath $LocalAsset -PathType Container) {
+                Get-ChildItem -LiteralPath $LocalAsset -Force | ForEach-Object {
+                    Copy-Item -LiteralPath $_.FullName -Destination (Join-Path $SubDest $Asset) -Recurse -Force
+                }
             }
         }
         $SubTplSkill = Join-Path $SubDest "templates\project-skill\SKILL.md"

@@ -104,7 +104,7 @@ Works natively out of the box across modern AI IDEs and CLI agents:
 
 ### Option 1: One-Line Installer (Recommended)
 
-Installs the full `writing-spec-for-ai` skill suite (orchestrator + 9 sub-skills + 8 Domain Packs + templates) AND the **3 specialized subagents (`spec-surveyor`, `spec-challenger`, `doc-tester`)** across **Antigravity, Claude Code, Cursor, Codex, OpenCode, ZCode, and `~/.agents`** simultaneously.
+Installs the full `writing-spec-for-ai` skill suite (orchestrator + 14 sub-skills + 8 Domain Packs + templates) AND the **3 specialized subagents (`spec-surveyor`, `spec-challenger`, `doc-tester`)** across **Antigravity, Claude Code, Cursor, Codex, OpenCode, ZCode, and `~/.agents`** simultaneously.
 
 **Windows (PowerShell):**
 ```powershell
@@ -133,7 +133,7 @@ Inside **Claude Code**:
 ### Option 3: Download Pre-Packaged Skill Archives (`.zip`)
 
 Every [GitHub Release](https://github.com/huongmh14/writing-spec-for-ai/releases) automatically builds and attaches:
-- `writing-spec-for-ai-full-suite.zip` — Complete orchestrator + all 9 sub-skills + 3 subagents + 8 packs + templates.
+- `writing-spec-for-ai-full-suite.zip` — Complete orchestrator + all 14 sub-skills + 3 subagents + 8 packs + templates.
 - Individual self-contained skill zips (`skill-survey-project.zip`, `skill-propose-doc-design.zip`, `skill-write-spec.zip`, `skill-write-design-doc.zip`, `skill-change-spec.zip`, `skill-review-docs.zip`, `skill-test-docs.zip`, `skill-plan-tasks.zip`, `skill-generate-verify-harness.zip`).
 
 ---

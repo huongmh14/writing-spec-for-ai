@@ -6,7 +6,7 @@
 #   ./install.sh
 # Default (lean): sub-skills ship nested in writing-spec-for-ai/skills/<name>/sub-skill.md so even
 # recursive skill scanners (Codex, OpenCode) only preload the single orchestrator SKILL.md.
-# --standalone: also install the 10 sub-skills at top level for direct /write-spec etc.
+# --standalone: also install every sub-skill under skills/ at top level for direct /write-spec etc.
 # (~0.8k extra metadata tokens in EVERY session, measured with tiktoken o200k_base).
 #   curl -fsSL .../install.sh | bash -s -- --standalone
 
@@ -49,18 +49,9 @@ TARGET_ROOTS=(
     "$HOME/.zcode/skills"
 )
 
-SUBSKILLS=(
-    "survey-project"
-    "propose-doc-design"
-    "write-spec"
-    "write-design-doc"
-    "change-spec"
-    "review-docs"
-    "test-docs"
-    "plan-tasks"
-    "generate-verify-harness"
-    "explore-options"
-)
+# Discover every skills/<name>/ dir (same as install.ps1) so new skills are never silently skipped.
+SUBSKILLS=()
+for d in "$SOURCE_DIR"/skills/*/; do [ -f "${d}SKILL.md" ] && SUBSKILLS+=("$(basename "$d")"); done
 
 echo "[2/4] Installing main orchestrator skill ($SKILL_NAME)..."
 
@@ -109,6 +100,8 @@ for ROOT in "${TARGET_ROOTS_STANDALONE[@]+"${TARGET_ROOTS_STANDALONE[@]}"}"; do
         rm -rf "$SUB_DEST"
         mkdir -p "$SUB_DEST"
         cp -r "$SOURCE_DIR/references" "$SOURCE_DIR/packs" "$SOURCE_DIR/agents" "$SOURCE_DIR/templates" "$SOURCE_DIR/scripts" "$SOURCE_DIR/profiles.md" "$SOURCE_DIR/LICENSE" "$SUB_DEST/"
+        # overlay the skill's own assets (references/templates/scripts) after the shared ones
+        for item in "$SOURCE_DIR/skills/$SUB"/*; do [ "$(basename "$item")" = "SKILL.md" ] || cp -r "$item" "$SUB_DEST/"; done
         sed \
             -e 's|\.\./\.\./references/|./references/|g' \
             -e 's|\.\./\.\./templates/|./templates/|g' \

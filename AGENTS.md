@@ -4,7 +4,7 @@ Repo này chứa skill `writing-spec-for-ai` (bộ điều phối) cùng các sk
 
 ## Cấu trúc
 
-- `SKILL.md` — entry point, bộ điều phối 3 cổng (chỉ 64 dòng, không thêm logic vào đây)
+- `SKILL.md` — entry point, bộ điều phối 3 cổng (chỉ 65 dòng, không thêm logic vào đây)
 - `skills/` — sub-skills của bộ điều phối + skill người mới (`auto-guide`, `writing-spec-simple`, `idea-to-spec`, `fast-track`)
 - `agents/` — subagent definitions (`spec-surveyor`, `spec-challenger`, `doc-tester`)
 - `references/` — core laws `C01–C31`, principles, glossary, examples

@@ -44,9 +44,27 @@ User-reported runtime symptoms remain unverified here; see [spec provenance](spe
 - Fix: overlay each sub-skill's local assets after shared assets. Removed guidance advertising nonexistent PK-UI, PK-E2E and PK-SEC packs.
 - Mechanical check: `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/test-validation.ps1` invokes the production standalone block in a disposable fixture and compares all local asset hashes. Passes for all 15 skills.
 
-## INSTALL-002 - Bash installer has an older skill inventory: open
+## INSTALL-002 - Bash installer has an older skill inventory: fixed
 
 - Baseline: `e977b0a`, observed 2026-11-09. Fix commit: none.
 - Root cause / blast radius: install.sh enumerates ten core skills while PowerShell discovers fifteen. Bash standalone omits the five beginner skills; Bash lean leaves their nested SKILL.md entries discoverable. It also lacks the standalone local-asset overlay.
-- Containment: use PowerShell lean installation for this synchronization. Bash installation parity remains a separate fix; health-check success does not validate that installer.
-- Mechanical check: compare `rg -n 'SUBSKILLS|SUB_DEST|cp -r' install.sh` with `Get-ChildItem skills -Directory` and the PowerShell standalone regression fixture before porting the correction.
+- Containment: use PowerShell lean installation for this synchronization. Fixed 2026-11-21: `install.sh` now discovers `skills/*/` like PowerShell and overlays each skill's local assets. Kit signal: `kit-missed` · full · pre-`20521c3`.
+- Mechanical check: compare `rg -n 'SUBSKILLS|SUB_DEST|cp -r' install.sh` with `Get-ChildItem skills -Directory` and the PowerShell standalone regression fixture ; after the fix, `HOME=$(mktemp -d) bash install.sh --standalone` yields 15 skill dirs and lean yields 1 top-level skill with 14 nested, 0 `SKILL.md`.
+
+## ROUTE-001 - auto-guide routed by file count only: fixed
+
+- Baseline: `22538d4`, observed 2026-11-21 from 3 user projects (research repo with 239 source files would go to the full process). Fix commit: `6f322ce`.
+- Root cause / blast radius: size rule `< 50 files` ignored project type; research loops that drop gates by hand were forced into the heavy process.
+- Fix: experiment/research loop routes to `fast-track` at any size.
+- Mechanical check: `rg -n "fast-track" skills/auto-guide/SKILL.md`. Kit signal: `kit-missed` · full · `22538d4`.
+
+## STALE-001 - Counts and line limits in docs out of date: fixed
+
+- Baseline: `20521c3`, observed 2026-11-21. Fix commit: this batch.
+- Root cause: `AGENTS.md` said 64 lines (ratchet allows 65) and `README.md` said 9 sub-skills while 14 install. Hardcoded numbers drift.
+- Fix: updated both. Mechanical check: `bash scripts/skill-health-check.sh` and `scripts/validate.ps1` (line ratchet). Kit signal: `kit-ignored` (one-truth-one-place: counts should be derived, not copied) · full · `20521c3`.
+
+## PRIV-001 - Machine path in new script example: fixed
+
+- Baseline: uncommitted `audit-project.ps1`, 2026-11-21; caught by `validate.ps1` `[PRIVACY]`. Fix: placeholder path before commit.
+- Mechanical check: `scripts/validate.ps1`. Kit signal: `kit-caught` · full · `20521c3`.

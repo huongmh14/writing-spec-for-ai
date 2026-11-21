@@ -11,7 +11,7 @@ echo ""
 # Check 1: Skills có license field không
 echo "1. Checking license field in skills..."
 missing_license=0
-for skill in auto-guide starter-guide cheat-sheet writing-spec-simple; do
+for skill in auto-guide writing-spec-simple; do
   if ! grep -q "license:" "$skills_root/$skill/SKILL.md" 2>/dev/null; then
     echo "  ❌ $skill: missing license field"
     missing_license=$((missing_license + 1))
@@ -24,7 +24,7 @@ echo ""
 # Check 2: Skills có "When NOT to use" không
 echo "2. Checking 'When NOT to use' sections..."
 missing_when_not=0
-for skill in auto-guide starter-guide cheat-sheet writing-spec-simple; do
+for skill in auto-guide writing-spec-simple; do
   if ! grep -qi "when not to use\|không dùng khi\|when to avoid" "$skills_root/$skill/SKILL.md" 2>/dev/null; then
     echo "  ❌ $skill: missing 'When NOT to use' section"
     missing_when_not=$((missing_when_not + 1))

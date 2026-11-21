@@ -4,7 +4,7 @@
 .EXAMPLE
     powershell -File scripts/audit-project.ps1 <path-to-your-project>
 .NOTES
-    Checks: docs/code line ratio, same-topic duplicate docs, bug-ledger entries missing SHA or runnable check.
+    Checks: docs/code line ratio, same-topic duplicate docs, bug-ledger entries missing SHA, runnable check or kit signal (references/kit-evidence.md).
     Always exits 0: these are warnings from measured projects, not hard gates.
 #>
 param([Parameter(Mandatory)][string]$Path)
@@ -32,12 +32,15 @@ $md | Group-Object { $_.DirectoryName + '|' + ($_.BaseName -replace '-(design|sp
 $ledger = $md | Where-Object Name -eq 'conflicts-and-bugs.md' | Select-Object -First 1
 if ($ledger) {
     $entries = (Get-Content $ledger.FullName -Raw -Encoding UTF8) -split '(?m)^## ' | Select-Object -Skip 1
+    $sig = @{}
     foreach ($e in $entries) {
         $title = ($e -split "`n")[0].Trim()
         if ($e -notmatch '\b[0-9a-f]{7,40}\b' -and $e -notmatch '(?i)no commit') { $warn += "[LEDGER] '$title': no commit SHA and no 'no commit: <reason>'." }
+        if ($e -match '(?i)kit-(missed|ignored|caught)|not-kit') { $sig[$Matches[0].ToLower()]++ } else { $warn += "[LEDGER] '$title': no kit signal (kit-missed/kit-ignored/kit-caught/not-kit), see references/kit-evidence.md." }
         if ($e -notmatch '(?i)pytest|npm (run )?test|check|lint|\.ps1|\.sh|python .*\.py') { $warn += "[LEDGER] '$title': no runnable check." }
     }
 }
 
+if ($ledger) { Write-Host ("Kit signals: " + (($sig.GetEnumerator() | Sort-Object Name | ForEach-Object { "$($_.Name)=$($_.Value)" }) -join ', ')) -ForegroundColor Cyan }
 if ($warn) { $warn | ForEach-Object { Write-Host "WARN $_" -ForegroundColor Yellow } } else { Write-Host 'No warnings.' -ForegroundColor Green }
 exit 0

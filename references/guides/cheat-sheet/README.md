@@ -1,13 +1,3 @@
----
-name: cheat-sheet
-description: Use when the user explicitly asks for a skill lookup, usage conditions, or examples.
-license: MIT
-trigger_phrases:
-  - "when to use a skill", "skill lookup", "when to use"
-do_not_use:
-  - "When you need auto-guidance", "When the skill is already decided"
----
-
 # Cheat Sheet - When to Use Which Skill
 
 ## Quick Lookup

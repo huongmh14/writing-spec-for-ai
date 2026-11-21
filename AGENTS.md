@@ -5,7 +5,7 @@ Repo này chứa skill `writing-spec-for-ai` (bộ điều phối) cùng các sk
 ## Cấu trúc
 
 - `SKILL.md` — entry point, bộ điều phối 3 cổng (chỉ 64 dòng, không thêm logic vào đây)
-- `skills/` — sub-skills của bộ điều phối + skill người mới (`auto-guide`, `starter-guide`, `cheat-sheet`, `writing-spec-simple`, `idea-to-spec`, `fast-track`)
+- `skills/` — sub-skills của bộ điều phối + skill người mới (`auto-guide`, `writing-spec-simple`, `idea-to-spec`, `fast-track`)
 - `agents/` — subagent definitions (`spec-surveyor`, `spec-challenger`, `doc-tester`)
 - `references/` — core laws `C01–C31`, principles, glossary, examples
 - `templates/` — mẫu `AGENTS.md`, `CONSTRAINTS.md`, spec, decisions, progress
@@ -20,7 +20,7 @@ Repo này chứa skill `writing-spec-for-ai` (bộ điều phối) cùng các sk
 - Frontmatter YAML (`description`, `trigger_phrases`, `do_not_use`) là tầng luôn nạp — giữ < 100 token.
 - `SKILL.md` giữ < 500 dòng; nội dung dài  `references/`; mẫu tái dùng  `templates/`; tác vụ có đáp án đúng  `scripts/`.
 - Skills hot (~39) tự nạp; skills cold tra bằng `skillctl search <keyword>`, bật bằng `skillctl add`, gỡ bằng `skillctl remove`. Không đưa skill vào hot tier chỉ để dùng một lần.
-- Routing: `auto-guide` là bộ định tuyến duy nhất; `starter-guide`/`cheat-sheet` chỉ là tài liệu tham khảo, không tự trigger cho tác vụ code thường.
+- Routing: `auto-guide` là bộ định tuyến duy nhất; `references/guides/` (starter-guide, cheat-sheet) chỉ là tài liệu tham khảo, không phải skill.
 
 ## Verify
 

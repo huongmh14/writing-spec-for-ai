@@ -1,13 +1,3 @@
----
-name: starter-guide
-description: Use when a beginner explicitly asks for an overview of the skill collection or how skills combine.
-license: MIT
-trigger_phrases:
-  - "skill guide", "which skill fits", "getting started with skills"
-do_not_use:
-  - "When you already know the specific skill", "When you need implementation details"
----
-
 # Starter Guide - Quick Guide for Beginners
 
 **For:** People new to using AI agents for coding, or who want a fast overview of how skills combine as a project grows.

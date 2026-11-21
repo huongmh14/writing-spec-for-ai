@@ -24,7 +24,7 @@ Evidence: in a measured research project the user removed subagents and review g
 
 1. `AGENTS.md` ≤ 60 lines: current goal, run/test commands, data-leak rules, "what counts as a result".
 2. `docs/progress.md` ≤ 5 KB: per experiment `hypothesis → run → result (number) → next decision`, plus stop point. Old entries go to `docs/progress-archive/`.
-3. `docs/conflicts-and-bugs.md`: each entry has date, root cause, fix, a runnable check, and commit SHA or `no commit: <reason>`.
+3. `docs/conflicts-and-bugs.md`: each entry has date, root cause, fix, a runnable check, and commit SHA or `no commit: <reason>`, and a kit signal per `references/kit-evidence.md`.
 
 ## Skip
 

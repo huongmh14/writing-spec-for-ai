@@ -8,11 +8,11 @@
 
 ## 1. Bảng Tổng hợp Lỗi & Xung đột Đã Gặp
 
-Mỗi khi phát hiện hoặc sửa xong một bug / xung đột / revert, **bắt buộc** thêm 1 dòng vào bảng dưới đây trước khi đóng đợt:
+Mỗi khi phát hiện hoặc sửa xong một bug / xung đột / revert, **bắt buộc** thêm 1 dòng vào bảng dưới đây trước khi đóng đợt (ý nghĩa 4 tín hiệu: `references/kit-evidence.md`):
 
-| ID | Ngày / Commit SHA | Phân loại (`Enum` / `API` / `DB` / `Port` / `UI` / `Logic`) | Mô tả triệu chứng & Xung đột | Nguyên nhân gốc (Root Cause) | Cách chặn tự động bằng máy (`Gate 0` / Test / Lint) | Ngày kiểm lần cuối |
-|---|---|---|---|---|---|---|
-| `BUG-01` | `YYYY-MM-DD` · `<sha>` | `<loại>` | `<chuyện gì đã xảy ra>` | `<vì sao AI/người viết gây lỗi>` | `<lệnh grep / test / constraint chặn lỗi này>` | `YYYY-MM-DD` |
+| ID | Ngày / Commit SHA | Phân loại (`Enum` / `API` / `DB` / `Port` / `UI` / `Logic`) | Mô tả triệu chứng & Xung đột | Nguyên nhân gốc (Root Cause) | Cách chặn tự động bằng máy (`Gate 0` / Test / Lint) | Ngày kiểm lần cuối | Tín hiệu bộ kit (`kit-missed` / `kit-ignored` / `kit-caught` / `not-kit`) · track · phiên bản kit |
+|---|---|---|---|---|---|---|---|
+| `BUG-01` | `YYYY-MM-DD` · `<sha>` | `<loại>` | `<chuyện gì đã xảy ra>` | `<vì sao AI/người viết gây lỗi>` | `<lệnh grep / test / constraint chặn lỗi này>` | `YYYY-MM-DD` | `<tín hiệu>` · `<fast-track/simple/full>` · `<tag hoặc sha của kit>` |
 
 ---
 

@@ -39,8 +39,8 @@ MUST read [routing guidance](references/routing-guidance.md) before proposing: i
 
 ### Signal 3: New project / no AI docs yet
 **Keywords:** new project, AGENTS.md, docs for AI, standardize docs
-**Detection:** Project < 50 files  `writing-spec-simple`, >= 50 files  `writing-spec-for-ai`
-** Propose:** `writing-spec-simple` or `writing-spec-for-ai`
+**Detection:** Experiment/research loop (results change the plan daily), any size  `fast-track`; otherwise project < 50 files  `writing-spec-simple`, >= 50 files  `writing-spec-for-ai`
+** Propose:** `fast-track`, `writing-spec-simple` or `writing-spec-for-ai`
 
 ### Signal 4: Has requirements/spec to implement
 **Keywords:** implement, feature, requirements, spec, design doc, plan

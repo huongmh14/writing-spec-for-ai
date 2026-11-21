@@ -15,18 +15,24 @@ EMOJI_RE = re.compile(
     '\u2600-\u27BF'
     '\u2B00-\u2BFF'
     '\uFE0F'
-    '\u2190-\u21FF'
     '\u2700-\u27BF'
-    ']+', flags=re.UNICODE)
+    ']+ ?', flags=re.UNICODE)  # arrows U+2190-21FF are text, kept; eat one trailing space
 
 def clean(text):
     for k, v in REPLACEMENTS.items():
-        text = text.replace(k, v)
+        text = re.sub(re.escape(k) + ' ?', '', text) if v == '' else text.replace(k, v)
     text = EMOJI_RE.sub('', text)
     # collapse leftover spaces before punctuation/newlines
-    text = re.sub(r'[ \t]+([,.;:)\]])', r'\1', text)
+    text = re.sub(r'(?<!\[)[ \t]+([,.;:)\]])', r'\1', text)  # keep the '[ ]' checkbox
     text = re.sub(r'\n{3,}', '\n\n', text)
     return text
+
+if sys.argv[1:] == ['--selftest']:
+    assert clean('a → b') == 'a → b', 'arrow must survive'
+    assert clean('❌ todo') == '[ ] todo' and clean('- [ ] x') == '- [ ] x', 'checkbox must survive'
+    assert clean('x 🎯 y') == 'x y', 'emoji removed without double space'
+    assert clean('ok ✅') == 'ok [x]', 'check mark mapped'
+    print('selftest ok'); sys.exit(0)
 
 changed = []
 for root in sys.argv[1:]:

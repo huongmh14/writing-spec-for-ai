@@ -1,97 +1,98 @@
-# Ví dụ chuẩn (lấy từ dự án thật, đã chú giải)
+# Reference examples (taken from a real project, annotated)
 
-Nguồn: bộ spec của nền tảng dashboard (NestJS + Quasar + Prisma). Mọi ví dụ dưới đây là REQ/AC **đã nghiệm thu bằng test** — dùng làm chuẩn so sánh khi viết spec mới. Gốc: `docs/specs/04-rbac.md`, `13-security-nfr.md`, `docs/decisions.md`.
+Source: the spec set of a dashboard platform (NestJS + Quasar + Prisma). Every example below is a REQ/AC that was **accepted by tests** — use them as the benchmark when writing new specs. Origin: `docs/specs/04-rbac.md`, `13-security-nfr.md`, `docs/decisions.md`.
 
-## 1. REQ theo mẫu EARS
+## 1. REQs in EARS form
 
-| Ví dụ thật | Mẫu EARS | Vì sao đạt |
+| Real example | EARS pattern | Why it passes |
 |---|---|---|
-| `RBAC-R01` — User không ở trạng thái ACTIVE có quyền hiệu lực rỗng. | Trạng thái | Điều kiện + kết quả quantified ("rỗng" kiểm được) |
-| `RBAC-R16` — Thiếu quyền  403 `AUTH_FORBIDDEN`. | Lỗi | Có mã HTTP + mã lỗi cụ thể |
-| `RBAC-R21` — Thay đổi **thu hẹp** (bớt quyền, deprecate vai trò) áp dụng ngay khi sync, tăng `permVersion` user bị ảnh hưởng, ghi AuditLog. | Sự kiện | Sự kiện + 3 hệ quả quan sát được |
-| `RBAC-R15` — Mọi thay đổi ảnh hưởng quyền hiệu lực … tăng `permVersion` của **mọi** user bị ảnh hưởng **trong cùng transaction**. | Sự kiện | Định lượng "mọi", ràng buộc "cùng transaction" — đủ hẹp để test |
-| `RBAC-R30` — MUST (GĐ2) — Scope `ORG`/`ORG_TREE` dựa trên `OrgUnit.path`… | Tuỳ chọn + giai đoạn | Có thời điểm làm, agent không làm trước |
+| `RBAC-R01` — A user not in the ACTIVE state has an empty effective permission set. | State | Condition + quantified result ("empty" is checkable) |
+| `RBAC-R16` — Missing permission → 403 `AUTH_FORBIDDEN`. | Error | Concrete HTTP code + error code |
+| `RBAC-R21` — A **narrowing** change (removing permissions, deprecating a role) applies immediately on sync, bumps `permVersion` of the affected users, and writes an AuditLog. | Event | One event + 3 observable consequences |
+| `RBAC-R15` — Every change affecting effective permissions ... bumps `permVersion` of **every** affected user **in the same transaction**. | Event | Quantified "every", bounded by "same transaction" — narrow enough to test |
+| `RBAC-R30` — MUST (phase 2) — `ORG`/`ORG_TREE` scope is based on `OrgUnit.path`... | Optional + phase | Has a timing; the agent does not build it early |
 
-Đối chiếu: câu viết hỏng `"Hệ thống phải bảo mật và phân quyền linh hoạt"` — không mẫu EARS, không số, không kiểm được.
+Contrast: the broken sentence `"The system must be secure and have flexible authorization"` — no EARS pattern, no number, not checkable.
 
-## 2. AC dạng Cho / Khi / Thì
+## 2. ACs in Given / When / Then form
 
-| AC thật | Cấu trúc |
+| Real AC | Structure |
 |---|---|
-| `RBAC-AC03` — *Cho* user có `orders:*` và DENY `orders:delete`, *khi* gọi `DELETE /orders/:id`, *thì* 403. | Biên trừu tượng thắng wildcard, dữ liệu đầu vào cụ thể |
-| `RBAC-AC07` — *Cho* nhóm có 50 thành viên, *khi* sửa quyền của nhóm, *thì* `permVersion` của cả 50 user tăng trong cùng transaction. | Số lượng cụ thể (50), hệ quả đếm được |
-| `RBAC-AC12` — *Cho* chỉ còn một SUPER_ADMIN ACTIVE, *khi* khoá tài khoản đó, *thì* 409 `RBAC_LAST_SUPER_ADMIN`. | AC cho nhánh lỗi, có mã lỗi |
-| `RBAC-AC18` — *Cho* cùng bộ quyền hiệu lực và mã yêu cầu (gồm wildcard), *khi* chạy `matchPermission` ở BE và FE, *thì* kết quả giống nhau (test dùng chung bộ dữ liệu). | Contract chạy nhiều runtime + test vectors dùng chung |
-| `NFR-AC08` — *Cho* một user gọi `POST /reports/:code/runs` vượt ngưỡng (10 lần/phút), *khi* gửi, *thì* các request vượt ngưỡng nhận 429 `RATE_LIMITED` và user khác không bị ảnh hưởng. | NFR có AC: ngưỡng số + điều kiện không lan sang người khác |
+| `RBAC-AC03` — *Given* a user with `orders:*` and a DENY on `orders:delete`, *when* calling `DELETE /orders/:id`, *then* 403. | The specific deny beats the wildcard; concrete input data |
+| `RBAC-AC07` — *Given* a group of 50 members, *when* the group's permissions are edited, *then* `permVersion` of all 50 users is bumped in the same transaction. | Concrete count (50), countable consequence |
+| `RBAC-AC12` — *Given* only one ACTIVE SUPER_ADMIN remains, *when* that account is locked, *then* 409 `RBAC_LAST_SUPER_ADMIN`. | AC for the error branch, with an error code |
+| `RBAC-AC18` — *Given* the same effective permission set and requested code (including wildcards), *when* `matchPermission` runs on BE and FE, *then* the results are identical (the test uses a shared dataset). | Contract across several runtimes + shared test vectors |
+| `NFR-AC08` — *Given* one user calling `POST /reports/:code/runs` over the limit (10 per minute), *when* sending, *then* the over-limit requests get 429 `RATE_LIMITED` and other users are unaffected. | NFR with an AC: numeric threshold + a condition that nothing leaks to others |
 
-## 3. NFR thay tính từ bằng số
+## 3. NFRs replace adjectives with numbers
 
-| Tính từ mơ hồ | REQ đạt (thật) |
+| Vague adjective | Passing REQ (real) |
 |---|---|
-| "nhanh" | `NFR-R20` — Chi phí guard quyền p95 < 5 ms (cache nóng). |
-| "chống spam" | `NFR-R02` — Rate limit lưu Redis: theo IP trên `/auth/*`; theo user trên gửi OTP và xuất báo cáo (mặc định 10 lần/phút). |
-| "có giám sát" | `NFR-R23` — Metric Prometheus: thời gian phản hồi, tỉ lệ lỗi, độ dài hàng đợi, số lần 2FA thất bại. |
-| "test đủ" | `NFR-R24` — Độ phủ test ≥ 80% cho `rbac`, `auth`, `mfa`; CI chặn merge nếu giảm dưới ngưỡng. |
-| "khỏi phục được" | `NFR-R26` — Backup PostgreSQL hằng ngày + WAL archiving, lưu ngoài máy chủ; diễn tập khôi phục định kỳ. |
+| "fast" | `NFR-R20` — Permission guard cost p95 < 5 ms (warm cache). |
+| "spam-proof" | `NFR-R02` — Rate limit stored in Redis: per IP on `/auth/*`; per user on OTP sending and report export (default 10 per minute). |
+| "monitored" | `NFR-R23` — Prometheus metrics: response time, error rate, queue length, number of failed 2FA attempts. |
+| "well tested" | `NFR-R24` — Test coverage ≥ 80% for `rbac`, `auth`, `mfa`; CI blocks the merge if it drops below the threshold. |
+| "recoverable" | `NFR-R26` — Daily PostgreSQL backup + WAL archiving, stored off the server; periodic restore drills. |
 
-## 4. Dòng quyết định (decisions.md)
+## 4. Decision rows (decisions.md)
 
-| ID | Ngày | Quyết định | Lý do tóm tắt | Spec |
+| ID | Date | Decision | Short reason | Spec |
 |---|---|---|---|---|
-| D-08 | 2026-09-23 | Đăng nhập Google + 2FA riêng: OTP email mặc định bắt buộc; TOTP tuỳ chọn; khi có TOTP thì OTP email là phương thức thứ cấp | Yêu cầu nghiệp vụ | SPEC-MFA |
-| D-11 | 2026-09-23 | Image đẩy lên registry nội bộ. **Thay thế phần "trên GHCR" của D-04**; phần còn lại của D-04 giữ nguyên | Dùng registry nội bộ | SPEC-REPO |
+| D-08 | 2026-09-23 | Google login + separate 2FA: email OTP mandatory by default; TOTP optional; when TOTP exists, email OTP becomes the secondary method | Business requirement | SPEC-MFA |
+| D-11 | 2026-09-23 | Images are pushed to the internal registry. **Replaces the "on GHCR" part of D-04**; the rest of D-04 stays | Use the internal registry | SPEC-REPO |
 
-Điểm đạt: một dòng một quyết định; dòng thay thế ghi rõ *thay phần nào* của dòng cũ; có Spec đích để truy vết.
+What makes them pass: one row per decision; a replacing row states *which part* of the old row it replaces; a target Spec is given for traceability.
 
-## 5. Chia khu vực spec cho một dự án (19 spec của dashboard)
+## 5. Splitting spec areas for a project (the dashboard's 19 specs)
 
 ```
-Kiến trúc/lõi phương tiện: ARCH, REPO, MOD, DATA, API, NFR, ROADMAP, DOCS
-Miền năng lực:            RBAC, AUTH, MFA, PASSKEY, ADMIN, UIKIT, WIDGET, REPORT, DATASET, NOTIF, INTEG, CLI
+Architecture/core:   ARCH, REPO, MOD, DATA, API, NFR, ROADMAP, DOCS
+Capability domains:  RBAC, AUTH, MFA, PASSKEY, ADMIN, UIKIT, WIDGET, REPORT, DATASET, NOTIF, INTEG, CLI
 ```
 
-Quy tắc rút ra: mỗi spec trả lời được "ai dùng tính năng này để làm gì"; không có số REQ tối thiểu. Con số trong ví dụ lịch sử không là mục tiêu phải điền cho đủ: chỉ viết chi tiết phần sắp làm (**Quyền thực thi theo đợt** `C30`, **Nguồn & giới hạn hiểu biết** `C31`). Bản thử dễ đọc: [controlled-spec-demo.md](controlled-spec-demo.md).
+Derived rule: every spec can answer "who uses this feature to do what"; there is no minimum REQ count. The numbers in the historical example are not a target to fill: write in detail only the part about to be built (**per-batch execution authority** `C30`, **sources & knowledge limits** `C31`). An easy-to-read trial version: [controlled-spec-demo.md](controlled-spec-demo.md).
 
-## 6. Plan theo PR (docs/plans/M6.md, rút gọn)
+## 6. Plan per PR (docs/plans/M6.md, abridged)
 
-| PR | Nhánh | Nội dung | AC | Phụ thuộc | Song song |
+| PR | Branch | Content | AC | Depends on | Parallel |
 |---|---|---|---|---|---|
-| 1 | `feat/SPEC-MOD-ext` | DomainEventBus, AuthHooks, ScopeResolver | MOD-AC20, AUTH-AC04 | — | [P] với 2 |
+| 1 | `feat/SPEC-MOD-ext` | DomainEventBus, AuthHooks, ScopeResolver | MOD-AC20, AUTH-AC04 | — | [P] with 2 |
 | 2 | `feat/SPEC-API-users` | `/users*`, `/me/permissions` | API-AC01, NFR-AC07 | 1 | |
 
-Kèm "ngữ cảnh tối thiểu" mỗi PR: link đúng mục spec + file liên quan, để agent không nạp cả spec.
+Each PR carries a "minimum context": links to the exact spec sections + related files, so the agent does not load the whole spec.
 
-## 7. Sửa câu mơ hồ (trước  sau)
+## 7. Fixing vague sentences (before → after)
 
-| Trước (không dùng được) | Sau (đạt) |
+| Before (unusable) | After (passes) |
 |---|---|
-| "Đăng nhập an toàn" | `AUTH-R01` — Khi nhận ID token Google, hệ thống MUST verify chữ ký, `aud`, `iss`, `exp`, `email_verified` phía server; sai  401 `AUTH_INVALID_TOKEN`. |
-| "Xuất báo cáo không làm chậm hệ thống" | `REP-R04` — Xuất file chạy nền qua hàng đợi; `POST /reports/:code/runs` rate limit 10 lần/phút/user (D-27). |
-| "Giao diện phân quyền theo vai trò" | `RBAC-R41` — Directive `v-can` (ẩn) và `v-can.disable` (vô hiệu hoá) theo quyền hiệu lực. |
+| "Secure login" | `AUTH-R01` — On receiving a Google ID token, the system MUST verify the signature, `aud`, `iss`, `exp`, `email_verified` on the server side; failure → 401 `AUTH_INVALID_TOKEN`. |
+| "Exporting reports must not slow the system" | `REP-R04` — File export runs in the background through a queue; `POST /reports/:code/runs` is rate limited to 10 per minute per user (D-27). |
+| "UI with role-based permissions" | `RBAC-R41` — The `v-can` directive (hide) and `v-can.disable` (disable) follow the effective permissions. |
 
-## 8. Trình bày định hướng bằng hình (`C28` — Scope Radar & thẻ phương án)
+## 8. Presenting direction visually (`C28` — Scope Radar & option cards)
 
-Khi người dùng mới nêu ý tưởng mơ hồ (*"Làm tính năng thông báo đơn hàng"*), thay vì viết ngay 20 REQ chữ khô khan, trình **Scope Radar** + **2 Phương án trực quan** ở Cổng 1 / Spec:
+When the user brings a vague idea (*"Build an order notification feature"*), instead of writing 20 dry REQs right away, present a **Scope Radar** + **2 visual options** at Gate 1 / in the Spec:
 
 - **Scope Radar:**
-  - (green) **Làm ngay (MVP):** Chuông thông báo in-app (`WebSocket`) + lưu DB `notifications` + đánh dấu đã đọc.
-  - (yellow) **Đợt kế (Phase 2):** Gửi email tổng hợp khi user offline > 15 phút.
-  - (red) **Không làm (Out of scope):** Web Push trình duyệt ngầm, SMS OTP.
-- **Snapshot I/O cụ thể (ASCII Wireframe + Payload mẫu):**
+  - (green) **Do now (MVP):** in-app notification bell (`WebSocket`) + store in the `notifications` DB table + mark as read.
+  - (yellow) **Next batch (Phase 2):** send a summary email when the user is offline for more than 15 minutes.
+  - (red) **Out of scope:** silent browser Web Push, SMS OTP.
+- **Concrete I/O snapshot (ASCII wireframe + sample payload):**
+
 ```text
 +--------------------------------------------------+
-| [Chuông (3)]  Thông báo mới        [Đánh dấu đọc]|
+| [Bell (3)]  New notifications      [Mark as read]|
 |--------------------------------------------------|
-| * Đơn #ORD-102 đã chuyển sang ĐANG GIAO   1p trước|
+| * Order #ORD-102 moved to SHIPPING     1 min ago |
 |   Payload: {"id":"n_1","type":"ORDER_SHIPPED"}   |
 +--------------------------------------------------+
 ```
 
-## 9. Bằng chứng test hiển thị (`C29`)
+## 9. Visible test evidence (`C29`)
 
-Thay vì báo *"All 12 tests passed"*, hiển thị bảng để lập trình viên nhìn thấy ngay độ thật của test:
+Instead of reporting *"All 12 tests passed"*, show a table so the developer immediately sees how real the tests are:
 
-| AC-ID | Kịch bản kiểm thử | Đầu vào cụ thể (Input) | Kết quả & Tác dụng phụ thực tế (Observed Output) | Tầng & Độ thật (khai báo mock) | Kết quả |
+| AC-ID | Test scenario | Concrete input | Observed output & real side effects | Layer & realism (declare mocks) | Result |
 |---|---|---|---|---|---|
-| `RBAC-AC03` | `DENY` thắng wildcard `orders:*` | `user={allow:["orders:*"], deny:["orders:delete"]}` gọi `DELETE /api/v1/orders/42` | HTTP `403`, body `{"error":{"code":"AUTH_FORBIDDEN"}}`; bản ghi `orders#42` còn nguyên trong PG | `integration` — **0 Mock** (PostgreSQL + Redis thật) | [x] PASS (42ms) |
-| `NFR-AC08` | Chặn vượt rate limit 10 lần/phút | Gửi 11 request `POST /reports/sales/runs` từ `user_1`, 1 request từ `user_2` | Lần 1..10: `202`; lần 11 (`user_1`): `429 RATE_LIMITED`; `user_2`: `202` | `integration` — Redis thật, **Mock:** `GotenbergClient.renderPdf` | [x] PASS (68ms) |
+| `RBAC-AC03` | `DENY` beats the wildcard `orders:*` | `user={allow:["orders:*"], deny:["orders:delete"]}` calls `DELETE /api/v1/orders/42` | HTTP `403`, body `{"error":{"code":"AUTH_FORBIDDEN"}}`; record `orders#42` still intact in PG | `integration` — **0 mocks** (real PostgreSQL + Redis) | [x] PASS (42ms) |
+| `NFR-AC08` | Block above the 10-per-minute rate limit | Send 11 `POST /reports/sales/runs` requests from `user_1`, 1 request from `user_2` | Requests 1..10: `202`; request 11 (`user_1`): `429 RATE_LIMITED`; `user_2`: `202` | `integration` — real Redis, **Mock:** `GotenbergClient.renderPdf` | [x] PASS (68ms) |

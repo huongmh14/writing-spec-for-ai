@@ -1,38 +1,38 @@
-# Danh mục góc nhìn chuyên môn (lens)
+# Catalog of professional lenses
 
-Dùng thay cho câu "bạn là senior BA / tech lead…". Đầu mỗi bước, AI tra bảng, bật **tối đa 3** góc nhìn có tín hiệu thật rồi ghi một dòng:
+Use this instead of "you are a senior BA / tech lead...". At the start of each step the AI consults the table, turns on **at most 3** lenses that have a real signal, then writes one line:
 
-`Góc nhìn: <tên> — vì <tín hiệu cụ thể: file, từ khoá, bước>`
+`Lens: <name> — because <specific signal: file, keyword, step>`
 
-Người dùng nói "thêm/bỏ góc nhìn X" thì AI làm theo. Mỗi góc nhìn phải đổi **câu hỏi và đầu ra**, không chỉ đổi giọng văn.
+When the user says "add/remove lens X" the AI does so. Each lens must change the **questions and the output**, not just the tone.
 
-> **Vì sao không dùng danh xưng (Đã xác minh, 2026-10-26):**
-> - Zheng et al., Findings EMNLP 2024, <https://arxiv.org/abs/2311.10054>, nguyên văn: *"adding personas in system prompts does not improve model performance across a range of questions compared to the control setting where no persona is added"*. Cùng bài: tự chọn persona *"often performing no better than random selection"*.
-> - Kim et al. 2024, <https://arxiv.org/abs/2408.08631>, nguyên văn: *"role-playing prompts sometimes distract LLMs, degrading their reasoning abilities in 7 out of 12 datasets in llama3"*.
-> - Anthropic, <https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices#give-claude-a-role>, nguyên văn: *"Setting a role in the system prompt focuses Claude's behavior and tone"*. Theo tài liệu này, độ chính xác đến từ ví dụ, không đến từ vai trò.
+> **Why we do not use job titles (Verified, 2026-10-26):**
+> - Zheng et al., Findings EMNLP 2024, <https://arxiv.org/abs/2311.10054>, verbatim: *"adding personas in system prompts does not improve model performance across a range of questions compared to the control setting where no persona is added"*. Same paper: choosing a persona automatically is *"often performing no better than random selection"*.
+> - Kim et al. 2024, <https://arxiv.org/abs/2408.08631>, verbatim: *"role-playing prompts sometimes distract LLMs, degrading their reasoning abilities in 7 out of 12 datasets in llama3"*.
+> - Anthropic, <https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices#give-claude-a-role>, verbatim: *"Setting a role in the system prompt focuses Claude's behavior and tone"*. According to that document, accuracy comes from examples, not from the role.
 >
-> Kết luận: chất lượng nằm ở checklist bên dưới; một dòng mô tả vai trò chỉ định hướng giọng văn.
+> Conclusion: quality lives in the checklist below; a one-line role description only steers the tone.
 
-| Góc nhìn | Bật khi có tín hiệu | Câu hỏi bắt buộc | Đầu ra | Skill liên quan |
+| Lens | Turn on when this signal appears | Mandatory questions | Output | Related skill |
 |---|---|---|---|---|
-| Phân tích nghiệp vụ (BA) | Yêu cầu mơ hồ, nhiều bên liên quan, chưa có AC | Ai dùng? Thành công đo bằng gì? Trường hợp biên nào? Điều gì **không** làm? | REQ dạng EARS, AC Cho/Khi/Thì, `[CẦN LÀM RÕ]` | `write-spec` |
-| Kiến trúc / Tech lead | > 2 PR, nhiều module, quyết định khó đảo ngược | Ranh giới module ở đâu? Lùi lại (rollback) thế nào? Task nào chặn task nào? | Design doc, đồ thị task | `write-design-doc`, `plan-tasks` |
-| Dữ liệu | Chạm schema, migration, backfill, dữ liệu người dùng | Đổi được mà không gián đoạn không? Dữ liệu cũ xử lý ra sao? | Chuỗi Expand–Migrate–Contract | `plan-tasks`, [PK-DB](../packs/PK-DB.md) |
-| Bảo mật | Đăng nhập, phân quyền, dữ liệu cá nhân, thanh toán, secret | Theo STRIDE: ai giả mạo được, cái gì lộ hoặc bị sửa được? Có cần chuyên gia không? | Bảng mối đe doạ + biện pháp, ghi "cần chuyên gia" nếu vượt hiểu biết | `write-design-doc`, [PK-AUTH](../packs/PK-AUTH.md) |
-| Kiểm thử (QA) | Có AC, có hồi quy, đang sửa bug | Test ở tầng nào? Bằng chứng nào chứng minh là đúng? Có dùng mock không? | Bảng test hiển thị, tầng test cho từng AC | `generate-verify-harness` |
-| Vận hành (SRE) | Deploy, worker, cron, hạ tầng, hàng đợi | Hỏng thì biết bằng cách nào? Lùi bản ra sao? | Log/metric cần có, runbook | [PK-OBS](../packs/PK-OBS.md), [PK-RELEASE](../packs/PK-RELEASE.md) |
-| Ngữ cảnh cho AI | Viết `AGENTS.md`, docs cho agent, skill dự án | Agent mới vào đọc file nào trước? Có vượt ngân sách đọc mỗi phiên không? Có hai nguồn sự thật không? | `AGENTS.md`, bản đồ docs, con trỏ có điều kiện | `propose-doc-design`, [PK-AGENT](../packs/PK-AGENT.md) |
-| Trải nghiệm người dùng (UX) | Có UI hoặc luồng thao tác của người dùng | Người dùng kẹt ở đâu? Trạng thái lỗi/rỗng/đang tải ra sao? Có đạt a11y không? | Luồng màn hình, trạng thái lỗi | [PK-FE](../packs/PK-FE.md) |
-| Phản biện | **Luôn bật** ở Cổng 2 và khi so sánh phương án | Chỗ nào sai được? Khẳng định nào thiếu nguồn mở được? Phương án nào là bù nhìn? | Danh sách vấn đề kèm mức độ | `review-docs`, `explore-options` |
+| Business analysis (BA) | Vague requirements, many stakeholders, no AC yet | Who uses it? How is success measured? Which edge cases? What is **not** done? | EARS REQs, Given/When/Then ACs, `[NEEDS CLARIFICATION]` | `write-spec` |
+| Architecture / Tech lead | More than 2 PRs, many modules, hard-to-reverse decisions | Where are the module boundaries? How do we roll back? Which task blocks which? | Design doc, task graph | `write-design-doc`, `plan-tasks` |
+| Data | Touches schema, migration, backfill, user data | Can it change without downtime? How is old data handled? | Expand–Migrate–Contract sequence | `plan-tasks`, [PK-DB](../packs/PK-DB.md) |
+| Security | Login, authorization, personal data, payments, secrets | Per STRIDE: who can spoof, what can leak or be altered? Is an expert needed? | Threat table + mitigations; write "needs expert" if beyond our knowledge | `write-design-doc`, [PK-AUTH](../packs/PK-AUTH.md) |
+| Testing (QA) | ACs exist, regressions, fixing a bug | At which layer do we test? What evidence proves it is correct? Are mocks used? | Visible test table, test layer for each AC | `generate-verify-harness` |
+| Operations (SRE) | Deploy, workers, cron, infrastructure, queues | How will we know it broke? How do we roll back? | Required logs/metrics, runbook | [PK-OBS](../packs/PK-OBS.md), [PK-RELEASE](../packs/PK-RELEASE.md) |
+| Context for AI | Writing `AGENTS.md`, docs for agents, project skills | Which file does a new agent read first? Does it exceed the per-session read budget? Are there two sources of truth? | `AGENTS.md`, docs map, conditional pointers | `propose-doc-design`, [PK-AGENT](../packs/PK-AGENT.md) |
+| User experience (UX) | There is a UI or a user interaction flow | Where does the user get stuck? What do the error/empty/loading states look like? Does it meet a11y? | Screen flow, error states | [PK-FE](../packs/PK-FE.md) |
+| Challenge | **Always on** at Gate 2 and when comparing options | What can be wrong? Which claim lacks an openable source? Which option is a strawman? | Issue list with severity | `review-docs`, `explore-options` |
 
-Bước mặc định (nếu chưa có tín hiệu nào khác):
+Default lenses per step (if no other signal exists):
 
-| Bước | Góc nhìn mặc định |
+| Step | Default lens |
 |---|---|
-| 1–4 (khảo sát, đề xuất) | Ngữ cảnh cho AI + BA |
-| 5b (spec) | BA + Kiểm thử |
-| 5c (design) | Kiến trúc + góc nhìn rủi ro có tín hiệu (Dữ liệu/Bảo mật/Vận hành) |
-| 6 (Cổng 2) | Phản biện |
-| 7.5–8 (plan, code) | Kiến trúc + Kiểm thử |
+| 1–4 (survey, proposal) | Context for AI + BA |
+| 5b (spec) | BA + Testing |
+| 5c (design) | Architecture + a risk lens that has a signal (Data/Security/Operations) |
+| 6 (Gate 2) | Challenge |
+| 7.5–8 (plan, code) | Architecture + Testing |
 
-Thêm góc nhìn mới khi một loại tín hiệu lặp lại ≥ 2 dự án. Ghi đủ 5 cột; thiếu "Câu hỏi bắt buộc" thì đó chỉ là danh xưng, không nhận.
+Add a new lens when one kind of signal repeats in 2 or more projects. Fill all 5 columns; without "Mandatory questions" it is only a job title and is not accepted.

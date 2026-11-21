@@ -17,7 +17,7 @@ do_not_use:
 
 # Idea to Spec - From Idea to Spec
 
-**Goal:** The user only provides an idea  the AI does full analysis  writes the spec  reviews code after implementation.
+**Goal:** The user only provides an idea → the AI does full analysis → writes the spec → reviews code after implementation.
 
 **When to use:**
 - User has a new idea and doesn't know if it's feasible
@@ -26,9 +26,9 @@ do_not_use:
 - User wants the AI to analyze scale and maintainability
 
 **When NOT to use:**
-- A clear spec already exists  use `writing-spec-simple` or `writing-spec-for-ai`
-- Only fixing a bug  use `systematic-debugging`
-- Small task needing no analysis  code directly
+- A clear spec already exists → use `writing-spec-simple` or `writing-spec-for-ai`
+- Only fixing a bug → use `systematic-debugging`
+- Small task needing no analysis → code directly
 
 ---
 
@@ -41,13 +41,13 @@ Before analysis, MUST read [the procedure](references/procedure.md). It covers i
 
 Before claiming "spec complete", must check:
 
-- [] **Check 1:** Is there a clear feasibility analysis?
-- [] **Check 2:** Is there a concrete scale prediction?
-- [] **Check 3:** Is there a maintainability assessment?
-- [] **Check 4:** Is there a spec with REQ + AC?
-- [] **Check 5:** Has the user approved?
+- [ ] **Check 1:** Is there a clear feasibility analysis?
+- [ ] **Check 2:** Is there a concrete scale prediction?
+- [ ] **Check 3:** Is there a maintainability assessment?
+- [ ] **Check 4:** Is there a spec with REQ + AC?
+- [ ] **Check 5:** Has the user approved?
 
-**If any check = No  not complete, keep improving.**
+**If any check = No → not complete, keep improving.**
 
 ---
 
@@ -92,7 +92,7 @@ Before claiming "spec complete", must check:
 
 ## When NOT to Use
 
-- A clear spec already exists  use writing-spec-simple or writing-spec-for-ai
-- Only fixing a bug  use systematic-debugging
-- Small task needing no analysis  code directly
-- Project already has a complete AGENTS.md  idea-to-spec not needed
+- A clear spec already exists → use writing-spec-simple or writing-spec-for-ai
+- Only fixing a bug → use systematic-debugging
+- Small task needing no analysis → code directly
+- Project already has a complete AGENTS.md → idea-to-spec not needed

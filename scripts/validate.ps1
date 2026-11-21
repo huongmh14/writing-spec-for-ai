@@ -262,7 +262,7 @@ if (-not (Test-Path $exploreSkill)) { $exploreSkill = Join-Path $root "skills/ex
 if (-not (Test-Path $exploreSkill)) { $exploreSkill = Join-Path (Split-Path $root -Parent) "explore-options/SKILL.md" }
 if (Test-Path $exploreSkill) {
     $exploreRaw = Get-Content $exploreSkill -Raw -Encoding UTF8
-    foreach ($pat in @('(?i)ng\u01B0\u1EDDi d\u00F9ng ch\u1ECDn', '(?i)gi\u1EEF nguy\u00EAn', '(?i)1 v\u00F2ng')) {
+    foreach ($pat in @('(?i)(người dùng chọn|user chooses)', '(?i)(giữ nguyên|keep as-is)', '(?i)(1 vòng|one (challenge )?round)')) {
         if ($exploreRaw -notmatch $pat) { $failures += "[LENS] skills/explore-options/SKILL.md missing /$pat/" }
     }
 }

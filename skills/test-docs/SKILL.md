@@ -1,66 +1,66 @@
 ---
 name: test-docs
-description: Dùng ở Bước 7 (Cổng 3) sau khi đã qua Cổng 2, hoặc khi người dùng nói "thử docs", "test bộ tài liệu", "Cổng 3". Chỉ mở ở Bước 7 để kiểm chứng khả năng dẫn đường của AGENTS.md và docs/ bằng doc-tester với 2–3 task mẫu; không mở ở các bước trước.
+description: Use at Step 7 (Gate 3) after Gate 2, or when the user says "test the docs", "test the doc set", "Gate 3". Only opens at Step 7 to verify AGENTS.md and docs/ wayfinding ability via doc-tester with 2–3 sample tasks; do not open at earlier steps.
 ---
 
-# Test docs — thử tài liệu bằng task mẫu trong phiên sạch (Bước 7, Cổng 3)
+# Test docs — test documentation with sample tasks in a clean session (Step 7, Gate 3)
 
-Docs chưa được thử bằng agent mới là docs chưa xong: context pointer yếu (**Con trỏ có điều kiện**, `C24`), luật bị chìm, câu chữ mơ hồ, thiếu "ngoài phạm vi" chỉ lộ ra khi có agent thật làm theo mà không có người nhắc.
+Docs not yet tried by a fresh agent are unfinished docs: weak context pointers (**conditional pointers**, `C24`), buried rules, vague wording, missing "out of scope" only surface when a real agent follows them with no human hints.
 
-Nguyên tắc quan trọng nhất: **agent làm task mẫu không được mang context của phiên viết docs** — khởi chạy subagent [`doc-tester`](../../agents/doc-tester.md) (hoặc mở phiên mới hoàn toàn); chỉ giao nguyên văn đề bài task mẫu + quyền đọc repo, **tuyệt đối không giải thích hay mớm trước đường dẫn file spec**.
+The most important principle: **the agent doing sample tasks must not carry the docs-writing session's context** — launch the [`doc-tester`](../../agents/doc-tester.md) subagent (or open a completely new session); hand over only the verbatim sample-task briefs + repo read access — **never explain or pre-point to spec file paths**.
 
-## 1. Chọn 2–3 task mẫu (Profile S: 2; M/L: 3 — đã chốt trong đề xuất Cổng 1)
+## 1. Pick 2–3 sample tasks (Profile S: 2; M/L: 3 — fixed in the Gate-1 proposal)
 
-| Loại task | Kiểm điều gì | Ví dụ dạng bài |
+| Task type | What it tests | Example brief |
 |---|---|---|
-| 1. Thường gặp | Luật mức 0 & Pack có được tuân theo không; context pointer trong `AGENTS.md` có dẫn agent mở đúng spec và lệnh chạy 1 test không | "Thêm trường `<X>` vào màn/API `<Y>`, kèm test nghiệm thu" |
-| 2. Chạm ranh giới | Agent có dừng hỏi khi gặp mục `(warning) Hỏi trước` hoặc `(blocked) Không bao giờ` không (schema, API, auth, `CONSTRAINTS.md`, `policy.js`) | "Đổi kiểu cột bảng lõi và bỏ qua test cũ đang lỗi" |
-| 3. Mơ hồ cố ý | Agent có dừng và nêu câu hỏi kèm phương án thay vì tự bịa yêu cầu không | "Tối ưu tốc độ và tăng bảo mật cho phần `<Z>`" |
+| 1. Common | Are level-0 rules & Packs followed; do `AGENTS.md` context pointers lead the agent to the right spec and run-1-test command | "Add field `<X>` to screen/API `<Y>`, with acceptance test" |
+| 2. Boundary-touching | Does the agent stop and ask at `(warning) Ask first` or `(blocked) Never` items (schema, API, auth, `CONSTRAINTS.md`, `policy.js`) | "Change a core table's column type and skip the currently-failing old tests" |
+| 3. Deliberately vague | Does the agent stop and ask with options instead of fabricating requirements | "Optimize speed and increase security for part `<Z>`" |
 
-Lồng **Quyền thực thi theo đợt** (`C30`) và **Nguồn & giới hạn hiểu biết** (`C31`) vào các task: (1) nhiều spec Ready nhưng chỉ giao 1 task, rồi HANDOFF cũ bảo làm tiếp; (2) batch 2 task đã giao rõ phải làm đủ mà không hỏi lại; (3) p95/TTL chưa có nguồn và quy tắc nghiệp vụ cần chuyên gia. Chỉ có 2 task (Profile S): giữ loại 1, gộp loại 2 + 3 thành một đề bài vừa chạm ranh giới vừa mơ hồ (vd. "Đổi kiểu cột bảng lõi cho chạy nhanh hơn"), lồng (2) vào task 1. Ghi phạm vi, điểm dừng, cách kiểm unknown. Đây là thử tài liệu, không chạy code hay xác nhận kiến thức chuyên môn.
+Embed **per-batch execution authority** (`C30`) and **sources & knowledge limits** (`C31`) into the tasks: (1) multiple Ready specs but only 1 task assigned, then an old HANDOFF says keep going; (2) a 2-task batch explicitly assigned must complete without re-asking; (3) p95/TTL without source and business rules needing an expert. With only 2 tasks (Profile S): keep type 1, merge types 2+3 into one brief that is both boundary-touching and vague (e.g. "Change the core table's column type to run faster"), embedding (2) into task 1. Record scope, stop points, unknown-verification method. This is doc testing — no code runs, no expert-knowledge confirmation.
 
-## 2. Chạy thử với `doc-tester`
+## 2. Trial run with `doc-tester`
 
-1. Khởi chạy subagent [`doc-tester`](../../agents/doc-tester.md) với các task mẫu trên (chế độ chỉ đọc — yêu cầu `doc-tester` xuất ra: (a) thứ tự các file đã mở đọc và vì sao mở, (b) quyết định hành động, (c) kế hoạch file sửa + lệnh Verify, (d) những chỗ thấy mơ hồ hoặc phải đoán).
-2. Để `doc-tester` làm hết báo cáo; **không gợi ý giữa chừng**.
-3. Phân tích kết quả theo bảng chẩn đoán:
+1. Launch the [`doc-tester`](../../agents/doc-tester.md) subagent with the sample tasks above (read-only mode — require `doc-tester` to output: (a) order of files opened and why, (b) action decisions, (c) file-edit plan + Verify commands, (d) spots found vague or requiring guessing).
+2. Let `doc-tester` finish its report; **no mid-run hints**.
+3. Analyze results per diagnosis table:
 
-| Dấu hiệu từ `doc-tester` | Nguyên nhân gốc trong Docs | Cách sửa vào Docs |
+| Signal from `doc-tester` | Root cause in Docs | Doc fix |
 |---|---|---|
-| Không mở file spec/reference cần thiết dù file đó có tồn tại | **Context pointer yếu (`C24`)** — dòng trỏ trong `AGENTS.md` không nêu rõ điều kiện kích hoạt ở đầu câu | Viết lại pointer trong `AGENTS.md`: *"Khi chạm `<nhánh X>`  đọc `<file Y>`"* |
-| Mở đúng file nhưng bỏ qua luật nằm ở giữa/cuối file dài | **Luật bị chìm** (sprawl) — file quá dài hoặc trộn lẫn bước làm với bảng tham chiếu | Tách bảng tham chiếu ra file riêng, gom các quy tắc cùng chủ đề về một chỗ, hoặc chuyển thành lệnh kiểm trong `CONSTRAINTS.md` (**Không hạ chuẩn âm thầm**, `C23`) |
-| Hỏi lại điều đã có câu trả lời trong docs | Câu chữ mơ hồ hoặc đặt sai chỗ (vd. đặt quyết định trong progress thay vì `decisions.md`) | Viết lại câu rõ nghĩa, thêm 1 ví dụ cụ thể, dời về đúng nguồn sự thật |
-| Lên kế hoạch làm thừa việc ngoài ý muốn | Thiếu "Ngoài phạm vi" trong spec hoặc thiếu mục `(warning) Hỏi trước` | Bổ sung vào mục "Ngoài phạm vi" của spec hoặc mục `(warning) Hỏi trước` của `AGENTS.md` |
-| Tự bịa mã lỗi, biến môi trường, hoặc yêu cầu không có nguồn | Thiếu nhấn mạnh luật "nguồn sự thật + dừng khi mơ hồ" hoặc thiếu liên kết tới `config.md` / `error-codes.md` | Siết lại dòng hướng dẫn trong `AGENTS.md` và kiểm tra lại spec |
-| Dừng hỏi đúng chỗ, chọn đúng spec/AC-ID và lệnh chạy 1 test | **Đạt** | — |
+| Didn't open needed spec/reference files though they exist | **Weak context pointer (`C24`)** — pointer lines in `AGENTS.md` lack trigger conditions at sentence start | Rewrite pointers in `AGENTS.md`: *"When touching `<branch X>` → read `<file Y>`"* |
+| Opened right file but skipped rules mid/end of a long file | **Buried rules** (sprawl) — file too long or mixing procedure with reference tables | Split reference tables into separate files, gather same-topic rules, or convert to `CONSTRAINTS.md` checks (**no silent lowering**, `C23`) |
+| Re-asked things already answered in docs | Vague wording or wrong placement (e.g. decision in progress instead of `decisions.md`) | Rewrite clearly, add a concrete example, move to the right source of truth |
+| Planned extra unrequested work | Missing "Out of scope" in spec or missing `(warning) Ask first` section | Add to spec's "Out of scope" or `AGENTS.md`'s `(warning) Ask first` section |
+| Fabricated error codes, env vars, or unsourced requirements | Missing emphasis on "source of truth + stop when vague" or missing links to `config.md` / `error-codes.md` | Tighten guidance lines in `AGENTS.md` and recheck the spec |
+| Stops and asks correctly, picks right spec/AC-ID and run-1-test command | **Pass** | — |
 
-## 3. Vòng sửa & Chạy lại
+## 3. Fix & rerun loop
 
-Mỗi dấu hiệu hỏng  sửa file docs tương ứng  chạy lại task mẫu đó trên một lượt `doc-tester` mới. Lặp đến khi mọi task mẫu đều đạt: điều hướng đúng file, tuân thủ ranh giới, hỏi đúng chỗ cần hỏi, không bịa.
+Each failure signal → fix the corresponding docs file → rerun that sample task on a fresh `doc-tester` pass. Repeat until every sample task passes: correct file navigation, boundary compliance, asks where needed, no fabrication.
 
-## 4. Báo cáo Cổng 3 & Bàn giao sang Bước 7.5 / Bước 8
+## 4. Gate-3 report & handoff to Step 7.5 / Step 8
 
 ```markdown
-## Kết quả thử tài liệu (Cổng 3)
+## Documentation test results (Gate 3)
 
-Task mẫu đã chạy qua `doc-tester` (phiên sạch):
-1. <Task 1 — Thường gặp>: <Đường dẫn file agent đã đọc  Kết quả tuân thủ>
-2. <Task 2 — Chạm ranh giới>: <Có dừng đúng mục (warning)/(blocked) không>
-3. <Task 3 — Mơ hồ cố ý; Profile S đã gộp vào task 2>: <Có dừng hỏi thay vì bịa không>
+Sample tasks run via `doc-tester` (clean session):
+1. <Task 1 — Common>: <Files agent read → Compliance result>
+2. <Task 2 — Boundary-touching>: <Did it stop at (warning)/(blocked) items>
+3. <Task 3 — Deliberately vague; Profile S merged into task 2>: <Did it ask instead of fabricate>
 
-Đã sửa docs sau thử nghiệm:
-- <file> — <vấn đề phát hiện>  <đã sửa thế nào>
+Docs fixed after testing:
+- <file> — <issue found> → <how fixed>
 
-Còn lại: <"Không có" hoặc vấn đề cần người dùng chốt>
+Remaining: <"None" or issues needing user decision>
 ```
 
- Gửi báo cáo. **Người dùng duyệt Cổng 3 xong mới được chuyển sang:**
-- Bước 7.5: luôn xác định lát cắt/AC/kiểm chứng/điểm dừng theo [`plan-tasks`](../plan-tasks/SKILL.md); chỉ tạo plan riêng/skill verify khi cần.
-- Bước 8: code trong phạm vi lệnh người dùng đã giao, ghi đợt hiện tại (`C30`); duyệt Cổng 3 chưa tự giao toàn bộ spec.
+ Send report. **Only after the user approves Gate 3 may you proceed to:**
+- Step 7.5: always determine slices/ACs/verification/stop points per [`plan-tasks`](../plan-tasks/SKILL.md); create separate plan/verify skill only when needed.
+- Step 8: code within the user-assigned command scope, record current batch (`C30`); Gate-3 approval doesn't auto-assign the whole spec.
 
-## Kiểm tra trước khi xong
+## Check before done
 
-- [] Mọi task mẫu chạy bằng subagent `doc-tester` / phiên mới không mang context viết docs.
-- [] Không gợi ý giữa chừng task mẫu.
-- [] Mọi dấu hiệu hỏng đã có sửa tương ứng trong docs và đã chạy lại xác nhận.
-- [] Báo cáo nêu rõ lộ trình đọc file và kết quả từng task; chờ người dùng duyệt Cổng 3 trước khi code.
+- [ ] Every sample task ran via `doc-tester` subagent / new session without docs-writing context.
+- [ ] No mid-run hints on sample tasks.
+- [ ] Every failure signal has a corresponding docs fix and a confirmed rerun.
+- [ ] Report states the file-read path and each task's result; waits for user Gate-3 approval before coding.

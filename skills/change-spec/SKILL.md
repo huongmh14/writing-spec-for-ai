@@ -1,56 +1,56 @@
 ---
 name: change-spec
-description: Dùng ở Bước 8 khi cần đổi yêu cầu của một spec đã Ready/Done, hoặc khi người dùng nói "lập change proposal CHG-xx", "cập nhật SPEC đã duyệt". Chỉ mở khi sửa spec đã duyệt (ADDED/MODIFIED/REMOVED); không mở khi viết spec mới.
+description: Use at Step 8 when requirements of a Ready/Done spec must change, or when the user says "draft change proposal CHG-xx", "update an approved SPEC". Only opens when editing an approved spec (ADDED/MODIFIED/REMOVED); do not open when writing a new spec.
 ---
 
-# Change spec — thay đổi spec đã duyệt
+# Change spec — changing an approved spec
 
-Spec `Draft`/`As-built` (spec mô tả code đã có) chưa được duyệt  sửa trực tiếp trong phạm vi đã giao. Spec `Ready`/`In progress`/`Done` đổi nghĩa REQ/AC  quy trình này, kể cả chưa code; sửa lỗi chính tả/link không đổi nghĩa thì sửa trực tiếp.
+`Draft`/`As-built` specs (describing existing code) not yet approved → edit directly within assigned scope. `Ready`/`In progress`/`Done` specs changing REQ/AC meaning → this process, even before coding; typo/link fixes that don't change meaning edit directly.
 
-## 1. Chọn đường đi (hỏi 3 câu theo thứ tự)
+## 1. Choose the path (ask 3 questions in order)
 
-| Câu hỏi | Đúng  đường đi |
+| Question | Yes → path |
 |---|---|
-| Phần mới là **khu vực khác** của hệ thống, có thể đứng riêng? | **Spec con mới** (`write-spec`), spec cũ chỉ link. |
-| Phần mới lớn (nhiều REQ) nhưng cùng khu vực, chưa ai làm? | Spec con hoặc đợt giai đoạn mới trong spec `Draft` — không nối vào spec `Ready`. |
-| Đổi/huỷ REQ đã có, hoặc thêm ít REQ vào spec đã `Ready`/`Done`? | **Change proposal CHG-xx** (skill này). |
+| Is the new part a **different area** of the system, able to stand alone? | **New child spec** (`write-spec`), old spec only links. |
+| Is the new part large (many REQs) but same area, not yet started? | Child spec or new phase batch in a `Draft` spec — never append to a `Ready` spec. |
+| Changing/removing existing REQs, or adding few REQs to a `Ready`/`Done` spec? | **Change proposal CHG-xx** (this skill). |
 
-## 2. Viết proposal
+## 2. Write the proposal
 
-Tạo `docs/changes/CHG-<số>-<slug>/proposal.md` từ `templates/docs/changes/_proposal-template.md`:
+Create `docs/changes/CHG-<number>-<slug>/proposal.md` from `templates/docs/changes/_proposal-template.md`:
 
-- **ADDED** — REQ mới, đánh số tiếp chuỗi cũ của spec (không đánh lại số cũ).
-- **MODIFIED** — ghi rõ `cũ: …  mới: …` nguyên văn REQ cũ. Đổi giá trị trong REQ thì **cùng PR** phải sửa REQ (không chỉ ghi ở decisions).
-- **REMOVED** — không xoá ID; đánh dấu deprecated + lý do. AC tương ứng cũng deprecated.
-- **Tác động**: migration, API công khai, dự án phía dưới, tài liệu nâng cấp — mỗi mục "Không có" nếu thật sự không có.
-- Gắn quyết định: thay đổi này là một quyết định  thêm dòng `D-xx` vào `decisions.md`, proposal chỉ link.
+- **ADDED** — new REQs, numbered continuing the spec's old sequence (never renumber old ones).
+- **MODIFIED** — record `old: … → new: …` verbatim old REQ text. Changing a value inside a REQ requires fixing the REQ **in the same PR** (not just a decisions note).
+- **REMOVED** — never delete the ID; mark deprecated + reason. Corresponding ACs also deprecated.
+- **Impact**: migration, public API, downstream projects, upgrade docs — each item "None" if truly none.
+- Attach decision: this change is a decision → add a `D-xx` row to `decisions.md`, proposal only links.
 
-Trạng thái proposal: `Đề xuất`  trình người dùng duyệt  `Đã duyệt`  áp dụng.
+Proposal status: `Proposed` → present to user for approval → `Approved` → apply.
 
-## 3. Áp dụng sau khi duyệt (cùng PR)
+## 3. Apply after approval (same PR)
 
-1. Sửa file spec đúng theo ADDED/MODIFIED/REMOVED — gồm cả bảng AC và danh mục ở `docs/specs/README.md`.
-2. AC bị MODIFIED mất hiệu lực cũ  chuyển `[]`, ghi ở "Làm rõ" của spec: ngày + CHG-id.
-3. Chuyển proposal sang `Đã áp dụng`, di chuyển vào `docs/changes/archive/`.
-4. Nếu AC đã `[x]` mà REQ đổi nghĩa  hạ về `[]`, test tương ứng sửa theo, chạy lại.
-5. Đối chiếu đợt hiện tại trong `docs/progress.md` (**Quyền thực thi theo đợt**, `C30`): CHG được duyệt không tự cấp quyền thực thi ngoài phạm vi đã giao. Thu hồi phần quyền dựa vào REQ/AC đã đổi, chỉ tiếp tục khi lệnh người dùng bao phủ nội dung mới.
-6. Spec từng `Done` có AC mới hoặc mất bằng chứng thì bỏ `Done`: đổi yêu cầu chưa chốt giữ `Draft`; yêu cầu đã chốt và chưa có đợt thì `Ready`, đang thực thi thì `In progress`. Đồng bộ danh mục; không tự duyệt yêu cầu bằng cách đổi trạng thái.
+1. Edit the spec file per ADDED/MODIFIED/REMOVED — including the AC table and index in `docs/specs/README.md`.
+2. MODIFIED ACs losing old validity → revert to `[ ]`, record in the spec's "Clarifications": date + CHG-id.
+3. Move proposal to `Applied`, relocate into `docs/changes/archive/`.
+4. If an AC was `[x]` but its REQ changed meaning → drop to `[ ]`, fix the corresponding test, rerun.
+5. Reconcile the current batch in `docs/progress.md` (**per-batch execution authority**, `C30`): an approved CHG doesn't auto-grant execution beyond assigned scope. Revoke authority based on changed REQ/AC; continue only when user commands cover the new content.
+6. A previously `Done` spec with new ACs or lost evidence loses `Done`: unconfirmed requirement changes keep `Draft`; confirmed requirements without a batch go `Ready`, executing ones `In progress`. Sync the index; don't self-approve requirements by status flips.
 
-## 4. Đóng P-xx
+## 4. Closing P-xx
 
-Đề xuất chưa chốt nằm ở bảng `P-xx` trong `decisions.md`. Khi có kết luận: thêm dòng `D-xx` (trạng thái Hiệu lực), dòng P-xx cũ **xoá khỏi bảng** (không để mục đã làm xong nằm lại). Vòng đời: `P-xx (đề xuất)  D-xx (chốt)  sửa REQ/spec cùng PR`.
+Undecided proposals live in the `P-xx` table in `decisions.md`. On conclusion: add a `D-xx` row (status Active), delete the old P-xx row **from the table** (don't leave finished items behind). Lifecycle: `P-xx (proposal) → D-xx (decided) → fix REQ/spec in same PR`.
 
 ## Gotchas
 
-- Nối thẳng phần lớn vào spec `Ready` — lỗi phổ biến nhất; spec phình, chuỗi truy vết gãy.
-- Đổi REQ mà quên sửa AC tương ứng  AC chứng minh điều không còn đúng.
-- Proposal ghi "sửa một chút cho linh hoạt" — không định lượng; MODIFIED phải có nguyên văn cũ để so.
-- decisions đổi giá trị (vd. ngưỡng rate limit) mà REQ giữ số cũ  mâu thuẫn hai nguồn sự thật.
+- Appending a large chunk directly into a `Ready` spec — the most common error; spec bloats, traceability chain breaks.
+- Changing REQ but forgetting the corresponding AC → AC now proves something no longer true.
+- Proposal saying "small tweak for flexibility" — unquantified; MODIFIED must include verbatim old text for comparison.
+- decisions changing values (e.g. rate-limit threshold) while REQ keeps old numbers → two sources of truth contradict.
 
-## Kiểm tra trước khi trình
+## Check before presenting
 
-- [] Đã chọn đúng đường đi (spec con vs CHG) theo bảng 3 câu.
-- [] MODIFIED có nguyên văn cũ  mới; REMOVED chỉ deprecated, không xoá ID.
-- [] Đổi giá trị thì REQ tương ứng sửa cùng PR.
-- [] Tác động liệt kê đủ (migration/API/nâng cấp); "Không có" phải thật sự không có.
-- [] Bảng P-xx không còn mục đã đóng.
+- [ ] Chose the right path (child spec vs CHG) per the 3-question table.
+- [ ] MODIFIED has verbatim old → new; REMOVED only deprecates, never deletes IDs.
+- [ ] Value changes fix the corresponding REQ in the same PR.
+- [ ] Impact lists all (migration/API/upgrade); "None" must be truly none.
+- [ ] P-xx table has no closed items left.

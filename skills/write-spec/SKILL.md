@@ -1,100 +1,100 @@
 ---
 name: write-spec
-description: Dùng ở Bước 5b (sau khi đã qua Cổng 1 và 5a) hoặc khi người dùng yêu cầu viết một file SPEC-XXX cụ thể (REQ theo EARS, NFR, AC Cho/Khi/Thì). Chỉ mở khi đang ở Bước 5b; mỗi lượt viết đúng 1 file SPEC-XXX rồi dừng, không mở kèm sub-skill bước khác.
+description: Use at Step 5b (after Gates 1 and 5a) or when the user asks for one specific SPEC-XXX file (EARS REQs, NFR, Given/When/Then ACs). Only opens at Step 5b; writes exactly 1 SPEC-XXX file per turn then stops — never alongside other step sub-skills.
 ---
 
-# Write spec — viết một spec xây dựng cụ thể (Bước 5, phần spec)
+# Write spec — write one build spec (Step 5, spec part)
 
-Đầu vào: một khu vực đã có trong đề xuất được duyệt + nguồn yêu cầu (PRD/phỏng vấn/code) + `docs/glossary.md`, `docs/decisions.md`.
-Đầu ra: một file `docs/specs/<nn>-<khu-vực>.md` theo `templates/docs/specs/_template.md`, mọi placeholder đã xoá.
+Input: an approved-proposal area + requirement source (PRD/interview/code) + `docs/glossary.md`, `docs/decisions.md`.
+Output: one `docs/specs/<nn>-<area>.md` file per `templates/docs/specs/_template.md`, all placeholders removed.
 
-Chỉ mở mẫu `templates/docs/specs/_template.md`; chỉ tra đoạn cần thiết trong [references/examples.md](../../references/examples.md) khi cần xem ví dụ, **không nạp nguyên file** [references/principles.md](../../references/principles.md) hay `references/base-kit.md` vào ngữ cảnh (`C17`).
+Only open the `templates/docs/specs/_template.md` template; look up needed sections in [references/examples.md](../../references/examples.md) when an example is needed — **do not bulk-load** [references/principles.md](../../references/principles.md) or `references/base-kit.md` into context (`C17`).
 
-Profile S không có cây docs: dùng `docs/spec.md` hoặc README và block đợt trong `AGENTS.md`; bỏ các lượt đọc file không tồn tại. Giữ cùng luật nguồn, AC, quyền và điểm dừng; không sinh thêm cây docs.
+Profile S has no docs tree: use `docs/spec.md` or README plus the batch block in `AGENTS.md`; skip reading nonexistent files. Keep the same source, AC, authority, and stop-point rules; don't generate an extra docs tree.
 
-## 0. Chuẩn bị (5 phút, không bỏ)
+## 0. Preparation (5 min, not skippable)
 
-1. Đọc `docs/specs/README.md` — biết spec nào đã có, tránh đè khu vực.
-2. Đọc `docs/glossary.md` — dùng đúng thuật ngữ; thiếu thuật ngữ thì thêm vào glossary **trước** khi viết spec.
-3. Đọc `docs/decisions.md` — quyết định nào chạm khu vực này thì chỉ ghi `D-xx` trong spec, không chép lý do.
-4. Chốt ID: `SPEC-<TÊN>` + tiền tố REQ/AC `<TÊN>-Rnn`/`<TÊN>-ACnn`. Đã dùng trong đề xuất được duyệt; không đổi ID sau khi viết.
-5. **Mỗi lượt một bước con, 5b đúng 1 spec — phản biện chéo & tự sửa trước khi trình** (**Quyền thực thi theo đợt**, `C30` & **Phản biện trong phiên sạch**, `C26` — Checkpoint 5b): mỗi lượt chỉ viết **ĐÚNG 1 file `SPEC-xx` sắp làm** (kèm cập nhật `docs/specs/README.md` và `docs/glossary.md`). Trước khi trình người dùng, chạy ngay 1 lượt phản biện độc lập trên file vừa viết (ưu tiên gọi CLI model thứ hai như `codex` read-only nếu máy có sẵn, hoặc subagent [`spec-challenger`](../../agents/spec-challenger.md) chỉ nhận `ARTIFACT + CONTRACT`), **tự sửa hết lỗi thật phát hiện được**, rồi mới trình bản đọc ngắn + tóm tắt lỗi đã tự sửa và **BẮT BUỘC DỪNG LẠI** chờ người dùng review. Cấm viết nhiều file `SPEC-xx` trong một lượt. `Ready` xác nhận yêu cầu; quyền chạy code nằm ở đợt thực thi.
+1. Read `docs/specs/README.md` — know which specs exist, avoid overlapping areas.
+2. Read `docs/glossary.md` — use correct terms; add missing terms to glossary **before** writing the spec.
+3. Read `docs/decisions.md` — decisions touching this area get only `D-xx` references in the spec, not copied reasons.
+4. Fix IDs: `SPEC-<NAME>` + REQ/AC prefix `<NAME>-Rnn`/`<NAME>-ACnn`. Already used in the approved proposal; don't change IDs after writing.
+5. **One sub-step per turn, 5b exactly 1 spec — cross-review & self-fix before presenting** (**per-batch execution authority**, `C30` & **clean-session challenge**, `C26` — Checkpoint 5b): each turn writes **exactly 1 `SPEC-xx` file about to be built** (plus `docs/specs/README.md` and `docs/glossary.md` updates). Before presenting to the user, immediately run one independent challenge pass on the file just written (prefer a second-model CLI like `codex` read-only if available, or the [`spec-challenger`](../../agents/spec-challenger.md) subagent receiving only `ARTIFACT + CONTRACT`), **self-fix all real errors found**, then present the short read + self-fixed error summary and **MUST STOP** for user review. Writing multiple `SPEC-xx` files in one turn is forbidden. `Ready` confirms requirements; code-run authority lives in the execution batch.
 
-## 1. Trực quan hoá luồng & trích yêu cầu từ nguồn (**Trình bày định hướng bằng hình**, `C28`)
+## 1. Visualize flow & extract requirements from source (**visual direction presentation**, `C28`)
 
-- **Vẽ luồng & Snapshot I/O trước khi viết REQ (`C28` — mục 3 của spec):** Vẽ 1 sơ đồ Mermaid (User Journey / State Flow) + 1 **Snapshot I/O cụ thể** (ASCII wireframe màn hình, mẫu lệnh CLI, hoặc JSON request/response thực tế) để lập trình viên nhìn thấy ngay hình hài tính năng thay vì đọc chay bảng REQ.
-- **Nguồn là tài liệu/phỏng vấn (greenfield, Draft):** Gạch động từ hành động  REQ ứng viên; điều kiện xấu ("không được", "chỉ khi", "tối đa")  REQ mẫu Lỗi; mục tiêu số  NFR; chỗ không suy ra được  `[CẦN LÀM RÕ: …]` ngay trong dòng REQ, không tự bịa.
-- **Nguồn là code (brownfield, As-built — spec mô tả code đã có):** Mỗi hành vi quan sát được từ ngoài (response, hiệu ứng dữ liệu, trạng thái UI) một REQ kèm bằng chứng `file:hàm` hoặc test; hành vi đáng ngờ (không test, nghi bug)  đưa vào **câu hỏi mở**, không chuẩn hoá.
+- **Draw flow & I/O Snapshot before writing REQs (`C28` — spec section 3):** Draw 1 Mermaid diagram (User Journey / State Flow) + 1 **concrete I/O Snapshot** (ASCII screen wireframe, CLI command sample, or real JSON request/response) so developers immediately see the feature's shape instead of reading a dry REQ table.
+- **Source is docs/interviews (greenfield, Draft):** underline action verbs → candidate REQs; bad conditions ("must not", "only when", "at most") → Error-pattern REQs; numeric goals → NFR; underivable spots → `[NEEDS CLARIFICATION: …]` inline in the REQ line, never fabricate.
+- **Source is code (brownfield, As-built — spec describes existing code):** every externally observable behavior (response, data effect, UI state) gets one REQ with `file:function` or test evidence; suspicious behavior (untested, suspected bug) → goes to **open questions**, never normalized.
 
-## 2. Viết REQ — mẫu EARS (mẫu câu Luôn / Khi / Trong khi / Nếu của Alistair Mavin)
+## 2. Write REQs — EARS pattern (Alistair Mavin's Always / When / While / If sentence patterns)
 
-Mỗi REQ: 1 câu, có ID, có mức (MUST/SHOULD/MAY), kèm giai đoạn nếu không làm ngay (`MUST (GĐ2)`).
+Each REQ: 1 sentence, has ID, has level (MUST/SHOULD/MAY), plus phase if not done now (`MUST (P2)`).
 
-| Nguồn gợi ý | Mẫu câu | Ví dụ thật |
+| Source hint | Sentence pattern | Real example |
 |---|---|---|
-| Hành vi luôn đúng | `Hệ thống MUST <…>` | RBAC-R01: User không ACTIVE có quyền hiệu lực rỗng |
-| Phản ứng sự kiện | `Khi <sự kiện>, hệ thống MUST <…>` | RBAC-R21: Thay đổi thu hẹp vai trò mẫu áp dụng ngay khi sync, tăng `permVersion`, ghi AuditLog |
-| Điều kiện trạng thái | `Trong khi <trạng thái>, hệ thống MUST <…>` | RBAC-R01 |
-| Nhánh lỗi | `Nếu <điều kiện xấu>, thì hệ thống MUST <kết quả cụ thể: mã HTTP/mã lỗi>` | RBAC-R16: Thiếu quyền  403 `AUTH_FORBIDDEN` |
-| Tính năng tắt/mở | `Khi bật <tính năng>, hệ thống MUST <…>` | RBAC-R30: scope ORG_TREE khi đơn vị có con |
+| Always-true behavior | `The system MUST <…>` | RBAC-R01: User without ACTIVE has empty effective permissions |
+| Event reaction | `When <event>, the system MUST <…>` | RBAC-R21: Narrowing role-template changes apply immediately on sync, bump `permVersion`, write AuditLog |
+| State condition | `While <state>, the system MUST <…>` | RBAC-R01 |
+| Error branch | `If <bad condition>, then the system MUST <concrete result: HTTP code/error code>` | RBAC-R16: Missing permission → 403 `AUTH_FORBIDDEN` |
+| Feature toggle | `When <feature> enabled, the system MUST <…>` | RBAC-R30: ORG_TREE scope when unit has children |
 
-Quy tắc chặt:
-- **Số phải có cơ sở (**Nguồn & giới hạn hiểu biết**, `C31`):** ngưỡng cần nguồn yêu cầu, số đo có điều kiện, hoặc đề xuất ghi rõ chưa chốt. Không biến ví dụ `p95 < 5 ms`/`10 lần/phút` thành cam kết. Chưa biết  câu hỏi mở + cách xác minh, không điền số cho đủ mẫu.
-- **Cột nguồn của mỗi REQ/NFR ghi đúng 1 trong 4 nhãn** ([glossary](../../references/glossary.md)): `Người dùng chốt` (ngày/câu nói hoặc mục Làm rõ) · `Đã xác minh` (đúng 1 con trỏ mở được: `path:line` | URL + trích nguyên văn + ngày đọc | lệnh + kết quả thật) · `AI đề xuất` (lý do 1 dòng + hậu quả nếu sai) · `Chưa biết` (cách xác minh + ai + phần bị chặn). Một khẳng định một dòng, không tự chấm %. Code chứng minh hiện trạng, không chứng minh nhu cầu; docs chính thức chứng minh API, không chứng minh NFR sản phẩm.
-- **Mọi khái niệm chuyên môn, cơ chế hoặc quyết định kỹ thuật AI đưa vào  Thẻ giải thích & quyết định kỹ thuật hiển thị tường minh** (mẫu ở `templates/docs/specs/_template.md` §9; cấm để ẩn trong comment `<!--... -->` rồi xoá mất): *Bản chất là gì (nói dễ hiểu + ví dụ thực tế) · Tại sao bắt buộc cần ở đây (nếu không có thì lỗi gì xảy ra) · Chạy thế nào trong dự án này (Đầu vào  Xử lý  Đầu ra) · Tự kiểm trong ≤ 5 phút (trỏ AC-ID) · Nguồn đối chiếu & Giới hạn không tự kiểm được*. Giải thích đủ rõ để người dùng **hiểu thật sự kiến thức AI viết**, đồng thời nghiệm thu bằng kết quả chạy thật ở dòng Tự kiểm (không duyệt mù theo văn xuôi); vùng bảo mật/thanh toán/pháp lý/dữ liệu cá nhân ghi "cần chuyên gia: <vai trò>".
-- Tên mã lỗi, tên trường, tên hàm viết đúng như sẽ xuất hiện trong code/contract. Không viết cách cài đặt (thuộc design), không chia việc (thuộc plan).
-- Một REQ một hành vi; REQ ghép 3 hệ quả (vd. R21) chỉ khi các hệ quả luôn xảy ra cùng nhau và cùng được kiểm.
+Strict rules:
+- **Numbers need basis (**sources & knowledge limits**, `C31`):** thresholds need a requirement source, conditional measurement, or an explicitly-marked-unconfirmed proposal. Never turn example numbers like `p95 < 5 ms`/`10 times/minute` into commitments. Unknown → open question + verification method — don't fill numbers just to fit the template.
+- **Each REQ/NFR source column gets exactly 1 of 4 labels** ([glossary](../../references/glossary.md)): `User decided` (date/quote or Clarifications) · `Verified` (exactly 1 openable pointer: `path:line` | URL + verbatim quote + read date | command + real result) · `AI proposed` (1-line reason + consequence if wrong) · `Unknown` (how to verify + who + blocked part). One claim per line, no self-scored %. Code proves current state, not need; official docs prove APIs, not product NFRs.
+- **Every advanced concept, mechanism, or technical decision the AI introduces → an explicitly shown Technical Explanation & Decision Card** (template in `templates/docs/specs/_template.md` §9; forbidden to hide in `<!--... -->` comments then lose): *What it is (plain + real example) · Why required here (what breaks if absent) · How it runs in this project (Input → Processing → Output) · Self-check ≤ 5 min (pointing to AC-ID) · Reference source & limits that can't be self-checked*. Explain clearly enough that the user **truly understands the AI-written knowledge**, while verifying via real run results on the Self-check line (no blind prose approval); security/payment/legal/personal-data areas write "needs expert: <role>".
+- Error codes, field names, function names written exactly as they will appear in code/contract. No implementation details (that's design), no task splitting (that's plan).
+- One REQ = one behavior; a compound REQ with 3 consequences (e.g. R21) only when consequences always occur together and are verified together.
 
-## 3. NFR — đủ 8 dòng, không bỏ dòng
+## 3. NFR — all 8 rows, none skipped
 
-Điền bảng theo template: **giá trị có cơ sở**, `N/A — lý do` nếu thực sự không áp dụng, hoặc `Chưa biết — P-xx + cách xác minh + AC bị chặn` trong Draft. Chưa biết không có nghĩa là N/A; số đo phải kèm môi trường/tải/ngày. Bảo mật/a11y có thể là điều kiện kiểm được, không bắt ép thành số.
+Fill the table per template: **values with basis**, `N/A — reason` if truly inapplicable, or `Unknown — P-xx + verification method + blocked AC` in Draft. Unknown doesn't mean N/A; measurements need environment/load/date. Security/a11y can be checkable conditions, not forced into numbers.
 
-| Dòng | Câu hỏi định giá | Ví dụ thật (SPEC-NFR) |
+| Row | Valuation question | Real example (SPEC-NFR) |
 |---|---|---|
-| Hiệu năng | Ngưỡng p95/p99 ở đâu, với điều kiện nào (cache nóng, số bản ghi) | guard p95 < 5 ms (cache nóng) |
-| Bảo mật | Dữ liệu nhạy cảm gì, cấm log gì, mã hoá gì | redact `Authorization`, `code`, `token` |
-| Giới hạn | Rate limit theo IP/user, kích thước payload | 10 lần/phút/user cho chạy báo cáo |
-| Khả dụng | Health check gì, failover thế nào | `/health/ready` kiểm DB, Redis, SMTP |
-| Quan sát | Log/metric/audit bắt buộc | Metric: tỉ lệ lỗi, độ dài hàng đợi |
-| i18n | Ngôn ngữ nào | vi (mặc định), en |
-| a11y | Tiêu chuẩn, phạm vi màn | WCAG 2.2 AA cho màn quản trị, hoặc N/A — lý do |
-| Trạng thái UI | loading/empty/error/forbidden có bắt buộc render không | mỗi bảng phải có empty + error state |
+| Performance | Where are p95/p99 thresholds, under what conditions (warm cache, record count) | guard p95 < 5 ms (warm cache) |
+| Security | What sensitive data, what's forbidden to log, what encryption | redact `Authorization`, `code`, `token` |
+| Limits | Rate limit by IP/user, payload size | 10 times/min/user for report runs |
+| Availability | What health check, how failover | `/health/ready` checks DB, Redis, SMTP |
+| Observability | Required log/metric/audit | Metrics: error rate, queue length |
+| i18n | Which languages | vi (default), en |
+| a11y | Standard, screen scope | WCAG 2.2 AA for admin screens, or N/A — reason |
+| UI states | Are loading/empty/error/forbidden renders mandatory | every table must have empty + error states |
 
-## 4. Trường hợp biên — sinh từ checklist
+## 4. Edge cases — generated from checklist
 
-Với mỗi REQ dữ liệu, hỏi theo danh sách: rỗng · đúng 1 · đầy · vượt ngưỡng · âm/sai định dạng · quyền hết hạn giữa thao tác · hai người sửa đồng thời · dữ liệu đã bị xoá mềm · ngôn ngữ/kích thước cực đại · dịch vụ phụ tắt (Redis/SMTP). Mỗi biên  một AC, hoặc ghi vào "Ngoài phạm vi". Không để biên nào không có số phận.
+For each data REQ, ask per list: empty · exactly 1 · full · over threshold · negative/wrong format · permission expiring mid-operation · two people editing concurrently · soft-deleted data · max language/size · dependent service down (Redis/SMTP). Each edge → one AC, or record in "Out of scope". No edge left without a fate.
 
-## 5. Viết AC & Ma trận Kiểm thử Minh bạch (**Bằng chứng test hiển thị**, `C29` — Cho / Khi / Thì)
+## 5. Write ACs & Transparent Test Matrix (**visible test evidence**, `C29` — Given / When / Then)
 
-Công thức: **Cho** <trạng thái ban đầu với dữ liệu cụ thể>, **khi** <hành động đúng như người/test gọi>, **thì** <kết quả quan sát được: mã HTTP, mã lỗi, dữ liệu, trạng thái DOM>.
+Formula: **Given** <initial state with concrete data>, **when** <action exactly as user/test calls it>, **then** <observable result: HTTP code, error code, data, DOM state>.
 
-- Mỗi REQ ≥ 1 AC; phải có ≥ 1 AC cho nhánh lỗi của khu vực. Tên hàm test chứa `AC-ID` (xem `examples.md` §2, §9).
-- **Ma trận Kiểm thử Minh bạch (`C29`, mục 7 của spec)** để người dùng duyệt trước kịch bản test AI sẽ chạy: `AC-ID | Kịch bản | Đầu vào cụ thể | Kỳ vọng quan sát được (Output & tác dụng phụ DB/DOM) | Tầng & độ thật (0 Mock hay Mock thành phần nào)`.
-- AI viết cả kỳ vọng lẫn test  test xanh chỉ chứng minh code khớp kỳ vọng của AI, không chứng minh kỳ vọng đúng; người dùng phải duyệt cột Kỳ vọng.
-- AC phụ thuộc hạ tầng thật (registry, email)  `[~]` + lý do + người/cách đóng; chưa phải pass và chặn `Done`. Mock chỉ chứng minh ranh giới đã test, không chứng minh dịch vụ thật.
-- AC cho lệnh vận hành (`migrate`, `sync`, `seed`, `deploy`) phải kiểm **tác dụng** (bảng tồn tại, số bản ghi, file sinh ra — **Kiểm tác dụng lệnh vận hành**, `C19`), không chỉ exit code 0; kèm AC lỗi (`exit ≠ 0`).
+- Each REQ ≥ 1 AC; must have ≥ 1 AC for the area's error branch. Test function names contain `AC-ID` (see `examples.md` §2, §9).
+- **Transparent Test Matrix (`C29`, spec section 7)** for user approval before AI runs tests: `AC-ID | Scenario | Concrete input | Observable expectation (Output & DB/DOM side effects) | Tier & fidelity (0 Mock or which mocks)>`.
+- AI writing both expectation and test → green only proves code matches the AI's expectation, not that the expectation is right; the user must approve the Expectation column.
+- ACs depending on real infrastructure (registry, email) → `[~]` + reason + owner/how to close; not pass and blocks `Done`. Mocks only prove the tested boundary, not the real service.
+- ACs for ops commands (`migrate`, `sync`, `seed`, `deploy`) must check **effects** (tables exist, record counts, generated files — **verify ops command effects**, `C19`), not just exit code 0; include an error AC (`exit ≠ 0`).
 
-## 6. Đóng gói
+## 6. Packaging
 
-- **Kiểm end-to-end** (mục 8): 1–3 lệnh/kịch bản agent tự chạy để xác nhận cả spec — chọn luồng xuyên BEDBFE, không lặp lại từng AC.
-- **Câu hỏi mở** (mục 12): gom mọi `[CẦN LÀM RÕ]` còn lại; ghi "Không có" nếu rỗng. Mâu thuẫn với spec khác  ghi ở **cả hai** spec.
-- **Làm rõ** (mục 11): mỗi đáp án nhận được ghi `### Phiên YYYY-MM-DD — H: …  Đ: … (vào R0n / D-xx)`.
-- Trạng thái: `Draft` (greenfield) / `As-built` (brownfield). Chỉ người dùng chuyển `Ready`.
-- Unknown chặn REQ/AC đã cam kết phải được kiểm trước `Ready`; AI khác đồng ý không thay bằng chứng. Có thể tách nhánh chưa chốt thành spec con Draft để spec độc lập được duyệt Ready; phần đã cam kết chỉ tách/hoãn qua change-spec được duyệt. Phần ngoài cam kết giữ backlog, không tự thêm vào spec sắp làm.
+- **End-to-end check** (section 8): 1–3 commands/scenarios the agent runs itself to confirm the whole spec — pick flows spanning BEDBFE, don't repeat each AC.
+- **Open questions** (section 12): gather every remaining `[NEEDS CLARIFICATION]`; write "None" if empty. Conflicts with other specs → record in **both** specs.
+- **Clarifications** (section 11): each received answer gets `### Session YYYY-MM-DD — Q: … → A: … (into R0n / D-xx)`.
+- Status: `Draft` (greenfield) / `As-built` (brownfield). Only the user moves to `Ready`.
+- Unknowns blocking committed REQ/AC must be resolved before `Ready`; another AI agreeing doesn't replace evidence. Unconfirmed branches may split into a Draft child spec so the independent spec can reach Ready; committed parts only split/defer via approved change-spec. Out-of-commitment parts stay in backlog, never self-added to the spec about to be built.
 
 ## 7. Gotchas
 
-- Spec chép lý do quyết định  xoá, chỉ để `D-xx`.
-- AC viết "hệ thống hoạt động đúng"  thay bằng mã lỗi/dữ liệu cụ thể.
-- Nhiều spec đủ 20 REQ mà NFR bỏ trống  NFR là mục hay bị bỏ nhất; điền trước nếu dễ quên.
-- Spec Ready bị nối thêm 10 REQ  dừng, dùng `change-spec`.
-- Thuật ngữ đổi tên giữa chừng  đồng bộ glossary + toàn spec trong cùng lần sửa.
+- Spec copying decision reasons → delete, keep only `D-xx`.
+- AC written as "system works correctly" → replace with concrete error codes/data.
+- Many specs with 20+ REQs but empty NFR → NFR is the most-skipped section; fill it first if forgetful.
+- A Ready spec getting +10 REQs appended → stop, use `change-spec`.
+- Terms renamed mid-stream → sync glossary + whole spec in the same edit.
 
-## Kiểm tra trước khi trình
+## Check before presenting
 
-- [] Có sơ đồ luồng Mermaid và **Snapshot I/O cụ thể** (ASCII wireframe / CLI / JSON mẫu) theo `C28`.
-- [] Mỗi REQ: 1 câu, có ID + mức, theo 1 mẫu EARS, không tính từ mơ hồ.
-- [] NFR đủ 8 dòng; mỗi REQ/NFR có 1 trong 4 nhãn nguồn (`C31`), không có số tự bịa; `N/A` không che điều chưa biết; mọi cơ chế/quyết định kỹ thuật có **Thẻ giải thích & quyết định kỹ thuật** hiển thị tường minh (giải thích bản chất + tại sao cần + luồng chạy + dòng Tự kiểm rẻ) và đã qua 1 lượt phản biện độc lập/chéo (`C26`) trước khi trình.
-- [] Mỗi REQ ≥ 1 AC; có AC lỗi; có AC biên; có **Ma trận Kiểm thử Minh bạch** (`C29`) nêu rõ Input, Output kỳ vọng và độ thật (`0 Mock` hay `Mock gì`).
-- [] "Ngoài phạm vi" không rỗng; có kiểm end-to-end; câu hỏi mở có mặt (hoặc "Không có").
-- [] Không còn `[CẦN LÀM RÕ]` nếu người dùng đã chuyển `Ready`; As-built có bằng chứng file/test.
+- [ ] Has Mermaid flow diagram and **concrete I/O Snapshot** (ASCII wireframe / CLI / JSON sample) per `C28`.
+- [ ] Each REQ: 1 sentence, has ID + level, follows 1 EARS pattern, no vague verbs.
+- [ ] NFR has all 8 rows; each REQ/NFR has 1 of 4 source labels (`C31`), no fabricated numbers; `N/A` doesn't hide unknowns; every mechanism/technical decision has an explicitly shown **Technical Explanation & Decision Card** (explains essence + why needed + run flow + cheap Self-check line) and passed 1 independent/cross review round (`C26`) before presenting.
+- [ ] Each REQ ≥ 1 AC; has error AC; has edge AC; has **Transparent Test Matrix** (`C29`) stating Input, expected Output, and fidelity (`0 Mock` or `which mocks`).
+- [ ] "Out of scope" not empty; has end-to-end check; open questions present (or "None").
+- [ ] No remaining `[NEEDS CLARIFICATION]` if the user moved to `Ready`; As-built has file/test evidence.

@@ -35,7 +35,7 @@
       "expected_output": "Đề xuất Profile M kết hợp đầy đủ các pack PK-API, PK-AUTH, PK-RELEASE, PK-DB, PK-OBS, PK-JOB, PK-AGENT và đưa policy.js / schema D1 vào mục Hỏi trước trong AGENTS.md.",
       "assertions": [
         "Kích hoạt đúng PK-AGENT (quản lý công cụ MCP, untrusted output, trần vòng lặp/chi phí) và PK-JOB (idempotency, lease CAS, retry/backoff)",
-        "Đặt policy.js, migration D1, wrangler.toml và cơ chế token vào mục ⚠️ Hỏi trước trong đề xuất AGENTS.md",
+        "Đặt policy.js, migration D1, wrangler.toml và cơ chế token vào mục (warning) Hỏi trước trong đề xuất AGENTS.md",
         "Chia Capability Map có chiều phụ thuộc một chiều (Depends on) không vòng lặp",
         "Mọi context pointer trong dự thảo AGENTS.md đều đặt điều kiện kích hoạt ở đầu câu (luật C24)"
       ]
@@ -73,9 +73,9 @@
       "id": "eval-06-visual-direction-and-visible-testing",
       "category": "visual_alignment_and_test_transparency",
       "prompt": "Tôi muốn làm tính năng thông báo đơn hàng cho app nhưng chưa chốt rõ làm đến mức nào. Hãy lập đề xuất Cổng 1 và mẫu đặc tả kiểm thử sao cho tôi nhìn vào thấy ngay hướng phát triển và biết chính xác AI sẽ test cái gì, có mock hay không.",
-      "expected_output": "Trình bày Scope Radar (🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm), 2-3 Visual Option Cards kèm sơ đồ Mermaid + ASCII wireframe/payload mẫu (C28), và Ma trận Kiểm thử Minh bạch (Visible Test Matrix — C29) có cột Input cụ thể, Output kỳ vọng và khai báo rõ 0 Mock hay Mock thành phần nào.",
+      "expected_output": "Trình bày Scope Radar ((green) Làm ngay / (yellow) Đợt kế / (red) Không làm), 2-3 Visual Option Cards kèm sơ đồ Mermaid + ASCII wireframe/payload mẫu (C28), và Ma trận Kiểm thử Minh bạch (Visible Test Matrix — C29) có cột Input cụ thể, Output kỳ vọng và khai báo rõ 0 Mock hay Mock thành phần nào.",
       "assertions": [
-        "Trình bày Scope Radar (🟢 Làm ngay / 🟡 Đợt kế / 🔴 Không làm) để phân định rõ ranh giới MVP (luật C28)",
+        "Trình bày Scope Radar ((green) Làm ngay / (yellow) Đợt kế / (red) Không làm) để phân định rõ ranh giới MVP (luật C28)",
         "Đưa ra 2-3 Phương án trực quan (Visual Option Cards) kèm sơ đồ luồng Mermaid và Snapshot I/O cụ thể (ASCII wireframe hoặc JSON mẫu)",
         "Cung cấp Ma trận Kiểm thử Minh bạch (Visible Test Matrix — C29) nêu rõ Input cụ thể, Output & tác dụng phụ DB/DOM kỳ vọng cho từng AC-ID",
         "Khai báo tường minh độ thật của test (Mock Disclosure: 0 Mock hay Mock thành phần nào) và yêu cầu in Bảng Bằng chứng Chạy Test (Visible Test Execution Ledger) sau khi chạy"

@@ -7,8 +7,8 @@ trigger_phrases:
   - "experiment workflow"
   - "no gates"
 do_not_use:
-  - "Product with stable requirements, a team, or a release contract  use writing-spec-for-ai"
-  - "Project < 50 files without experiments  use writing-spec-simple"
+  - "Product with stable requirements, a team, or a release contract → use writing-spec-for-ai"
+  - "Project < 50 files without experiments → use writing-spec-simple"
 ---
 
 # Fast Track — Docs for Experiment / Research Projects
@@ -17,8 +17,8 @@ Evidence: in a measured research project the user removed subagents and review g
 
 ## When NOT to Use
 
-- Stable requirements, several contributors, external release or acceptance contract  use `writing-spec-for-ai`.
-- Fewer than 50 files and no experiments  use `writing-spec-simple`.
+- Stable requirements, several contributors, external release or acceptance contract → use `writing-spec-for-ai`.
+- Fewer than 50 files and no experiments → use `writing-spec-simple`.
 
 ## Keep (3 files, nothing else is required)
 
@@ -36,8 +36,8 @@ Evidence: in a measured research project the user removed subagents and review g
 - Never fabricate results: a claim carries `Verified` + a command or file pointer, else `Unknown`.
 - Do not replace a real run by a mock and report the score as a model result.
 - Dated docs are history, not constraints; `AGENTS.md` is the only standing rule set.
-- Docs/code line ratio > 2 or two files on one topic (e.g. `X.md` and `X-design.md`)  merge before writing more.
+- Docs/code line ratio > 2 or two files on one topic (e.g. `X.md` and `X-design.md`) → merge before writing more.
 
 ## Graduate to the full process when
 
-A result is promoted to a product, a second contributor joins, or the same rule is broken twice  switch to `writing-spec-for-ai` Profile S/M and keep these 3 files as inputs.
+A result is promoted to a product, a second contributor joins, or the same rule is broken twice → switch to `writing-spec-for-ai` Profile S/M and keep these 3 files as inputs.

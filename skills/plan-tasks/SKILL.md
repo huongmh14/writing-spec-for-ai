@@ -1,72 +1,72 @@
 ---
 name: plan-tasks
-description: Dùng ở Bước 7.5 (sau Cổng 3) hoặc khi người dùng yêu cầu "chẻ SPEC thành đồ thị task", "chia task Tracer-Bullet" từ một SPEC đã duyệt. Chỉ mở ở Bước 7.5 để lập đồ thị task có Blocked by; không mở khi chưa có SPEC hoặc khi đang khảo sát/viết spec.
+description: Use at Step 7.5 (after Gate 3) or when the user asks to "split a SPEC into a task graph", "split Tracer-Bullet tasks" from an approved SPEC. Only opens at Step 7.5 to build a task graph with Blocked-by relations; do not open without a SPEC or while surveying/writing specs.
 ---
 
-# Plan tasks — chẻ Spec thành Đồ thị Task & Tracer Bullets (Bước 7.5)
+# Plan tasks — split a Spec into a Task Graph & Tracer Bullets (Step 7.5)
 
-Đầu vào: `SPEC-<TÊN>` đã duyệt (và `DESIGN-<TÊN>` nếu có) + `docs/glossary.md`, `docs/decisions.md`.
-Đầu ra: file kế hoạch `docs/plans/<nn>-<tên-spec>-plan.md` theo `templates/docs/plans/_plan-template.md` (hoặc xuất ra danh sách ticket cho issue tracker / `.scratch/<slug>/issues/`).
+Input: approved `SPEC-<NAME>` (and `DESIGN-<NAME>` if any) + `docs/glossary.md`, `docs/decisions.md`.
+Output: plan file `docs/plans/<nn>-<spec-name>-plan.md` per `templates/docs/plans/_plan-template.md` (or export a ticket list for the issue tracker / `.scratch/<slug>/issues/`).
 
-Profile S dùng `docs/spec.md`/README và block đợt trong `AGENTS.md`; không cần plan/progress riêng, vẫn ghi hành vi/AC/kiểm chứng/điểm dừng.
+Profile S uses `docs/spec.md`/README and the batch block in `AGENTS.md`; no separate plan/progress needed, still record behavior/AC/verification/stop points.
 
-**Quyền thực thi (**Quyền thực thi theo đợt**, `C30`):** `Ready` và plan chỉ chốt yêu cầu/công việc dự kiến. Đợt hiện tại ở `docs/progress.md` phải ghi chỉ dẫn thật của người dùng, SPEC/task/AC, vùng file, phần loại trừ và điểm dừng. Mặc định chưa nêu ranh giới: **1 SPEC + 1 task**, làm  kiểm  báo cáo  dừng. Yêu cầu rõ batch/toàn spec hữu hạn thì ghi và làm đủ phạm vi ấy; không hỏi lại từng task. Chỉ dẫn hiện hành của người dùng được ưu tiên; AI không tự cấp quyền khi sửa block.
+**Execution authority (**per-batch execution authority**, `C30`):** `Ready` and plans only fix requirements/expected work. The current batch in `docs/progress.md` must record the user's real direction, SPEC/task/AC, file areas, exclusions, and stop points. Default without stated boundaries: **1 SPEC + 1 task**, do → verify → report → stop. Explicit requests for a batch/whole finite spec get exactly that scope recorded and completed; don't re-ask per task. Current user direction takes priority; the AI doesn't self-grant authority when editing the block.
 
-> Gốc ý tưởng (skill tham khảo nội bộ, không phải bằng chứng): `to-tickets`, `implement-spec`, `planning-and-task-breakdown`, `migration`, `blast-radius`. Khái niệm mượn: Tracer Bullet (Hunt & Thomas, *The Pragmatic Programmer*); Expand–Migrate–Contract (Parallel Change — Danilo Sato, martinfowler.com/bliki/ParallelChange.html). Nghĩa ngắn: [glossary](../../references/glossary.md).
+> Root idea (internal reference skill, not evidence): `to-tickets`, `implement-spec`, `planning-and-task-breakdown`, `migration`, `blast-radius`. Borrowed concepts: Tracer Bullet (Hunt & Thomas, *The Pragmatic Programmer*); Expand–Migrate–Contract (Parallel Change — Danilo Sato, martinfowler.com/bliki/ParallelChange.html). Short meanings: [glossary](../../references/glossary.md).
 
-## 1. Nguyên tắc lát cắt dọc (Tracer Bullet — lát mỏng chạy xuyên mọi tầng)
+## 1. Vertical slicing principle (Tracer Bullet — thin slice spanning all layers)
 
-Không chia task theo tầng ngang (*"Task 1: làm hết DB, Task 2: làm hết API, Task 3: làm hết UI"* — chỉ đến task cuối mới biết ghép vào bị lệch). Mọi task thông thường phải là một **Tracer Bullet**:
+Don't split tasks by horizontal layers (*"Task 1: all DB, Task 2: all API, Task 3: all UI"* — only at the last task do you find the assembly is off). Every normal task must be a **Tracer Bullet**:
 
-- **Đi xuyên đủ các tầng** (schema  logic/API  UI/CLI  test nghiệm thu `AC-ID`) cho một hành vi hẹp nhưng **chạy được trọn vẹn từ đầu tới cuối**.
-- **Kích thước vừa một phiên sạch:** khoảng `5` file là dự kiến; task có thể hoàn tất và kiểm chứng trong một phiên. Sửa hàm chung/caller cần thiết trong cùng hành vi được phép; báo tác động, không tự thêm hành vi.
-- **Ưu tiên dọn đường trước (Prefactoring):** *làm cho thay đổi trở nên dễ, rồi mới làm thay đổi dễ đó* — nếu cần tách hàm/module để lát cắt chính dễ lắp, đặt task prefactoring lên đầu.
+- **Spans all layers** (schema → logic/API → UI/CLI → acceptance test `AC-ID`) for one narrow behavior that **runs end-to-end**.
+- **Fits one clean session:** ~`5` files expected; completable and verifiable in one session. Fixing shared functions/necessary callers within the same behavior is allowed; report impact, don't self-add behavior.
+- **Clear the path first (Prefactoring):** *make the change easy, then make the easy change* — if a function/module must be extracted for the main slice to fit, put the prefactoring task first.
 
-## 2. Ngoại lệ: thay đổi lan rộng nhiều file  Expand–Migrate–Contract
+## 2. Exception: wide multi-file changes → Expand–Migrate–Contract
 
-Khi một thay đổi cơ học (đổi tên cột, đổi chữ ký hàm/type dùng chung ở hàng chục nơi) làm vỡ hàng loạt file cùng lúc khiến lát cắt dọc không thể xanh:
+When a mechanical change (renaming a column, changing a shared function/type signature in dozens of places) breaks many files at once so vertical slices can't go green:
 
-1. **Task 1 — Expand (Mở rộng):** Thêm cấu trúc/cột/hàm mới bên cạnh cái cũ; giữ cả hai cùng sống để CI vẫn xanh.
-2. **Task 2..N — Migrate (Chuyển dữ liệu/nơi gọi) theo batch:** Chuyển các nơi gọi theo từng cụm thư mục/module, kiểm chứng ngay trong từng batch (mỗi batch 1 task, `Blocked by: Task 1`).
-3. **Task cuối — Contract (Thu gọn):** Xoá cấu trúc/cột/hàm cũ sau khi không còn nơi nào gọi (`Blocked by: tất cả các task Migrate`).
+1. **Task 1 — Expand:** Add the new structure/column/function alongside the old; keep both alive so CI stays green.
+2. **Tasks 2..N — Migrate (data/call sites) in batches:** Migrate call sites cluster by directory/module, verify within each batch (each batch 1 task, `Blocked by: Task 1`).
+3. **Last task — Contract:** Delete the old structure/column/function once nothing calls it (`Blocked by: all Migrate tasks`).
 
-## 3. Đồ thị phụ thuộc (Task Graph) & task sẵn sàng
+## 3. Dependency graph (Task Graph) & ready tasks
 
-Các task không phải danh sách phẳng mà là một **đồ thị có hướng (DAG)**:
+Tasks aren't a flat list but a **directed graph (DAG)**:
 
-- Mỗi task khai báo rõ **`Blocked by:`** (danh sách mã task phải xong trước; ghi `None` nếu làm được ngay).
-- **Task sẵn sàng:** mọi task trong `Blocked by` đã hoàn tất; đây chỉ là quan hệ phụ thuộc, không cấp quyền bắt đầu. Subagent chỉ chạy phần thuộc đợt đã giao, dùng context pointers (SPEC/AC, commit nền, link đợt); không tự chọn task/spec kế. Song song các task khác chỉ khi batch đó đã được người dùng giao rõ.
+- Each task declares **`Blocked by:`** (list of task IDs that must finish first; write `None` if immediately doable).
+- **Ready task:** all tasks in `Blocked by` are complete; this is only a dependency relation, not start authority. Subagents only run the assigned batch's parts, using context pointers (SPEC/AC, base commit, batch link); they don't self-pick the next task/spec. Parallelizing other tasks only when the user explicitly assigned that batch.
 
-## 4. Mẫu trình bày một Task & Bảng Bằng chứng Kiểm thử (**Bằng chứng test hiển thị**, `C29`)
+## 4. One-task presentation & Test Evidence Table (**visible test evidence**, `C29`)
 
-Mỗi task không chỉ ghi lệnh chạy test mà phải khai báo rõ **Ma trận test dự kiến trước khi code** và khi hoàn tất phải điền **Bảng bằng chứng chạy test** (`C29`) để lập trình viên thấy rõ AI đã bơm dữ liệu gì và có dùng mock hay không:
+Each task doesn't just list test commands — it must declare the **planned test matrix before coding** and on completion fill the **test-run evidence table** (`C29`) so developers see what data the AI fed and whether mocks were used:
 
 ```markdown
-### T-01: <Tên hành vi đầu-cuối ngắn gọn, đúng thuật ngữ glossary>
-- **REQ / AC nghiệm thu:** `<TÊN>-R01`, `<TÊN>-AC01`, `<TÊN>-AC02`
-- **Blocked by:** `None` (hoặc `T-01, T-02`)
-- **Phạm vi file dự kiến (~5 file):** `<đường dẫn>`
-- **Kế hoạch & Bằng chứng Kiểm thử Minh bạch (`C29`):**
-  | AC-ID | Kịch bản | Input dự kiến | Output & Tác dụng phụ kỳ vọng | Tầng & Độ thật (`0 Mock` / `Mock gì`) | Trạng thái chạy |
+### T-01: <short end-to-end behavior name, glossary terms>
+- **Acceptance REQ / AC:** `<NAME>-R01`, `<NAME>-AC01`, `<NAME>-AC02`
+- **Blocked by:** `None` (or `T-01, T-02`)
+- **Expected file scope (~5 files):** `<paths>`
+- **Plan & Transparent Test Evidence (`C29`):**
+  | AC-ID | Scenario | Expected input | Expected output & side effects | Tier & fidelity (`0 Mock` / which mocks) | Run status |
   |---|---|---|---|---|---|
-  | `<TÊN>-AC01` | <nhánh chính> | `<payload/tham số>` | `<HTTP 200 / DB row / DOM>` | `integration` (`0 Mock`) | `[]` |
-- **Lệnh kiểm chứng (Verify):** `<lệnh chạy đúng test chứa AC-ID>`
-- **Điểm dừng:** `<hành vi demo được / AC hoàn tất; không tự chuyển task>`
-- **Trạng thái:** `[]`
+  | `<NAME>-AC01` | <main branch> | `<payload/params>` | `<HTTP 200 / DB row / DOM>` | `integration` (`0 Mock`) | `[]` |
+- **Verification command:** `<command running the test containing AC-ID>`
+- **Stop point:** `<demoable behavior / AC complete; don't auto-advance task>`
+- **Status:** `[]`
 ```
 
-## 5. Trình plan và xác định đợt được giao
+## 5. Present plan and fix the assigned batch
 
-Trình bảng `Mã | Hành vi nhìn thấy | Blocked by | AC-ID | Cách demo`. Người dùng chọn kết quả/phạm vi; AI chịu trách nhiệm kiểm cạnh phụ thuộc và tính khả thi bằng code/test, không bắt người dùng duyệt chi tiết kỹ thuật ngoài chuyên môn.
+Present the table `ID | Visible behavior | Blocked by | AC-ID | How to demo`. The user picks outcomes/scope; the AI is responsible for checking dependency edges and feasibility via code/tests — don't make the user approve out-of-expertise technical details.
 
-- Đã được giao phạm vi rõ thì ghi đợt và tiếp tục, không hỏi lại. Chưa có chỉ dẫn triển khai thì chỉ giao plan; plan được duyệt không tự cho phép chạy toàn bộ.
-- Khi thực thi hết đợt: cập nhật `Chờ kiểm chứng`, báo **kết quả · demo/bằng chứng · điều chưa kiểm chứng · điểm đã dừng**, rồi dừng. `[~]` chưa kiểm chứng không đủ chuyển spec `Done`.
-- Đổi hành vi/spec/rủi ro bảo mật hoặc schema ngoài phạm vi đã giao thì cập nhật phạm vi trước khi làm phần đó; không chặn phần độc lập được giao.
+- With clearly assigned scope, record the batch and continue — don't re-ask. Without implementation direction, only hand over the plan; an approved plan doesn't auto-permit running everything.
+- When the batch finishes: update to `Awaiting verification`, report **result · demo/evidence · unverified items · stopped point**, then stop. `[~]` unverified is not enough to move the spec to `Done`.
+- Changing behavior/spec/security risk or schema outside assigned scope → update scope before doing that part; don't block independently assigned parts.
 
-## Kiểm tra trước khi xong
+## Check before done
 
-- [] Mọi `REQ` và `AC` trong phạm vi của Spec đều thuộc về ít nhất một task.
-- [] Mỗi task là một lát cắt dọc kiểm chứng được (hoặc một bước trong chuỗi Expand–Migrate–Contract).
-- [] Mỗi task có `Blocked by` tường minh và có lệnh Verify gắn với `AC-ID`.
-- [] Không có vòng lặp phụ thuộc trong đồ thị task.
-- [] Plan link tới một đợt hiện tại trong `docs/progress.md`; không tự duyệt batch/task sẵn sàng hoặc suy quyền từ HANDOFF cũ.
+- [ ] Every `REQ` and `AC` in the spec's scope belongs to at least one task.
+- [ ] Each task is a verifiable vertical slice (or a step in an Expand–Migrate–Contract chain).
+- [ ] Each task has explicit `Blocked by` and a Verify command tied to `AC-ID`.
+- [ ] No dependency cycles in the task graph.
+- [ ] Plan links to a current batch in `docs/progress.md`; doesn't self-approve ready batches/tasks or infer authority from old HANDOFFs.

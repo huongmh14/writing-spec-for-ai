@@ -1,53 +1,53 @@
 ---
 name: survey-project
-description: Dùng ở Bước 1–2 hoặc khi người dùng gọi riêng việc "khảo sát dự án", "audit docs", "khảo sát repo". Chỉ thu thập bằng chứng hiện trạng repo (stack, lệnh, CI, vùng rủi ro, sàn chất lượng) và chấm Profile S/M/L + Pack PK-*; không mở kèm các sub-skill bước 3–8.
+description: Use at Steps 1–2 or when the user separately asks to "survey the project", "audit docs", "survey the repo". Only collects evidence of the repo's current state (stack, commands, CI, risk areas, quality floor) and scores Profile S/M/L + PK-* packs; does not open sub-skills for steps 3–8.
 ---
 
-# Survey project — khảo sát dự án (Bước 1–2 của writing-spec-for-ai)
+# Survey project — project survey (Steps 1–2 of writing-spec-for-ai)
 
-Đầu vào: repo dự án (và tài liệu nguồn bên ngoài nếu có: PRD, docx, ticket).
-Đầu ra: bảng hiện trạng **mỗi dòng có đường dẫn bằng chứng** + kết luận greenfield/brownfield + Profile (`S/M/L`), mức (`0/1/2` — Mức 0 bắt buộc, Mức 1–2 thêm khi có tín hiệu; xem [glossary](../../references/glossary.md)) và danh sách Pack (`PK-*`) đề xuất. Kết quả này điền thẳng vào mục 1–2 của `propose-doc-design`.
+Input: the project repo (and external source docs if any: PRD, docx, tickets).
+Output: a current-state table **where every row has an evidence path** + greenfield/brownfield conclusion + Profile (`S/M/L`), level (`0/1/2` — Level 0 mandatory, Levels 1–2 added on signal; see [glossary](../../references/glossary.md)) and proposed Pack (`PK-*`) list. This result feeds directly into sections 1–2 of `propose-doc-design`.
 
-Chỉ đọc, không sửa file nào của dự án. Repo lớn (`> 50` file hoặc không đọc hết trong ~10 phút)  uỷ quyền cho subagent chỉ đọc [`spec-surveyor`](../../agents/spec-surveyor.md), chỉ nhận lại bảng kết luận kèm đường dẫn `path:line` để giữ sạch context của phiên chính.
+Read-only — modify no project files. Large repo (`> 50` files or can't be read in ~10 min) → delegate to the read-only subagent [`spec-surveyor`](../../agents/spec-surveyor.md), receiving back only the conclusion table with `path:line` pointers to keep the main session's context clean.
 
-## 1. Thu thập — mỗi mục phải có bằng chứng đường dẫn
+## 1. Collect — every item needs a path evidence
 
-| Hạng mục | Cách kiểm | Bằng chứng cần ghi |
+| Item | How to check | Evidence to record |
 |---|---|---|
-| **Knowledge Graph sẵn có** *(nếu có)* | Kiểm tra `.ua/knowledge-graph.json`, `.understand-anything/knowledge-graph.json`, hoặc `graphify-out/` | Lấy nhanh danh sách layer kiến trúc, entry point, import map và module trung tâm (god nodes) mà không cần đọc lại toàn bộ mã nguồn |
-| Stack + major version | Đọc `package.json` / `pyproject.toml` / `go.mod` / `Cargo.toml` / `*.csproj`, `.nvmrc`, lockfile | "NestJS 12, Prisma 7, PostgreSQL 15" — kèm đường dẫn file |
-| Lệnh dev/build/test/lint | Đọc `scripts` trong manifest, CI workflow, Makefile, README | Lệnh thật + **lệnh chạy đúng 1 test** (tự tìm; không có thì ghi "chưa có" — đây là lỗ hổng mức 0) |
-| Tài liệu AI sẵn có | `ls` các vị trí ma trận (principles §5): `AGENTS.md`, `CLAUDE.md`, `CONSTRAINTS.md`, `.github/copilot-instructions.md`, `.cursor/rules/`, `.agents/` | File nào có, đặt đúng chỗ công cụ đọc hay không, nội dung mâu thuẫn/trùng nhau ở đâu |
-| File mồ côi / bị bỏ quên | `git check-ignore <file>` với mọi file docs; grep xem file có được file nào link tới không; so ngày sửa với `git log -5` | Danh sách file bị ignore hoặc không được trỏ tới |
-| Tài liệu nguồn bên ngoài | Hỏi người dùng / tìm `*.docx`, `docs/prd`, ticket | Đường dẫn, phiên bản, ngày |
-| Cưỡng chế & **Sàn chất lượng** (**Không hạ chuẩn âm thầm**, `C23`) | Đọc CI, `eslint`/`biome`/`ruff` config, hooks (husky/pre-commit), đếm nhanh các cờ `@ts-ignore`/`eslint-disable`/`.skip` và coverage hiện tại | Cái gì đã có máy chặn, số đo baseline hôm nay để đưa vào `CONSTRAINTS.md` |
-| **CI khớp stack** (**Đổi stack là một thay đổi**, `C20`) | So lệnh/đường dẫn trong CI với manifest và file có thật (`git ls-files`) | CI build file không tồn tại, chạy stack cũ, hoặc không chạy test (chỉ build) |
-| **Nhiều "nguồn sự thật"** (**Thứ tự nguồn sự thật**, `C01`) | grep `Single Source of Truth`, `nguồn sự thật`, `SSOT` trong docs; so cùng một sự thật (format key, env, cây thư mục) giữa các file | Các cặp file tranh nhau hoặc mô tả khác nhau |
-| **Secret & cấu hình** (`C16`) | Tên file env mẫu (`.env.example`?); `.env` có bị ignore không; `git ls-files.claude.cursor.vscode.zcode` | File quyền cá nhân của agent bị commit (allow-list, đường dẫn máy, mật khẩu) |
-| **Lệnh vận hành** (**Kiểm tác dụng lệnh vận hành**, `C19`) | Chạy thử an toàn (`migrate`, `sync`, `seed`) trên môi trường local hoặc đọc code của lệnh | Lệnh không làm gì mà vẫn exit 0 |
-| Quy ước git thực tế | `git log --oneline -30` | Dạng commit thật, tên nhánh thật (khớp hay lệch quy định viết) |
-| Vùng rủi ro & **Tín hiệu bật Pack** | Đối chiếu tín hiệu trong repo trước (HTTP API  `PK-API`, Auth/Token/Webhook  `PK-AUTH`, Docker/Release  `PK-RELEASE`, DB/Migration  `PK-DB`, Logging/Metrics  `PK-OBS`, Frontend UI/E2E  `PK-FE`, Worker/Cron/Queue  `PK-JOB`, AI Agent/MCP  `PK-AGENT`); **chỉ mở đọc file trong [`packs/`](../../packs/) của Pack thực sự có tín hiệu** (cấm mở cả 8 file) | Danh sách thư mục/file rủi ro + Pack nào có tín hiệu bật kèm câu hỏi khảo sát bổ sung ở cuối file `packs/PK-*.md` đã bật |
-| Hạ tầng bên ngoài | CI config (runner, hạn mức), registry, secrets dùng trong workflow, team/org GitHub | Điều kiện có thể chặn AC: gói Free, hết hạn mức, team chưa tồn tại |
-| Brownfield? | Có code chạy + có test + không có spec? | "Brownfield — cần spec As-built (mô tả code đã có)" hoặc "Greenfield" |
+| **Existing Knowledge Graph** *(if any)* | Check `.ua/knowledge-graph.json`, `.understand-anything/knowledge-graph.json`, or `graphify-out/` | Quickly get architecture layers, entry points, import map, and central modules (god nodes) without re-reading all source |
+| Stack + major version | Read `package.json` / `pyproject.toml` / `go.mod` / `Cargo.toml` / `*.csproj`, `.nvmrc`, lockfile | "NestJS 12, Prisma 7, PostgreSQL 15" — with file path |
+| Dev/build/test/lint commands | Read `scripts` in manifest, CI workflow, Makefile, README | Real commands + **command to run exactly 1 test** (find it yourself; if none, record "none" — this is a level-0 gap) |
+| Existing AI docs | `ls` the matrix locations (principles §5): `AGENTS.md`, `CLAUDE.md`, `CONSTRAINTS.md`, `.github/copilot-instructions.md`, `.cursor/rules/`, `.agents/` | Which files exist, whether placed where tools read them, where content conflicts/duplicates |
+| Orphan / forgotten files | `git check-ignore <file>` for every docs file; grep whether any file links to it; compare edit date with `git log -5` | List of ignored or unreferenced files |
+| External source docs | Ask user / find `*.docx`, `docs/prd`, tickets | Path, version, date |
+| Enforcement & **Quality floor** (**no silent lowering**, `C23`) | Read CI, `eslint`/`biome`/`ruff` config, hooks (husky/pre-commit), quickly count `@ts-ignore`/`eslint-disable`/`.skip` flags and current coverage | What machines already block, today's baseline numbers for `CONSTRAINTS.md` |
+| **CI matches stack** (**stack change is a change**, `C20`) | Compare CI commands/paths with manifest and real files (`git ls-files`) | CI building nonexistent files, running old stack, or not running tests (build only) |
+| **Multiple "sources of truth"** (**source-of-truth order**, `C01`) | grep `Single Source of Truth`, `nguồn sự thật`, `SSOT` in docs; compare the same truth (key format, env, dir tree) across files | Pairs of files competing or describing differently |
+| **Secrets & config** (`C16`) | Env sample filename (`.env.example`?); is `.env` ignored; `git ls-files .claude .cursor .vscode .zcode` | Agent personal files committed (allow-lists, machine paths, passwords) |
+| **Ops commands** (**verify ops command effects**, `C19`) | Safely try (`migrate`, `sync`, `seed`) on local env or read the command's code | Commands that do nothing yet exit 0 |
+| Actual git conventions | `git log --oneline -30` | Real commit format, real branch names (match or drift from written rules) |
+| Risk areas & **Pack-enable signals** | Match signals in repo first (HTTP API → `PK-API`, Auth/Token/Webhook → `PK-AUTH`, Docker/Release → `PK-RELEASE`, DB/Migration → `PK-DB`, Logging/Metrics → `PK-OBS`, Frontend UI/E2E → `PK-FE`, Worker/Cron/Queue → `PK-JOB`, AI Agent/MCP → `PK-AGENT`); **only open files inside [`packs/`](../../packs/) of Packs with real signals** (never open all 8 files) | List of risky dirs/files + which Packs have enable signals plus their extra survey questions at the end of each enabled `packs/PK-*.md` |
+| External infrastructure | CI config (runner, quota), registry, secrets used in workflows, GitHub team/org | Conditions that could block ACs: Free plan, quota exhausted, team doesn't exist |
+| Brownfield? | Has running code + tests + no spec? | "Brownfield — needs As-built spec (describes existing code)" or "Greenfield" |
 
-## 2. Chấm Profile, Mức đề xuất & Pack (theo `profiles.md` & `base-kit.md`)
+## 2. Score Profile, proposed level & Packs (per `profiles.md` & `base-kit.md`)
 
-- **Profile (`S` / `M` / `L`):** đối chiếu với [`profiles.md`](../../profiles.md): S < ~30 file, M ~30–200, L > 200; số file chỉ là gợi ý, tín hiệu (số người, CI, vùng rủi ro, số spec) quyết định cuối cùng. Không nạp nguyên `references/base-kit.md` vào ngữ cảnh (`C17`).
-- **Mức 0 (0.1–0.16):** luôn đủ toàn bộ sau khảo sát.
-- **Mức 1–2:** liệt kê từng thành phần kèm **tín hiệu thấy được trong repo** (vd. `CONSTRAINTS.md`, `DESIGN-xx`, `adr/`, `upgrade/`, skill `verify-<app>`).
-- **Pack miền (`PK-*`):** chỉ bật pack có tín hiệu thật trong repo; đọc mục *"Mục khảo sát bổ sung"* của từng pack được bật để thu thập đủ tham số `{…}`.
+- **Profile (`S` / `M` / `L`):** compare with [`profiles.md`](../../profiles.md): S < ~30 files, M ~30–200, L > 200; file count is only a hint — signals (people count, CI, risk areas, spec count) decide finally. Do not bulk-load `references/base-kit.md` into context (`C17`).
+- **Level 0 (0.1–0.16):** always complete all of the following after survey.
+- **Levels 1–2:** list each component with the **signal seen in the repo** (e.g. `CONSTRAINTS.md`, `DESIGN-xx`, `adr/`, `upgrade/`, `verify-<app>` skill).
+- **Domain packs (`PK-*`):** only enable packs with real repo signals; read each enabled pack's *"Additional survey items"* section to collect all `{…}` parameters.
 
-## 3. Bẫy thường gặp
+## 3. Common traps
 
-- Chỉ đọc README rồi khẳng định lệnh chạy được — phải đối chiếu manifest/CI.
-- Quên hạ tầng bên ngoài  AC treo lơ lửng lúc triển khai.
-- Kết luận "thiếu docs" trong khi file docs bị `.gitignore`.
-- Không phân biệt "chưa có spec" (greenfield) với "có code chưa có spec" (brownfield  As-built, mỗi REQ cần bằng chứng).
-- Dự án vừa đổi stack: README đã mới nhưng CI, WORKFLOW, CONVENTIONS còn stack cũ.
+- Reading only README then asserting commands work — must cross-check manifest/CI.
+- Forgetting external infrastructure → ACs hang at deployment.
+- Concluding "missing docs" while docs files are `.gitignore`d.
+- Not distinguishing "no spec yet" (greenfield) from "code exists without spec" (brownfield → As-built, every REQ needs evidence).
+- Project just changed stack: README updated but CI, WORKFLOW, CONVENTIONS still on old stack.
 
-## Kiểm tra trước khi xong
+## Check before done
 
-- [] Mọi dòng kết luận có đường dẫn bằng chứng.
-- [] Có kèm lệnh chạy 1 test (hoặc ghi rõ "chưa có").
-- [] Có kết luận greenfield/brownfield, Profile (`S/M/L`), và danh sách Pack (`PK-*`) kèm tín hiệu.
-- [] Mỗi thành phần mức 1–2 có tín hiệu; repo mới ghi "chưa có tín hiệu".
+- [ ] Every conclusion row has an evidence path.
+- [ ] Includes the run-1-test command (or explicitly "none").
+- [ ] Has greenfield/brownfield conclusion, Profile (`S/M/L`), and Pack list (`PK-*`) with signals.
+- [ ] Each level 1–2 component has a signal; new repos record "no signal yet".

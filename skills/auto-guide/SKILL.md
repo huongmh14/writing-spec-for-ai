@@ -18,7 +18,7 @@ do_not_use:
 **When it activates:**
 - User speaks generically: "fix this bug", "implement this feature", "look at this project"
 - User does not mention a specific skill
-- AI is unsure what the user wants  auto-guide activates
+- AI is unsure what the user wants → auto-guide activates
 
 ---
 
@@ -39,12 +39,12 @@ MUST read [routing guidance](references/routing-guidance.md) before proposing: i
 
 ### Signal 3: New project / no AI docs yet
 **Keywords:** new project, AGENTS.md, docs for AI, standardize docs
-**Detection:** Experiment/research loop (results change the plan daily), any size  `fast-track`; otherwise project < 50 files  `writing-spec-simple`, >= 50 files  `writing-spec-for-ai`
+**Detection:** Experiment/research loop (results change the plan daily), any size → `fast-track`; otherwise project < 50 files → `writing-spec-simple`, >= 50 files → `writing-spec-for-ai`
 ** Propose:** `fast-track`, `writing-spec-simple` or `writing-spec-for-ai`
 
 ### Signal 4: Has requirements/spec to implement
 **Keywords:** implement, feature, requirements, spec, design doc, plan
-**Detection:** Small task  code directly, Large task  `writing-plans`
+**Detection:** Small task → code directly, Large task → `writing-plans`
 ** Propose:** `writing-plans` or code directly
 
 ### Signal 5: Code review / PR / branch

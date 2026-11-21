@@ -19,9 +19,9 @@ do_not_use:
 
 ## When NOT to Use
 
-- Only fixing a single bug or a small change with a known location  use `systematic-debugging` or fix directly
+- Only fixing a single bug or a small change with a known location → use `systematic-debugging` or fix directly
 - Project already has a valid `AGENTS.md` and full `docs/specs/`
-- Large project (`>= 50` files, team `>= 3` people, or needs parallel sub-agents)  use `writing-spec-for-ai` (Profile M/L)
+- Large project (`>= 50` files, team `>= 3` people, or needs parallel sub-agents) → use `writing-spec-for-ai` (Profile M/L)
 
 ---
 
@@ -29,8 +29,8 @@ do_not_use:
 
 | Rule | Detection signals | AI action |
 |---|---|---|
-| **Rule 1: First time in project** | User says *"first time in this project"*, *"look at this repo", no `AGENTS.md` | Propose chain: `explore`  `writing-spec-simple` |
-| **Rule 2: Size tiering** | Count code files in repo (skip `node_modules`, `.git`, `dist`, `build`) | `< 50` files  `writing-spec-simple`<br>`>= 50` files  `writing-spec-for-ai` |
+| **Rule 1: First time in project** | User says *"first time in this project"*, *"look at this repo", no `AGENTS.md` | Propose chain: `explore` → `writing-spec-simple` |
+| **Rule 2: Size tiering** | Count code files in repo (skip `node_modules`, `.git`, `dist`, `build`) | `< 50` files → `writing-spec-simple`<br>`>= 50` files → `writing-spec-for-ai` |
 | **Rule 3: Direct request** | User says *"write AGENTS.md"*, *"standardize docs"*, *"create spec for new project"* | Run Step 1 of `writing-spec-simple` immediately |
 
 When proposing this workflow, read the [proposal format](references/proposal-template.md).

@@ -1,84 +1,84 @@
 ---
 name: review-docs
-description: Dùng ở Bước 6 (Cổng 2) sau khi đã viết xong file docs/spec, hoặc khi người dùng nói "review docs", "chấm checklist", "phản biện Cổng 2". Chỉ mở ở Bước 6 để chạy spec-challenger trong phiên sạch và trình báo cáo; không mở trước khi viết xong docs.
+description: Use at Step 6 (Gate 2) after docs/spec files are written, or when the user says "review docs", "score the checklist", "Gate-2 challenge". Only opens at Step 6 to run spec-challenger in a clean session and present the report; do not open before docs are written.
 ---
 
-# Review docs — phản biện đối kháng & tự kiểm trước khi trình duyệt (Cổng 2)
+# Review docs — adversarial challenge & self-check before presenting (Gate 2)
 
-Đầu vào: danh sách file vừa viết/sửa (`ARTIFACT`) + đường dẫn `references/review-checklist.md`, các `packs/PK-*.md` đang bật (`CONTRACT` — truyền đường dẫn cho subagent `spec-challenger` đọc trong phiên sạch, phiên chính không tự nạp toàn bộ `references/base-kit.md` vào ngữ cảnh, `C17`).
-Đầu ra: báo cáo gửi người dùng gồm (1) danh sách file, (2) kết quả chấm từng mục, (3) phân loại phát hiện phản biện & mọi mục `[]` kèm đề xuất sửa, (4) câu hỏi mở còn lại. **Mục `[]` không được giấu** — đó là thông tin người duyệt cần nhất.
+Input: list of files just written/edited (`ARTIFACT`) + path to `references/review-checklist.md`, enabled `packs/PK-*.md` files (`CONTRACT` — pass paths for the `spec-challenger` subagent to read in a clean session; the main session does not bulk-load `references/base-kit.md` into context, `C17`).
+Output: report to the user containing (1) file list, (2) per-item scoring results, (3) classified challenge findings & every `[ ]` item with fix proposals, (4) remaining open questions. **`[ ]` items must not be hidden** — they are what the approver most needs.
 
-> Gốc ý tưởng (skill tham khảo nội bộ, không phải bằng chứng): `doubt-driven-development` (luật Core **Phản biện trong phiên sạch**, `C26`), `pstack/interrogate`, `open-code-review-delegate`.
+> Root idea (internal reference skill, not evidence): `doubt-driven-development` (Core rule **clean-session challenge**, `C26`), `pstack/interrogate`, `open-code-review-delegate`.
 
-## 1. Quy trình Phản biện Đối kháng trong Context sạch (`C26`)
+## 1. Adversarial challenge process in clean context (`C26`)
 
-Người vừa viết tài liệu luôn mang thiên kiến xác nhận (confirmation bias). Vì vậy, khi kiểm tra ở Bước 6:
+The author always carries confirmation bias. So at Step 6:
 
-1. **Tách `ARTIFACT` và `CONTRACT` (Tuyệt đối không truyền `CLAIM`):**
-   - Giao việc cho subagent chỉ đọc [`spec-challenger`](../../agents/spec-challenger.md) (hoặc chạy một lượt kiểm tra tách biệt hoàn toàn với lý lẽ lúc viết).
-   - Chỉ cung cấp đường dẫn các file vừa viết (`ARTIFACT`) và [`references/review-checklist.md`](../../references/review-checklist.md) + các Pack đang bật (`CONTRACT`). Không kèm lời giải thích *"tôi viết thế này vì..."*.
-2. **Chạy phản biện độc lập — phân biệt rõ `Chéo model (Cross-Model)` và `Phiên sạch cùng model (Same-Model Clean-Session)`:**
-   - Cùng một họ model vừa viết vừa tự đọc lại dễ chia sẻ chung điểm mù. Nếu môi trường có sẵn CLI của **họ model khác** với model đang viết (vd. đang viết bằng Antigravity/Claude thì gọi `"" | codex exec --sandbox read-only...`, hoặc ngược lại; luôn đóng `stdin` bằng `"" |` để CLI không treo chờ nhập), **chủ động chạy luôn lượt phản biện chéo model** chỉ truyền `ARTIFACT + CONTRACT`. Nếu máy không có CLI của họ model khác thì chạy subagent [`spec-challenger`](../../agents/spec-challenger.md) trong phiên sạch và phải ghi trung thực trong báo cáo là `Phiên sạch cùng model (kèm lý do chưa chạy khác model)` — cấm khai gian là đã phản biện chéo model.
-   - **Cấm tự ý ỉm phát hiện của bộ phản biện:** Tác giả không được tự đánh dấu "báo động giả" rồi xoá im lặng. Mọi phát hiện từ lượt phản biện phải được liệt kê đầy đủ trong báo cáo người dùng dưới 2 nhóm: `Đã tự sửa (Fixed)` và `Không sửa / Cần người dùng quyết (Not Fixed / Needs Decision)` kèm lý do cụ thể. Phân biệt rõ với `C31`: hai AI cùng khen/đồng ý **không phải là bằng chứng đúng**, nhưng lỗi do model thứ hai / phiên sạch chỉ ra là tín hiệu bắt buộc phải đối chiếu công khai.
-3. **Đối chiếu & Phân loại phát hiện (`RECONCILE`):**
-   Đọc lại văn bản thật đối chiếu với từng phát hiện của `spec-challenger` và phân loại theo thứ tự ưu tiên:
-   - **Loại 1 — Lỗi thật, sửa được ngay:** sửa thẳng vào file docs trước khi trình người dùng (xem bảng mục 2).
-   - **Loại 2 — Cần quyết định:** hành vi/phạm vi/đánh đổi  hỏi người dùng bằng ví dụ; thiếu kiến thức kỹ thuật  AI nghiên cứu/thử nghiệm trong quyền đã giao hoặc đề nghị người có chuyên môn (**Nguồn & giới hạn hiểu biết**, `C31`), không bắt người dùng xác nhận điều chưa chứng minh.
-   - **Loại 3 — Đánh đổi có chủ đích:** ghi rõ lý do hoặc gắn `ceiling:` (**Đánh dấu giới hạn đơn giản hoá**, `C27`) / `D-xx` để người dùng thấy.
-   - **Loại 4 — Báo động giả do thiếu ngữ cảnh:** nếu người đọc mới hiểu nhầm vì câu chữ trong docs chưa rõ, hãy làm sắc nét câu chữ đó để người sau không hiểu nhầm tương tự.
+1. **Separate `ARTIFACT` and `CONTRACT` (never pass `CLAIM`):**
+   - Hand work to the read-only [`spec-challenger`](../../agents/spec-challenger.md) subagent (or run a check fully detached from the writing rationale).
+   - Provide only paths of just-written files (`ARTIFACT`) and [`references/review-checklist.md`](../../references/review-checklist.md) + enabled Packs (`CONTRACT`). No *"I wrote this because..."* justifications.
+2. **Run independent challenge — clearly distinguish `Cross-Model` vs `Same-Model Clean-Session`:**
+   - Same model family writing and re-reading shares blind spots. If the environment has a CLI of a **different model family** than the one writing (e.g. writing with Antigravity/Claude then call `codex exec --sandbox read-only...`, or vice versa; always close `stdin` with `"" |` so the CLI doesn't hang waiting for input), **proactively run the cross-model challenge** passing only `ARTIFACT + CONTRACT`. If no other-family CLI exists, run the [`spec-challenger`](../../agents/spec-challenger.md) subagent in a clean session and honestly record in the report `Same-model clean session (with reason other model unavailable)` — falsely claiming cross-model review is forbidden.
+   - **Never silently suppress challenger findings:** the author may not self-label "false alarm" and quietly delete. Every challenger finding must be fully listed in the user report under 2 groups: `Self-fixed (Fixed)` and `Not fixed / Needs user decision (Not Fixed / Needs Decision)` with concrete reasons. Distinguish from `C31`: two AIs praising/agreeing **is not correctness evidence**, but errors pointed out by the second model / clean session are mandatory signals to reconcile publicly.
+3. **Reconcile & classify findings (`RECONCILE`):**
+   Re-read the actual text against each `spec-challenger` finding and classify by priority:
+   - **Type 1 — Real error, fixable now:** fix directly in docs files before presenting to the user (see section 2 table).
+   - **Type 2 — Needs decision:** behavior/scope/trade-off → ask the user with examples; missing technical knowledge → AI researches/experiments within granted authority or proposes an expert (**sources & knowledge limits**, `C31`) — don't force the user to confirm unproven claims.
+   - **Type 3 — Deliberate trade-off:** record the reason or tag `ceiling:` (**mark simplification ceilings**, `C27`) / `D-xx` so the user sees it.
+   - **Type 4 — False alarm from missing context:** if a fresh reader misunderstood due to unclear wording, sharpen the wording so future readers don't misunderstand the same way.
 
-## 2. Chấm theo [references/review-checklist.md](../../references/review-checklist.md) & Sửa nhanh
+## 2. Score per [references/review-checklist.md](../../references/review-checklist.md) & quick fixes
 
-Chạy đủ 6 nhóm theo thứ tự; mỗi mục phải có **bằng chứng trong file** (đường dẫn + dòng/đoạn).
+Run all 6 groups in order; each item needs **evidence in the file** (path + line/section).
 
-| Triệu chứng thấy được | Sửa ngay trước khi trình |
+| Observable symptom | Fix before presenting |
 |---|---|
-| Spec chỉ có chữ và bảng REQ, thiếu hình dung trực quan (**Trình bày định hướng bằng hình**, `C28`) | Thêm sơ đồ luồng Mermaid + ít nhất 1 **Snapshot I/O cụ thể** (ASCII wireframe / CLI / JSON mẫu) |
-| AC chỉ ghi chữ chung chung, thiếu Ma trận Kiểm thử Minh bạch (**Bằng chứng test hiển thị**, `C29`) | Bổ sung Ma trận Kiểm thử Minh bạch nêu rõ `Input cụ thể / Output & Tác dụng phụ / Tầng & Độ thật (0 Mock hay Mock gì)` |
-| Spec/Design dùng thuật ngữ hoặc cơ chế kỹ thuật chuyên sâu nhưng xoá mất / để ẩn trong comment phần **Giải thích kiến thức & quyết định kỹ thuật** (`C31`) | Mở comment, viết tường minh Thẻ giải thích kỹ thuật: *Bản chất là gì (kèm ví dụ) · Tại sao cần (không có thì lỗi gì) · Chạy thế nào (Đầu vào  Xử lý  Đầu ra) · Tự kiểm ≤ 5 phút · Nguồn* + thêm thuật ngữ vào `docs/glossary.md` |
-| REQ mơ hồ, chứa số không có nguồn, hoặc nhãn `Đã xác minh` mà con trỏ không chứa câu trích | Tìm cơ sở yêu cầu/số đo; chưa có  `Chưa biết` + cách xác minh, không tự điền ngưỡng (`C31`) |
-| AC kết thúc bằng "hoạt động đúng" / lệnh vận hành chỉ kiểm exit 0 | Thay bằng mã HTTP, mã lỗi, dữ liệu DB/file sinh ra (**Kiểm tác dụng lệnh vận hành**, `C19`) |
-| "Ngoài phạm vi" rỗng | Thêm ít nhất 1 thứ lân cận bị loại (phần GĐ sau, dịch vụ ngoài, màn không làm) |
-| Spec `Ready` còn `[CẦN LÀM RÕ]` | Chuyển về `Draft` hoặc hỏi người dùng giải quyết trước khi trình |
-| Sự thật xuất hiện ở 2 file | Chọn 1 nguồn thật (spec/contract/`config.md`/`error-codes.md`), chỗ còn lại chỉ đặt context pointer |
-| Dòng trỏ file trong `AGENTS.md` chỉ ghi tên file chung chung | Viết lại theo mẫu **Con trỏ có điều kiện** (`C24`): *"Khi chạm <nhánh X>  đọc `<file Y>`"* |
-| REQ kế thừa từ `PK-*` còn `{tham-số}` | Tìm giá trị có cơ sở; chưa có thì P-xx và giữ Draft, không đoán cho đủ mẫu |
-| `Ready`/task sẵn sàng/HANDOFF bị coi là quyền code | Đối chiếu lệnh người dùng và đợt hiện tại; xác định điểm dừng (**Quyền thực thi theo đợt**, `C30`) |
-| Có AC `[~]` nhưng spec `Done` | Trả về trạng thái chưa hoàn tất; nêu ai/cách kiểm chứng, không tính là pass |
-| Lệnh trong `AGENTS.md` / `CONSTRAINTS.md` chưa chạy thử | Chạy thử nếu an toàn; không an toàn  ghi rõ "chưa chạy + lý do" trong báo cáo |
+| Spec has only text and REQ tables, lacks visual direction (**visual direction presentation**, `C28`) | Add Mermaid flow diagram + at least 1 **concrete I/O Snapshot** (ASCII wireframe / CLI / JSON sample) |
+| ACs are generic words, missing Transparent Test Matrix (**visible test evidence**, `C29`) | Add Transparent Test Matrix stating `Concrete Input / Output & side effects / Tier & Fidelity (0 Mock or which mocks)` |
+| Spec/Design uses advanced technical terms or mechanisms but the **Knowledge & technical decision explanation** was deleted or hidden in comments (`C31`) | Open comments, write the Technical Explanation Card explicitly: *What it is (with example) · Why needed (what breaks without) · How it runs (Input → Processing → Output) · Self-check ≤ 5 min · Source* + add terms to `docs/glossary.md` |
+| REQ vague, contains unsourced numbers, or `Verified` label whose pointer lacks a quote | Find requirement/measurement basis; if none → `Unknown` + verification method, don't self-fill thresholds (`C31`) |
+| AC ends with "works correctly" / ops command only checks exit 0 | Replace with HTTP code, error code, DB/file-generated data (**verify ops command effects**, `C19`) |
+| "Out of scope" empty | Add at least 1 adjacent excluded item (later-phase part, external service, unbuilt screen) |
+| `Ready` spec still has `[NEEDS CLARIFICATION]` | Revert to `Draft` or ask the user to resolve before presenting |
+| Truth appears in 2 files | Pick 1 real source (spec/contract/`config.md`/`error-codes.md`), the other only gets a context pointer |
+| File pointers in `AGENTS.md` are generic filenames | Rewrite as **conditional pointer** (`C24`): *"When touching `<branch X>` → read `<file Y>`"* |
+| REQ inherited from `PK-*` still has `{param}` | Find a baselined value; if none → P-xx and keep Draft, don't guess to fit template |
+| `Ready`/ready tasks/HANDOFF treated as code authority | Reconcile user commands and current batch; fix stop point (**per-batch execution authority**, `C30`) |
+| Spec `Done` while ACs are `[~]` | Return to unfinished status; state who/how to verify, don't count as pass |
+| Commands in `AGENTS.md` / `CONSTRAINTS.md` never tried | Try if safe; if unsafe → record "not run + reason" in the report |
 
-## 3. Format báo cáo Cổng 2
+## 3. Gate-2 report format
 
 ```markdown
-## Kết quả tự kiểm & phản biện (Cổng 2)
+## Self-check & challenge results (Gate 2)
 
-File đã viết/sửa: <danh sách>
+Files written/edited: <list>
 
-| Nhóm | Đạt | Chưa đạt | Không áp dụng |
+| Group | Pass | Fail | N/A |
 |---|---|---|---|
-| 1. AGENTS.md (gồm **Không hạ chuẩn âm thầm** `C23`, `C24`, `C27`) | … | … | |
-| 2. Spec & Pack kế thừa | … | … | |
-| 3. Quyết định, thuật ngữ, Capability Map | … | … | |
-| 3b. CI, cấu hình, CONSTRAINTS, gotcha | … | … | |
-| 4–6. Vị trí, chất lượng chung, Mức 1–2 | … | … | |
+| 1. AGENTS.md (incl. **no silent lowering** `C23`, `C24`, `C27`) | … | … | |
+| 2. Spec & inherited Packs | … | … | |
+| 3. Decisions, terms, Capability Map | … | … | |
+| 3b. CI, config, CONSTRAINTS, gotchas | … | … | |
+| 4–6. Locations, general quality, Levels 1–2 | … | … | |
 
-Chế độ phản biện đã chạy: <Chéo model: `<model viết>  <CLI model phản biện>` | Phiên sạch cùng model: `spec-challenger` — lý do chưa chạy khác model>
+Challenge mode run: <Cross-model: `<authoring model> → <challenging CLI model>` | Same-model clean session: `spec-challenger` — reason other model unavailable>
 
-Đã tự sửa sau phản biện (Fixed):
-- <file:dòng> — <lỗi phát hiện>  <đã sửa thế nào>
+Self-fixed after challenge (Fixed):
+- <file:line> — <finding> → <how fixed>
 
-Phát hiện giữ nguyên / cần người dùng quyết định (Not Fixed — cấm ẩn phát hiện):
-- <file:dòng> — <phát hiện của bộ phản biện>  <lý do giữ nguyên hoặc câu hỏi cần người dùng chốt>
+Findings kept / need user decision (Not Fixed — hiding findings forbidden):
+- <file:line> — <challenger finding> → <reason kept or question for user>
 
-Câu hỏi còn lại: <danh sách hoặc "Không có">
+Remaining questions: <list or "None">
 ```
 
- Gửi báo cáo, dừng, chờ duyệt (Cổng 2). Không tự chuyển sang Bước 7.
+ Send report, stop, wait for approval (Gate 2). Do not self-advance to Step 7.
 
-## Kiểm tra trước khi xong
+## Check before done
 
-- [] Đã chạy kiểm tra đối kháng với context tách biệt (`C26`).
-- [] Mọi mục `[]` đều xuất hiện tường minh trong báo cáo.
-- [] Mọi kết luận có bằng chứng đường dẫn trong file.
-- [] Không file mới nào bị bỏ quên (không được trỏ tới, nằm ngoài git).
-- [] Đã kiểm `C30–C31`; AI phản biện không thay nguồn sơ cấp/test/chuyên gia, báo cáo kiểm docs không chứng minh sản phẩm đã đúng.
+- [ ] Ran the adversarial check with detached context (`C26`).
+- [ ] Every `[ ]` item appears explicitly in the report.
+- [ ] Every conclusion has file-path evidence.
+- [ ] No new file forgotten (unreferenced, outside git).
+- [ ] Checked `C30–C31`; AI challenge doesn't replace primary sources/tests/experts; a doc-check report doesn't prove the product is correct.

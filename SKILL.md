@@ -3,62 +3,62 @@ name: writing-spec-for-ai
 description: Use when starting a project that lacks AI documentation, or when the user requests project specs, AGENTS.md, or standardization of scattered agent docs.
 license: MIT
 trigger_phrases:
-  - "viết spec cho dự án"
-  - "viết AGENTS.md"
-  - "chuẩn hoá tài liệu cho agent"
-  - "bắt đầu dự án mới"
+  - "write a spec for the project"
+  - "write AGENTS.md"
+  - "standardize docs for agents"
+  - "start a new project"
 do_not_use:
-  - "Dự án nhỏ < 50 files  dùng writing-spec-simple thay vì bộ đầy đủ"
-  - "User chỉ đưa ý tưởng chưa rõ  dùng idea-to-spec trước"
-  - "Chỉ fix bug hoặc task nhỏ  systematic-debugging, không viết spec"
+  - "Small projects < 50 files → use writing-spec-simple instead of the full kit"
+  - "User only has a vague idea → use idea-to-spec first"
+  - "Only fixing a bug or small task → systematic-debugging; experiment/research loop → fast-track; no specs"
 ---
 
 # Writing Spec For AI
 
-Mục tiêu: bộ tài liệu giúp mọi AI agent **làm đúng luật, tự chứng minh việc đã xong, biết dừng khi mơ hồ** — và ngắn nhất có thể.
+Goal: a doc set that helps every AI agent **follow the rules, prove its own completion, and know when to stop on ambiguity** — and as short as possible.
 
-Skill này là **bộ điều phối**. **Đọc đúng lúc (tiết kiệm ngữ cảnh, `C17`):** mỗi lượt **chỉ mở đúng 1 sub-skill của bước đang làm** trong [skills/](skills/) và đúng mẫu trong [templates/](templates/); **cấm đọc trước** sub-skill bước sau và **cấm nạp nguyên file** [references/principles.md](references/principles.md), [references/base-kit.md](references/base-kit.md), [references/research-controlled-execution.md](references/research-controlled-execution.md) hay cả thư mục `packs/` (chỉ tra mục lẻ khi vướng: [glossary](references/glossary.md), [examples](references/examples.md)).
+This skill is a **coordinator**. **Read on demand (context economy, `C17`):** each turn opens **only the one sub-skill of the current step** in [skills/](skills/) and the matching template in [templates/](templates/); **forbidden to pre-read** the next step's sub-skill or **bulk-load** [references/principles.md](references/principles.md), [references/base-kit.md](references/base-kit.md), [references/research-controlled-execution.md](references/research-controlled-execution.md), or the whole `packs/` directory (look up single entries only when stuck: [glossary](references/glossary.md), [examples](references/examples.md)).
 
-## Luật cứng
+## Hard Rules
 
-1. **Mặc định ba cổng:** đề xuất (Cổng 1)  phản biện docs (Cổng 2)  thử docs (Cổng 3)  code. Chỉ dẫn rõ của người dùng có thể điều chỉnh quy trình/phạm vi; không biến giả định thành bằng chứng và không hỏi lại quyền đã cấp.
-2. **Không bịa yêu cầu.** Không suy ra được từ repo hoặc lời người dùng  `[CẦN LÀM RÕ: …]` + câu hỏi mở.
-3. **Một sự thật, một chỗ.** Nơi khác chỉ trỏ tới bằng link/ID; câu trỏ đặt điều kiện ở đầu, vd. *"Khi sửa API  đọc …"* (**con trỏ có điều kiện**, `C24`).
-4. **Mức 0 luôn làm; mức 1–2 và Pack chỉ khi có tín hiệu**, ghi rõ tín hiệu.
-5. **Ngắn và không hạ chuẩn:** `AGENTS.md` khoảng ≤ 150 dòng (quy ước của bộ kit, không phải số có nguồn); không tự tắt trình kiểm tra hay hạ ngưỡng để qua bài kiểm (**không hạ chuẩn âm thầm**, `C23`).
-6. **Viết để người không chuyên duyệt được:** ngôn ngữ theo người dùng; ID, lệnh, tên file giữ nguyên. **Nghĩa trước, mã sau:** lần đầu nhắc một luật trong mỗi file thì viết tên ngắn rồi mới đến mã; file trong `templates/` không chứa mã luật `Cxx`.
-7. **Quyền thực thi theo đợt (`C30`):** `Ready` và duyệt Cổng 1 không phải quyền viết tràn lan. **Viết docs (Bước 5):** mỗi lượt chỉ làm **một bước con** rồi dừng chờ review: 5a cụm nền, 5b **đúng 1 file `SPEC-xx`** (+ `specs/README.md`), 5c 1 file design. **Viết code (Bước 8):** mặc định 1 spec, 1 task/AC nhỏ; ghi điểm dừng trong `docs/progress.md`, báo bằng chứng rồi dừng.
-8. **Nguồn, giải thích kỹ thuật và giới hạn hiểu biết (`C31`):** người dùng chốt hành vi/phạm vi; AI kiểm chứng kỹ thuật bằng repo, nguồn chính thức và thử nghiệm. Mỗi khẳng định quan trọng mang 1 trong 4 nhãn `Người dùng chốt / Đã xác minh / AI đề xuất / Chưa biết`; `Đã xác minh` phải kèm con trỏ mở được (`path:line`, URL + trích nguyên văn, hoặc lệnh + kết quả). Mọi khái niệm/cơ chế hoặc quyết định kỹ thuật chuyên sâu AI đưa vào phải đi kèm **Thẻ giải thích & quyết định kỹ thuật** hiển thị tường minh (*Bản chất là gì + ví dụ · Tại sao cần / không có thì lỗi gì · Chạy thế nào · Tự kiểm ≤ 5 phút · Nguồn & giới hạn*) để người dùng hiểu rõ kiến thức AI viết và nghiệm thu qua bước `Tự kiểm`; vùng bảo mật/thanh toán/pháp lý  ghi "cần chuyên gia". Không tự chấm độ tin cậy %, không bịa NFR; không dùng lời khen/đồng ý của AI thứ hai làm bằng chứng đúng (`C31`), nhưng **bắt buộc dùng phiên sạch / model thứ hai (vd. `codex` read-only hoặc `spec-challenger`) để bắt lỗi chéo và tự sửa trước khi trình người dùng (`C26`)**.
-9. **Profile S:** mọi con trỏ `docs/specs/`  `docs/spec.md`/README, `docs/progress.md`  block đợt trong `AGENTS.md`; file glossary/decisions/plan chỉ đọc khi có. Áp dụng ánh xạ này ở mọi sub-skill/adapter; không sinh thêm file để thoả con trỏ.
-10. **Góc nhìn thay danh xưng:** đầu mỗi bước ghi `Góc nhìn: <≤ 3 mục> — vì <tín hiệu thật>` theo [references/lenses.md](references/lenses.md); không dùng "bạn là senior…" thay checklist; người dùng thêm/bỏ được. Quyết định có ≥ 2 phương án khó đảo ngược  [skills/explore-options](skills/explore-options/SKILL.md): người dùng chọn, AI không tự quyết.
+1. **Default three gates:** proposal (Gate 1) → doc challenge (Gate 2) → doc testing (Gate 3) → code. Only explicit user direction may adjust the process/scope; never turn assumptions into evidence and never re-ask granted permission.
+2. **Never fabricate requirements.** Cannot be derived from the repo or the user → `[NEEDS CLARIFICATION: …]` + open question.
+3. **One truth, one place.** Elsewhere only point via link/ID; conditional pointers go at the top, e.g. *"When editing API → read …"* (**conditional pointer**, `C24`).
+4. **Level 0 always; levels 1-2 and Packs only on signal**, record the signal.
+5. **Short without lowering standards:** `AGENTS.md` ~≤ 150 lines (kit convention, not sourced); never disable checkers or lower thresholds to pass (**no silent lowering of standards**, `C23`).
+6. **Write so non-experts can approve:** language follows the user; IDs, commands, filenames stay verbatim. **Meaning before code:** first mention of a law in each file uses its short name then the code; files in `templates/` contain no `Cxx` law codes.
+7. **Per-batch execution authority (`C30`):** `Ready` and Gate-1 approval are not blanket write permission. **Writing docs (Step 5):** each turn does **one sub-step** then stops for review: 5a foundation cluster, 5b **exactly 1 `SPEC-xx` file** (+ `specs/README.md`), 5c 1 design file. **Writing code (Step 8):** default 1 spec, 1 small verifiable task/AC; record stop point in `docs/progress.md`, report evidence then stop.
+8. **Sources, technical explanation, and knowledge limits (`C31`):** the user decides behavior/scope; the AI verifies technical claims via repo, official sources, and experiments. Every key claim carries 1 of 4 labels `User decided / Verified / AI proposed / Unknown`; `Verified` must include an openable pointer (`path:line`, URL + verbatim quote, or command + result). Every advanced concept/mechanism or technical decision the AI introduces must come with a **Technical Explanation & Decision Card** shown explicitly (*What it is + example · Why needed / what breaks without it · How it runs · Self-check ≤ 5 min · Source & limits*) so the user understands the knowledge the AI wrote and verifies via the `Self-check` step; security/payment/legal areas → note "needs expert". Never self-score confidence %, never fabricate NFRs; don't use a second AI's praise/agreement as correctness evidence (`C31`), but **must use a clean session / second model (e.g. `codex` read-only or `spec-challenger`) to cross-check and self-fix before presenting to the user (`C26`)**.
+9. **Profile S:** every `docs/specs/` pointer → `docs/spec.md`/README, `docs/progress.md` → batch block inside `AGENTS.md`; glossary/decisions/plan files are read only when present. Apply this mapping in every sub-skill/adapter; don't generate extra files to satisfy pointers.
+10. **Lenses instead of personas:** each step starts with `Lens: <≤ 3 items> — because <real signal>` per [references/lenses.md](references/lenses.md); never use "you are a senior…" to replace checklists; users may add/remove. Decisions with ≥ 2 hard-to-reverse options → [skills/explore-options](skills/explore-options/SKILL.md): the user chooses, the AI doesn't self-decide.
 
 Before each gate, MUST read [red flags and mandatory responses](references/anti-rationalization.md).
 
-## Quy trình — bước nào mở sub-skill / subagent đó
+## Process — each step opens its own sub-skill / subagent
 
-| Bước | Việc | Sub-skill / Subagent | Cổng |
+| Step | Work | Sub-skill / Subagent | Gate |
 |---|---|---|---|
-| 1–2 | Khảo sát dự án, thu bằng chứng, xác định mức 0/1/2, Profile & Pack | [skills/survey-project](skills/survey-project/SKILL.md) · subagent [`spec-surveyor`](agents/spec-surveyor.md) | |
-| 3 | Đề xuất thiết kế docs + Capability Map (chưa tạo file repo) | [skills/propose-doc-design](skills/propose-doc-design/SKILL.md) | **Cổng 1 — chờ duyệt** |
-| 4 | Làm rõ các câu hỏi chỉ người dùng quyết được (Frontier) bằng giả thuyết + đáp án đoán sẵn (`HYPOTHESIS/GUESS`); đáp án  `D-xx` hoặc spec | (nội quy trong `propose-doc-design` §3) | |
-| 5a | Viết cụm nền tảng: `AGENTS.md` (+ `CONSTRAINTS.md`), `glossary`, `decisions` | [templates/](templates/) + `principles.md` §4.2 | **Checkpoint 5a — chờ review cụm file này** |
-| 5b | Viết `specs/README.md` + **đúng 1 file `SPEC-xx` sắp làm** (từng spec một) | [skills/write-spec](skills/write-spec/SKILL.md) | **Checkpoint 5b — chờ review từng spec** |
-| 5c | Viết **1 file design doc** khi có tín hiệu (thuật ngữ thiết kế: [glossary](references/glossary.md)) | [skills/write-design-doc](skills/write-design-doc/SKILL.md) | **Checkpoint 5c — chờ review design** |
-| 6 | Phản biện đối kháng & chấm checklist | [skills/review-docs](skills/review-docs/SKILL.md) · subagent [`spec-challenger`](agents/spec-challenger.md) | **Cổng 2 — chờ duyệt** |
-| 7 | Thử docs bằng 2–3 task mẫu trong phiên sạch | [skills/test-docs](skills/test-docs/SKILL.md) · subagent [`doc-tester`](agents/doc-tester.md) | **Cổng 3 — chờ duyệt mới code** |
-| 7.5 | Chọn lát cắt, AC, kiểm chứng và điểm dừng; plan riêng/skill verify chỉ khi cần | [skills/plan-tasks](skills/plan-tasks/SKILL.md) · [skills/generate-verify-harness](skills/generate-verify-harness/SKILL.md) | |
-| 8 | Code theo quy trình bộ docs định nghĩa; quản lý thay đổi spec | [skills/change-spec](skills/change-spec/SKILL.md) | |
+| 1–2 | Survey project, gather evidence, determine level 0/1/2, Profile & Pack | [skills/survey-project](skills/survey-project/SKILL.md) · subagent [`spec-surveyor`](agents/spec-surveyor.md) | |
+| 3 | Propose docs design + Capability Map (no repo files yet) | [skills/propose-doc-design](skills/propose-doc-design/SKILL.md) | **Gate 1 — wait for approval** |
+| 4 | Clarify questions only the user can decide (Frontier) via hypothesis + pre-guessed answer (`HYPOTHESIS/GUESS`); answers → `D-xx` or spec | (rules inside `propose-doc-design` §3) | |
+| 5a | Write foundation cluster: `AGENTS.md` (+ `CONSTRAINTS.md`), `glossary`, `decisions` | [templates/](templates/) + `principles.md` §4.2 | **Checkpoint 5a — wait for review of this file cluster** |
+| 5b | Write `specs/README.md` + **exactly 1 `SPEC-xx` file next in line** (one spec at a time) | [skills/write-spec](skills/write-spec/SKILL.md) | **Checkpoint 5b — wait for review of each spec** |
+| 5c | Write **1 design doc** when signaled (design glossary terms: [glossary](references/glossary.md)) | [skills/write-design-doc](skills/write-design-doc/SKILL.md) | **Checkpoint 5c — wait for design review** |
+| 6 | Adversarial challenge & checklist scoring | [skills/review-docs](skills/review-docs/SKILL.md) · subagent [`spec-challenger`](agents/spec-challenger.md) | **Gate 2 — wait for approval** |
+| 7 | Test docs with 2–3 sample tasks in a clean session | [skills/test-docs](skills/test-docs/SKILL.md) · subagent [`doc-tester`](agents/doc-tester.md) | **Gate 3 — wait for approval before coding** |
+| 7.5 | Choose slices, ACs, verification, stop points; separate plan/verify skill only when needed | [skills/plan-tasks](skills/plan-tasks/SKILL.md) · [skills/generate-verify-harness](skills/generate-verify-harness/SKILL.md) | |
+| 8 | Code per the doc-defined process; manage spec changes | [skills/change-spec](skills/change-spec/SKILL.md) | |
 
-Luật xuyên các bước:
+Cross-step rules:
 
-- Bước 4: nêu giả thuyết (`HYPOTHESIS`) + bằng chứng và khoảng trống; tối đa 3 câu hỏi về kết quả/đánh đổi mà chỉ người dùng quyết được (**Frontier**), kèm đề xuất. Chi tiết kỹ thuật có thể uỷ quyền thì AI tự nghiên cứu trong phạm vi đã giao (`C31`).
-- Bước 5: chép mẫu từ `templates/`, điền giá trị thật, xoá phần không áp dụng; không để placeholder trong file giao; lệnh trong `AGENTS.md` / `CONSTRAINTS.md` phải chạy được. Spec mới `Draft`; brownfield `As-built` kèm bằng chứng; chỉ người dùng chuyển `Ready`.
-- Bước 8: phát hiện docs sai/thiếu khi code  dừng, đề xuất sửa docs trước; spec đã `Done` thì qua [skills/change-spec](skills/change-spec/SKILL.md).
+- Step 4: state hypothesis (`HYPOTHESIS`) + evidence and gaps; max 3 questions about outcomes/trade-offs only the user can decide (**Frontier**), each with a proposal. Deep technical matters can be delegated — the AI researches within the granted scope (`C31`).
+- Step 5: copy templates from `templates/`, fill real values, delete inapplicable parts; no placeholders in deliverables; commands in `AGENTS.md` / `CONSTRAINTS.md` must actually run. New specs start `Draft`; brownfield specs start `As-built` with evidence; only the user moves to `Ready`.
+- Step 8: discovering docs are wrong/missing while coding → stop, propose doc fix first; a `Done` spec goes through [skills/change-spec](skills/change-spec/SKILL.md).
 
-## Sau khi code chạy (bảo trì)
+## After Coding (Maintenance)
 
-- Luật vi phạm ≥ 2 lần  đưa vào `CONSTRAINTS.md` / lint / test / hook, thông báo lỗi kèm ID luật + cách sửa; rút văn xuôi.
-- Quy trình lặp ≥ 2 lần hoặc cần kiểm chứng runtime tự động  dùng [skills/generate-verify-harness](skills/generate-verify-harness/SKILL.md) hoặc [templates/project-skill](templates/project-skill/SKILL.md).
-- Lỗi khó đã gặp, xung đột hợp đồng (enum/API/DB/port), hotfix hoặc revert  bắt buộc ghi vào `docs/conflicts-and-bugs.md` kèm commit SHA, nguyên nhân gốc, cách chặn bằng máy và ngày kiểm lần cuối (**sổ tay lỗi & xung đột có ngày kiểm**, `C18`); chưa sửa thì có issue.
-- Phiên làm việc dài: trước khi nén ngữ cảnh hoặc mở phiên mới, ghi quyết định vào `decisions.md`, điểm dừng và bàn giao vào `progress.md` (**bộ nhớ phiên**, `C17`; một file duy nhất, không tách `HANDOFF.md`). Việc đo độ dài ngữ cảnh do công cụ AI tự làm, không thuộc bộ kit.
-- Làm xong P-xx  chuyển D-xx hoặc xoá. Spec chỉ `Done` khi mọi AC còn hiệu lực của spec `[x]` có bằng chứng, không chỉ AC của đợt; `[~]` chưa kiểm chứng.
+- A rule violated ≥ 2 times → move into `CONSTRAINTS.md` / lint / test / hook, error messages cite law ID + fix; trim prose.
+- A process repeated ≥ 2 times or needing automated runtime verification → use [skills/generate-verify-harness](skills/generate-verify-harness/SKILL.md) or [templates/project-skill](templates/project-skill/SKILL.md).
+- Hard bugs encountered, contract conflicts (enum/API/DB/port), hotfixes or reverts → must record in `docs/conflicts-and-bugs.md` with commit SHA, root cause, machine-blocking check, and last-verified date (**dated bug & conflict ledger**, `C18`); unfixed ones get an issue. Tag every ledger record and milestone report with a kit signal (`references/kit-evidence.md`) so the kit can be judged later.
+- Long sessions: before compaction or a new session, write decisions into `decisions.md`, stop point and handoff into `progress.md` (**session memory**, `C17`; single file, no separate `HANDOFF.md`). Context-length measurement is the AI tool's job, not the kit's.
+- Finishing P-xx → convert to D-xx or delete. A spec only reaches `Done` when every **must** AC of that spec is `[x]` with evidence, not just the batch's ACs; `[~]` is unverified. Mark each AC `must` or `later`; `later` ACs move to the backlog and do not block `Done` (measured: 100–317 open ACs per project made `Done` unreachable).

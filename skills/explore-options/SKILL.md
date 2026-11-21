@@ -1,83 +1,83 @@
 ---
 name: explore-options
-description: Dùng khi đứng trước một quyết định cụ thể có ≥ 2 lựa chọn khó đảo ngược hoặc khi người dùng nói "cho tôi các phương án", "so sánh đa góc nhìn". Chỉ mở khi cần so sánh 2–4 phương án để người dùng chọn (ghi D-xx); không mở tự động cho quyết định nhỏ.
+description: Use when facing a concrete decision with 2 or more hard-to-reverse options, or when the user says "give me the options" or "compare from several angles". Open only to compare 2-4 options for the user to choose (record a D-xx); never open it automatically for small decisions.
 ---
 
-# Explore options — khám phá phương án đa góc nhìn
+# Explore options - multi-lens option exploration
 
-Mục tiêu: người dùng **chọn được** giữa các phương án mà không cần hiểu hết kỹ thuật. AI mở rộng lựa chọn, kiểm chứng và trình bày. **Người dùng chọn**; AI không tự quyết thay.
+Goal: the user can **choose** between options without understanding every technical detail. The AI widens the choices, verifies them and presents them. **The user chooses**; the AI never decides in their place.
 
-**Không dùng khi:** việc nhỏ, dễ đảo ngược, hoặc đã có `D-xx` chốt. Gặp trường hợp đó thì làm theo `D-xx` hoặc nêu một đề xuất ngắn.
+**Do not use when:** the task is small, easily reversible, or a `D-xx` already settles it. In that case follow the `D-xx` or give one short proposal.
 
-> Cơ sở (Đã xác minh, 2026-10-26; chi tiết và trích nguyên văn ở [lenses.md](../../references/lenses.md)):
-> - Tìm nhiều góc nhìn giúp bài viết bao quát hơn: STORM, Shao et al. 2024, <https://arxiv.org/abs/2402.14207>.
-> - Tranh luận nhiều agent *"do not reliably outperform … self-consistency"*: Smit et al. 2023, <https://arxiv.org/abs/2311.17371>. Vì vậy skill chỉ phản biện **1 vòng**.
-> - Cách để một model tự đóng nhiều vai chỉ hiệu quả với model mạnh cỡ GPT-4: Wang et al. 2023, <https://arxiv.org/abs/2307.05300>. Vì vậy skill ưu tiên subagent có ngữ cảnh sạch.
-> - Khung ghi quyết định lấy theo mẫu MADR: <https://adr.github.io/madr/>.
+> Basis (Verified, 2026-10-26; details and verbatim quotes in [lenses.md](../../references/lenses.md)):
+> - Searching from several perspectives makes writing more comprehensive: STORM, Shao et al. 2024, <https://arxiv.org/abs/2402.14207>.
+> - Multi-agent debate *"do not reliably outperform ... self-consistency"*: Smit et al. 2023, <https://arxiv.org/abs/2311.17371>. Hence this skill runs **one** challenge round only.
+> - Having one model play several personas only works well for strong models around GPT-4 level: Wang et al. 2023, <https://arxiv.org/abs/2307.05300>. Hence this skill prefers clean-context subagents.
+> - The decision record follows the MADR template: <https://adr.github.io/madr/>.
 
-## Quy trình — mỗi lượt một bước con, dừng chờ người dùng ở bước 1 và bước 5
+## Process - one sub-step per turn, stop and wait for the user at steps 1 and 5
 
-1. **Đóng khung quyết định.**
-   - Viết quyết định thành 1 câu hỏi, ví dụ: *"Lưu phiên đăng nhập ở đâu?"*.
-   - Liệt kê ràng buộc đã chốt, mỗi ràng buộc kèm link `D-xx` hoặc `CONSTRAINTS.md`.
-   - Liệt kê tiêu chí chọn (ví dụ: chi phí, độ an toàn, công sức, khả năng đổi sau này). Người dùng xếp hạng tiêu chí.
-   - Nếu thiếu tiêu chí, hỏi tối đa 3 câu mà chỉ người dùng quyết được (Frontier), mỗi câu kèm đáp án đoán sẵn. Sau đó **dừng** chờ trả lời.
-2. **Chọn góc nhìn.**
-   - Lấy 2–3 góc nhìn từ [lenses.md](../../references/lenses.md) theo tín hiệu thật, cộng thêm góc nhìn **Phản biện**.
-   - Ghi đúng một dòng: `Góc nhìn: … — vì …`.
-3. **Sinh phương án độc lập.**
-   - Đưa ra 2–4 phương án. Luôn có một phương án **giữ nguyên / làm tối thiểu** để làm mốc so sánh.
-   - Nếu chạy được subagent: mỗi góc nhìn một subagent với ngữ cảnh sạch. Chỉ truyền câu hỏi, ràng buộc, tiêu chí và đường dẫn; không truyền lịch sử hội thoại.
-   - Nếu không chạy được subagent: làm tuần tự.
-   - Hai phương án phải khác nhau ở **ít nhất một đánh đổi cốt lõi** (ví dụ: tự vận hành hay thuê dịch vụ; đồng bộ hay bất đồng bộ). Nếu chỉ khác tên gọi thì gộp làm một.
-4. **Phản biện 1 vòng.**
-   - Góc nhìn Phản biện tấn công từng phương án: chỗ nào sai được, chi phí ẩn, rủi ro khó đảo ngược.
-   - Mở lại từng nguồn được trích. Nguồn không mở được hoặc câu trích không khớp thì hạ nhãn xuống `AI đề xuất`.
-   - Không tranh luận nhiều vòng.
-5. **Trình bày để chọn** theo khuôn bên dưới, rồi **dừng** chờ người dùng chọn.
-6. **Ghi quyết định.**
-   - Người dùng chọn xong thì ghi `D-xx` vào `docs/decisions.md` theo khung MADR: *Các phương án đã xét*, *Phương án chọn + lý do*, *Hệ quả*.
-   - Các phương án bị loại ghi kèm lý do loại. Nếu đang viết design doc thì đây chính là mục "Phương án đã loại".
+1. **Frame the decision.**
+   - Write the decision as one question, e.g. *"Where do we store the login session?"*.
+   - List the settled constraints, each with a link to a `D-xx` or `CONSTRAINTS.md`.
+   - List the selection criteria (e.g. cost, safety, effort, ease of changing later). The user ranks the criteria.
+   - If criteria are missing, ask at most 3 questions only the user can decide (Frontier), each with a pre-guessed answer. Then **stop** and wait.
+2. **Pick lenses.**
+   - Take 2-3 lenses from [lenses.md](../../references/lenses.md) based on real signals, plus the **Challenge** lens.
+   - Write exactly one line: `Lens: ... - because ...`.
+3. **Generate independent options.**
+   - Produce 2-4 options. Always include a **keep as-is / do the minimum** option as the baseline.
+   - If subagents are available: one subagent per lens with a clean context. Pass only the question, constraints, criteria and paths; never the conversation history.
+   - If subagents are not available: do it sequentially.
+   - Two options must differ in **at least one core trade-off** (e.g. self-hosted vs bought service; synchronous vs asynchronous). If they differ only by name, merge them.
+4. **One challenge round.**
+   - The Challenge lens attacks each option: where it can be wrong, hidden costs, hard-to-reverse risks.
+   - Reopen every cited source. A source that cannot be opened, or a quote that does not match, drops its label to `AI proposed`.
+   - No multi-round debate.
+5. **Present for choice** using the format below, then **stop** and wait for the user to choose.
+6. **Record the decision.**
+   - Once the user chooses, write a `D-xx` into `docs/decisions.md` in MADR form: *Options considered*, *Chosen option + reason*, *Consequences*.
+   - Rejected options are recorded with the reason for rejection. When writing a design doc, this is its "Rejected options" section.
 
-## Khuôn trình bày (bước 5)
+## Presentation format (step 5)
 
 ```markdown
-**Quyết định:** <1 câu> · **Tiêu chí (người dùng xếp hạng):** 1. … 2. … 3. …
-**Góc nhìn:** <…> — vì <tín hiệu>
+**Decision:** <1 sentence> · **Criteria (ranked by the user):** 1. ... 2. ... 3. ...
+**Lens:** <...> - because <signal>
 
-| Phương án | Tiêu chí 1 | Tiêu chí 2 | Tiêu chí 3 | Khó đảo ngược? |
+| Option | Criterion 1 | Criterion 2 | Criterion 3 | Hard to reverse? |
 |---|---|---|---|---|
-| A. Giữ nguyên / tối thiểu | tốt / vừa / kém + 1 lý do | … | … | Dễ |
-| B. … | … | … | … | … |
+| A. Keep as-is / minimum | good / fair / poor + 1 reason | ... | ... | Easy |
+| B. ... | ... | ... | ... | ... |
 
-Mỗi phương án kèm một Thẻ giải thích & quyết định kỹ thuật:
-- Bản chất là gì (nói dễ hiểu + ví dụ thực tế): <không dùng thuật ngữ mù mờ>
-- Tại sao cần / Nếu sai thì sao: <hậu quả quan sát được + chi phí quay lại>
-- Chạy thế nào (Đầu vào  Xử lý  Đầu ra): <2–3 bước ngắn>
-- Tự kiểm ≤ 5 phút: <lệnh / link / thao tác người dùng tự làm được>
-- Nguồn: <path:line | URL + trích nguyên văn> · Nhãn: Người dùng chốt / Đã xác minh / AI đề xuất / Chưa biết
-- Không tự kiểm được: <phần cần chuyên gia, nếu có>
+Each option gets a Technical Explanation & Decision Card:
+- What it is (plain words + a real example): <no vague jargon>
+- Why needed / what happens if wrong: <observable consequence + cost of going back>
+- How it runs (Input -> Process -> Output): <2-3 short steps>
+- Self-check <= 5 min: <command / link / action the user can do alone>
+- Source: <path:line | URL + verbatim quote> · Label: User decided / Verified / AI proposed / Unknown
+- Cannot self-check: <part that needs an expert, if any>
 
-**Điểm khác biệt mấu chốt:** <1–2 câu: chọn A nghĩa là chấp nhận X, chọn B nghĩa là chấp nhận Y>
-**AI đề xuất:** <phương án> — vì <tiêu chí>. **Tôi sẽ đổi đề xuất nếu:** <điều kiện cụ thể>
+**Key difference:** <1-2 sentences: choosing A means accepting X, choosing B means accepting Y>
+**AI proposes:** <option> - because <criterion>. **I would change this proposal if:** <specific condition>
 ```
 
-Chỉ đánh giá định tính (tốt / vừa / kém); không chấm điểm số hay phần trăm, vì con số tạo cảm giác chính xác giả. Vùng bảo mật, thanh toán, pháp lý ghi "cần chuyên gia".
+Rate qualitatively only (good / fair / poor); never give numeric scores or percentages, because numbers create false precision. Security, payment and legal areas are marked "needs expert".
 
-## Dấu hiệu lỗi — dừng và làm lại
+## Failure signs - stop and redo
 
-| Dấu hiệu | Sửa |
+| Sign | Fix |
 |---|---|
-| Các phương án thực chất là một (chỉ khác tên hoặc thư viện) | Gộp lại; tìm đánh đổi cốt lõi khác |
-| Có phương án bù nhìn dựng ra để dễ loại | Thay bằng phương án mà một chuyên gia thật sẽ bảo vệ |
-| Góc nhìn chỉ đổi giọng văn ("với tư cách senior…") | Dùng câu hỏi bắt buộc của góc nhìn đó trong `lenses.md` |
-| Có hơn 4 phương án, hoặc bảng quá dài | Giữ tối đa 4 phương án; loại sớm phương án vi phạm ràng buộc đã chốt |
-| AI tự chọn rồi viết code hoặc docs luôn | Dừng. Chưa có lựa chọn của người dùng thì không có `D-xx` |
-| Gắn nhãn "Đã xác minh" nhưng không có nguồn mở được | Hạ nhãn xuống `AI đề xuất` hoặc `Chưa biết` |
+| The options are really one (only a name or library differs) | Merge them; find a different core trade-off |
+| A strawman option was built just to be rejected | Replace it with an option a real expert would defend |
+| A lens only changes tone ("as a senior...") | Use that lens's mandatory questions from `lenses.md` |
+| More than 4 options, or the table is too long | Keep at most 4; drop early any option that violates a settled constraint |
+| The AI picks and then writes code or docs right away | Stop. Without the user's choice there is no `D-xx` |
+| Labeled "Verified" but no source can be opened | Downgrade to `AI proposed` or `Unknown` |
 
 ## Checklist
 
-- [] Có phương án giữ nguyên / tối thiểu; 2–4 phương án, mỗi cặp khác nhau ở ít nhất một đánh đổi cốt lõi.
-- [] Đã ghi dòng `Góc nhìn: … — vì …`; góc nhìn Phản biện đã chạy đúng 1 vòng.
-- [] Mỗi phương án có Thẻ quyết định, kèm dòng Tự kiểm ≤ 5 phút và nhãn nguồn gốc.
-- [] Người dùng chọn; quyết định được ghi vào `D-xx` theo khung MADR.
+- [ ] A keep-as-is / minimum option exists; 2-4 options, every pair differing in at least one core trade-off.
+- [ ] The `Lens: ... - because ...` line is written; the Challenge lens ran exactly one round.
+- [ ] Each option has a Decision Card with a Self-check <= 5 min line and a source label.
+- [ ] The user chose; the decision is recorded as a `D-xx` in MADR form.

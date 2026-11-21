@@ -1,61 +1,61 @@
 ---
 name: propose-doc-design
-description: Dùng ở Bước 3–4 (Cổng 1) sau khi đã có bảng khảo sát Bước 1–2, hoặc khi người dùng nói "lập đề xuất thiết kế bộ docs", "Capability Map", "duyệt Cổng 1". Chỉ mở ở Bước 3–4 để viết bản đề xuất và dừng chờ duyệt; không mở khi đang khảo sát hoặc viết spec.
+description: Use at Steps 3–4 (Gate 1) after the Step 1–2 survey table exists, or when the user says "draft the docs design proposal", "Capability Map", "approve Gate 1". Only opens at Steps 3–4 to write the proposal and stop for approval; do not open while surveying or writing specs.
 ---
 
-# Propose doc design — đề xuất thiết kế docs (Bước 3–4 của writing-spec-for-ai)
+# Propose doc design — docs design proposal (Steps 3–4 of writing-spec-for-ai)
 
-Đầu vào: kết quả `survey-project` (bảng hiện trạng + Profile + mức + Pack).
-Đầu ra: MỘT file đề xuất theo `templates/doc-design-proposal.md`, lưu ở thư mục artifact của phiên (hoặc `docs/proposals/` nếu người dùng muốn). **Chưa tạo bất kỳ file docs thật nào trong repo.** Chỉ mở `templates/doc-design-proposal.md` và các file `packs/PK-*.md` đã bật ở Bước 1–2; không đọc trước `templates/docs/specs/*` hay các sub-skill bước 5–8 (`C17`).
+Input: `survey-project` results (current-state table + Profile + levels + Packs).
+Output: ONE proposal file per `templates/doc-design-proposal.md`, saved in the session's artifact directory (or `docs/proposals/` if the user wants). **No real docs files created in the repo yet.** Only open `templates/doc-design-proposal.md` and the `packs/PK-*.md` files enabled at Steps 1–2; do not pre-read `templates/docs/specs/*` or step 5–8 sub-skills (`C17`).
 
- Gửi đề xuất, dừng, chờ duyệt (Cổng 1). Không duyệt thì sửa đề xuất, không lách sang viết docs.
+ Send proposal, stop, wait for approval (Gate 1). If not approved, revise the proposal — never bypass to writing docs.
 
-## 1. Điền đề xuất từ kết quả khảo sát
+## 1. Fill the proposal from survey results
 
-- Mục 1 (hiện trạng): chép bảng khảo sát, giữ nguyên cột bằng chứng.
-- Mục 2 (mức, profile, pack): chọn **Profile** (`S/M/L` theo [`profiles.md`](../../profiles.md)), chỉ giữ thành phần Mức 1–2 (thêm khi có tín hiệu; Mức 0 luôn bắt buộc — [glossary](../../references/glossary.md)) có tín hiệu (`CONSTRAINTS.md`, `DESIGN-xx`, `verify-<app>`…), chọn **Pack** theo tín hiệu trong 8 pack (`PK-API`, `PK-AUTH`, `PK-RELEASE`, `PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`).
-- Mục 3 (cây file): mỗi file ghi rõ Tạo / Sửa / Di chuyển / Xoá — repo có sẵn docs thì ưu tiên sửa/di chuyển, không tạo bản sao thứ hai.
-- Mục 4 (nội dung `AGENTS.md` & `CONSTRAINTS.md`): viết sẵn các giá trị chính — lệnh, 3 tầng ranh giới, DoD, context pointers có điều kiện kích hoạt ở đầu câu (**Con trỏ có điều kiện**, `C24`), dòng khai báo base/profile/pack.
-- Mục 7 (cưỡng chế/hook/skill): chỉ đề xuất khi có tín hiệu; ghi luật nào rút thành check trong `CONSTRAINTS.md` được.
+- Section 1 (current state): copy the survey table, keep evidence columns verbatim.
+- Section 2 (levels, profile, packs): choose **Profile** (`S/M/L` per [`profiles.md`](../../profiles.md)), keep only level 1–2 components with signals (added on signal; Level 0 always required — [glossary](../../references/glossary.md)) (`CONSTRAINTS.md`, `DESIGN-xx`, `verify-<app>`…), choose **Packs** by signal among the 8 packs (`PK-API`, `PK-AUTH`, `PK-RELEASE`, `PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`).
+- Section 3 (file tree): every file marked Create / Edit / Move / Delete — if the repo already has docs, prefer edit/move, never create a second copy.
+- Section 4 (`AGENTS.md` & `CONSTRAINTS.md` content): pre-write key values — commands, 3 boundary tiers, DoD, conditional context pointers activated at sentence start (**conditional pointer**, `C24`), base/profile/pack declaration line.
+- Section 7 (enforcement/hooks/skills): only propose when signaled; note which rules can become `CONSTRAINTS.md` checks.
 
-## 2. Trực quan hoá Định hướng & Chia bộ Spec theo Capability Map (**Trình bày định hướng bằng hình**, `C28` — mục 5 của đề xuất)
+## 2. Visualize Direction & split Specs by Capability Map (**visual direction presentation**, `C28` — proposal section 5)
 
-Người dùng rất dễ "gật đầu mù" (*rubber-stamp*) trước một bảng chữ dài rồi sau đó phát hiện AI hiểu trật hướng sản phẩm. Trước khi liệt kê danh sách spec, bắt buộc trực quan hoá định hướng theo `C28` (gốc ý tưởng: skill tham khảo nội bộ `brainstorming`, `idea-refine`, `archify`):
+Users easily *rubber-stamp* a wall of text then discover the AI misunderstood the product direction. Before listing specs, visualization per `C28` is mandatory (root idea: internal reference skills `brainstorming`, `idea-refine`, `archify`):
 
-1. **Scope Radar — bảng 3 cột phạm vi (`(green) Làm ngay / (yellow) Đợt kế / (red) Không làm`):** Đặt bảng/khối 3 cột ngay đầu mục định hướng để người dùng thấy rõ ranh giới MVP, phần hoãn sang đợt sau và phần loại bỏ hoàn toàn.
-2. **Luồng tương tác tổng thể & thẻ phương án trực quan (khi hướng phát triển còn mở):**
-   - Vẽ **1 sơ đồ Mermaid** (User Journey / System Flow) thể hiện đường đi của tác nhân chính từ đầu vào đến kết quả.
-   - Nếu bài toán có `≥ 2` hướng tiếp cận sản phẩm/kiến trúc khả dĩ, trình bày **2–3 thẻ phương án trực quan (A / B)** kèm phác thảo **Snapshot I/O cụ thể** (ASCII UI wireframe, mẫu lệnh CLI, hoặc JSON payload) + bảng đánh đổi để người dùng nhìn thấy và chọn hướng trước khi đi vào chi tiết.
-3. **Chia khu vực độc lập theo miền năng lực:**
-   - Liệt kê thực thể và năng lực miền (người dùng, đơn, vai trò, kho, thông báo…); gom thành khu vực kiểm thử độc lập trả lời *"ai dùng tính năng này để làm gì"*.
-   - Tách riêng spec **phương tiện** (`ARCH`, `REPO`, `API`, `NFR`) chỉ khi dự án đủ lớn.
-4. **Xác định chiều phụ thuộc một chiều (`Depends on`) & Thứ tự xây dựng (`Build Order`):**
-   - Mỗi dòng bảng: `SPEC-<TÊN> | Trách nhiệm khu vực | Phụ thuộc vào (Depends on) | Trạng thái dự kiến (Draft/As-built) | Nguồn yêu cầu`.
-   - Mũi tên phụ thuộc chỉ đi một chiều, **cấm vòng lặp**. Không có số REQ tối thiểu: chỉ viết chi tiết spec sắp làm, khu vực sau giữ tên/mục tiêu/phụ thuộc. Duyệt Capability Map chưa cấp quyền triển khai (**Quyền thực thi theo đợt**, `C30`).
-5. **REQ kế thừa từ Pack (`PK-*`):** Nếu dự án bật pack (`PK-API`, `PK-AUTH`, `PK-RELEASE`, `PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`), ghi REQ kế thừa bằng bảng kèm giá trị tham số `{…}` cụ thể (xem `base-kit.md` §7.2).
+1. **Scope Radar — 3-column scope table (`(green) Do now / (yellow) Next batch / (red) Won't do`):** put the 3-column table/block at the top of the direction section so users see MVP boundaries, deferred parts, and fully excluded parts.
+2. **Overall interaction flow & visual option cards (while direction is open):**
+   - Draw **1 Mermaid diagram** (User Journey / System Flow) showing the main actor's path from input to result.
+   - If the problem has `>= 2` viable product/architecture directions, present **2–3 visual option cards (A / B)** each with a concrete **I/O Snapshot sketch** (ASCII UI wireframe, CLI command sample, or JSON payload) + trade-off table so users see and pick a direction before details.
+3. **Split independent areas by capability domain:**
+   - List domain entities and capabilities (users, orders, roles, warehouse, notifications…); group into independently testable areas answering *"who uses this feature to do what"*.
+   - Separate **enabler** specs (`ARCH`, `REPO`, `API`, `NFR`) only when the project is large enough.
+4. **Determine one-way dependencies (`Depends on`) & Build Order:**
+   - Each table row: `SPEC-<NAME> | Area responsibility | Depends on | Expected status (Draft/As-built) | Requirement source`.
+   - Dependency arrows point one way only — **cycles forbidden**. No minimum REQ count: only detail specs about to be built; later areas keep name/goal/dependencies. Approving the Capability Map grants no implementation authority (**per-batch execution authority**, `C30`).
+5. **REQs inherited from Packs (`PK-*`):** if the project enables packs (`PK-API`, `PK-AUTH`, `PK-RELEASE`, `PK-DB`, `PK-OBS`, `PK-FE`, `PK-JOB`, `PK-AGENT`), record inherited REQs in a table with concrete `{…}` parameter values (see `base-kit.md` §7.2).
 
-## 3. Câu hỏi làm rõ theo `HYPOTHESIS + Frontier + GUESS` (mục 10 — giả thuyết kèm bằng chứng  chỉ hỏi điều người dùng quyết được  kèm đề xuất của AI)
+## 3. Clarifying questions per `HYPOTHESIS + Frontier + GUESS` (section 10 — hypothesis with evidence → only ask what the user can decide → with AI proposals attached)
 
-Rút từ mọi `[CẦN LÀM RÕ]` phát hiện được khi điền đề xuất. Áp dụng kỷ luật phỏng vấn từ `interview-me` và `grilling`:
+Drawn from every `[NEEDS CLARIFICATION]` found while filling the proposal. Apply interview discipline from `interview-me` and `grilling`:
 
-1. **Nêu giả thuyết & Cơ sở (`HYPOTHESIS + EVIDENCE` — **Nguồn & giới hạn hiểu biết**, `C31`):** Tóm tắt mục tiêu/ràng buộc; mỗi khẳng định gắn 1 trong 4 nhãn nguồn (glossary); dẫn lời người dùng, `path:line` hoặc nguồn chính thức, ghi rõ khoảng trống. Không tự chấm phần trăm độ tin cậy.
-2. **Chỉ hỏi câu thuộc Frontier (kết quả/đánh đổi mà chỉ người dùng quyết được):** Tối đa 3 câu về hành vi/phạm vi/chi phí mà người dùng quyết được; câu phụ thuộc đáp án trước để lượt sau. Dùng ví dụ đầu vào  kết quả thay cho thuật ngữ chuyên môn.
-3. **Đính kèm đề xuất (` GUESS`):** Nêu kết quả quan sát được, đánh đổi và phần chưa chứng minh. Đồng ý hành vi không xác nhận mọi khẳng định kỹ thuật hay cấp quyền chạy toàn bộ roadmap.
-4. **Bóc tách từ khoá chung chung & Không nhận uỷ quyền mơ hồ:**
-   - Nếu người dùng trả lời bằng từ khoá chung chung (*"cần scalable, clean, hiện đại"*), hỏi thẳng ngưỡng cụ thể hoặc *"Nếu không phải giải trình với ai, bạn thực sự cần điều gì chạy được trước?"*.
-   - *"Tuỳ bạn"* có thể uỷ quyền chi tiết kỹ thuật dễ đảo ngược trong phạm vi đã giao: ưu tiên pattern/dependency sẵn có và ghi cơ sở. Với dữ liệu, phân quyền, tiền hoặc cam kết nghiệp vụ, nêu hệ quả dễ hiểu; AI tự nghiên cứu/thử nghiệm được phép. Nếu vẫn thiếu chuyên môn, ghi cần người có chuyên môn kiểm tra và chặn phần phụ thuộc, không ép người dùng đoán A/B.
-5. Đáp án đã chốt  `D-xx` hoặc "Làm rõ" của spec. Khuyến nghị chưa được chứng minh  `P-xx`, không tự biến thành sự thật hay REQ đã duyệt.
+1. **State hypothesis & basis (`HYPOTHESIS + EVIDENCE` — **sources & knowledge limits**, `C31`):** summarize goal/constraints; tag each claim with 1 of 4 source labels (glossary); cite user words, `path:line`, or official sources, noting gaps. Never self-score confidence %.
+2. **Only ask Frontier questions (outcomes/trade-offs only the user can decide):** max 3 questions on behavior/scope/cost the user decides; dependent questions wait for the next turn. Use input→output examples instead of jargon.
+3. **Attach proposal (`GUESS`):** state observable outcome, trade-offs, and unproven parts. Agreeing on behavior doesn't confirm every technical claim or grant authority to run the whole roadmap.
+4. **Unpack vague keywords & don't accept vague delegation:**
+   - If the user answers with generic words (*"needs to be scalable, clean, modern"*), ask for concrete thresholds or *"If you didn't have to justify to anyone, what would you actually need working first?"*.
+   - *"Up to you"* can delegate easily-reversible technical details within the granted scope: prefer existing patterns/dependencies and record the basis. For data, permissions, money, or business commitments, state consequences plainly; the AI self-researches/experiments what's allowed. If expertise is still missing, record "needs expert review" and block dependent parts — don't force the user to guess A/B.
+5. Confirmed answers → `D-xx` or the spec's "Clarifications". Unproven recommendations → `P-xx`, never self-promoted to truth or approved REQ.
 
-## 4. Kế hoạch thử docs (mục 8) & Cố ý không làm (mục 9)
+## 4. Doc test plan (section 8) & deliberate exclusions (section 9)
 
-- Chọn sẵn 2–3 task mẫu (Profile S: 2; M/L: 3) sẽ giao cho subagent [`doc-tester`](../../agents/doc-tester.md) ở Cổng 3: 1 task thường gặp, 1 task chạm ranh giới "Hỏi trước", 1 task mơ hồ cố ý.
-- Ghi rõ thứ đề xuất **bỏ qua** và lý do (mục 9) để người duyệt biết là đã cân nhắc, không quên.
+- Pre-select 2–3 sample tasks (Profile S: 2; M/L: 3) to hand to the [`doc-tester`](../../agents/doc-tester.md) subagent at Gate 3: 1 common task, 1 task touching an "Ask first" boundary, 1 deliberately vague task.
+- Record clearly what the proposal **skips** and why (section 9) so approvers know it was considered, not forgotten.
 
-## Kiểm tra trước khi xong
+## Check before done
 
-- [] Chưa file docs nào trong repo được tạo/sửa.
-- [] Mọi thành phần mức 1–2 và Pack được chọn đều có tín hiệu đi kèm.
-- [] Có **Scope Radar (`(green) Làm ngay / (yellow) Đợt kế / (red) Không làm`)**, sơ đồ luồng Mermaid, và **thẻ phương án trực quan + Snapshot I/O** khi hướng phát triển còn mở (`C28`).
-- [] Bảng chia bộ spec có cột `Depends on` một chiều (không vòng lặp) + `Build Order` + nguồn yêu cầu truy được.
-- [] Có bản đọc ngắn: hành vi đầu tiên, ví dụ nghiệm thu, ngoài phạm vi, điều chưa biết; chỉ chi tiết hoá phần sắp làm (`C30`, `C31`).
-- [] `HYPOTHESIS + EVIDENCE` chỉ rõ nguồn/khoảng trống, ≤ 3 câu người dùng quyết được; phần kỹ thuật có cách kiểm chứng và người chịu trách nhiệm.
+- [ ] No docs files in the repo created/edited.
+- [ ] Every level 1–2 component and chosen Pack has an accompanying signal.
+- [ ] Has **Scope Radar (`(green) Do now / (yellow) Next batch / (red) Won't do`)**, Mermaid flow diagram, and **visual option cards + I/O Snapshots** while direction is open (`C28`).
+- [ ] Spec-split table has one-way `Depends on` column (no cycles) + `Build Order` + traceable requirement sources.
+- [ ] Has short read: first behavior, acceptance example, out-of-scope, unknowns; only details what's about to be built (`C30`, `C31`).
+- [ ] `HYPOTHESIS + EVIDENCE` states sources/gaps clearly, ≤ 3 user-decidable questions; technical parts have verification methods and owners.

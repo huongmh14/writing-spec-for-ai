@@ -1,54 +1,54 @@
 ---
 name: generate-verify-harness
-description: Dùng ở Bước 7.5–8 hoặc khi người dùng yêu cầu rõ "tạo skill verify", "tạo bộ kiểm chứng tự động cho app". Chỉ mở khi cần sinh.agents/skills/verify-<app>/SKILL.md (Launch, Doctor, Drive, Evidence, Cleanup); không mở ở các bước viết spec.
+description: Use at Step 7.5-8 or when the user explicitly asks to "create a verify skill" or "create an automatic verification harness for the app". Open only to generate .agents/skills/verify-<app>/SKILL.md (Launch, Doctor, Drive, Evidence, Cleanup); never open it during the spec-writing steps.
 ---
 
-# Generate verify harness — sinh Skill Kiểm chứng Thực tế cho Dự án
+# Generate verify harness - create a real-world verification skill for the project
 
-Đầu vào: repo dự án + `AGENTS.md` + `docs/specs/`.
-Đầu ra:
-1. `.agents/skills/verify-<tên-app>/SKILL.md` (và đồng bộ sang `.claude/skills/` hoặc `.cursor/skills/` nếu dự án dùng).
-2. Bản đồ tính năng kiểm chứng `.agents/skills/verify-<tên-app>/features/README.md` + 3–5 luồng chính.
+Input: the project repo + `AGENTS.md` + `docs/specs/`.
+Output:
+1. `.agents/skills/verify-<app-name>/SKILL.md` (mirrored to `.claude/skills/` or `.cursor/skills/` if the project uses them).
+2. A verification feature map `.agents/skills/verify-<app-name>/features/README.md` with 3-5 main flows.
 
-> Gốc ý tưởng (skill tham khảo nội bộ, không phải bằng chứng): `pstack/create-verification-skill`, `playwright`; luật Core **Kiểm tác dụng lệnh vận hành** (`C19` — kiểm tác dụng thật, không chỉ exit code).
+> Origin of the idea (internal reference skills, not evidence): `pstack/create-verification-skill`, `playwright`; Core rule **Check the effect of operational commands** (`C19` - verify the real effect, not just the exit code).
 
-## 1. Khảo sát cơ chế điều khiển từ repo (Không hỏi điều đọc được từ code)
+## 1. Survey the control mechanism from the repo (never ask what the code already answers)
 
-Trước khi viết skill, tự đọc repo để xác định 5 yếu tố:
-- **Bề mặt tương tác (Surface):** Web UI, HTTP API, CLI/TUI, Worker/Daemon, hay Desktop/Electron?
-- **Cách khởi chạy (Launch):** Lệnh khởi động từ trạng thái sạch (gồm cả migration + seed nếu có), cổng mạng, biến môi trường, và **dấu hiệu thật sự sẵn sàng** (log line cụ thể hoặc health endpoint trả `200`, không chỉ là tiến trình vừa bật).
-- **Công cụ điều khiển (Drive):** Ưu tiên harness có sẵn trong repo (Playwright, test runner, script CLI, `curl`); nếu chưa có mới chọn công cụ chuẩn (Playwright/CDP cho Web, PTY/subshell cô lập cho CLI, HTTP client cho API).
-- **Bằng chứng thu thập (Evidence):** Ảnh chụp màn hình, bản ghi terminal, HTTP response body + status, dòng log có `requestId`, và trạng thái dữ liệu trong DB/file sau thao tác.
-- **Cô lập (Isolation):** Hai phiên kiểm chứng có chạy song song được không (port riêng, DB/thư mục tạm riêng)? Nếu không, phải ghi rõ quy tắc kiểm tra khoá để tránh đè lên phiên của lập trình viên.
+Before writing the skill, read the repo yourself to determine 5 factors:
+- **Surface:** Web UI, HTTP API, CLI/TUI, worker/daemon, or desktop/Electron?
+- **Launch:** the start command from a clean state (including migration + seed if any), network port, environment variables, and the **real readiness signal** (a specific log line or a health endpoint returning `200`, not merely a process that has started).
+- **Drive tool:** prefer a harness already in the repo (Playwright, test runner, CLI script, `curl`); only if none exists choose a standard tool (Playwright/CDP for Web, an isolated PTY/subshell for CLI, an HTTP client for API).
+- **Evidence collected:** screenshots, terminal recordings, HTTP response body + status, log lines with a `requestId`, and the data state in the DB/files after the action.
+- **Isolation:** can two verification sessions run in parallel (separate port, separate DB/temp folder)? If not, state a locking rule so a session does not overwrite the developer's.
 
-## 2. Cấu trúc bắt buộc của `.agents/skills/verify-<tên-app>/SKILL.md`
+## 2. Required structure of `.agents/skills/verify-<app-name>/SKILL.md`
 
-Viết cho **agent kế tiếp đọc lúc chưa biết gì về app** (không để lại bất kỳ placeholder `<...>` nào):
+Write it for **the next agent who knows nothing about the app** (leave no `<...>` placeholder behind):
 
-1. **Launch:** Lệnh khởi chạy đầy đủ và cách xác nhận hệ thống đã sẵn sàng phục vụ.
-2. **Doctor:** Một lệnh chỉ đọc (read-only) chạy trong `< 3 giây` để trả lời *"instance này có đang sống, đúng phiên bản build mới nhất, và sẵn sàng nhận kiểm thử không?"*.
-3. **Drive:** Công thức điều khiển bằng selector/lệnh thật của dự án (ưu tiên ARIA role/label, route path, CLI flags ổn định).
-4. **Evidence & bảng bằng chứng chạy test (`C19`, **Bằng chứng test hiển thị** `C29`):** Tiêu chuẩn bằng chứng nghiệm thu cho các `AC-ID`:
-   - Phải đi qua đường người dùng thật (không gọi hàm nội bộ tắt ngang).
-   - Kiểm tra cả **phản hồi bề mặt** lẫn **tác dụng phụ thực tế** (bản ghi DB, file sinh ra, message trong queue — luật `C19`).
-   - **In Bảng bằng chứng chạy test (`C29`):** Kết thúc mỗi lượt verify, bắt buộc in ra bảng tóm tắt cho lập trình viên thấy rõ: `AC-ID | Kịch bản đã chạy | Input đã bơm | Output & Tác dụng phụ thực tế | Độ thật (0 Mock hay Mock thành phần nào) | Kết quả & Thời gian`, kèm đường dẫn ảnh chụp màn hình / trace log.
-   - Lưu bằng chứng vào thư mục cố định để không bị xoá mất khi dọn dẹp.
-5. **Cleanup:** Lệnh tắt đúng tiến trình do phiên kiểm chứng bật lên (theo PID/container tên riêng, **cấm `killall` theo tên chung**), xoá dữ liệu rác nhưng giữ nguyên thư mục chứa bằng chứng (`Evidence`).
+1. **Launch:** the full start command and how to confirm the system is ready to serve.
+2. **Doctor:** one read-only command running in `< 3 seconds` that answers *"is this instance alive, on the latest build, and ready for testing?"*.
+3. **Drive:** the control recipe using the project's real selectors/commands (prefer ARIA role/label, route paths, stable CLI flags).
+4. **Evidence & test-run evidence table (`C19`, **visible test evidence** `C29`):** the acceptance-evidence standard for each `AC-ID`:
+   - It must go through the real user path (no calling internal functions that skip the flow).
+   - Check both the **surface response** and the **real side effects** (DB records, generated files, queue messages - rule `C19`).
+   - **Print the test-run evidence table (`C29`):** at the end of every verify run, print a summary table so the developer sees clearly: `AC-ID | Scenario run | Input injected | Output & real side effects | Realism (0 mocks, or which parts are mocked) | Result & time`, with paths to screenshots / trace logs.
+   - Save the evidence in a fixed folder so cleanup does not delete it.
+5. **Cleanup:** the command that stops exactly the processes this verification session started (by PID / a container with its own name; **never `killall` by a generic name**), removes junk data but keeps the evidence folder (`Evidence`).
 
-## 3. Khởi tạo Bản đồ tính năng (`features/README.md`)
+## 3. Create the feature map (`features/README.md`)
 
-Tạo danh mục 3–5 luồng cốt lõi tương ứng với các `SPEC-<TÊN>` quan trọng nhất. Mỗi luồng ghi ngắn gọn 4 mục:
-- `Các hành vi con (AC-ID liên quan)`
-- `Cách đi tới luồng (góc nhìn người dùng)`
-- `Cách điều khiển bằng <harness>`
-- `Gotchas (bẫy đã biết + ngày kiểm lần cuối — luật Gotcha có ngày kiểm, C18)`
+Create a list of 3-5 core flows matching the most important `SPEC-<NAME>` files. For each flow write four short items:
+- `Sub-behaviors (related AC-IDs)`
+- `How to reach the flow (user's point of view)`
+- `How to drive it with <harness>`
+- `Gotchas (known traps + date last checked - the dated-gotcha rule, C18)`
 
-## 4. Chạy thử thực tế trước khi bàn giao
+## 4. Real dry run before handover
 
-Bắt buộc tự thực thi đúng hướng dẫn vừa viết 1 vòng từ đầu tới cuối cho ít nhất 1 luồng: **Launch  Doctor  Drive  Capture Evidence  Cleanup**, rồi xác nhận file bằng chứng vẫn còn nguyên sau bước Cleanup. Nếu bước nào vấp, sửa ngay vào skill rồi chạy lại.
+You must execute the instructions you just wrote once from start to finish for at least 1 flow: **Launch -> Doctor -> Drive -> Capture Evidence -> Cleanup**, then confirm the evidence files still exist after Cleanup. If any step stumbles, fix it in the skill immediately and run again.
 
-## Kiểm tra trước khi xong
+## Check before finishing
 
-- [] `.agents/skills/verify-<tên-app>/SKILL.md` có YAML frontmatter (`name`, `description`) hợp lệ và không còn placeholder.
-- [] Có đủ 5 mục: `Launch`, `Doctor`, `Drive`, `Evidence`, `Cleanup`.
-- [] Đã chạy thử thật ít nhất 1 luồng end-to-end và thu được bằng chứng sống sót sau bước `Cleanup`.
+- [ ] `.agents/skills/verify-<app-name>/SKILL.md` has valid YAML frontmatter (`name`, `description`) and no placeholders left.
+- [ ] All 5 sections exist: `Launch`, `Doctor`, `Drive`, `Evidence`, `Cleanup`.
+- [ ] At least 1 flow was really run end to end, and its evidence survived the `Cleanup` step.

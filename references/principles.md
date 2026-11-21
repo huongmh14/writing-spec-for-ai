@@ -1,252 +1,252 @@
-# Nguyên tắc tài liệu cho AI
+# Documentation principles for AI
 
-Tổng hợp từ: phân tích repo `vmu-tools/dashboard` (repo nội bộ); GitHub "How to write a great agents.md" (2.500 repo); Anthropic "Claude Code best practices", "Effective context engineering", "Skill authoring best practices"; GitHub Spec Kit; AWS Kiro; OpenSpec; BMAD; EARS; ADR/MADR; Diátaxis. Nguồn đầy đủ ở §8. Thuật ngữ kit: [glossary.md](glossary.md).
+Compiled from: an analysis of the `vmu-tools/dashboard` repo (internal repo); GitHub "How to write a great agents.md" (2,500 repos); Anthropic "Claude Code best practices", "Effective context engineering", "Skill authoring best practices"; GitHub Spec Kit; AWS Kiro; OpenSpec; BMAD; EARS; ADR/MADR; Diátaxis. Full sources in §8. Kit terms: [glossary.md](glossary.md).
 
-> Các ngưỡng số trong file (AGENTS.md ≤ ~150 dòng, file đọc mỗi phiên ≤ ~5 KB, hotfix ≤ 1 ngày làm việc, spec > ~300 dòng…) là **quy ước của bộ kit**, không có nguồn đo lường. Bài GitHub (2.500 repo) khuyên viết AGENTS.md ngắn gọn nhưng không đưa con số.
+> The numeric thresholds in this file (AGENTS.md ≤ ~150 lines, files read per session ≤ ~5 KB, hotfix ≤ 1 working day, spec > ~300 lines...) are **conventions of the kit**, with no measured source. The GitHub article (2,500 repos) advises writing a concise AGENTS.md but gives no number.
 
-## Mục lục
+## Table of contents
 
-1. Mô hình tài liệu
-2. Bộ kỹ năng theo mức (0 / 1 / 2)
-3. Quy tắc viết spec
-4. Phong cách viết cho agent
-5. Công cụ nào đọc file nào
-6. Skill trong dự án vs skill tải về
-7. Bài học từ thất bại thực tế
-8. Nguồn
+1. The documentation model
+2. The skill set by level (0 / 1 / 2)
+3. Rules for writing specs
+4. Writing style for agents
+5. Which tool reads which file
+6. Project skills vs downloaded skills
+7. Lessons from real failures
+8. Sources
 
 ---
 
-## 1. Mô hình tài liệu
+## 1. The documentation model
 
 ```mermaid
 flowchart TD
-    G["glossary.md — thuật ngữ"] --> C
-    A["AGENTS.md — lệnh, ranh giới, DoD"] --> B["decisions.md (+ adr/) — tại sao"]
-    A --> C["specs/ — cái gì: REQ, NFR, biên, AC"]
-    C --> DS["specs/*-design.md — thiết kế, contract (khi cần)"]
-    DS --> D["plans/ — thứ tự, PR, phụ thuộc"]
-    CH["changes/ — đề xuất thay đổi spec (delta)"] --> C
-    D --> E["Code + test tên chứa AC-ID"]
+    G["glossary.md — terms"] --> C
+    A["AGENTS.md — commands, boundaries, DoD"] --> B["decisions.md (+ adr/) — why"]
+    A --> C["specs/ — what: REQ, NFR, edge cases, AC"]
+    C --> DS["specs/*-design.md — design, contract (when needed)"]
+    DS --> D["plans/ — order, PRs, dependencies"]
+    CH["changes/ — spec change proposals (delta)"] --> C
+    D --> E["Code + tests whose names contain the AC-ID"]
     E --> F["Commit/PR [SPEC-XXX]"]
-    F --> P["progress.md (tiến độ + bàn giao)"]
-    H["Adapter: CLAUDE.md,.github/,.cursor/"] --> A
-    I["Lint, hook, CI, deny-rules"] -.cưỡng chế.-> E
+    F --> P["progress.md (progress + handoff)"]
+    H["Adapters: CLAUDE.md, .github/, .cursor/"] --> A
+    I["Lint, hooks, CI, deny-rules"] -.enforce.-> E
 ```
 
-| Tầng | Câu hỏi | File |
+| Layer | Question | File |
 |---|---|---|
-| Luật | Lệnh nào, được/không được gì, khi nào xong | `AGENTS.md` (+ adapter, luật theo phạm vi) |
-| Ngôn ngữ | Từ này nghĩa là gì | `docs/glossary.md` |
-| Quyết định | Tại sao | `docs/decisions.md`, `docs/adr/` |
-| Yêu cầu | Cái gì phải đúng | `docs/specs/` |
-| Thiết kế | Ghép thế nào, phương án nào bị loại | `docs/specs/<nn>-<khu-vực>-design.md` |
-| Thay đổi | Spec đã chạy đổi gì | `docs/changes/` |
-| Kế hoạch | Thứ tự nào, song song gì | `docs/plans/` |
-| Tra cứu | Biến nào, mã nào nghĩa gì, bản nào đổi gì | `docs/reference/config.md`, `docs/reference/error-codes.md`, `docs/changelog/` |
-| Bộ nhớ | Đang ở đâu | `docs/progress.md` (gồm cả mục bàn giao phiên mới) |
-| Cưỡng chế | Máy chặn | lint, hook, CI, settings deny |
+| Rules | Which commands, what is allowed/forbidden, when is it done | `AGENTS.md` (+ adapters, scoped rules) |
+| Language | What does this word mean | `docs/glossary.md` |
+| Decisions | Why | `docs/decisions.md`, `docs/adr/` |
+| Requirements | What must be true | `docs/specs/` |
+| Design | How it fits together, which options were rejected | `docs/specs/<nn>-<area>-design.md` |
+| Changes | What changed in a spec that already ran | `docs/changes/` |
+| Plan | What order, what in parallel | `docs/plans/` |
+| Reference | Which variable, what each code means, what each version changed | `docs/reference/config.md`, `docs/reference/error-codes.md`, `docs/changelog/` |
+| Memory | Where we are | `docs/progress.md` (including the new-session handoff section) |
+| Enforcement | Machines block | lint, hooks, CI, settings deny |
 
-**Chuỗi truy vết:** `D-xx  XXX-Rnn  XXX-ACnn  tên test  commit [SPEC-XXX]  PR  progress`.
+**Traceability chain:** `D-xx → XXX-Rnn → XXX-ACnn → test name → commit [SPEC-XXX] → PR → progress`.
 
-**Thứ tự nguồn sự thật:** định nghĩa chuẩn ở **Thứ tự nguồn sự thật** (`C01`) trong [base-kit.md §3](base-kit.md); không chép lại ở đây.
+**Source-of-truth order:** the canonical definition is **source-of-truth order** (`C01`) in [base-kit.md §3](base-kit.md); it is not copied here.
 
 ---
 
-## 2. Bộ kỹ năng theo mức
+## 2. The skill set by level
 
-### Mức 0 — Bắt buộc từ ngày đầu
+### Level 0 — Mandatory from day one
 
-| # | Kỹ năng | Tối thiểu phải có | Vì sao |
+| # | Skill | Minimum required | Why |
 |---|---|---|---|
-| 0.1 | **Lệnh tự kiểm, đặt đầu file** | install/build/test/lint/dev đầy đủ flag + **lệnh chạy 1 test** | Agent tự chứng minh code chạy; chạy 1 test nhanh hơn cả bộ |
-| 0.2 | **Bối cảnh + stack cụ thể + bản đồ cấp 1–2** | "NestJS 12 + Prisma + PostgreSQL 15", cây thư mục 1–2 cấp kèm vai trò | "React project" quá mơ hồ; cây chi tiết nhanh cũ |
-| 0.3 | **Thứ tự nguồn sự thật + dừng khi mơ hồ** | Bảng ưu tiên; "mơ hồ thì dừng, nêu chỗ chưa rõ, đề xuất phương án"; skill ngoài thua | Chống bịa yêu cầu |
-| 0.4 | **Ranh giới 3 tầng** | [x] Luôn làm / (warning) Hỏi trước / (blocked) Không bao giờ | Thiếu tầng "Luôn" thì agent chỉ biết cấm, không biết thói quen đúng |
-| 0.5 | **DoD kiểm chứng được** | Lệnh phải xanh + AC có test + tài liệu trạng thái cập nhật | "Xong" phải là bằng chứng |
-| 0.6 | **Quy ước code bằng ví dụ thật** | 1 snippet ngắn hoặc "làm giống file `X`" | 1 ví dụ hơn 3 đoạn mô tả |
-| 0.7 | **Quy ước git** | Dạng commit, tên nhánh, luồng PR, việc agent không được làm (merge, force push) | |
-| 0.8 | **Spec template đủ mục** | Mục tiêu, phạm vi trong/ngoài, REQ có mức, NFR (số hoặc `N/A — lý do`), trường hợp biên, AC Cho/Khi/Thì, câu hỏi mở (ghi "Không có" nếu rỗng) | Thiếu mục nào thì AI quên mục đó |
-| 0.9 | **Làm rõ có cấu trúc** | Marker `[CẦN LÀM RÕ: …]` trong dòng; hỏi từng câu kèm phương án đề xuất; spec không `Ready` khi còn marker | Biến "mơ hồ" thành việc đếm được |
-| 0.10 | **Quyết định append-only có trạng thái** | Bảng ID/ngày/quyết định/lý do/**trạng thái (hiệu lực / bị thay bởi D-xx)**; bảng P-xx đề xuất, làm xong phải đóng | Agent không phải dò chuỗi thay thế |
-| 0.11 | **Thuật ngữ** | `glossary.md`: thuật ngữ / định nghĩa / không gọi là / tên trong code | Chống dùng lẫn từ đồng nghĩa |
-| 0.12 | **Đặt file đúng chỗ công cụ đọc** | Theo ma trận §5; kiểm bằng `/context`, `/memory show` | File đặt sai chỗ = không tồn tại |
-| 0.13 | **Thử tài liệu** | Phiên mới, giao agent 2–3 task mẫu; ghi luật bị bỏ qua, câu hỏi đã có trong docs | Docs chưa thử là docs chưa xong |
-| 0.14 | **Tiêu chí cắt** | Mỗi dòng: "bỏ đi agent có làm sai không?" Không thì xoá. AGENTS.md ≤ ~150 dòng | Dài thì luật quan trọng bị chìm |
-| 0.15 | **Quyền AI theo trạng thái spec** | Bảng trạng thái × được làm / không được làm trong `docs/specs/README.md`; không code spec `Draft`; hotfix sửa spec trong ≤ 1 ngày làm việc | Trạng thái chỉ có nghĩa khi gắn với việc agent được phép làm |
-| 0.16 | **Loại thay đổi  file phải sửa** | Bảng trong `docs/specs/README.md`, gồm dòng "đổi stack" | Docs lệch code vì không ai biết phải sửa file nào |
-| 0.17 | **Trình bày định hướng bằng hình** (`C28`) | Scope Radar (`(green) Làm ngay / (yellow) Đợt kế / (red) Không làm`), thẻ phương án — Option Card (2–3 hướng kèm sơ đồ Mermaid + ASCII wireframe/I-O mẫu) | Chống "gật đầu mù" trước bảng chữ dài khiến AI code lệch ý người dùng |
-| 0.18 | **Bằng chứng test hiển thị** (`C29`) | Ma trận Test Minh bạch trong spec (`Input cụ thể / Output kỳ vọng / Tầng & Độ thật: 0 Mock hay Mock gì`) + Bảng Bằng chứng Chạy Test sau khi code | Chống "test hộp đen ngầm" chỉ báo pass mà lập trình viên không biết AI đã test cái gì |
+| 0.1 | **Self-check commands, at the top of the file** | Full install/build/test/lint/dev with flags + a **run-1-test command** | The agent proves the code runs by itself; running 1 test is faster than the whole suite |
+| 0.2 | **Context + concrete stack + level 1–2 map** | "NestJS 12 + Prisma + PostgreSQL 15", a 1–2 level directory tree with roles | "A React project" is too vague; a detailed tree goes stale fast |
+| 0.3 | **Source-of-truth order + stop when ambiguous** | A priority table; "when ambiguous, stop, state what is unclear, propose options"; outside skills lose | Against fabricating requirements |
+| 0.4 | **3-tier boundaries** | [x] Always do / (warning) Ask first / (blocked) Never | Without the "Always" tier the agent only knows prohibitions, not the right habits |
+| 0.5 | **A verifiable DoD** | Commands must be green + ACs have tests + the status docs updated | "Done" must be evidence |
+| 0.6 | **Code conventions by real example** | 1 short snippet or "do it like file `X`" | 1 example beats 3 paragraphs of description |
+| 0.7 | **Git conventions** | Commit form, branch names, PR flow, things the agent must not do (merge, force push) | |
+| 0.8 | **A complete spec template** | Goal, in/out scope, leveled REQs, NFR (a number or `N/A — reason`), edge cases, Given/When/Then ACs, open questions (write "None" if empty) | Whatever section is missing, the AI forgets that section |
+| 0.9 | **Structured clarification** | An inline `[NEEDS CLARIFICATION: …]` marker; ask one question at a time with a proposed option; a spec is not `Ready` while markers remain | Turns "ambiguity" into something countable |
+| 0.10 | **Append-only decisions with status** | A table of ID/date/decision/reason/**status (in effect / superseded by D-xx)**; a P-xx table of proposals that must be closed once done | The agent need not trace replacement chains |
+| 0.11 | **Glossary** | `glossary.md`: term / definition / do not call it / name in code | Against mixing synonyms |
+| 0.12 | **Put files where the tool reads them** | Per the §5 matrix; verify with `/context`, `/memory show` | A misplaced file does not exist |
+| 0.13 | **Test the docs** | In a fresh session, give the agent 2–3 sample tasks; record skipped rules and questions the docs already answer | Untested docs are unfinished docs |
+| 0.14 | **Cutting criterion** | Every line: "if removed, would the agent do something wrong?" If not, delete it. AGENTS.md ≤ ~150 lines | When long, the important rules get buried |
+| 0.15 | **AI permissions by spec status** | A status × allowed / not allowed table in `docs/specs/README.md`; no coding a `Draft` spec; a hotfix updates the spec within ≤ 1 working day | A status only means something when tied to what the agent may do |
+| 0.16 | **Type of change → file to edit** | A table in `docs/specs/README.md`, including a "stack change" row | Docs drift from code because nobody knows which file to edit |
+| 0.17 | **Visual direction presentation** (`C28`) | Scope Radar (`(green) Do now / (yellow) Next batch / (red) Do not do`), option cards — Option Card (2–3 directions with a Mermaid diagram + ASCII wireframe/sample I/O) | Against "blind nodding" at long text tables, which makes the AI code away from the user's intent |
+| 0.18 | **Visible test evidence** (`C29`) | A Transparent Test Matrix in the spec (`Concrete Input / Expected Output / Layer & Realism: 0 mocks or which mocks`) + a Test-Run Evidence Table after coding | Against "silent black-box tests" that only report pass while the developer does not know what the AI tested |
 
-### Mức 1 — Thêm khi có tín hiệu
+### Level 1 — Add when there is a signal
 
-| Kỹ năng | Tín hiệu | Nội dung |
+| Skill | Signal | Content |
 |---|---|---|
-| **Truy vết + tầng test cho AC** | > 3 spec, nhiều người/agent | Tên test chứa AC-ID; cột tầng (unit/integration/contract/e2e/thủ công-lý do); trạng thái AC `[]` / `[x]` / `[~]` (cần môi trường thật — ghi lý do + cách đóng ngay trong spec) |
-| **Tài liệu thiết kế** | Spec cần > 2 PR, chạm schema/API/bảo mật | Thành phần + luồng, mô hình dữ liệu, contract, **phương án đã loại**, rủi ro + rollback, map REQ  thành phần, đối chiếu nguyên tắc AGENTS.md |
-| **Contract máy đọc + dữ liệu kiểm thử dùng chung** | API công khai, logic chạy ở nhiều runtime (BE/FE) | OpenAPI/JSON Schema là nguồn thật, spec chỉ link; test vectors một file dùng ở mọi runtime; danh mục mã lỗi một chỗ, có test đủ bản dịch |
-| **Thay đổi spec (brownfield)** | Spec đã `Done` cần đổi | `docs/changes/CHG-xx/proposal.md` với ADDED / MODIFIED (cũmới) / REMOVEDdeprecated; merge xong cập nhật spec, chuyển proposal vào archive. Phần lớn mới  spec con, không nối vào spec `Ready` |
-| **Spec hiện trạng (as-built)** | Repo có code nhưng chưa có spec | Trạng thái `As-built`; mỗi REQ ghi bằng chứng (file/test); hành vi đáng ngờ vào câu hỏi mở, không chuẩn hoá; `[x]` chỉ khi test hiện có chứng minh |
-| **Kịch bản người dùng + giai đoạn** | Nhiều đợt giao hàng | US có ưu tiên P1/P2/P3, kiểm độc lập được; REQ ghi giai đoạn (`MUST (GĐ2)`) để agent không làm trước |
-| **Plan theo milestone** | Spec > 2 PR | Bảng PR + nhánh + AC + **phụ thuộc + song song [P]**; lý do thứ tự; checklist kích hoạt theo loại thay đổi (schema/API/bảo mật); dependency duyệt theo lô; "ngữ cảnh tối thiểu" mỗi PR (link mục spec, file, AC) |
-| **Bộ nhớ phiên** | Nhiều phiên, đổi agent | `progress.md` là nơi duy nhất ghi đợt hiện tại, bàn giao phiên mới và lịch sử (≤ 3 câu/dòng); quy tắc ai chuyển spec sang `Done` |
-| **Quản lý context phiên** | Phiên dài, agent lạc hướng | Viết spec xong  phiên mới để code; sửa cùng lỗi 2 lần chưa xanh  ghi hướng đã loại vào bàn giao, phiên mới với hướng viết lại; ghi đè bàn giao theo mốc sự kiện, không đếm token; chỉ dẫn compaction (RUN-ID, file đã sửa, lệnh kiểm + lỗi chưa đóng, câu hỏi chờ); sau nén đọc lại block đợt trong `progress.md` (quyền theo `progress.md`, trạng thái lệch thì kiểm lại bằng workspace/test); khảo sát bằng subagent |
-| **Adapter + luật theo phạm vi** | > 1 công cụ, AGENTS.md > 150 dòng | Adapter chỉ trỏ về AGENTS.md; luật chuyên sâu xuống `AGENTS.md` thư mục con / `.github/instructions/*.instructions.md` (`applyTo`) / `.cursor/rules/*.mdc` (`globs`) |
-| **Mẫu PR có phần điều kiện** | AI mở PR thường xuyên | Phần chỉ điền khi vào nhánh môi trường (tag, migration, rollback), máy kiểm |
-| **Nâng cấp / tương thích** | Có dự án phía dưới | `docs/upgrade/<ver>.md` bổ sung theo từng PR (schema / env / API công khai); `compatibility.md`; CI bắt buộc khi đổi schema |
-| **Đối chiếu tài liệu nguồn** | Spec dựng từ PRD/docx | Bảng mục nguồn  SPEC/REQ; mục "phần lệch so với nguồn" |
-| **ADR đầy đủ + định danh hiện hành** | Quyết định có ≥ 2 phương án đáng kể; định danh đổi nhiều lần | `docs/adr/D-xx-<slug>.md` (bối cảnh, lựa chọn, kết quả, hệ quả); bảng "định danh hiện hành" (org, scope, registry, domain) một chỗ |
-| **Mô hình đe doạ** | Auth, phân quyền, dữ liệu cá nhân, thanh toán | Bảng tài sản / mối đe doạ (STRIDE — Microsoft, Kohnfelder & Garg 1999) / biện pháp / REQ-AC |
-| **Fake/stub cho AC phụ thuộc ngoài** | AC cần dịch vụ bên ngoài | Fake chạy được trong CI; test tích hợp bỏ qua ở local khi thiếu dịch vụ nhưng **thất bại** trên CI |
-| **Bảo mật tài liệu** | Repo có nhiều người đóng góp | AGENTS.md, skill, rule, hook nằm dưới CODEOWNERS; không chép nội dung chưa tin cậy (issue, web) vào docs; deny-rules chặn đọc `.env` thay vì chỉ viết văn xuôi |
+| **Traceability + test layer for ACs** | > 3 specs, many people/agents | Test names contain the AC-ID; a layer column (unit/integration/contract/e2e/manual-reason); AC status `[ ]` / `[x]` / `[~]` (needs a real environment — state the reason + how to close it right in the spec) |
+| **Design doc** | A spec needs > 2 PRs, touches schema/API/security | Components + flow, data model, contract, **rejected options**, risk + rollback, a REQ → component map, a cross-check against AGENTS.md principles |
+| **Machine-readable contract + shared test data** | A public API, logic running on several runtimes (BE/FE) | OpenAPI/JSON Schema is the real source and the spec only links; one test-vector file used on every runtime; the error-code catalog in one place, with tests covering every translation |
+| **Spec change (brownfield)** | A spec that is `Done` needs to change | `docs/changes/CHG-xx/proposal.md` with ADDED / MODIFIED (old → new) / REMOVED → deprecated; after merging, update the spec and move the proposal to the archive. Mostly-new parts → a child spec, never appended to a `Ready` spec |
+| **As-built spec** | The repo has code but no spec yet | Status `As-built`; each REQ records evidence (file/test); suspicious behavior goes into open questions, not normalized; `[x]` only when an existing test proves it |
+| **User scenarios + phases** | Several delivery batches | User stories with P1/P2/P3 priority, independently verifiable; REQs record the phase (`MUST (phase 2)`) so the agent does not build early |
+| **Plan by milestone** | A spec > 2 PRs | A table of PR + branch + AC + **dependencies + parallel [P]**; the reason for the order; a checklist triggered by change type (schema/API/security); dependencies approved in batches; "minimum context" per PR (links to spec sections, files, ACs) |
+| **Session memory** | Many sessions, switching agents | `progress.md` is the only place recording the current batch, the new-session handoff and the history (≤ 3 sentences per line); a rule for who moves a spec to `Done` |
+| **Session context management** | Long sessions, the agent drifts | After writing the spec → a new session to code; fixing the same bug twice and still not green → record the rejected direction in the handoff, new session with a rewrite direction; overwrite the handoff at event milestones, no token counting; compaction instructions (RUN-ID, edited files, check command + open errors, waiting questions); after compaction re-read the batch block in `progress.md` (authority follows `progress.md`, drifted state is re-verified with the workspace/tests); survey with subagents |
+| **Adapters + scoped rules** | > 1 tool, AGENTS.md > 150 lines | Adapters only point back to AGENTS.md; deep rules go to a subfolder `AGENTS.md` / `.github/instructions/*.instructions.md` (`applyTo`) / `.cursor/rules/*.mdc` (`globs`) |
+| **PR template with conditional parts** | The AI opens PRs often | Parts filled only when entering an environment branch (tag, migration, rollback), machine-checked |
+| **Upgrade / compatibility** | There are downstream projects | `docs/upgrade/<ver>.md` added per PR (schema / env / public API); `compatibility.md`; CI mandatory when the schema changes |
+| **Cross-check against source documents** | The spec was built from a PRD/docx | A table mapping source sections → SPEC/REQ; a "deviations from the source" section |
+| **Full ADR + current identifiers** | A decision has ≥ 2 significant options; identifiers changed many times | `docs/adr/D-xx-<slug>.md` (context, choice, result, consequences); a "current identifiers" table (org, scope, registry, domain) in one place |
+| **Threat model** | Auth, authorization, personal data, payments | A table of assets / threats (STRIDE — Microsoft, Kohnfelder & Garg 1999) / mitigations / REQ-AC |
+| **Fake/stub for ACs with external dependencies** | An AC needs an outside service | A fake that runs in CI; integration tests skip locally when the service is missing but **fail** on CI |
+| **Docs security** | The repo has many contributors | AGENTS.md, skills, rules, hooks sit under CODEOWNERS; never copy untrusted content (issues, web) into docs; deny-rules block reading `.env` instead of only writing prose |
 
-### Mức 2 — Trưởng thành
+### Level 2 — Mature
 
-| Kỹ năng | Nội dung |
+| Skill | Content |
 |---|---|
-| **Cưỡng chế bằng máy** | Luật vi phạm ≥ 2 lần  lint/test/CI. Thông báo lỗi = **ID luật + cách sửa** (`REPO-R11: nâng lõi bằng...`). Logic phụ thuộc môi trường viết thành hàm thuần để unit test |
-| **Hook** | Văn xuôi là khuyến nghị, hook là bảo đảm: chạy lint sau khi sửa file, chặn ghi vào thư mục migration đã phát hành, bơm lại block đợt của `progress.md` ngay sau khi nén (Claude Code `SessionStart`/`compact`). Hook chạy shell nên phải review |
-| **Skill dự án** | Quy trình lặp ≥ 2 lần  `.agents/skills/` theo luật authoring (§4.3) |
-| **Subagent vai trò hẹp** | Persona chỉ đặt trong file agent riêng (`.claude/agents/`, `.github/agents/`), giới hạn tool; không đặt persona ở AGENTS.md gốc |
-| **Gotchas / knowledge base** | Lỗi đã gặp  nguyên nhân  cách tránh, đặt trong skill/guide liên quan; lỗi biết mà chưa sửa phải có issue |
-| **Kiểm tài liệu tự động** | AC-ID có test; không còn `[CẦN LÀM RÕ]` ở spec `Ready`; spec có đủ mục; link không gãy; progress/plan không cũ hơn commit `[SPEC]` cuối; REQ không có AC, PR trong plan không có REQ |
-| **Code sinh từ template** | Code scaffold/mẫu không sửa tay; CI so lệch với template |
-| **Tỉa context** | Lưu trữ progress cũ; file đọc mỗi phiên ≤ ~5 KB |
-| **Phân loại guide (Diátaxis)** | how-to / reference / explanation; không trộn hướng dẫn vào spec |
-| **Chia nhỏ spec lớn** | Spec > ~300 dòng: mỗi PR trong plan có "ngữ cảnh tối thiểu" để agent không nạp cả spec |
+| **Machine enforcement** | A rule violated ≥ 2 times → lint/test/CI. The error message = **rule ID + how to fix** (`REPO-R11: upgrade the core with...`). Environment-dependent logic is written as pure functions for unit testing |
+| **Hooks** | Prose is a recommendation, a hook is a guarantee: run lint after editing a file, block writes into released migration folders, re-inject the `progress.md` batch block right after compaction (Claude Code `SessionStart`/`compact`). Hooks run shell, so they must be reviewed |
+| **Project skills** | A process repeated ≥ 2 times → `.agents/skills/` following the authoring rules (§4.3) |
+| **Narrow-role subagents** | Personas live only in a dedicated agent file (`.claude/agents/`, `.github/agents/`) with limited tools; never put a persona in the root AGENTS.md |
+| **Gotchas / knowledge base** | An error met → cause → how to avoid, placed in the related skill/guide; an error known but unfixed must have an issue |
+| **Automatic docs checks** | AC-IDs have tests; no `[NEEDS CLARIFICATION]` in a `Ready` spec; specs have all sections; links are not broken; progress/plan are not older than the last `[SPEC]` commit; no REQ without an AC, no PR in the plan without a REQ |
+| **Code generated from templates** | Scaffold/sample code is not hand-edited; CI diffs against the template |
+| **Context pruning** | Archive old progress; files read per session ≤ ~5 KB |
+| **Guide classification (Diátaxis)** | how-to / reference / explanation; never mix guides into specs |
+| **Splitting a large spec** | A spec > ~300 lines: each PR in the plan has a "minimum context" so the agent does not load the whole spec |
 
-**Vòng đời một luật:** văn xuôi  vi phạm lần 2  check/hook  rút văn xuôi còn một dòng trỏ tới check. Tài liệu nên co lại theo thời gian.
-
----
-
-## 3. Quy tắc viết spec
-
-1. Tách *tại sao* (decisions) / *cái gì* (spec) / *ghép thế nào* (design) / *thứ tự* (plan). Spec chỉ ghi ID `D-xx`, không chép lý do.
-2. ID ổn định: `SPEC-<KHU-VỰC>`, `<KHU-VỰC>-R01`, `<KHU-VỰC>-AC01`. Không đánh số lại; bỏ thì ghi deprecated.
-3. Mức RFC 2119 (MUST / SHOULD / MAY) — **chỉ dùng trong spec**.
-4. Câu REQ theo mẫu EARS khi được:
-   - Luôn: `Hệ thống MUST …`
-   - Sự kiện: `Khi <sự kiện>, hệ thống MUST …`
-   - Trạng thái: `Trong khi <trạng thái>, hệ thống MUST …`
-   - Lỗi: `Nếu <điều kiện không mong muốn>, thì hệ thống MUST …`
-   - Tuỳ chọn: `Khi bật <tính năng>, hệ thống MUST …`
-5. AC *Cho / Khi / Thì* với dữ liệu cụ thể; mỗi REQ ≥ 1 AC; có AC cho lỗi và biên.
-6. Số thay tính từ khi có nguồn yêu cầu hoặc số đo kèm điều kiện (**Nguồn & giới hạn hiểu biết**, `C31`); không tự đặt p95/rate limit cho đủ mẫu. Chưa biết  câu hỏi mở và cách kiểm chứng, không là cam kết.
-7. NFR luôn có mặt: hiệu năng, bảo mật, giới hạn, khả dụng, quan sát, i18n, a11y, trạng thái UI. Không áp dụng  `N/A — lý do`; Draft chưa rõ  `Chưa biết — P-xx + cách xác minh + phần bị chặn`.
-8. "Ngoài phạm vi" không được rỗng.
-9. Một sự thật một chỗ; contract máy đọc là nguồn thật, spec link tới.
-10. Quyết định đổi giá trị trong REQ thì **cùng PR** sửa REQ đó.
-11. Mâu thuẫn giữa hai spec  ghi vào câu hỏi mở của **cả hai**; không đánh `[x]` AC đang có mâu thuẫn mở.
-12. `[x]` cần bằng chứng test xanh; có CI thì trong chính PR. Spec chỉ `Done` khi mọi AC còn hiệu lực của spec `[x]`, không chỉ AC của đợt; `[~]` chặn `Done`. Hoãn yêu cầu cần đổi phạm vi được duyệt qua change-spec.
-13. Spec `Ready` không nối thêm phần lớn; tạo spec con hoặc change proposal.
-14. Spec trước code cho phần mới; nội dung chia việc thuộc plan, không thuộc spec.
-15. Spec kết thúc bằng cách kiểm end-to-end (lệnh/kịch bản) để agent tự xác nhận.
-16. `Ready` không là quyền chạy (**Quyền thực thi theo đợt**, `C30`): mặc định 1 spec/1 task, ghi đợt trong progress; làm hết phạm vi đã giao, báo bằng chứng rồi dừng. Plan/danh sách task sẵn sàng/HANDOFF không tự giao thêm việc.
-17. Người dùng duyệt hành vi/phạm vi, AI chịu trách nhiệm chứng minh lựa chọn kỹ thuật (`C31`). Tự viết cả kỳ vọng lẫn test chưa chứng minh nhu cầu đúng: đối chiếu ví dụ đã chốt/contract; AI khác đồng ý không thay nguồn, đo đạc hay chuyên gia.
-
-### 3.1 Viết để người không chuyên duyệt được
-
-1. **Nghĩa trước, mã sau.** Mẫu chép sang repo đích không chứa mã luật `Cxx`; viết nghĩa ngắn ngay trong câu. File nội bộ kit: lần đầu viết ``**tên ngắn** (`Cxx`)``; thuật ngữ kit lần đầu giải nghĩa hoặc link [glossary.md](glossary.md). Nguồn: [Google — Abbreviations](https://developers.google.com/style/abbreviations).
-2. **Bốn nhãn nguồn gốc, một khẳng định một dòng:** `Người dùng chốt` (ngày/câu nói) · `Đã xác minh` (đúng 1 con trỏ mở được: `path:line` | URL + trích nguyên văn + ngày đọc | lệnh + kết quả thật) · `AI đề xuất` (lý do + hậu quả nếu sai) · `Chưa biết` (cách xác minh + ai + phần bị chặn). Không tự chấm %; có link chưa đủ, phải có câu trích để đối chiếu. Nguồn: [Liu et al. 2023](https://arxiv.org/abs/2304.09848), [Anthropic — Reduce hallucinations](https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations).
-3. **Thẻ giải thích & quyết định kỹ thuật** cho mọi cơ chế/khái niệm chuyên môn hoặc quyết định kỹ thuật AI đưa vào spec/design/code: *Bản chất là gì (nói dễ hiểu + ví dụ thực tế) · Tại sao bắt buộc cần ở đây (nếu không có thì lỗi gì xảy ra) · Chạy thế nào từng bước (Đầu vào  Xử lý  Đầu ra) · Tự kiểm trong ≤ 5 phút (lệnh/thao tác + kết quả mong đợi, trỏ AC-ID) · Nguồn & Không tự kiểm được*. **Không được cắt cụt phần giải thích khiến người đọc không hiểu kiến thức AI viết**, nhưng người dùng nghiệm thu tính đúng đắn dựa trên kết quả chạy thật ở dòng "Tự kiểm" (không duyệt mù chỉ vì lập luận nghe xuôi tai). Vùng đắt kiểm (bảo mật, thanh toán, pháp lý, dữ liệu cá nhân) ghi "cần chuyên gia: <vai trò>"; lời duyệt không chứng nhận phần đó. Nguồn: [Bansal et al. 2021](https://arxiv.org/abs/2006.14779), [Vasconcelos et al. 2023](https://arxiv.org/abs/2212.06823).
-4. **Phân biệt hai chiều khi dùng AI thứ hai (`C26` vs `C31`):** Chiều xuôi — hai AI cùng khen/đồng ý một con số hay thuật toán **không phải là bằng chứng đúng** (`C31`). Chiều ngược — dùng một phiên sạch hoặc model khác họ (`codex`, `claude`, `gemini` read-only / `spec-challenger` chỉ đọc `ARTIFACT + CONTRACT`) để **tấn công bắt lỗi rồi đưa lại cho AI viết tự sửa trước khi trình người dùng** (`C26`) là bộ lọc bắt buộc để phá điểm mù của một model đơn lẻ.
+**Life cycle of a rule:** prose → second violation → check/hook → shrink the prose to one line pointing to the check. Documentation should shrink over time.
 
 ---
 
-## 4. Phong cách viết cho agent
+## 3. Rules for writing specs
 
-### 4.1 Chung
-- **Cụ thể, kiểm được:** "chạy `pnpm test -- path`", không phải "test kỹ".
-- **Khẳng định trước, cấm sau:** "ném `PlatformException(code)`" tốt hơn "không ném Error trần". Giữ câu cấm cho ranh giới cứng.
-- **Nhấn mạnh tiết chế:** chỉ thêm IMPORTANT/viết hoa cho dòng agent hay bỏ qua; nhấn mọi dòng = không dòng nào nổi.
-- **Không ghi thông tin nhanh cũ:** số dòng, anchor theo dòng, phiên bản patch. Trỏ tới `package.json`, `.nvmrc`.
-- **Không ghi điều suy ra được từ code** hay quy ước chuẩn của ngôn ngữ; không chép API docs dài — link.
-- **Đúng độ cao:** tránh cả if-else cứng nhắc lẫn chỉ dẫn mơ hồ; nêu nguyên tắc + một ví dụ.
-- **Nạp đúng lúc:** link/đường dẫn thay vì nhồi nội dung; `@import` nạp nguyên văn nên không tiết kiệm token.
-- **Thuật ngữ nhất quán** theo glossary.
+1. Separate *why* (decisions) / *what* (spec) / *how it fits* (design) / *order* (plan). A spec only writes the `D-xx` ID and never copies the reason.
+2. Stable IDs: `SPEC-<AREA>`, `<AREA>-R01`, `<AREA>-AC01`. Never renumber; when dropping, write deprecated.
+3. RFC 2119 levels (MUST / SHOULD / MAY) — **used only in specs**.
+4. Write REQ sentences in EARS form where possible:
+   - Always: `The system MUST ...`
+   - Event: `When <event>, the system MUST ...`
+   - State: `While <state>, the system MUST ...`
+   - Error: `If <unwanted condition>, then the system MUST ...`
+   - Optional: `Where <feature> is enabled, the system MUST ...`
+5. ACs in *Given / When / Then* with concrete data; every REQ has ≥ 1 AC; there are ACs for errors and edge cases.
+6. Numbers replace adjectives only when there is a requirement source or a measurement with conditions (**sources & knowledge limits**, `C31`); never invent p95/rate limits to fill the template. Unknown → an open question and a way to verify, not a commitment.
+7. NFRs are always present: performance, security, limits, availability, observability, i18n, a11y, UI states. Not applicable → `N/A — reason`; a Draft that is unclear → `Unknown — P-xx + how to verify + the blocked part`.
+8. "Out of scope" must not be empty.
+9. One truth, one place; a machine-readable contract is the real source and the spec links to it.
+10. When a decision changes a value in a REQ, fix that REQ **in the same PR**.
+11. A conflict between two specs → record it in the open questions of **both**; never mark `[x]` an AC with an open conflict.
+12. `[x]` needs green-test evidence; with CI, within the PR itself. A spec is `Done` only when every in-effect AC of the spec is `[x]`, not just the batch's ACs; `[~]` blocks `Done`. Deferring a requirement that needs a scope change is approved through change-spec.
+13. A `Ready` spec is not appended with a large part; create a child spec or a change proposal.
+14. Spec before code for new parts; work-breakdown content belongs in the plan, not in the spec.
+15. A spec ends with an end-to-end check (command/scenario) so the agent can confirm by itself.
+16. `Ready` is not permission to run (**per-batch execution authority**, `C30`): by default 1 spec / 1 task, record the batch in progress; finish the assigned scope, report evidence, then stop. A plan / ready-task list / HANDOFF does not assign more work by itself.
+17. The user approves behavior/scope, and the AI is responsible for proving technical choices (`C31`). Writing both the expectations and the tests yourself does not prove the need is right: compare against agreed examples/contracts; another AI agreeing does not replace a source, a measurement or an expert.
 
-### 4.2 AGENTS.md — thứ tự mục khuyến nghị
-Bối cảnh + stack  **Lệnh**  Nguồn sự thật  Ranh giới 3 tầng  Quy trình task  DoD  Quy ước code (ví dụ)  Git  Bản đồ repo. Phủ đủ 6 mảng: lệnh, test, cấu trúc, style, git, ranh giới.
+### 3.1 Writing so non-experts can approve
 
-### 4.3 Skill dự án
-- `name`: chữ thường, số, gạch nối, ≤ 64 ký tự.
-- `description`: ngôi thứ ba, nêu **làm gì + khi nào**, chứa từ khoá người dùng hay nói, ≤ 1024 ký tự.
-- Body < 500 dòng; reference sâu 1 cấp; file > 100 dòng có mục lục.
-- Độ tự do: cao (heuristic) cho review/thiết kế; thấp (script, checklist cứng) cho thao tác dễ vỡ: migration, xoá, phát hành.
-- Workflow có tác dụng phụ (deploy, xoá) tắt tự kích hoạt nếu công cụ hỗ trợ (`disable-model-invocation: true` ở Claude Code).
-- Gọi tên skill global cho kỹ năng chung, không chép lại.
+1. **Meaning first, code after.** Templates copied into the target repo contain no `Cxx` rule codes; write the short meaning inside the sentence. Kit-internal files: on first use write ``**short name** (`Cxx`)``; a kit term is explained on first use or links to [glossary.md](glossary.md). Source: [Google — Abbreviations](https://developers.google.com/style/abbreviations).
+2. **Four provenance labels, one claim per line:** `User decided` (date/quote) · `Verified` (exactly 1 openable pointer: `path:line` | URL + verbatim quote + read date | command + real result) · `AI proposed` (reason + consequence if wrong) · `Unknown` (how to verify + who + the blocked part). Never self-score %; a link is not enough, a quote must be present to compare. Sources: [Liu et al. 2023](https://arxiv.org/abs/2304.09848), [Anthropic — Reduce hallucinations](https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations).
+3. **Technical Explanation & Decision Card** for every specialist mechanism/concept or technical decision the AI introduces into a spec/design/code: *What it is (plain words + a real example) · Why it is required here (what error happens without it) · How it runs step by step (Input → Process → Output) · Self-check in ≤ 5 minutes (command/action + expected result, pointing to the AC-ID) · Source & Cannot self-check*. **The explanation must not be cut so short that the reader cannot understand the knowledge the AI wrote**, but the user accepts correctness based on the real run result of the "Self-check" line (no blind approval just because the reasoning sounds smooth). Costly-to-check areas (security, payments, legal, personal data) are marked "needs expert: <role>"; an approval does not certify that part. Sources: [Bansal et al. 2021](https://arxiv.org/abs/2006.14779), [Vasconcelos et al. 2023](https://arxiv.org/abs/2212.06823).
+4. **Distinguish the two directions when using a second AI (`C26` vs `C31`):** Forward direction — two AIs praising/agreeing on a number or algorithm **is not evidence of correctness** (`C31`). Reverse direction — using a clean session or a model from another family (`codex`, `claude`, `gemini` read-only / `spec-challenger` reading only `ARTIFACT + CONTRACT`) to **attack and catch errors, then hand them back to the writing AI to self-fix before presenting to the user** (`C26`) is the mandatory filter that breaks the blind spot of a single model.
 
 ---
 
-## 5. Công cụ nào đọc file nào
+## 4. Writing style for agents
+
+### 4.1 General
+- **Concrete, checkable:** "run `pnpm test -- path`", not "test thoroughly".
+- **Affirmative first, prohibitions after:** "throw `PlatformException(code)`" is better than "do not throw a bare Error". Keep prohibitions for hard boundaries.
+- **Moderate emphasis:** add IMPORTANT/caps only on lines the agent often skips; emphasizing every line means no line stands out.
+- **Do not record fast-aging information:** line numbers, line-based anchors, patch versions. Point to `package.json`, `.nvmrc`.
+- **Do not record what can be inferred from code** or a language's standard conventions; do not copy long API docs — link.
+- **The right altitude:** avoid both rigid if-else and vague instructions; state the principle + one example.
+- **Load just in time:** links/paths instead of stuffing content; `@import` loads verbatim so it saves no tokens.
+- **Consistent terms** per the glossary.
+
+### 4.2 AGENTS.md — recommended section order
+Context + stack → **Commands** → Source of truth → 3-tier boundaries → Task process → DoD → Code conventions (example) → Git → Repo map. Cover all 6 areas: commands, tests, structure, style, git, boundaries.
+
+### 4.3 Project skills
+- `name`: lowercase, digits, hyphens, ≤ 64 characters.
+- `description`: third person, state **what it does + when**, include keywords users often say, ≤ 1024 characters.
+- Body < 500 lines; references 1 level deep; a file > 100 lines has a table of contents.
+- Degree of freedom: high (heuristics) for review/design; low (scripts, hard checklists) for fragile operations: migration, deletion, release.
+- A workflow with side effects (deploy, delete) turns off auto-activation if the tool supports it (`disable-model-invocation: true` in Claude Code).
+- Name a global skill for general skills; do not copy it.
+
+---
+
+## 5. Which tool reads which file
 
 > [!NOTE]
-> Ma trận thay đổi nhanh. Khi áp dụng, kiểm lại tài liệu bản hiện hành của công cụ.
+> This matrix changes fast. When applying it, re-check the tool's current documentation.
 
-| Công cụ | Đọc chung | Luật theo phạm vi | Ghi chú |
+| Tool | Shared reads | Scoped rules | Notes |
 |---|---|---|---|
 | Antigravity | `AGENTS.md`, `GEMINI.md`, `.agents/rules/*.md` | `.agents/skills/` | Workspace > global > built-in |
-| Claude Code | `CLAUDE.md` (gốc + thư mục con khi đụng file) | `.claude/rules/`, `.claude/skills/`, `.claude/agents/` | **Không đọc AGENTS.md mặc định**  `CLAUDE.md` có `@AGENTS.md`; kiểm `/context` |
-| GitHub Copilot | `.github/copilot-instructions.md`, `AGENTS.md` (file gần nhất thắng) | `.github/instructions/*.instructions.md` với `applyTo: "glob"` | File trong `docs/` không được đọc |
-| Codex | `AGENTS.md` / `AGENTS.override.md` từ gốc xuống thư mục làm việc | file gần hơn nối sau | Cắt khi tổng > 32 KiB (`project_doc_max_bytes`) |
+| Claude Code | `CLAUDE.md` (root + subfolders when touching files) | `.claude/rules/`, `.claude/skills/`, `.claude/agents/` | **Does not read AGENTS.md by default** → `CLAUDE.md` contains `@AGENTS.md`; verify with `/context` |
+| GitHub Copilot | `.github/copilot-instructions.md`, `AGENTS.md` (the nearest file wins) | `.github/instructions/*.instructions.md` with `applyTo: "glob"` | Files under `docs/` are not read |
+| Codex | `AGENTS.md` / `AGENTS.override.md` from the root down to the working directory | nearer files are appended later | Truncated when the total > 32 KiB (`project_doc_max_bytes`) |
 | Cursor | `AGENTS.md`, `.cursor/rules/*.mdc` | `globs`, `alwaysApply`, `description` | |
-| Gemini CLI | `GEMINI.md` | thư mục con | Đặt `context.fileName: ["AGENTS.md"]` thay vì tạo adapter; kiểm `/memory show` |
+| Gemini CLI | `GEMINI.md` | subfolders | Set `context.fileName: ["AGENTS.md"]` instead of creating an adapter; verify with `/memory show` |
 
 ---
 
-## 6. Skill trong dự án vs skill tải về
+## 6. Project skills vs downloaded skills
 
-| Tiêu chí | Trong dự án (`AGENTS.md`, `.agents/skills/`, rules) | Tải từ GitHub (global) |
+| Criterion | In the project (`AGENTS.md`, `.agents/skills/`, rules) | Downloaded from GitHub (global) |
 |---|---|---|
-| Tri thức | *Cái gì / ở đâu* của repo | *Cách làm* chung (TDD, debug, review) |
-| Phạm vi | Workspace; cả team cùng bản qua git | Một máy; người khác không có |
-| Phiên bản | Cùng commit với code, review qua PR | Theo repo ngoài, đổi bất ngờ |
-| Ưu tiên | Cao nhất, trùng tên thì thắng | Thấp hơn |
-| Bảo mật | Team viết, review, CODEOWNERS | Rủi ro chuỗi cung ứng: script, lệnh nguy hiểm, prompt injection |
-| Context | AGENTS/rules luôn nạp; skill nạp theo `description` | Mô tả mọi skill chiếm chỗ; nhiều skill dễ kích hoạt nhầm |
-| Xung đột | Một nguồn | Chồng chéo, mâu thuẫn |
+| Knowledge | The repo's *what / where* | General *how-to* (TDD, debug, review) |
+| Scope | Workspace; the whole team shares one version via git | One machine; others do not have it |
+| Version | Same commit as the code, reviewed via PR | Follows an outside repo, changes unexpectedly |
+| Priority | Highest, wins on a name clash | Lower |
+| Security | Written by the team, reviewed, CODEOWNERS | Supply-chain risk: scripts, dangerous commands, prompt injection |
+| Context | AGENTS/rules always loaded; skills loaded by `description` | Every skill's description takes space; many skills trigger by mistake easily |
+| Conflicts | One source | Overlaps, contradictions |
 
-**Kết hợp:** global cho kỹ năng chung, dự án cho tri thức riêng; skill dự án gọi tên skill global; AGENTS.md ghi "skill ngoài mâu thuẫn thì theo file này"; mỗi chủ đề một skill global; đọc `SKILL.md` + mọi script trước khi cài, ghim commit/tag.
+**Combine:** global for general skills, project for its own knowledge; a project skill names the global skill; AGENTS.md says "if an outside skill conflicts, follow this file"; one global skill per topic; read `SKILL.md` + every script before installing, pin a commit/tag.
 
 ---
 
-## 7. Bài học từ thất bại thực tế (repo dashboard)
+## 7. Lessons from real failures (the dashboard repo)
 
-> Giai thoại ở §7 và §7.1 lấy từ repo nội bộ của tác giả, người ngoài không kiểm được; dùng minh hoạ, không phải số liệu thống kê.
+> The anecdotes in §7 and §7.1 come from the author's internal repos, which outsiders cannot verify; use them as illustration, not as statistics.
 
-| Thất bại | Quy tắc phòng tránh |
+| Failure | Preventive rule |
 |---|---|
-| Mâu thuẫn giữa spec chỉ ghi trong plan/HANDOFF, AC vẫn bị `[x]` theo "ý" | Mâu thuẫn ghi vào câu hỏi mở của cả hai spec; cấm `[x]` khi còn mâu thuẫn mở |
-| 18/19 spec bỏ mục câu hỏi mở | Mục bắt buộc, ghi "Không có" nếu rỗng; check tự động |
-| "Đánh `[x]` ở PR kế tiếp"  AC trễ mãi; ngược lại có AC `[x]` khi chưa có CI | `[x]` trong chính PR có CI xanh |
-| Không spec nào chuyển `Done` | DoD của PR cuối spec gồm chuyển trạng thái |
-| HANDOFF, plan, compatibility, bảng P-xx cũ | Mỗi file trạng thái có ngày cập nhật; check cảnh báo; P-xx làm xong phải đóng |
-| Định danh (org/scope) bị thay 4 lần; quyết định ghi đè REQ mà REQ không sửa | Cột trạng thái quyết định; bảng định danh hiện hành; sửa REQ cùng PR |
-| Spec chép lại quyết định và lý do | Spec chỉ ghi `D-xx` |
-| Spec `Ready` bị nối 15 REQ mới kèm phần chia việc | Spec con / change proposal; chia việc vào plan |
-| File tri thức bị git loại trừ, không ai trỏ tới; adapter đặt sai thư mục; gotchas chôn trong plan | Không file tri thức bị ignore; mọi file docs có nơi trỏ tới; gotchas vào guide/skill |
-| Lỗi biết mà ghi "ngoài phạm vi", không issue | Lỗi biết mà chưa sửa phải có issue/ID |
-| Nhật ký 23 KB trong file phải đọc mỗi phiên | progress tách riêng, ≤ 3 câu/dòng, lưu trữ định kỳ |
-| AC chặn vì gói GitHub Free, hết hạn mức CI, team chưa tồn tại | Khảo sát "điều kiện hạ tầng bên ngoài"; AC phụ thuộc hạ tầng gắn `[~]` từ đầu |
-| AGENTS.md 170 dòng nạp luật RBAC khi sửa CSS | Luật theo phạm vi |
+| A conflict between specs was recorded only in the plan/HANDOFF, and ACs were still marked `[x]` by "intent" | Record conflicts in the open questions of both specs; `[x]` is forbidden while a conflict is open |
+| 18/19 specs dropped the open-questions section | A mandatory section, write "None" if empty; automatic check |
+| "Mark `[x]` in the next PR" → ACs lag forever; conversely there are `[x]` ACs with no CI | `[x]` inside the PR itself with green CI |
+| No spec was ever moved to `Done` | The DoD of the spec's last PR includes the status change |
+| HANDOFF, plans, compatibility, P-xx tables go stale | Every status file has an update date; a check warns; finished P-xx must be closed |
+| Identifiers (org/scope) replaced 4 times; a decision overrode a REQ while the REQ was not edited | A decision status column; a current-identifiers table; fix the REQ in the same PR |
+| A spec copies decisions and reasons | A spec writes only the `D-xx` |
+| A `Ready` spec was appended with 15 new REQs plus a work breakdown | A child spec / change proposal; put the breakdown in the plan |
+| A knowledge file excluded by git and pointed to by no one; an adapter in the wrong folder; gotchas buried in a plan | No knowledge file is ignored; every docs file has a pointer to it; gotchas go into a guide/skill |
+| A known bug marked "out of scope" with no issue | A known unfixed bug must have an issue/ID |
+| A 23 KB journal in a file that must be read every session | progress kept separate, ≤ 3 sentences per line, archived periodically |
+| ACs blocked by the GitHub Free plan, exhausted CI quota, a team that does not exist yet | Survey "external infrastructure conditions"; infrastructure-dependent ACs marked `[~]` from the start |
+| A 170-line AGENTS.md loads RBAC rules when editing CSS | Scoped rules |
 
-### 7.1 Lỗi lặp lại giữa các dự án (khảo sát 9 repo, 2026-10-20)
+### 7.1 Errors repeated across projects (survey of 9 repos, 2026-10-20)
 
-| Lỗi | Gặp ở | Quy tắc phòng tránh |
+| Error | Seen in | Preventive rule |
 |---|---|---|
-| Docs mô tả khác code (format key, thuật toán hash, cây thư mục, file không tồn tại) | cdn ×3, BotAutoTask, notification-service | `As-built` kèm test chứng minh; gotcha có ngày kiểm; bảng "loại thay đổi  file phải sửa" |
-| Hai file cùng nhận là "nguồn sự thật" | notification (`SPECS.md` + `knowledge.md`), cdn (`SPECS.md` + `ARCHITECTURE.md`) | Một sự thật một chỗ; khảo sát grep "Single Source of Truth" |
-| CI không chạy test, hoặc chạy sai stack sau khi đổi stack | cdn, BotAutoTask, citad-*, notification (`Notification.slnx` đã xoá) | CI chạy DoD; đổi stack là một change sửa AGENTS + CI + quy ước cùng PR |
-| Commit không theo quy ước | cdn, khaosatvmu, citad-* | Vi phạm ≥ 2 lần  commitlint |
-| Allow-list cá nhân của agent (mật khẩu DB, đường dẫn máy) bị commit | khaosatvmu `.claude/settings.json` | `settings.json` chung chỉ chứa deny + hook; allow-list để ở `settings.local.json` (ignore) |
-| Tên file env mẫu không thống nhất (`.env-example`) | citad-vmu-resources, vmu-deploy-tool | Luôn dùng `.env.example` |
-| File trạng thái gắn chặt một công cụ | cdn `.devin/TASK.md` | `docs/progress.md` không phụ thuộc công cụ |
-| Lệnh `migrate` không làm gì mà vẫn exit 0 | cdn | AC của lệnh vận hành kiểm tác dụng |
-| File build được commit nhưng lệch với nguồn | BotAutoTask `dist/` | CI kiểm artifact khớp nguồn (PK-RELEASE) |
+| Docs describe something different from the code (key format, hash algorithm, directory tree, nonexistent files) | cdn ×3, BotAutoTask, notification-service | `As-built` with tests that prove it; dated gotchas; a "type of change → file to edit" table |
+| Two files both claim to be the "source of truth" | notification (`SPECS.md` + `knowledge.md`), cdn (`SPECS.md` + `ARCHITECTURE.md`) | One truth one place; the survey greps "Single Source of Truth" |
+| CI does not run tests, or runs the wrong stack after the stack changed | cdn, BotAutoTask, citad-*, notification (`Notification.slnx` deleted) | CI runs the DoD; a stack change is one change editing AGENTS + CI + conventions in the same PR |
+| Commits do not follow the convention | cdn, khaosatvmu, citad-* | A violation ≥ 2 times → commitlint |
+| The agent's personal allow-list (DB password, machine paths) is committed | khaosatvmu `.claude/settings.json` | The shared `settings.json` holds only deny + hooks; keep the allow-list in `settings.local.json` (ignored) |
+| The sample env file name is inconsistent (`.env-example`) | citad-vmu-resources, vmu-deploy-tool | Always use `.env.example` |
+| A status file tied to one tool | cdn `.devin/TASK.md` | `docs/progress.md` does not depend on a tool |
+| The `migrate` command does nothing yet exits 0 | cdn | ACs for operational commands check the effect |
+| A build file is committed but drifts from the source | BotAutoTask `dist/` | CI checks the artifact matches the source (PK-RELEASE) |
 
 ---
 
-## 8. Nguồn
+## 8. Sources
 
 - GitHub — How to write a great agents.md: https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/
 - Anthropic — Claude Code best practices: https://www.anthropic.com/engineering/claude-code-best-practices
@@ -269,14 +269,14 @@ Bối cảnh + stack  **Lệnh**  Nguồn sự thật  Ranh giới 3 tầng  Quy
 - Ubiquitous language: https://martinfowler.com/bliki/UbiquitousLanguage.html
 - OWASP Threat Modeling: https://owasp.org/www-community/Threat_Modeling · WCAG 2.2: https://www.w3.org/TR/WCAG22/
 - STRIDE (Microsoft; Kohnfelder & Garg 1999): https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats
-- Deep Module, Design It Twice — John Ousterhout, *A Philosophy of Software Design* (sách)
-- Tracer Bullet — Andrew Hunt & David Thomas, *The Pragmatic Programmer* (sách)
-- Seam — Michael Feathers, *Working Effectively with Legacy Code* (sách)
+- Deep Module, Design It Twice — John Ousterhout, *A Philosophy of Software Design* (book)
+- Tracer Bullet — Andrew Hunt & David Thomas, *The Pragmatic Programmer* (book)
+- Seam — Michael Feathers, *Working Effectively with Legacy Code* (book)
 - Expand–Contract (Parallel Change, Danilo Sato): https://martinfowler.com/bliki/ParallelChange.html
 
-Nguồn cho §3.1 (đọc dễ & nguồn gốc khẳng định) — đã mở trang và đối chiếu nguyên văn ngày 2026-10-26:
+Sources for §3.1 (readability & claim provenance) — pages opened and compared verbatim on 2026-10-26:
 - Google developer style — Abbreviations: https://developers.google.com/style/abbreviations — *"Spell out abbreviations on first reference, except for widely recognized ones"*
 - Anthropic — Reduce hallucinations: https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations
 - Liu, Zhang, Liang 2023 — Evaluating Verifiability in Generative Search Engines: https://arxiv.org/abs/2304.09848
-- Bansal et al. 2021 — Does the Whole Exceed its Parts? (giải thích của AI và hiệu quả nhóm người–AI): https://arxiv.org/abs/2006.14779
-- Vasconcelos et al. 2023 — Explanations Can Reduce Overreliance on AI Systems During Decision-Making: https://arxiv.org/abs/2212.06823 — khung chi phí–lợi ích: lời giải thích chỉ giảm phụ thuộc quá mức khi nó làm việc kiểm tra dự đoán của AI đủ rẻ
+- Bansal et al. 2021 — Does the Whole Exceed its Parts? (AI explanations and human–AI team performance): https://arxiv.org/abs/2006.14779
+- Vasconcelos et al. 2023 — Explanations Can Reduce Overreliance on AI Systems During Decision-Making: https://arxiv.org/abs/2212.06823 — cost–benefit framing: an explanation reduces overreliance only when it makes checking the AI's prediction cheap enough

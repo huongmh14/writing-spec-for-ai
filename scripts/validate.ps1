@@ -233,7 +233,7 @@ foreach ($tc in $templateChecks) {
 $completionFiles = @("SKILL.md", "references/principles.md", "templates/AGENTS.md", "templates/docs/specs/README.md")
 foreach ($rel in $completionFiles) {
     $raw = Get-Content (Join-Path $root $rel) -Raw -Encoding UTF8
-    if ($raw -match '\[x\][^\r\n]{0,20}ho\u1EB7c[^\r\n]{0,20}\[~\]') {
+    if ($raw -match '\[x\][^\r\n]{0,20}(?:ho\u1EB7c|or)[^\r\n]{0,20}\[~\]') {
         $failures += "[COMPLETION] $rel still accepts unresolved [~] alongside [x]; unresolved ACs must prevent Done"
     }
 }
